@@ -17,6 +17,14 @@ boot_splash/bg_color=Color(0.0431373, 0.0431373, 0.0431373, 1)
 boot_splash/image="res://assets/ui/boot-splash.png"
 config/icon="res://assets/ui/icon.png"
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/gdUnit4/plugin.cfg")
+
+[gdunit4]
+
+settings/test/test_root_folder="tests"
+
 [rendering]
 
 environment/defaults/default_clear_color=Color(0.0431373, 0.0431373, 0.0431373, 1)
