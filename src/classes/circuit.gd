@@ -5,6 +5,14 @@ extends Resource
 @export var name = ""
 @export var connections = []
 @export var parts = []
+@export var version = 2.0
+
+# Settings
+@export var scroll_offset = Vector2.ZERO
+@export var snap_distance = 20
+@export var use_snap = true
+@export var zoom = 1.0
+@export var minimap_enabled = true
 
 var saved_to = ""
 
