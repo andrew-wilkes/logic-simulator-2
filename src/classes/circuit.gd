@@ -2,7 +2,7 @@ class_name Circuit
 
 extends Resource
 
-@export var name = ""
+@export var title = ""
 @export var connections = []
 @export var parts = []
 @export var version = 2.0
