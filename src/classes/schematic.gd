@@ -2,11 +2,12 @@ class_name Schematic
 
 extends GraphEdit
 
-const PART_INITIAL_OFFSET = Vector2(100, 100)
+const PART_INITIAL_OFFSET = Vector2(50, 50)
 
 var part_scene = preload("res://parts/part.tscn")
 var circuit: Circuit
 var selected_parts = []
+var part_initial_offset_delta = Vector2.ZERO
 
 func _ready():
 	circuit = Circuit.new()
@@ -80,7 +81,17 @@ func duplicate_selected_parts():
 
 func add_part():
 	var part = part_scene.instantiate()
-	part.position_offset = PART_INITIAL_OFFSET + scroll_offset / zoom
+	part.position_offset = PART_INITIAL_OFFSET + scroll_offset / zoom \
+		+ part_initial_offset_delta
+	var x = part_initial_offset_delta.x
+	var y = part_initial_offset_delta.y
+	y += 20
+	if y > 60:
+		y = 0
+		x += 20
+		if x > 60:
+			x = 0
+	part_initial_offset_delta = Vector2(x, y)
 	part.name = "part" + circuit.get_next_id()
 	part.node_name = part.name
 	add_child(part)
