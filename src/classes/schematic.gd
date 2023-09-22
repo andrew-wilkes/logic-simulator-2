@@ -21,13 +21,11 @@ func _ready():
 func connect_wire(from_part, from_pin, to_part, to_pin):
 	# Add guards against invalid connections
 	connect_node(from_part, from_pin, to_part, to_pin)
-	circuit.connections = get_connection_list()
 	# Propagate bus value or level
 
 
 func disconnect_wire(from_part, from_pin, to_part, to_pin):
 	disconnect_node(from_part, from_pin, to_part, to_pin)
-	circuit.connections = get_connection_list()
 
 
 func remove_connections_to_part(part):
@@ -38,8 +36,6 @@ func remove_connections_to_part(part):
 
 func clear():
 	clear_connections()
-	circuit.connections.clear()
-	circuit.parts.clear()
 	for node in get_children():
 		if node is Part:
 			node.queue_free()
@@ -88,4 +84,7 @@ func add_part(part: Part):
 	part_name_id += 1
 	part.name = "part" + str(part_name_id)
 	add_child(part)
-	
+
+
+func save_circuit():
+	circuit.connections = get_connection_list()
