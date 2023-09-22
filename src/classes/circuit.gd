@@ -5,6 +5,7 @@ extends Resource
 @export var title = ""
 @export var connections = []
 @export var parts = []
+@export var id_num = 0
 @export var version = 2.0
 
 # Settings
@@ -32,3 +33,8 @@ func save_data(file_name, check_if_exists = false):
 		if error == OK:
 			saved_to = file_name
 	return error
+
+
+func get_next_id():
+	id_num += 1
+	return str(id_num)

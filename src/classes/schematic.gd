@@ -4,9 +4,9 @@ extends GraphEdit
 
 const PART_INITIAL_OFFSET = Vector2(100, 100)
 
+var part_scene = preload("res://parts/part.tscn")
 var circuit: Circuit
 var selected_parts = []
-var part_name_id = 0
 
 func _ready():
 	circuit = Circuit.new()
@@ -74,17 +74,58 @@ func duplicate_selected_parts():
 		var new_part = part.duplicate()
 		new_part.selected = false
 		new_part.position_offset += offset
-		part_name_id += 1
-		new_part.name = "part" + str(part_name_id)
+		new_part.name = "part" + circuit.get_next_id()
 		add_child(new_part)
 
 
-func add_part(part: Part):
+func add_part():
+	var part = part_scene.instantiate()
 	part.position_offset = PART_INITIAL_OFFSET + scroll_offset / zoom
-	part_name_id += 1
-	part.name = "part" + str(part_name_id)
+	part.name = "part" + circuit.get_next_id()
+	part.node_name = part.name
 	add_child(part)
 
 
 func save_circuit():
 	circuit.connections = get_connection_list()
+	circuit.parts = []
+	for node in get_children():
+		if node is Part:
+			circuit.parts.append(node)
+	circuit.snap_distance = snap_distance
+	circuit.use_snap = use_snap
+	circuit.minimap_enabled = minimap_enabled
+	circuit.zoom = zoom
+	circuit.scroll_offset = scroll_offset
+	circuit.save_data("res://temp.tres")
+
+
+func load_circuit():
+	clear()
+	setup_graph()
+	# Be sure that the old circuit nodes have been deleted
+	await get_tree().create_timer(0.1).timeout
+	circuit = Circuit.new().load_data("res://temp.tres")
+	add_parts()
+	add_connections()
+
+
+func add_parts():
+	for node in circuit.parts:
+		var part = part_scene.instantiate()
+		add_child(part)
+		part.name = node.node_name
+		part.position_offset = node.position_offset
+
+
+func add_connections():
+	for con in circuit.connections:
+		connect_node(con.from, con.from_port, con.to, con.to_port)
+
+
+func setup_graph():
+	snap_distance = circuit.snap_distance
+	use_snap = circuit.use_snap
+	zoom = circuit.zoom
+	scroll_offset = circuit.scroll_offset
+	minimap_enabled = circuit.minimap_enabled
