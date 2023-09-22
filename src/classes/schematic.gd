@@ -51,11 +51,11 @@ func deselect_part(part):
 
 
 func delete_selected_parts(_arr):
-	# _arr only lists parts with a close button
+	# _arr only lists parts that have a close button
 	for part in selected_parts:
-		delete_selected_part(part)
+		if is_instance_valid(part):
+			delete_selected_part(part)
 	selected_parts.clear()
-	circuit.connections = get_connection_list()
 
 
 func delete_selected_part(part):
@@ -66,23 +66,34 @@ func delete_selected_part(part):
 
 
 func duplicate_selected_parts():
+	# Base the location off the first selected part relative to the mouse cursor
 	var offset = get_local_mouse_position()
 	var first_part = true
 	for part in selected_parts:
 		if first_part:
 			first_part = false
+			# If the mouse is outside of the graph area, make the - coor +
 			offset = abs(offset) - part.position_offset
 		var new_part = part.duplicate()
 		new_part.selected = false
 		new_part.position_offset += offset
-		new_part.name = "part" + circuit.get_next_id()
 		add_child(new_part)
+		new_part.name = "part" + circuit.get_next_id()
 
 
 func add_part():
 	var part = part_scene.instantiate()
 	part.position_offset = PART_INITIAL_OFFSET + scroll_offset / zoom \
 		+ part_initial_offset_delta
+	update_part_initial_offset_delta()
+	add_child(part)
+	# Want precise control of node names to keep circuit data robust
+	# Godot can sneak in @ marks to the node name
+	part.name = "part" + circuit.get_next_id()
+	part.node_name = part.name
+
+
+func update_part_initial_offset_delta():
 	var x = part_initial_offset_delta.x
 	var y = part_initial_offset_delta.y
 	y += 20
@@ -92,9 +103,6 @@ func add_part():
 		if x > 60:
 			x = 0
 	part_initial_offset_delta = Vector2(x, y)
-	part.name = "part" + circuit.get_next_id()
-	part.node_name = part.name
-	add_child(part)
 
 
 func save_circuit():
