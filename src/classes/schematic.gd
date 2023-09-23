@@ -22,6 +22,10 @@ func _ready():
 
 func connect_wire(from_part, from_pin, to_part, to_pin):
 	# Add guards against invalid connections
+	# Only allow 1 connection to an input
+	for con in get_connection_list():
+		if to_part == con.to and to_pin == con.to_port:
+			return
 	connect_node(from_part, from_pin, to_part, to_pin)
 	# Propagate bus value or level
 
