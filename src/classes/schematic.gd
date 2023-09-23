@@ -8,6 +8,7 @@ var part_scene = preload("res://parts/part.tscn")
 var circuit: Circuit
 var selected_parts = []
 var part_initial_offset_delta = Vector2.ZERO
+var file_name = "res://temp.tres"
 
 func _ready():
 	circuit = Circuit.new()
@@ -36,14 +37,12 @@ func remove_connections_to_part(part):
 
 
 func clear():
-	var clear_idx = 1
 	clear_connections()
 	for node in get_children():
 		if node is Part:
 			# Change the node name to avoid conflicts with loaded scene part names
 			# whilst the old objects may not be freed up when new parts are being added
-			node.name = node.name + str(clear_idx)
-			clear_idx += 1
+			node.name = node.name + "x"
 			node.queue_free() # This is delayed
 
 
@@ -75,6 +74,9 @@ func duplicate_selected_parts():
 	var offset = abs(get_local_mouse_position())
 	var first_part = true
 	for part in selected_parts:
+		# Sometimes a previously freed part is one of the selected parts
+		if not is_instance_valid(part):
+			continue
 		if first_part:
 			first_part = false
 			offset = offset - part.position
@@ -84,7 +86,6 @@ func duplicate_selected_parts():
 				part_offset *= 0.8 / zoom
 			offset = Vector2(offset.x / part.position.x * part_offset.x, \
 				offset.y / part.position.y * part_offset.y)
-			prints(part.position_offset, offset, scroll_offset, zoom)
 		var new_part = part.duplicate()
 		new_part.selected = false
 		new_part.position_offset += offset
@@ -130,15 +131,13 @@ func save_circuit():
 	circuit.minimap_enabled = minimap_enabled
 	circuit.zoom = zoom
 	circuit.scroll_offset = scroll_offset
-	circuit.save_data("res://temp.tres")
+	circuit.save_data(file_name)
 
 
 func load_circuit():
 	clear()
+	circuit = Circuit.new().load_data(file_name)
 	setup_graph()
-	# Be sure that the old circuit nodes have been deleted
-	await get_tree().create_timer(0.1).timeout
-	circuit = Circuit.new().load_data("res://temp.tres")
 	add_parts()
 	add_connections()
 
