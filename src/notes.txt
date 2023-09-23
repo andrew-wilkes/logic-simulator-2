@@ -1,0 +1,1 @@
+Add button beside pins of part to allow for changing the wire colors.
