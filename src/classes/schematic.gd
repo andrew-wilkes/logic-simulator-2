@@ -101,7 +101,6 @@ func add_part():
 	# Want precise control of node names to keep circuit data robust
 	# Godot can sneak in @ marks to the node name
 	part.name = "part" + circuit.get_next_id()
-	part.node_name = part.name
 
 
 # Avoid overlapping parts that are added via the menu
@@ -123,6 +122,8 @@ func save_circuit():
 	circuit.parts = []
 	for node in get_children():
 		if node is Part:
+			# Save the name of the node
+			node.node_name = node.name
 			circuit.parts.append(node)
 	circuit.snap_distance = snap_distance
 	circuit.use_snap = use_snap
@@ -144,7 +145,11 @@ func load_circuit():
 
 func add_parts():
 	for node in circuit.parts:
+		# Todo: instantiate node based on part_type
 		var part = part_scene.instantiate()
+		part.tag = node.tag
+		part.part_type = node.part_type
+		part.data = node.data
 		add_child(part)
 		part.name = node.node_name
 		part.position_offset = node.position_offset

@@ -7,4 +7,4 @@ extends GraphNode
 var tag = ""
 var part_type = 0
 var data = {}
-var node_name = ""
+var node_name = "temp"
