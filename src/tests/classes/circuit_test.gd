@@ -6,6 +6,7 @@ extends GdUnitTestSuite
 
 # TestSuite generated from
 const __source = 'res://classes/circuit.gd'
+
 const temp_file = "res://temp.res"
 
 func test_save_data() -> void:

@@ -2,6 +2,8 @@ class_name Schematic
 
 extends GraphEdit
 
+signal invalid_instance(ob, note)
+
 const PART_INITIAL_OFFSET = Vector2(50, 50)
 
 var part_scene = preload("res://parts/part.tscn")
@@ -22,6 +24,7 @@ func _ready():
 
 func connect_wire(from_part, from_pin, to_part, to_pin):
 	# Add guards against invalid connections
+	# Think about how to handle reverse (right to left) flow
 	# Only allow 1 connection to an input
 	for con in get_connection_list():
 		if to_part == con.to and to_pin == con.to_port:
@@ -61,7 +64,7 @@ func deselect_part(part):
 func delete_selected_parts(_arr):
 	# _arr only lists parts that have a close button
 	for part in selected_parts:
-		if is_instance_valid(part):
+		if not is_object_instance_invalid(part, "delete_selected_parts"):
 			delete_selected_part(part)
 	selected_parts.clear()
 
@@ -79,12 +82,12 @@ func duplicate_selected_parts():
 	var first_part = true
 	for part in selected_parts:
 		# Sometimes a previously freed part is one of the selected parts
-		if not is_instance_valid(part):
+		if is_object_instance_invalid(part, "duplicate_selected_parts"):
 			continue
 		if first_part:
 			first_part = false
 			offset = offset - part.position
-			var part_offset = (part.position_offset - scroll_offset)
+			var part_offset = part.position_offset - scroll_offset
 			# Can only seem to approximate the position when zoomed
 			if zoom > 1.1 or zoom < 0.9:
 				part_offset *= 0.8 / zoom
@@ -148,6 +151,8 @@ func load_circuit():
 
 func add_parts():
 	for node in circuit.parts:
+		if is_object_instance_invalid(node, "add_parts"):
+			continue
 		# Todo: instantiate node based on part_type
 		var part = part_scene.instantiate()
 		part.tag = node.tag
@@ -169,3 +174,14 @@ func setup_graph():
 	zoom = circuit.zoom
 	scroll_offset = circuit.scroll_offset
 	minimap_enabled = circuit.minimap_enabled
+
+
+# This function is included because it is difficult to debug situations 
+# of freed nodes still persisting in say a weak reference state.
+# In this software we frequently delete, duplicate, and create nodes.
+func is_object_instance_invalid(ob, note = ""):
+	if is_instance_valid(ob):
+		return false
+	else:
+		emit_signal("invalid_instance", ob, note)
+		return true

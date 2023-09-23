@@ -7,7 +7,7 @@ extends GraphNode
 signal output_level_changed(part, side, port, level)
 signal bus_value_changed(part, side, port, value)
 
-# Indicate unstable wire and stop flow
+# Indicate unstable wire and stop flow of level or value
 signal unstable(part, side, port)
 
 enum { LEFT, RIGHT }
