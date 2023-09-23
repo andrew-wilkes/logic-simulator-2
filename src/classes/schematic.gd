@@ -36,10 +36,15 @@ func remove_connections_to_part(part):
 
 
 func clear():
+	var clear_idx = 1
 	clear_connections()
 	for node in get_children():
 		if node is Part:
-			node.queue_free()
+			# Change the node name to avoid conflicts with loaded scene part names
+			# whilst the old objects may not be freed up when new parts are being added
+			node.name = node.name + str(clear_idx)
+			clear_idx += 1
+			node.queue_free() # This is delayed
 
 
 func select_part(part):
@@ -67,13 +72,19 @@ func delete_selected_part(part):
 
 func duplicate_selected_parts():
 	# Base the location off the first selected part relative to the mouse cursor
-	var offset = get_local_mouse_position()
+	var offset = abs(get_local_mouse_position())
 	var first_part = true
 	for part in selected_parts:
 		if first_part:
 			first_part = false
-			# If the mouse is outside of the graph area, make the - coor +
-			offset = abs(offset) - part.position_offset
+			offset = offset - part.position
+			var part_offset = (part.position_offset - scroll_offset)
+			# Can only seem to approximate the position when zoomed
+			if zoom > 1.1 or zoom < 0.9:
+				part_offset *= 0.8 / zoom
+			offset = Vector2(offset.x / part.position.x * part_offset.x, \
+				offset.y / part.position.y * part_offset.y)
+			prints(part.position_offset, offset, scroll_offset, zoom)
 		var new_part = part.duplicate()
 		new_part.selected = false
 		new_part.position_offset += offset
@@ -93,6 +104,8 @@ func add_part():
 	part.node_name = part.name
 
 
+# Avoid overlapping parts that are added via the menu
+# Place in a 4x4 pattern
 func update_part_initial_offset_delta():
 	var x = part_initial_offset_delta.x
 	var y = part_initial_offset_delta.y
