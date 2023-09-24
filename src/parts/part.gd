@@ -22,27 +22,31 @@ var race_counter = {} # [side, port]: count
 var pins = {} # [side, port]: level / value
 
 func update_input_level(side, port, level):
-	var key = [side, port]
-	if not pins.has(key):
-		pins[key] = not level
-	if level != pins[key]:
-		pins[key] = level
+	var key = set_pin_value(side, port, level)
+	if key:
 		if race_counter.has(key):
 			race_counter[key] += 1
 			if race_counter[key] == 2:
 				emit_signal("unstable", self, side, port)
 				return
 		else:
-			race_counter[key] = 0
+			race_counter[key] = 1
 		evaluate_output_level(side, port, level)
 
 
-func update_bus_input_value(side, port, value):
+func set_pin_value(side, port, value):
 	var key = [side, port]
 	if not pins.has(key):
-		pins[key] = value + 1
-	if value != pins[key]:
+		pins[key] = null
+	if value == pins[key]:
+		key = null
+	else:
 		pins[key] = value
+	return key
+
+
+func update_bus_input_value(side, port, value):
+	if set_pin_value(side, port, value):
 		evaluate_bus_output_value(side, port, value)
 
 
@@ -51,10 +55,25 @@ func reset_race_counter():
 		race_counter[key] = 0
 
 
-# Override these functions in extended parts
-func evaluate_output_level(side, _port, level):
-	emit_signal("output_level_changed", self, side, 1, level)
+# Override this function in extended parts
+func evaluate_output_level(side, port, level):
+	# Logic to derive the new level
+	side += 1
+	update_output_level(side, port, level)
 
 
-func evaluate_bus_output_value(side, _port, value):
-	emit_signal("bus_value_changed", self, side, 2, value)
+func update_output_level(side, port, level):
+	if set_pin_value(side, port, level):
+		emit_signal("output_level_changed", self, 1, 2, level)
+
+
+# Override this function in extended parts
+func evaluate_bus_output_value(side, port, value):
+	# Logic to derive the new value
+	side += 1
+	update_output_value(side, port, value)
+
+
+func update_output_value(side, port, value):
+	if set_pin_value(side, port, value):
+		emit_signal("bus_value_changed", self, 1, 1, value)

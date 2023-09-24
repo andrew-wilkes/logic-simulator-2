@@ -106,8 +106,9 @@ func add_part():
 		+ part_initial_offset_delta
 	update_part_initial_offset_delta()
 	add_child(part)
-	# Want precise control of node names to keep circuit data robust
-	# Godot can sneak in @ marks to the node name
+	# We want precise control of node names to keep circuit data robust
+	# Godot can sneak in @ marks to the node name, so we assign the name after
+	# the node was added to the scene and Godot gave it a name
 	part.name = "part" + circuit.get_next_id()
 
 
