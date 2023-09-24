@@ -14,3 +14,6 @@ src/addons
 .mono/
 data_*/
 mono_crash.*.json
+
+# Related to my pc ignores :)
+src/temp.tres

@@ -7,7 +7,6 @@ extends GdUnitTestSuite
 # TestSuite generated from
 const __source = 'res://parts/nand.gd'
 
-
 func test_evaluate_output_level() -> void:
 	var part = monitor_signals(NAND.new())
 	part.update_input_level(0, 1, true)
