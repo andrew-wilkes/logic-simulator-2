@@ -50,6 +50,7 @@ func clear():
 			# Change the node name to avoid conflicts with loaded scene part names
 			# whilst the old objects may not be freed up when new parts are being added
 			node.name = node.name + "x"
+			remove_child(node) # Added this after the above fix
 			node.queue_free() # This is delayed
 
 
@@ -73,6 +74,7 @@ func delete_selected_part(part):
 	for con in get_connection_list():
 		if con.to == part.name or con.from == part.name:
 			disconnect_node(con.from, con.from_port, con.to, con.to_port)
+	remove_child(part)
 	part.queue_free()
 
 

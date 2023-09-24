@@ -35,6 +35,9 @@ func update_input_level(side, port, level):
 
 
 func set_pin_value(side, port, value):
+	# value will be an int or a bool to handle a wire or a bus
+	# The function returns null if there was no change or the pin key
+	# This makes it easy to emit a signal or not to indicate a change
 	var key = [side, port]
 	if not pins.has(key):
 		pins[key] = null
