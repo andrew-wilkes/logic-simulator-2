@@ -90,7 +90,10 @@ func duplicate_selected_parts():
 			first_part = false
 			offset = offset - part.position
 			var part_offset = part.position_offset - scroll_offset
-			# Can only seem to approximate the position when zoomed
+			# Can only seem to approximate the position when zoomed.
+			# Ideally, the first selected part copy would position itself
+			# exacly where the mouse cursor is.
+			# Are you up for the challenge to fix this?
 			if zoom > 1.1 or zoom < 0.9:
 				part_offset *= 0.8 / zoom
 			offset = Vector2(offset.x / part.position.x * part_offset.x, \
@@ -115,7 +118,8 @@ func add_part():
 
 
 # Avoid overlapping parts that are added via the menu
-# Place in a 4x4 pattern
+# Place in a 4x4 pattern since 16 parts are likely to be the max entered in one
+# go by a user I think
 func update_part_initial_offset_delta():
 	var x = part_initial_offset_delta.x
 	var y = part_initial_offset_delta.y
