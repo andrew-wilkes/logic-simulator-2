@@ -17,6 +17,7 @@ var tag = ""
 var part_type = 0
 var data = {}
 var node_name = "temp"
+var show_display = true
 
 var race_counter = {} # [side, port]: count
 var pins = {} # [side, port]: level / value
