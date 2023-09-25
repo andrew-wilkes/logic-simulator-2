@@ -61,22 +61,22 @@ func reset_race_counter():
 # Override this function in extended parts
 func evaluate_output_level(side, port, level):
 	# Logic to derive the new level
-	side += 1
+	side = (side + 1) % 2 # Used with IO part to alternate sides
 	update_output_level(side, port, level)
 
 
 func update_output_level(side, port, level):
 	if set_pin_value(side, port, level):
-		emit_signal("output_level_changed", self, 1, 2, level)
+		emit_signal("output_level_changed", self, side, port, level)
 
 
 # Override this function in extended parts
 func evaluate_bus_output_value(side, port, value):
 	# Logic to derive the new value
-	side += 1
+	side = (side + 1) % 2
 	update_output_value(side, port, value)
 
 
 func update_output_value(side, port, value):
 	if set_pin_value(side, port, value):
-		emit_signal("bus_value_changed", self, 1, 1, value)
+		emit_signal("bus_value_changed", self, side, port, value)
