@@ -1,10 +1,15 @@
 class_name IO
 
 # It has 1 bus and 1 or more wires.
-# The wires and bus are independent apart from causing updates to the display.
-# When setting the value externally, both output wires and the bus are updated.
-# The data flow is bidirectional except for when setting the value externally.
-# I
+# When selected, the part will be connected to a UI control panel for configuring the part
+# and adjusting the value.
+# The wires and bus are synced to the same value of bits and integer.
+# When setting the value externally, the output is emitted from both sides.
+# The data flow is bidirectional.
+# The external value setting feature has no meaning when the part is inside a block.
+# The display value may be edited by the user to set the value. Also, this value
+# is updated when the input on either side changes.
+# The display may be made visible in blocks depending on settings.
 
 extends Part
 
@@ -13,8 +18,8 @@ var format = "0x%02X"
 var num_wires
 
 func _ready():
-	#test_set_pins()
-	$Value.connect("text_submitted", _on_text_entered)
+	#test_set_pins() # Done visually when running the scene.
+	$Value.connect("text_submitted", _on_text_submitted)
 
 
 func set_pins(labels: Array):
@@ -38,22 +43,24 @@ func set_pins(labels: Array):
 		set_slot_enabled_right(n + 2, true)
 
 
-func _on_text_entered(new_text):
+func _on_text_submitted(new_text):
 	var value = 0
 	if new_text.is_valid_integer():
 		value = int(new_text)
 	if new_text.is_valid_hex_number(true):
 		value = new_text.hex_to_int()
 	$Value.caret_position = 8
-	output_levels_from_value(1, int(clamp(value, 0, max_value)))
+	update_output_levels_from_value([0, 1], int(clamp(value, 0, max_value)))
+	update_output_value(0, 2, value)
 	update_output_value(1, 2, value)
 
 
-func output_levels_from_value(side, value):
+func update_output_levels_from_value(sides: Array, value: int):
 	for n in num_wires:
 		var level = bool(value % 2)
 		value /= 2
-		update_output_level(side, n + 3, level)
+		for side in sides:
+			update_output_level(side, n + 3, level)
 
 
 func set_display_value(value):
@@ -65,15 +72,15 @@ func evaluate_output_level(side, port, level):
 	var value = 0
 	for n in num_wires:
 		value *= 2
-		value += int(pins[[side, num_wires + 2 - n]])
-	if show_display:
-		set_display_value(value)
-	evaluate_bus_output_value(side, port, value)
+		value += int(pins.get([side, num_wires + 2 - n], false))
+	evaluate_bus_output_value(side, 2, value, false)
 
 
-func evaluate_bus_output_value(side, port, value):
+func evaluate_bus_output_value(side, port, value, update_levels = true):
 	super(side, port, value)
-	output_levels_from_value(side, value)
+	# A speed optimization could be to not call this unless there are wire connections.
+	if update_levels:
+		update_output_levels_from_value([(side + 1) % 2], value)
 	if show_display:
 		set_display_value(value)
 
