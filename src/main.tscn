@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://eohxndqnij0x"]
+[gd_scene load_steps=4 format=3 uid="uid://eohxndqnij0x"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_7i1tr"]
 [ext_resource type="Script" path="res://classes/schematic.gd" id="2_evx7y"]
+[ext_resource type="PackedScene" uid="uid://blyoi2nc61uvt" path="res://io_config.tscn" id="3_x8pl6"]
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -37,6 +38,10 @@ text = "Load"
 layout_mode = 2
 text = "Add Part"
 
+[node name="IOButton" type="Button" parent="VB/HB"]
+layout_mode = 2
+text = "IO Config"
+
 [node name="Schematic" type="GraphEdit" parent="VB"]
 layout_mode = 2
 size_flags_vertical = 3
@@ -44,5 +49,8 @@ right_disconnects = true
 arrange_nodes_button_hidden = true
 script = ExtResource("2_evx7y")
 
+[node name="IOConfig" parent="." instance=ExtResource("3_x8pl6")]
+
 [connection signal="pressed" from="VB/HB/SaveButton" to="." method="_on_save_button_pressed"]
 [connection signal="pressed" from="VB/HB/LoadButton" to="." method="_on_load_button_pressed"]
+[connection signal="pressed" from="VB/HB/IOButton" to="." method="_on_io_button_pressed"]

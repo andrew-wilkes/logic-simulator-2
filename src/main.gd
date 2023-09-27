@@ -18,3 +18,7 @@ func _on_save_button_pressed():
 
 func _on_load_button_pressed():
 	$VB/Schematic.load_circuit()
+
+
+func _on_io_button_pressed():
+	$IOConfig.popup_centered()

@@ -1,0 +1,108 @@
+[gd_scene load_steps=3 format=3 uid="uid://blyoi2nc61uvt"]
+
+[ext_resource type="Script" path="res://io_config.gd" id="1_qtc2y"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dsrqn"]
+bg_color = Color(0.278431, 0.278431, 0.278431, 1)
+
+[node name="IOConfig" type="PopupPanel"]
+title = "Configure IO"
+size = Vector2i(447, 518)
+visible = true
+borderless = false
+theme_override_styles/panel = SubResource("StyleBoxFlat_dsrqn")
+script = ExtResource("1_qtc2y")
+
+[node name="M" type="MarginContainer" parent="."]
+offset_right = 447.0
+offset_bottom = 518.0
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="HB" type="HBoxContainer" parent="M"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="VB" type="VBoxContainer" parent="M/HB"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Label2" type="Label" parent="M/HB/VB"]
+layout_mode = 2
+text = "Value"
+horizontal_alignment = 1
+
+[node name="Value" type="LineEdit" parent="M/HB/VB"]
+layout_mode = 2
+text = "0x00"
+alignment = 1
+
+[node name="HB" type="HBoxContainer" parent="M/HB/VB"]
+layout_mode = 2
+
+[node name="Sp" type="Control" parent="M/HB/VB/HB"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VSlider" type="VSlider" parent="M/HB/VB/HB"]
+custom_minimum_size = Vector2(0, 128)
+layout_mode = 2
+max_value = 256.0
+
+[node name="Sp2" type="Control" parent="M/HB/VB/HB"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VB" type="VBoxContainer" parent="M/HB/VB/HB"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="UpButton" type="Button" parent="M/HB/VB/HB/VB"]
+layout_mode = 2
+text = "UP"
+
+[node name="DownButton" type="Button" parent="M/HB/VB/HB/VB"]
+layout_mode = 2
+text = "Down"
+
+[node name="Label" type="Label" parent="M/HB/VB"]
+layout_mode = 2
+text = "Number of bits"
+horizontal_alignment = 1
+
+[node name="NumBits" type="SpinBox" parent="M/HB/VB"]
+layout_mode = 2
+min_value = 1.0
+max_value = 256.0
+value = 1.0
+
+[node name="BusLabel" type="Label" parent="M/HB/VB"]
+layout_mode = 2
+text = "Bus color"
+horizontal_alignment = 1
+
+[node name="BusColor" type="Button" parent="M/HB/VB"]
+layout_mode = 2
+action_mode = 0
+text = "Change"
+
+[node name="WireLabel" type="Label" parent="M/HB/VB"]
+layout_mode = 2
+text = "Wire color"
+horizontal_alignment = 1
+
+[node name="WireColor" type="Button" parent="M/HB/VB"]
+layout_mode = 2
+action_mode = 0
+text = "Change"
+
+[node name="ColorPicker" type="ColorPicker" parent="M/HB"]
+layout_mode = 2
+can_add_swatches = false
+presets_visible = false
+
+[connection signal="popup_hide" from="." to="." method="_on_popup_hide"]
+[connection signal="pressed" from="M/HB/VB/BusColor" to="." method="_on_bus_color_pressed"]
+[connection signal="pressed" from="M/HB/VB/WireColor" to="." method="_on_wire_color_pressed"]
