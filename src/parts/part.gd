@@ -24,7 +24,7 @@ var pins = {} # [side, port]: level / value
 
 func update_input_level(side, port, level):
 	var key = set_pin_value(side, port, level)
-	if key:
+	if key != null:
 		if race_counter.has(key):
 			race_counter[key] += 1
 			if race_counter[key] == 2:
@@ -50,7 +50,7 @@ func set_pin_value(side, port, value):
 
 
 func update_bus_input_value(side, port, value):
-	if set_pin_value(side, port, value):
+	if set_pin_value(side, port, value) != null:
 		evaluate_bus_output_value(side, port, value)
 
 
@@ -67,7 +67,7 @@ func evaluate_output_level(side, port, level):
 
 
 func update_output_level(side, port, level):
-	if set_pin_value(side, port, level):
+	if set_pin_value(side, port, level) != null:
 		emit_signal("output_level_changed", self, side, port, level)
 
 
@@ -79,5 +79,5 @@ func evaluate_bus_output_value(side, port, value):
 
 
 func update_output_value(side, port, value):
-	if set_pin_value(side, port, value):
+	if set_pin_value(side, port, value) != null:
 		emit_signal("bus_value_changed", self, side, port, value)

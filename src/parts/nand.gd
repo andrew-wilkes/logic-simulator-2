@@ -10,5 +10,5 @@ func evaluate_output_level(side, _port, level):
 	if side == 0:
 		level = not (pins[[side, 1]] and pins[[side, 2]])
 		# Set output pin level
-		if set_pin_value(1, 1, level):
+		if set_pin_value(1, 1, level) != null:
 			emit_signal("output_level_changed", self, 1, 1, level)
