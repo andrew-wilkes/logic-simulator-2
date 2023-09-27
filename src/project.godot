@@ -17,6 +17,10 @@ boot_splash/bg_color=Color(0.0431373, 0.0431373, 0.0431373, 1)
 boot_splash/image="res://assets/ui/boot-splash.png"
 config/icon="res://assets/ui/icon.png"
 
+[autoload]
+
+Parts="*res://parts.gd"
+
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/gdUnit4/plugin.cfg")

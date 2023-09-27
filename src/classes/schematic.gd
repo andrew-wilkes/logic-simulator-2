@@ -6,7 +6,6 @@ signal invalid_instance(ob, note)
 
 const PART_INITIAL_OFFSET = Vector2(50, 50)
 
-var part_scene = preload("res://parts/part.tscn")
 var circuit: Circuit
 var selected_parts = []
 var part_initial_offset_delta = Vector2.ZERO
@@ -105,8 +104,9 @@ func duplicate_selected_parts():
 		new_part.name = "part" + circuit.get_next_id()
 
 
-func add_part():
-	var part = part_scene.instantiate()
+func add_part(part_name):
+	var part = Parts.scenes[part_name].instantiate()
+	part.part_type = part_name
 	part.position_offset = PART_INITIAL_OFFSET + scroll_offset / zoom \
 		+ part_initial_offset_delta
 	update_part_initial_offset_delta()
@@ -114,7 +114,7 @@ func add_part():
 	# We want precise control of node names to keep circuit data robust
 	# Godot can sneak in @ marks to the node name, so we assign the name after
 	# the node was added to the scene and Godot gave it a name
-	part.name = "part" + circuit.get_next_id()
+	part.name = part_name + circuit.get_next_id()
 
 
 # Avoid overlapping parts that are added via the menu
@@ -161,7 +161,7 @@ func add_parts():
 		if is_object_instance_invalid(node, "add_parts"):
 			continue
 		# Todo: instantiate node based on part_type
-		var part = part_scene.instantiate()
+		var part = Parts.scenes[node.part_type].instantiate()
 		part.tag = node.tag
 		part.part_type = node.part_type
 		part.data = node.data

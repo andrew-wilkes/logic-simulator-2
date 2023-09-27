@@ -14,7 +14,7 @@ enum { LEFT, RIGHT }
 
 # Part properties
 var tag = ""
-var part_type = 0
+var part_type = ""
 var data = {}
 var node_name = "temp"
 var show_display = true

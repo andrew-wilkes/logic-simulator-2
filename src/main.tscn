@@ -25,10 +25,6 @@ theme_override_constants/separation = 20
 layout_mode = 2
 theme_override_constants/separation = 20
 
-[node name="TestButton" type="Button" parent="VB/HB"]
-layout_mode = 2
-text = "Add Part"
-
 [node name="SaveButton" type="Button" parent="VB/HB"]
 layout_mode = 2
 text = "Save"
@@ -37,6 +33,10 @@ text = "Save"
 layout_mode = 2
 text = "Load"
 
+[node name="AddPartMenu" type="MenuButton" parent="VB/HB"]
+layout_mode = 2
+text = "Add Part"
+
 [node name="Schematic" type="GraphEdit" parent="VB"]
 layout_mode = 2
 size_flags_vertical = 3
@@ -44,6 +44,5 @@ right_disconnects = true
 arrange_nodes_button_hidden = true
 script = ExtResource("2_evx7y")
 
-[connection signal="pressed" from="VB/HB/TestButton" to="." method="_on_button_pressed"]
 [connection signal="pressed" from="VB/HB/SaveButton" to="." method="_on_save_button_pressed"]
 [connection signal="pressed" from="VB/HB/LoadButton" to="." method="_on_load_button_pressed"]
