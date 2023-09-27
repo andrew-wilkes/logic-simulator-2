@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://main.gd" id="1_7i1tr"]
 [ext_resource type="Script" path="res://classes/schematic.gd" id="2_evx7y"]
-[ext_resource type="PackedScene" uid="uid://blyoi2nc61uvt" path="res://io_config.tscn" id="3_x8pl6"]
+[ext_resource type="PackedScene" uid="uid://blyoi2nc61uvt" path="res://io_manager.tscn" id="3_x8pl6"]
 
 [node name="Main" type="Control"]
 layout_mode = 3

@@ -20,7 +20,7 @@ func _ready():
 func setup(bus_color, wire_color):
 	_bus_color = bus_color
 	_wire_color = wire_color
-	set_button_colors()
+	set_button_text_colors()
 
 
 func hide_color_picker():
@@ -54,7 +54,7 @@ func _on_wire_color_pressed():
 		color_picker.show()
 
 
-func set_button_colors():
+func set_button_text_colors():
 	$M/HB/VB/WireColor.set("theme_override_colors/font_color", _wire_color)
 	$M/HB/VB/BusColor.set("theme_override_colors/font_color", _bus_color)
 
@@ -64,4 +64,4 @@ func _on_color_picker_color_changed(color):
 		_wire_color = color_picker.color
 	else:
 		_bus_color = color_picker.color
-	set_button_colors()
+	set_button_text_colors()
