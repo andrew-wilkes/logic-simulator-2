@@ -26,7 +26,8 @@ func _init():
 
 
 func _ready():
-	test_set_pins() # Done visually when running the scene.
+	if get_parent().name == "root":
+		test_set_pins() # Done visually when running the scene.
 	$Value.connect("text_submitted", _on_text_submitted)
 
 
@@ -52,6 +53,11 @@ func set_pins():
 			get_child(-2 - n).queue_free()
 	set_pin_colors()
 	set_labels()
+	resize_part() # Shrinking leaves a gap at the bottom
+
+
+func resize_part():
+	size = Vector2.ZERO # Fit to the new size automatically
 
 
 func set_labels():
@@ -79,7 +85,7 @@ func _on_text_submitted(new_text):
 		value = int(new_text)
 	if new_text.is_valid_hex_number(true):
 		value = new_text.hex_to_int()
-	set_display_value(value) # The value may come from the IO panel
+	set_display_value(value) # This formats the value as well as updating it from the IO panel
 	current_value = value
 	update_output_levels_from_value([0, 1], value)
 	update_output_value(0, 2, value)
@@ -87,7 +93,7 @@ func _on_text_submitted(new_text):
 
 
 func update_output_levels_from_value(sides: Array, value: int):
-	# This will ignore value bits above the range that the wires cover
+	# This will ignore (clip) value bits above the range that the wires cover
 	for n in data.num_wires:
 		var level = bool(value % 2)
 		value /= 2
@@ -97,6 +103,7 @@ func update_output_levels_from_value(sides: Array, value: int):
 
 func set_display_value(value):
 	$Value.text = format % [value]
+	# The following line avoids the caret blinking at the start of the text
 	$Value.caret_column = 16
 
 

@@ -107,15 +107,16 @@ func _on_value_text_submitted(new_text):
 
 
 func _on_up_button_pressed():
-	step = 1
-	change_value(step)
-	update_value()
-	$RepeatTimer.start(0.5)
+	up_down_initiate(1)
 
 
 func _on_down_button_pressed():
-	step = -1
-	change_value(step)
+	up_down_initiate(-1)
+
+
+func up_down_initiate(_step):
+	step = _step
+	change_value()
 	update_value()
 	$RepeatTimer.start(0.5)
 
@@ -141,16 +142,18 @@ func _on_repeat_timer_timeout():
 			if not %DownButton.button_pressed:
 				step = 0
 	if step != 0:
-		change_value(step)
+		change_value()
 		update_value()
+		# Possible Godot 4 bug here. $RepeatTimer.start() uses last value
+		# rather than the default value.
 		$RepeatTimer.start(0.1)
 
 
-func change_value(delta):
+func change_value():
 	if part.data.range > 0:
-		part.current_value = clampi(part.current_value + delta, 0, part.data.range)
+		part.current_value = clampi(part.current_value + step, 0, part.data.range)
 	else:
-		part.current_value = posmod(part.current_value + delta, DEFAULT_SLIDER_LIMIT + 1)
+		part.current_value = posmod(part.current_value + step, DEFAULT_SLIDER_LIMIT + 1)
 
 
 func _on_update_timer_timeout():
@@ -173,7 +176,7 @@ func set_slider_value():
 	if slider_value_changed:
 		slider_value_changed = false
 	else:
-		# Update slider position and ignore it's signal
+		# Update slider position and ignore its signal
 		var limit = DEFAULT_SLIDER_LIMIT
 		if part.data.range > 0:
 			limit = part.data.range
@@ -183,6 +186,7 @@ func set_slider_value():
 
 func set_range(value):
 	%Range.text = part.format % [value]
+	%Range.caret_column = 16
 
 
 func _on_range_text_submitted(new_text):
@@ -191,6 +195,7 @@ func _on_range_text_submitted(new_text):
 		value = int(new_text)
 	if new_text.is_valid_hex_number(true):
 		value = new_text.hex_to_int()
+	set_range(value)
 	part.data.range = value
 
 
