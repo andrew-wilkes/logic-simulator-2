@@ -43,18 +43,6 @@ layout_mode = 2
 text = "0x00"
 alignment = 1
 
-[node name="RB" type="HBoxContainer" parent="M/HB/VB"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="M/HB/VB/RB"]
-layout_mode = 2
-text = "Range:"
-
-[node name="Range" type="LineEdit" parent="M/HB/VB/RB"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "0xff"
-
 [node name="HB" type="HBoxContainer" parent="M/HB/VB"]
 layout_mode = 2
 
@@ -76,6 +64,10 @@ size_flags_horizontal = 3
 layout_mode = 2
 theme_override_constants/separation = 20
 
+[node name="Sp" type="Control" parent="M/HB/VB/HB/VB"]
+layout_mode = 2
+size_flags_vertical = 3
+
 [node name="UpButton" type="Button" parent="M/HB/VB/HB/VB"]
 unique_name_in_owner = true
 layout_mode = 2
@@ -89,6 +81,22 @@ layout_mode = 2
 focus_mode = 0
 action_mode = 0
 icon = ExtResource("3_k13fo")
+
+[node name="Sp2" type="Control" parent="M/HB/VB/HB/VB"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="RB" type="HBoxContainer" parent="M/HB/VB"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="M/HB/VB/RB"]
+layout_mode = 2
+text = "Range:"
+
+[node name="Range" type="LineEdit" parent="M/HB/VB/RB"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0xff"
 
 [node name="Label" type="Label" parent="M/HB/VB"]
 layout_mode = 2
@@ -147,6 +155,7 @@ text = "Generate"
 [node name="Suffix" type="LineEdit" parent="M/HB/Pins/HB"]
 unique_name_in_owner = true
 layout_mode = 2
+tooltip_text = "Suffix"
 placeholder_text = "Suffix"
 
 [node name="Names" type="TextEdit" parent="M/HB/Pins"]
@@ -164,10 +173,10 @@ one_shot = true
 
 [connection signal="popup_hide" from="." to="." method="_on_popup_hide"]
 [connection signal="text_submitted" from="M/HB/VB/Value" to="." method="_on_value_text_submitted"]
-[connection signal="text_submitted" from="M/HB/VB/RB/Range" to="." method="_on_range_text_submitted"]
 [connection signal="value_changed" from="M/HB/VB/HB/VSlider" to="." method="_on_v_slider_value_changed"]
 [connection signal="pressed" from="M/HB/VB/HB/VB/UpButton" to="." method="_on_up_button_pressed"]
 [connection signal="pressed" from="M/HB/VB/HB/VB/DownButton" to="." method="_on_down_button_pressed"]
+[connection signal="text_submitted" from="M/HB/VB/RB/Range" to="." method="_on_range_text_submitted"]
 [connection signal="value_changed" from="M/HB/VB/NumWires" to="." method="_on_num_wires_value_changed"]
 [connection signal="pressed" from="M/HB/VB/BusColor" to="." method="_on_bus_color_pressed"]
 [connection signal="pressed" from="M/HB/VB/WireColor" to="." method="_on_wire_color_pressed"]

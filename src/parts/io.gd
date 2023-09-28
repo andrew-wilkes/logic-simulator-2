@@ -1,8 +1,7 @@
 class_name IO
 
 # It has 1 bus and 1 or more wires.
-# When selected, the part will be connected to a UI control panel for configuring the part
-# and adjusting the value.
+# Selected parts may be controlled and configured via a IO Manager panel.
 # The wires and bus are synced to the same value of bits and integer.
 # When setting the value externally, the output is emitted from both sides.
 # The data flow is bidirectional.
@@ -14,7 +13,7 @@ class_name IO
 extends Part
 
 var format = "0x%02X"
-var current_value = 0 # This is accessed by the IO panel
+var current_value = 0 # This is accessed by the IO Manager panel
 
 func _init():
 		data = {
@@ -27,14 +26,12 @@ func _init():
 
 
 func _ready():
-	#test_set_pins() # Done visually when running the scene.
+	test_set_pins() # Done visually when running the scene.
 	$Value.connect("text_submitted", _on_text_submitted)
 
 
 func setup():
 	set_pins()
-	set_labels()
-	set_pin_colors()
 
 
 func set_pins():
@@ -53,6 +50,8 @@ func set_pins():
 	if to_add < 0:
 		for n in -to_add:
 			get_child(-2 - n).queue_free()
+	set_pin_colors()
+	set_labels()
 
 
 func set_labels():
@@ -125,9 +124,7 @@ func test_set_pins():
 	data.num_wires = 4
 	data.labels = ["data","a","b","c","d"]
 	set_pins()
-	set_labels()
 	await get_tree().create_timer(1.0).timeout
 	data.num_wires = 2
 	data.labels = ["DIO","x","The yellow tail"]
 	set_pins()
-	set_labels()

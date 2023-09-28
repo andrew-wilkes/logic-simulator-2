@@ -6,11 +6,12 @@ signal wire_color_changed(part, color)
 
 const DEFAULT_SLIDER_LIMIT = 0xff
 
-var set_bus_color = false
-var set_wire_color = false
 @onready var color_picker = $M/HB/ColorPicker
+
 var part
 var step := 0
+var set_bus_color = false
+var set_wire_color = false
 var slider_value_changed = false
 var ignore_slider_signal = false
 
@@ -19,7 +20,7 @@ func open(_part: IO):
 	hide_pin_names()
 	hide_color_picker()
 	set_button_text_colors()
-	set_pin_names()
+	list_pin_names()
 	set_range(part.data.range)
 	set_display_value()
 	%NumWires.value = part.data.num_wires
@@ -95,7 +96,7 @@ func hide_pin_names():
 	size = Vector2.ZERO
 
 
-func set_pin_names():
+func list_pin_names():
 	%Names.text = "\n".join(part.data.labels)
 
 
