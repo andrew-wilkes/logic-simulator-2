@@ -1,20 +1,23 @@
-[gd_scene load_steps=3 format=3 uid="uid://blyoi2nc61uvt"]
+[gd_scene load_steps=5 format=3 uid="uid://blyoi2nc61uvt"]
 
 [ext_resource type="Script" path="res://io_manager.gd" id="1_r1v3c"]
+[ext_resource type="Texture2D" uid="uid://dy1sd78ikc231" path="res://assets/parts/up.png" id="2_a3iin"]
+[ext_resource type="Texture2D" uid="uid://nebjnvr6aqnq" path="res://assets/parts/down.png" id="3_k13fo"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dsrqn"]
 bg_color = Color(0.278431, 0.278431, 0.278431, 1)
 
-[node name="IOConfig" type="PopupPanel"]
+[node name="IOManager" type="PopupPanel"]
 title = "IO Manager"
-size = Vector2i(462, 518)
+position = Vector2i(0, 36)
+size = Vector2i(798, 518)
 visible = true
 borderless = false
 theme_override_styles/panel = SubResource("StyleBoxFlat_dsrqn")
 script = ExtResource("1_r1v3c")
 
 [node name="M" type="MarginContainer" parent="."]
-offset_right = 462.0
+offset_right = 798.0
 offset_bottom = 518.0
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
@@ -35,9 +38,22 @@ text = "Value"
 horizontal_alignment = 1
 
 [node name="Value" type="LineEdit" parent="M/HB/VB"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "0x00"
 alignment = 1
+
+[node name="RB" type="HBoxContainer" parent="M/HB/VB"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="M/HB/VB/RB"]
+layout_mode = 2
+text = "Range:"
+
+[node name="Range" type="LineEdit" parent="M/HB/VB/RB"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0xff"
 
 [node name="HB" type="HBoxContainer" parent="M/HB/VB"]
 layout_mode = 2
@@ -47,9 +63,10 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="VSlider" type="VSlider" parent="M/HB/VB/HB"]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 128)
 layout_mode = 2
-max_value = 256.0
+max_value = 255.0
 
 [node name="Sp2" type="Control" parent="M/HB/VB/HB"]
 layout_mode = 2
@@ -60,14 +77,18 @@ layout_mode = 2
 theme_override_constants/separation = 20
 
 [node name="UpButton" type="Button" parent="M/HB/VB/HB/VB"]
+unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
-text = "UP"
+action_mode = 0
+icon = ExtResource("2_a3iin")
 
 [node name="DownButton" type="Button" parent="M/HB/VB/HB/VB"]
+unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
-text = "Down"
+action_mode = 0
+icon = ExtResource("3_k13fo")
 
 [node name="Label" type="Label" parent="M/HB/VB"]
 layout_mode = 2
@@ -75,6 +96,7 @@ text = "Number of wires"
 horizontal_alignment = 1
 
 [node name="NumWires" type="SpinBox" parent="M/HB/VB"]
+unique_name_in_owner = true
 layout_mode = 2
 min_value = 1.0
 max_value = 256.0
@@ -103,7 +125,54 @@ layout_mode = 2
 can_add_swatches = false
 presets_visible = false
 
+[node name="Pins" type="VBoxContainer" parent="M/HB"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="HB" type="HBoxContainer" parent="M/HB/Pins"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Prefix" type="LineEdit" parent="M/HB/Pins/HB"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Prefix"
+text = "D"
+placeholder_text = "Prefix"
+
+[node name="GenPinNamesButton" type="Button" parent="M/HB/Pins/HB"]
+layout_mode = 2
+text = "Generate"
+
+[node name="Suffix" type="LineEdit" parent="M/HB/Pins/HB"]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "Suffix"
+
+[node name="Names" type="TextEdit" parent="M/HB/Pins"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="RepeatTimer" type="Timer" parent="."]
+wait_time = 0.1
+one_shot = true
+
+[node name="UpdateTimer" type="Timer" parent="."]
+wait_time = 0.2
+one_shot = true
+
 [connection signal="popup_hide" from="." to="." method="_on_popup_hide"]
+[connection signal="text_submitted" from="M/HB/VB/Value" to="." method="_on_value_text_submitted"]
+[connection signal="text_submitted" from="M/HB/VB/RB/Range" to="." method="_on_range_text_submitted"]
+[connection signal="value_changed" from="M/HB/VB/HB/VSlider" to="." method="_on_v_slider_value_changed"]
+[connection signal="pressed" from="M/HB/VB/HB/VB/UpButton" to="." method="_on_up_button_pressed"]
+[connection signal="pressed" from="M/HB/VB/HB/VB/DownButton" to="." method="_on_down_button_pressed"]
+[connection signal="value_changed" from="M/HB/VB/NumWires" to="." method="_on_num_wires_value_changed"]
 [connection signal="pressed" from="M/HB/VB/BusColor" to="." method="_on_bus_color_pressed"]
 [connection signal="pressed" from="M/HB/VB/WireColor" to="." method="_on_wire_color_pressed"]
+[connection signal="pressed" from="M/HB/VB/PinsButton" to="." method="_on_pins_button_pressed"]
 [connection signal="color_changed" from="M/HB/ColorPicker" to="." method="_on_color_picker_color_changed"]
+[connection signal="pressed" from="M/HB/Pins/HB/GenPinNamesButton" to="." method="_on_gen_pin_names_button_pressed"]
+[connection signal="timeout" from="RepeatTimer" to="." method="_on_repeat_timer_timeout"]
+[connection signal="timeout" from="UpdateTimer" to="." method="_on_update_timer_timeout"]

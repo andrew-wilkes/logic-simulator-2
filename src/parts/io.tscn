@@ -67,6 +67,7 @@ layout_mode = 2
 
 [node name="Value" type="LineEdit" parent="."]
 layout_mode = 2
+text = "0x00"
 
 [node name="Bus" type="HBoxContainer" parent="."]
 layout_mode = 2

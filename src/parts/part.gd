@@ -81,3 +81,8 @@ func evaluate_bus_output_value(side, port, value):
 func update_output_value(side, port, value):
 	if set_pin_value(side, port, value) != null:
 		emit_signal("bus_value_changed", self, side, port, value)
+
+
+# Override this function for custom setup of the Part when it is loaded into the Schematic
+func setup():
+	pass

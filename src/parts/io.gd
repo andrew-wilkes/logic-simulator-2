@@ -13,18 +13,34 @@ class_name IO
 
 extends Part
 
-var max_value = 0xffff
 var format = "0x%02X"
-var num_wires
+var current_value = 0 # This is accessed by the IO panel
+
+func _init():
+		data = {
+		"num_wires": 1,
+		"bus_color": Color.YELLOW,
+		"wire_color": Color.WHITE,
+		"labels": ["- Data -", "- D0 -"],
+		"range": 0xff
+	}
+
 
 func _ready():
 	#test_set_pins() # Done visually when running the scene.
 	$Value.connect("text_submitted", _on_text_submitted)
 
 
-func set_pins(labels: Array):
-	num_wires = get_child_count() - 3
-	var to_add = labels.size() - num_wires
+func setup():
+	set_pins()
+	set_labels()
+	set_pin_colors()
+
+
+func set_pins():
+	# num_wires == number of bits, the bus is seperate
+	var num_wires = get_child_count() - 4
+	var to_add = data.num_wires - num_wires
 	if to_add > 0:
 		for n in to_add:
 			var wire = $Wire1.duplicate()
@@ -37,26 +53,43 @@ func set_pins(labels: Array):
 	if to_add < 0:
 		for n in -to_add:
 			get_child(-2 - n).queue_free()
-	for n in labels.size():
-		get_child(2 + n).get_child(0).text = labels[n]
+
+
+func set_labels():
+	for n in data.labels.size():
+		if n > data.num_wires:
+			break
+		get_child(2 + n).get_child(0).text = data.labels[n]
+
+
+func set_pin_colors():
+	for n in data.num_wires + 1:
 		set_slot_enabled_left(n + 2, true)
 		set_slot_enabled_right(n + 2, true)
+		if n > 0:
+			set_slot_color_left(n + 2, data.wire_color)
+			set_slot_color_right(n + 2, data.wire_color)
+		else:
+			set_slot_color_left(n + 2, data.bus_color)
+			set_slot_color_right(n + 2, data.bus_color)
 
 
 func _on_text_submitted(new_text):
 	var value = 0
-	if new_text.is_valid_integer():
+	if new_text.is_valid_int():
 		value = int(new_text)
 	if new_text.is_valid_hex_number(true):
 		value = new_text.hex_to_int()
-	$Value.caret_position = 8
-	update_output_levels_from_value([0, 1], int(clamp(value, 0, max_value)))
+	set_display_value(value) # The value may come from the IO panel
+	current_value = value
+	update_output_levels_from_value([0, 1], value)
 	update_output_value(0, 2, value)
 	update_output_value(1, 2, value)
 
 
 func update_output_levels_from_value(sides: Array, value: int):
-	for n in num_wires:
+	# This will ignore value bits above the range that the wires cover
+	for n in data.num_wires:
 		var level = bool(value % 2)
 		value /= 2
 		for side in sides:
@@ -65,14 +98,15 @@ func update_output_levels_from_value(sides: Array, value: int):
 
 func set_display_value(value):
 	$Value.text = format % [value]
+	$Value.caret_column = 16
 
 
 func evaluate_output_level(side, port, level):
 	super(side, port, level)
 	var value = 0
-	for n in num_wires:
+	for n in data.num_wires:
 		value *= 2
-		value += int(pins.get([side, num_wires + 2 - n], false))
+		value += int(pins.get([side, data.num_wires + 2 - n], false))
 	evaluate_bus_output_value(side, 2, value, false)
 
 
@@ -83,10 +117,17 @@ func evaluate_bus_output_value(side, port, value, update_levels = true):
 		update_output_levels_from_value([(side + 1) % 2], value)
 	if show_display:
 		set_display_value(value)
+	current_value = value
 
 
 func test_set_pins():
 	await get_tree().create_timer(1.0).timeout
-	set_pins(["data","a","b","c","d"])
+	data.num_wires = 4
+	data.labels = ["data","a","b","c","d"]
+	set_pins()
+	set_labels()
 	await get_tree().create_timer(1.0).timeout
-	set_pins(["DIO","x","The yellow tail"])
+	data.num_wires = 2
+	data.labels = ["DIO","x","The yellow tail"]
+	set_pins()
+	set_labels()

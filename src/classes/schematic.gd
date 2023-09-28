@@ -165,6 +165,7 @@ func add_parts():
 		part.tag = node.tag
 		part.part_type = node.part_type
 		part.data = node.data
+		part.setup()
 		add_child(part)
 		part.name = node.node_name
 		part.position_offset = node.position_offset

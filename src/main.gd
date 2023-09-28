@@ -21,4 +21,6 @@ func _on_load_button_pressed():
 
 
 func _on_io_button_pressed():
-	$IOConfig.popup_centered()
+	var selected_parts = $VB/Schematic.selected_parts
+	if selected_parts.size() == 1 and selected_parts[0] is IO:
+		$IOConfig.open(selected_parts[0])
