@@ -7,7 +7,7 @@
 [node name="Colorizer" type="GraphNode"]
 offset_right = 20.0
 offset_bottom = 20.0
-theme_override_constants/port_offset = -5
+theme_override_constants/port_offset = -1
 theme_override_styles/frame = ExtResource("1_vn1pt")
 theme_override_styles/selected_frame = ExtResource("2_lik4g")
 slot/0/left_enabled = true

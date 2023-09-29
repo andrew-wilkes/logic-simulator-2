@@ -7,6 +7,7 @@ extends GraphNode
 signal output_level_changed(part, side, port, level)
 signal bus_value_changed(part, side, port, value)
 signal removing_slot(part, port)
+signal right_click_on_part(part)
 
 # Indicate unstable wire and stop flow of level or value
 signal unstable(part, side, port)
@@ -88,3 +89,11 @@ func update_output_value(side, port, value):
 # Override this function for custom setup of the Part when it is loaded into the Schematic
 func setup():
 	pass
+
+
+# Connect this signal manually in parts because it is not available
+# during our connect signals function call in the schematic
+func _on_gui_input(event):
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_RIGHT:
+			emit_signal("right_click_on_part", self)

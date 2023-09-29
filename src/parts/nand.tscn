@@ -9,6 +9,7 @@ offset_left = 32.0
 offset_top = 22.0
 offset_right = 103.0
 offset_bottom = 117.0
+mouse_filter = 1
 theme_override_constants/port_offset = -4
 theme_override_styles/frame = ExtResource("1_mpjdu")
 theme_override_styles/selected_frame = ExtResource("2_i0d27")
@@ -75,3 +76,5 @@ text = "b"
 [node name="Tag" type="LineEdit" parent="."]
 layout_mode = 2
 expand_to_text_length = true
+
+[connection signal="gui_input" from="." to="." method="_on_gui_input"]

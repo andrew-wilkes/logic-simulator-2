@@ -36,4 +36,3 @@ func test_evaluate_output_level() -> void:
 	# This would be called if there was a new input level to port 5 (D2) on the left side
 	part.evaluate_output_level(0, 5, true)
 	await assert_signal(part).is_emitted('bus_value_changed', [part, 1 ,2, 0x04])
-
