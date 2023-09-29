@@ -1,1 +1,6 @@
-Add button beside pins of part to allow for changing the wire colors.
+Maybe use a color pallete for setting wire colors?
+
+There could be a part that is only used for setting a wire or bus color when a
+ wire or bus is connected to it.
+
+Need pin name editor widget for general parts.
