@@ -3,6 +3,7 @@ class_name Schematic
 extends GraphEdit
 
 signal invalid_instance(ob, note)
+signal warning(text)
 
 const PART_INITIAL_OFFSET = Vector2(50, 50)
 
@@ -125,7 +126,7 @@ func add_part(part):
 
 func add_block(circuit_file):
 	if file_name == circuit_file:
-		pass #"Warning"
+		emit_signal("warning", "cannot open parent circuit as block.")
 	else:
 		var block = Parts.scenes["BLOCK"].instantiate()
 		block.data.circuit_file = circuit_file

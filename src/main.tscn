@@ -1,8 +1,18 @@
-[gd_scene load_steps=4 format=3 uid="uid://eohxndqnij0x"]
+[gd_scene load_steps=6 format=3 uid="uid://eohxndqnij0x"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_7i1tr"]
 [ext_resource type="Script" path="res://classes/schematic.gd" id="2_evx7y"]
 [ext_resource type="PackedScene" uid="uid://blyoi2nc61uvt" path="res://io_manager.tscn" id="3_x8pl6"]
+[ext_resource type="Script" path="res://WarningPanel.gd" id="4_u4i6y"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dua6n"]
+content_margin_left = 20.0
+content_margin_right = 20.0
+bg_color = Color(0.854902, 0.407843, 0.0235294, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -53,8 +63,23 @@ right_disconnects = true
 arrange_nodes_button_hidden = true
 script = ExtResource("2_evx7y")
 
-[node name="IOConfig" parent="." instance=ExtResource("3_x8pl6")]
+[node name="IOManager" parent="." instance=ExtResource("3_x8pl6")]
 visible = false
+
+[node name="WarningPanel" type="PopupPanel" parent="."]
+size = Vector2i(106, 50)
+visible = true
+theme_override_styles/panel = SubResource("StyleBoxFlat_dua6n")
+script = ExtResource("4_u4i6y")
+
+[node name="C" type="CenterContainer" parent="WarningPanel"]
+offset_left = 20.0
+offset_right = 86.0
+offset_bottom = 50.0
+
+[node name="Note" type="Label" parent="WarningPanel/C"]
+layout_mode = 2
+text = "Warning"
 
 [connection signal="pressed" from="VB/HB/SaveButton" to="." method="_on_save_button_pressed"]
 [connection signal="pressed" from="VB/HB/LoadButton" to="." method="_on_load_button_pressed"]

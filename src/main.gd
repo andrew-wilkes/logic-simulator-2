@@ -5,6 +5,7 @@ func _ready():
 	for part_name in Parts.names:
 		add_part_menu.add_item(part_name)
 	add_part_menu.index_pressed.connect(part_to_add)
+	$VB/Schematic.connect("warning", $WarningPanel.open)
 
 
 func part_to_add(part_index):
@@ -23,7 +24,7 @@ func _on_load_button_pressed():
 func _on_io_button_pressed():
 	var selected_parts = $VB/Schematic.selected_parts
 	if selected_parts.size() == 1 and selected_parts[0] is IO:
-		$IOConfig.open(selected_parts[0])
+		$IOManager.open(selected_parts[0])
 
 
 func _on_block_button_pressed():
