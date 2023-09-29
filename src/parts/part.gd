@@ -12,6 +12,7 @@ signal removing_slot(part, port)
 signal unstable(part, side, port)
 
 enum { LEFT, RIGHT }
+enum { WIRE_TYPE, BUS_TYPE }
 
 # Part properties
 var tag = ""

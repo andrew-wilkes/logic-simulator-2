@@ -2,7 +2,7 @@ extends Part
 
 class_name Block
 
-# The data should contain the path to a circuit file
+enum { PART, PORT }
 
 var circuit: Circuit
 var parts = {}
@@ -17,8 +17,6 @@ func _init():
 
 func _ready():
 	circuit = Circuit.new().load_data(data.circuit_file)
-	# Identify IO parts
-	# Add pins and labels
 	var input_pin_count = 0
 	var output_pin_count = 0
 	var inputs = []
@@ -34,6 +32,7 @@ func _ready():
 	set_slots(max(input_pin_count, output_pin_count))
 	configure_pins(inputs, outputs)
 	add_parts()
+	# Create IO pin maps
 	for io_part in inputs:
 		# [part_name, port]
 		input_map.append([io_part.node_name, 0])
@@ -54,7 +53,7 @@ func configure_pins(inputs, outputs):
 	for input in inputs:
 		var label_idx = 0
 		set_slot_enabled_left(slot_idx, true)
-		set_slot_type_left(slot_idx, 1)
+		set_slot_type_left(slot_idx, BUS_TYPE)
 		set_slot_color_left(slot_idx, input.data.bus_color)
 		get_child(slot_idx).get_child(0).text = input.data.labels[label_idx]
 		for n in input.data.num_wires:
@@ -62,14 +61,14 @@ func configure_pins(inputs, outputs):
 			label_idx += 1
 			get_child(slot_idx).get_child(0).text = input.data.labels[label_idx]
 			set_slot_enabled_left(slot_idx, true)
-			set_slot_type_left(slot_idx, 0)
+			set_slot_type_left(slot_idx, WIRE_TYPE)
 			set_slot_color_left(slot_idx, input.data.wire_color)
 		slot_idx += 1
 	slot_idx = 1
 	for output in outputs:
 		var label_idx = 0
 		set_slot_enabled_right(slot_idx, true)
-		set_slot_type_right(slot_idx, 1)
+		set_slot_type_right(slot_idx, BUS_TYPE)
 		set_slot_color_right(slot_idx, output.data.bus_color)
 		get_child(slot_idx).get_child(1).text = output.data.labels[label_idx]
 		for n in output.data.num_wires:
@@ -77,7 +76,7 @@ func configure_pins(inputs, outputs):
 			label_idx += 1
 			get_child(slot_idx).get_child(1).text = output.data.labels[label_idx]
 			set_slot_enabled_right(slot_idx, true)
-			set_slot_type_right(slot_idx, 0)
+			set_slot_type_right(slot_idx, WIRE_TYPE)
 			set_slot_color_right(slot_idx, output.data.wire_color)
 		slot_idx += 1
 
@@ -104,9 +103,11 @@ func set_slots(num_slots):
 		add_child(tag_node)
 	if to_add < 0:
 		for n in -to_add:
-			get_child(-2 - n).queue_free()
+			var node_to_remove = get_child(-2 - n)
+			remove_child(node_to_remove)
+			node_to_remove.queue_free()
 	# Shrinking leaves a gap at the bottom
-	await get_tree().create_timer(0.1).timeout
+	#await get_tree().create_timer(0.1).timeout
 	resize_part()
 
 
@@ -122,3 +123,61 @@ func add_parts():
 		part.data = node.data
 		part.name = node.node_name
 		parts[part.name] = part
+		part.connect("output_level_changed", output_level_changed_handler)
+		part.connect("bus_value_changed", bus_value_changed_handler)
+
+
+func get_map(side, port):
+	return input_map[port] if side == LEFT else output_map[port]
+
+
+# Map external input to internal part
+func evaluate_output_level(side, port, level):
+	var map = get_map(side, port)
+	parts[map[PART]].update_input_level(side, map[PORT], level)
+
+
+# Map external input to internal part
+func evaluate_bus_output_value(side, port, value):
+	var map = get_map(side, port)
+	parts[map[PART]].update_bus_input_value(side, map[PORT], value)
+
+
+func output_level_changed_handler(part, side, port, level):
+	var map_idx = [part, port]
+	var port_idx = [input_map, output_map][side].find(map_idx)
+	if port_idx > -1:
+		emit_signal("output_level_changed", self, side, port_idx, level)
+	else:
+		prints("output_level_changed", part, side, port, level)
+		update_internal_input_level(part, side, port, level)
+
+
+func update_internal_input_level(part, side, port, level):
+		for con in circuit.connections:
+			if side == RIGHT:
+				if con.from == part and con.from_port == port:
+					parts[con.to].update_input_level(side, con.to_port, level)
+			else:
+				if con.to == part and con.to_port == port:
+					parts[con.from].update_input_level(side, con.from_port, level)
+
+
+func bus_value_changed_handler(part, side, port, value):
+	var map_idx = [part, port]
+	var port_idx = [input_map, output_map][side].find(map_idx)
+	if port_idx > -1:
+		emit_signal("bus_level_changed", self, side, port_idx, value)
+	else:
+		prints("bus_value_changed", part, side, port, value)
+		update_internal_bus_input_value(part, side, port, value)
+
+
+func update_internal_bus_input_value(part, side, port, value):
+		for con in circuit.connections:
+			if side == RIGHT:
+				if con.from == part and con.from_port == port:
+					parts[con.to].update_bus_input_value(side, con.to_port, value)
+			else:
+				if con.to == part and con.to_port == port:
+					parts[con.from].update_bus_input_value(side, con.from_port, value)
