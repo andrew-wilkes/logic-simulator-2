@@ -4,6 +4,7 @@ extends Node
 
 var scenes = {}
 var names = []
+var scripts = {}
 
 func _init():
 	var path = "res://parts/"
@@ -14,4 +15,9 @@ func _init():
 		if part_name != "BLOCK":
 			names.append(part_name)
 		scenes[part_name] = load(path + file_name)
+		scripts[part_name] = load(path + file_name.get_file().get_slice('.', 0) + ".gd")
 	#print(scenes)
+
+
+func get_instance(part_name):
+	return scripts[part_name].new()

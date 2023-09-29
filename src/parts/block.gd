@@ -5,6 +5,9 @@ class_name Block
 # The data should contain the path to a circuit file
 
 var circuit: Circuit
+var parts = {}
+var input_map = []
+var output_map = []
 
 func _init():
 	data = {
@@ -23,13 +26,26 @@ func _ready():
 	for part in circuit.parts:
 		if part is IO:
 			if is_input(part):
-				inputs.append(part.data)
+				inputs.append(part)
 				input_pin_count += part.data.num_wires + 1
 			else:
-				outputs.append(part.data)
+				outputs.append(part)
 				output_pin_count += part.data.num_wires + 1
 	set_slots(max(input_pin_count, output_pin_count))
 	configure_pins(inputs, outputs)
+	add_parts()
+	for io_part in inputs:
+		# [part_name, port]
+		input_map.append([io_part.node_name, 0])
+		for n in io_part.data.num_wires:
+			input_map.append([io_part.node_name, n + 1])
+	for io_part in outputs:
+		# [part_name, port]
+		output_map.append([io_part.node_name, 0])
+		for n in io_part.data.num_wires:
+			output_map.append([io_part.node_name, n + 1])
+	print(input_map)
+	print(output_map)
 
 
 func configure_pins(inputs, outputs):
@@ -39,31 +55,30 @@ func configure_pins(inputs, outputs):
 		var label_idx = 0
 		set_slot_enabled_left(slot_idx, true)
 		set_slot_type_left(slot_idx, 1)
-		set_slot_color_left(slot_idx, input.bus_color)
-		get_child(slot_idx).get_child(0).text = input.labels[label_idx]
-		for n in input.num_wires:
+		set_slot_color_left(slot_idx, input.data.bus_color)
+		get_child(slot_idx).get_child(0).text = input.data.labels[label_idx]
+		for n in input.data.num_wires:
 			slot_idx += 1
 			label_idx += 1
-			get_child(slot_idx).get_child(0).text = input.labels[label_idx]
+			get_child(slot_idx).get_child(0).text = input.data.labels[label_idx]
 			set_slot_enabled_left(slot_idx, true)
 			set_slot_type_left(slot_idx, 0)
-			set_slot_color_left(slot_idx, input.wire_color)
+			set_slot_color_left(slot_idx, input.data.wire_color)
 		slot_idx += 1
 	slot_idx = 1
 	for output in outputs:
 		var label_idx = 0
 		set_slot_enabled_right(slot_idx, true)
 		set_slot_type_right(slot_idx, 1)
-		set_slot_color_right(slot_idx, output.bus_color)
-		get_child(slot_idx).get_child(1).text = output.labels[label_idx]
-		for n in output.num_wires:
+		set_slot_color_right(slot_idx, output.data.bus_color)
+		get_child(slot_idx).get_child(1).text = output.data.labels[label_idx]
+		for n in output.data.num_wires:
 			slot_idx += 1
 			label_idx += 1
-			get_child(slot_idx).get_child(1).text = output.labels[label_idx]
+			get_child(slot_idx).get_child(1).text = output.data.labels[label_idx]
 			set_slot_enabled_right(slot_idx, true)
 			set_slot_type_right(slot_idx, 0)
-			set_slot_color_right(slot_idx, output.wire_color)
-			
+			set_slot_color_right(slot_idx, output.data.wire_color)
 		slot_idx += 1
 
 
@@ -98,3 +113,12 @@ func set_slots(num_slots):
 func resize_part():
 	size = Vector2.ZERO # Fit to the new size automatically
 
+
+func add_parts():
+	for node in circuit.parts:
+		var part = Parts.get_instance(node.part_type)
+		part.tag = node.tag
+		part.part_type = node.part_type
+		part.data = node.data
+		part.name = node.node_name
+		parts[part.name] = part

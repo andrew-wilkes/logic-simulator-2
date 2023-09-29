@@ -28,4 +28,4 @@ func _on_io_button_pressed():
 
 
 func _on_block_button_pressed():
-	$VB/Schematic.add_block("res://temp.tres")
+	$VB/Schematic.add_block("res://block.tres")

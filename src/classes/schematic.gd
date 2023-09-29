@@ -111,7 +111,7 @@ func add_part_by_name(part_name):
 
 
 func add_part(part):
-	part.part_type = part.name
+	part.part_type = part.name.to_upper()
 	part.position_offset = PART_INITIAL_OFFSET + scroll_offset / zoom \
 		+ part_initial_offset_delta
 	update_part_initial_offset_delta()
@@ -176,7 +176,6 @@ func add_parts():
 	for node in circuit.parts:
 		if is_object_instance_invalid(node, "add_parts"):
 			continue
-		# Todo: instantiate node based on part_type
 		var part = Parts.scenes[node.part_type].instantiate()
 		part.tag = node.tag
 		part.part_type = node.part_type

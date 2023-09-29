@@ -15,5 +15,5 @@ src/addons
 data_*/
 mono_crash.*.json
 
-# Related to my pc ignores :)
-src/temp.tres
+# Related to test files
+src/*.tres
