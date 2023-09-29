@@ -25,6 +25,7 @@ func _ready():
 func connect_wire(from_part, from_pin, to_part, to_pin):
 	# Add guards against invalid connections
 	# Think about how to handle reverse (right to left) flow
+	# The Part class is designed to be bi-directional
 	# Only allow 1 connection to an input
 	for con in get_connection_list():
 		if to_part == con.to and to_pin == con.to_port:
@@ -47,9 +48,11 @@ func clear():
 	clear_connections()
 	for node in get_children():
 		if node is Part:
+			""" Delete this later if all is OK
 			# Change the node name to avoid conflicts with loaded scene part names
 			# whilst the old objects may not be freed up when new parts are being added
 			node.name = node.name + "x"
+			"""
 			remove_child(node) # Added this after the above fix
 			node.queue_free() # This is delayed
 

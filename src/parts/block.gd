@@ -1,6 +1,14 @@
-extends Part
-
 class_name Block
+
+# This Part allows for loading a circuit as a Block
+# Then a part is created with inputs and outputs derived from the IO parts of the circuit.
+# And the circuit within a block may also contain blocks.
+# Have to think about a requested feature of surfacing embedded displays.
+# This could be via a right-click feature.
+# Also, there should be reports of how the block is comprised in terms of a tree.
+# Again, a possible right-click feature.
+
+extends Part
 
 enum { PART, PORT }
 
