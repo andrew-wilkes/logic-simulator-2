@@ -104,9 +104,13 @@ func duplicate_selected_parts():
 		new_part.name = "part" + circuit.get_next_id()
 
 
-func add_part(part_name):
+func add_part_by_name(part_name):
 	var part = Parts.scenes[part_name].instantiate()
-	part.part_type = part_name
+	add_part(part)
+
+
+func add_part(part):
+	part.part_type = part.name
 	part.position_offset = PART_INITIAL_OFFSET + scroll_offset / zoom \
 		+ part_initial_offset_delta
 	update_part_initial_offset_delta()
@@ -116,7 +120,16 @@ func add_part(part_name):
 	# We want precise control of node names to keep circuit data robust
 	# Godot can sneak in @ marks to the node name, so we assign the name after
 	# the node was added to the scene and Godot gave it a name
-	part.name = part_name + circuit.get_next_id()
+	part.name = part.part_type + circuit.get_next_id()
+
+
+func add_block(circuit_file):
+	if file_name == circuit_file:
+		pass #"Warning"
+	else:
+		var block = Parts.scenes["BLOCK"].instantiate()
+		block.data.circuit_file = circuit_file
+		add_part(block)
 
 
 # Avoid overlapping parts that are added via the menu

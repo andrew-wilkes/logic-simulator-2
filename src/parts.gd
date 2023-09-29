@@ -11,6 +11,7 @@ func _init():
 	var files = Array(dir.get_files()).filter(func(fn): return fn.ends_with("scn"))
 	for file_name in files:
 		var part_name = file_name.get_file().get_slice('.', 0).to_upper()
-		names.append(part_name)
+		if part_name != "BLOCK":
+			names.append(part_name)
 		scenes[part_name] = load(path + file_name)
 	#print(scenes)

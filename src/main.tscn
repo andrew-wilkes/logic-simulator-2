@@ -50,7 +50,6 @@ text = "IO Config"
 layout_mode = 2
 size_flags_vertical = 3
 right_disconnects = true
-scroll_offset = Vector2(0, -23)
 arrange_nodes_button_hidden = true
 script = ExtResource("2_evx7y")
 

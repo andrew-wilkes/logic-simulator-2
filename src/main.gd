@@ -9,7 +9,7 @@ func _ready():
 
 func part_to_add(part_index):
 	var part_name = Parts.names[part_index]
-	$VB/Schematic.add_part(part_name)
+	$VB/Schematic.add_part_by_name(part_name)
 
 
 func _on_save_button_pressed():
@@ -27,4 +27,4 @@ func _on_io_button_pressed():
 
 
 func _on_block_button_pressed():
-	pass # Replace with function body.
+	$VB/Schematic.add_block("res://temp.tres")

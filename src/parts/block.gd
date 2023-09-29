@@ -7,10 +7,13 @@ class_name Block
 var circuit: Circuit
 
 func _init():
-	circuit = Circuit.new().load_data(data.circuit)
+	data = {
+	"circuit_file": ""
+}
 
 
 func _ready():
+	circuit = Circuit.new().load_data(data.circuit_file)
 	# Identify IO parts
 	# Add pins and labels
 	var input_pin_count = 0
@@ -34,28 +37,33 @@ func configure_pins(inputs, outputs):
 	var slot_idx = 1
 	for input in inputs:
 		var label_idx = 0
-		set_slot_color_left(slot_idx, input.bus_color)
 		set_slot_enabled_left(slot_idx, true)
+		set_slot_type_left(slot_idx, 1)
+		set_slot_color_left(slot_idx, input.bus_color)
 		get_child(slot_idx).get_child(0).text = input.labels[label_idx]
 		for n in input.num_wires:
 			slot_idx += 1
 			label_idx += 1
 			get_child(slot_idx).get_child(0).text = input.labels[label_idx]
-			set_slot_color_left(slot_idx, input.wire_color)
 			set_slot_enabled_left(slot_idx, true)
+			set_slot_type_left(slot_idx, 0)
+			set_slot_color_left(slot_idx, input.wire_color)
 		slot_idx += 1
 	slot_idx = 1
 	for output in outputs:
 		var label_idx = 0
-		set_slot_color_right(slot_idx, output.bus_color)
 		set_slot_enabled_right(slot_idx, true)
+		set_slot_type_right(slot_idx, 1)
+		set_slot_color_right(slot_idx, output.bus_color)
 		get_child(slot_idx).get_child(1).text = output.labels[label_idx]
 		for n in output.num_wires:
 			slot_idx += 1
 			label_idx += 1
 			get_child(slot_idx).get_child(1).text = output.labels[label_idx]
-			set_slot_color_right(slot_idx, output.wire_color)
 			set_slot_enabled_right(slot_idx, true)
+			set_slot_type_right(slot_idx, 0)
+			set_slot_color_right(slot_idx, output.wire_color)
+			
 		slot_idx += 1
 
 
