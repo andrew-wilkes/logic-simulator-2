@@ -50,17 +50,12 @@ func set_pins():
 		add_child(tag_node)
 	if to_add < 0:
 		for n in -to_add:
-			var idx = -2 - n
 			emit_signal("removing_slot", self, num_wires - n)
-			get_child(idx).queue_free()
+			get_child(-2).queue_free()
+			remove_child(get_child(-2))
 	set_pin_colors()
 	set_labels()
 	# Shrinking leaves a gap at the bottom
-	await get_tree().create_timer(0.1).timeout
-	resize_part()
-
-
-func resize_part():
 	size = Vector2.ZERO # Fit to the new size automatically
 
 
