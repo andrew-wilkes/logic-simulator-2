@@ -21,11 +21,5 @@ func _on_load_button_pressed():
 	$VB/Schematic.load_circuit()
 
 
-func _on_io_button_pressed():
-	var selected_parts = $VB/Schematic.selected_parts
-	if selected_parts.size() == 1 and selected_parts[0] is IO:
-		$IOManager.open(selected_parts[0])
-
-
 func _on_block_button_pressed():
 	$VB/Schematic.add_block("res://block.tres")

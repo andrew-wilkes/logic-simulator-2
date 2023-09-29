@@ -194,6 +194,8 @@ func add_connections():
 
 func connect_signals(part: Part):
 	part.connect("removing_slot", removing_slot)
+	if part.has_signal("io_manager_requested"):
+		part.connect("io_manager_requested", io_manager_requested)
 
 
 func setup_graph():
@@ -220,3 +222,7 @@ func removing_slot(part, port):
 		if con.to == part.name and con.to_port == port \
 			or con.from == part.name and con.from_port == port:
 			disconnect_node(con.from, con.from_port, con.to, con.to_port)
+
+
+func io_manager_requested(part):
+	$IOManager.open(part)

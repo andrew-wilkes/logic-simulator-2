@@ -52,10 +52,6 @@ text = "Load As Block"
 layout_mode = 2
 text = "Add Part"
 
-[node name="IOButton" type="Button" parent="VB/HB"]
-layout_mode = 2
-text = "IO Config"
-
 [node name="Schematic" type="GraphEdit" parent="VB"]
 layout_mode = 2
 size_flags_vertical = 3
@@ -63,8 +59,7 @@ right_disconnects = true
 arrange_nodes_button_hidden = true
 script = ExtResource("2_evx7y")
 
-[node name="IOManager" parent="." instance=ExtResource("3_x8pl6")]
-visible = false
+[node name="IOManager" parent="VB/Schematic" instance=ExtResource("3_x8pl6")]
 
 [node name="WarningPanel" type="PopupPanel" parent="."]
 size = Vector2i(106, 50)
@@ -84,4 +79,3 @@ text = "Warning"
 [connection signal="pressed" from="VB/HB/SaveButton" to="." method="_on_save_button_pressed"]
 [connection signal="pressed" from="VB/HB/LoadButton" to="." method="_on_load_button_pressed"]
 [connection signal="pressed" from="VB/HB/BlockButton" to="." method="_on_block_button_pressed"]
-[connection signal="pressed" from="VB/HB/IOButton" to="." method="_on_io_button_pressed"]

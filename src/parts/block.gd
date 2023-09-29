@@ -107,11 +107,6 @@ func set_slots(num_slots):
 			remove_child(node_to_remove)
 			node_to_remove.queue_free()
 	# Shrinking leaves a gap at the bottom
-	#await get_tree().create_timer(0.1).timeout
-	resize_part()
-
-
-func resize_part():
 	size = Vector2.ZERO # Fit to the new size automatically
 
 

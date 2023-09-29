@@ -12,6 +12,8 @@ class_name IO
 
 extends Part
 
+signal io_manager_requested(part)
+
 var format = "0x%02X"
 var current_value = 0 # This is accessed by the IO Manager panel
 
@@ -142,3 +144,9 @@ func test_set_pins():
 	data.num_wires = 2
 	data.labels = ["DIO","x","The yellow tail"]
 	set_pins()
+
+
+func _on_gui_input(event):
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_RIGHT:
+			emit_signal("io_manager_requested", self)
