@@ -34,6 +34,10 @@ text = "Save"
 layout_mode = 2
 text = "Load"
 
+[node name="BlockButton" type="Button" parent="VB/HB"]
+layout_mode = 2
+text = "Load As Block"
+
 [node name="AddPartMenu" type="MenuButton" parent="VB/HB"]
 layout_mode = 2
 text = "Add Part"
@@ -46,11 +50,14 @@ text = "IO Config"
 layout_mode = 2
 size_flags_vertical = 3
 right_disconnects = true
+scroll_offset = Vector2(0, -23)
 arrange_nodes_button_hidden = true
 script = ExtResource("2_evx7y")
 
 [node name="IOConfig" parent="." instance=ExtResource("3_x8pl6")]
+visible = false
 
 [connection signal="pressed" from="VB/HB/SaveButton" to="." method="_on_save_button_pressed"]
 [connection signal="pressed" from="VB/HB/LoadButton" to="." method="_on_load_button_pressed"]
+[connection signal="pressed" from="VB/HB/BlockButton" to="." method="_on_block_button_pressed"]
 [connection signal="pressed" from="VB/HB/IOButton" to="." method="_on_io_button_pressed"]

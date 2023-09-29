@@ -24,3 +24,7 @@ func _on_io_button_pressed():
 	var selected_parts = $VB/Schematic.selected_parts
 	if selected_parts.size() == 1 and selected_parts[0] is IO:
 		$IOConfig.open(selected_parts[0])
+
+
+func _on_block_button_pressed():
+	pass # Replace with function body.

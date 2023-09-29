@@ -111,6 +111,8 @@ func add_part(part_name):
 		+ part_initial_offset_delta
 	update_part_initial_offset_delta()
 	add_child(part)
+	connect_signals(part)
+	
 	# We want precise control of node names to keep circuit data robust
 	# Godot can sneak in @ marks to the node name, so we assign the name after
 	# the node was added to the scene and Godot gave it a name
@@ -165,8 +167,9 @@ func add_parts():
 		part.tag = node.tag
 		part.part_type = node.part_type
 		part.data = node.data
-		part.setup()
 		add_child(part)
+		part.setup()
+		connect_signals(part)
 		part.name = node.node_name
 		part.position_offset = node.position_offset
 
@@ -174,6 +177,10 @@ func add_parts():
 func add_connections():
 	for con in circuit.connections:
 		connect_node(con.from, con.from_port, con.to, con.to_port)
+
+
+func connect_signals(part: Part):
+	part.connect("removing_slot", removing_slot)
 
 
 func setup_graph():
@@ -193,3 +200,10 @@ func is_object_instance_invalid(ob, note = ""):
 	else:
 		emit_signal("invalid_instance", ob, note)
 		return true
+
+
+func removing_slot(part, port):
+	for con in get_connection_list():
+		if con.to == part.name and con.to_port == port \
+			or con.from == part.name and con.from_port == port:
+			disconnect_node(con.from, con.from_port, con.to, con.to_port)

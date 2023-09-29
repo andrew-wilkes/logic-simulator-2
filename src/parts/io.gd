@@ -16,7 +16,7 @@ var format = "0x%02X"
 var current_value = 0 # This is accessed by the IO Manager panel
 
 func _init():
-		data = {
+	data = {
 		"num_wires": 1,
 		"bus_color": Color.YELLOW,
 		"wire_color": Color.WHITE,
@@ -50,10 +50,14 @@ func set_pins():
 		add_child(tag_node)
 	if to_add < 0:
 		for n in -to_add:
-			get_child(-2 - n).queue_free()
+			var idx = -2 - n
+			emit_signal("removing_slot", self, num_wires - n)
+			get_child(idx).queue_free()
 	set_pin_colors()
 	set_labels()
-	resize_part() # Shrinking leaves a gap at the bottom
+	# Shrinking leaves a gap at the bottom
+	await get_tree().create_timer(0.1).timeout
+	resize_part()
 
 
 func resize_part():
@@ -68,15 +72,18 @@ func set_labels():
 
 
 func set_pin_colors():
-	for n in data.num_wires + 1:
-		set_slot_enabled_left(n + 2, true)
-		set_slot_enabled_right(n + 2, true)
-		if n > 0:
-			set_slot_color_left(n + 2, data.wire_color)
-			set_slot_color_right(n + 2, data.wire_color)
+	for idx in range(2, data.num_wires + 3):
+		set_slot_enabled_left(idx, true)
+		set_slot_enabled_right(idx, true)
+		if idx > 2:
+			set_slot_color_left(idx, data.wire_color)
+			set_slot_color_right(idx, data.wire_color)
 		else:
-			set_slot_color_left(n + 2, data.bus_color)
-			set_slot_color_right(n + 2, data.bus_color)
+			set_slot_color_left(idx, data.bus_color)
+			set_slot_color_right(idx, data.bus_color)
+	# Ensure that the Tag doesn't have pins
+	set_slot_enabled_left(data.num_wires + 3, false)
+	set_slot_enabled_right(data.num_wires + 3, false)
 
 
 func _on_text_submitted(new_text):
@@ -104,7 +111,7 @@ func update_output_levels_from_value(sides: Array, value: int):
 func set_display_value(value):
 	$Value.text = format % [value]
 	# The following line avoids the caret blinking at the start of the text
-	$Value.caret_column = 16
+	$Value.caret_column = $Value.text.length()
 
 
 func evaluate_output_level(side, port, level):

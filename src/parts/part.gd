@@ -6,6 +6,7 @@ extends GraphNode
 
 signal output_level_changed(part, side, port, level)
 signal bus_value_changed(part, side, port, value)
+signal removing_slot(part, port)
 
 # Indicate unstable wire and stop flow of level or value
 signal unstable(part, side, port)

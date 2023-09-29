@@ -1,6 +1,5 @@
 extends PopupPanel
 
-signal num_bits_changed(part, num_bits)
 signal bus_color_changed(part, color)
 signal wire_color_changed(part, color)
 
@@ -169,7 +168,7 @@ func update_value():
 
 func set_display_value():
 	%Value.text = part.format % [part.current_value]
-	%Value.caret_column = 16
+	%Value.caret_column = %Value.text.length()
 
 
 func set_slider_value():
@@ -186,7 +185,7 @@ func set_slider_value():
 
 func set_range(value):
 	%Range.text = part.format % [value]
-	%Range.caret_column = 16
+	%Range.caret_column = %Range.text.length()
 
 
 func _on_range_text_submitted(new_text):
