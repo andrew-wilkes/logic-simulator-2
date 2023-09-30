@@ -76,5 +76,3 @@ text = "b"
 [node name="Tag" type="LineEdit" parent="."]
 layout_mode = 2
 expand_to_text_length = true
-
-[connection signal="gui_input" from="." to="." method="_on_gui_input"]

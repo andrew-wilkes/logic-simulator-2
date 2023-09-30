@@ -7,6 +7,8 @@ signal warning(text)
 
 const PART_INITIAL_OFFSET = Vector2(50, 50)
 
+enum { LEFT, RIGHT }
+
 var circuit: Circuit
 var selected_parts = []
 var part_initial_offset_delta = Vector2.ZERO
@@ -104,8 +106,11 @@ func duplicate_selected_parts():
 		var new_part = part.duplicate()
 		new_part.selected = false
 		new_part.position_offset += offset
+		new_part.data = part.data.duplicate()
+		new_part.part_type = part.part_type
 		add_child(new_part)
-		new_part.name = "part" + circuit.get_next_id()
+		new_part.name = part.part_type + circuit.get_next_id()
+		new_part.connect("right_click_on_part", right_click_on_part)
 
 
 func add_part_by_name(part_name):
@@ -158,6 +163,7 @@ func save_circuit():
 		if node is Part:
 			# Save the name of the node
 			node.node_name = node.name
+			node.tag = node.get_node("Tag").text
 			circuit.parts.append(node)
 	circuit.snap_distance = snap_distance
 	circuit.use_snap = use_snap
@@ -180,7 +186,7 @@ func add_parts():
 		if is_object_instance_invalid(node, "add_parts"):
 			continue
 		var part = Parts.scenes[node.part_type].instantiate()
-		part.tag = node.tag
+		part.get_node("Tag").text = node.tag
 		part.part_type = node.part_type
 		part.data = node.data
 		add_child(part)
@@ -198,6 +204,10 @@ func add_connections():
 func connect_signals(part: Part):
 	part.connect("removing_slot", removing_slot)
 	part.connect("right_click_on_part", right_click_on_part)
+	part.connect("output_level_changed", output_level_changed_handler)
+	part.connect("bus_value_changed", bus_value_changed_handler)
+	part.connect("unstable", unstable_handler)
+	part.connect("reset_race_counters", reset_race_counters)
 
 
 func setup_graph():
@@ -230,3 +240,32 @@ func right_click_on_part(part):
 	match part.part_type:
 		"IO":
 			$IOManager.open(part)
+
+
+func output_level_changed_handler(part, side, port, level):
+	for con in circuit.connections:
+		if side == RIGHT:
+			if con.from == part.name and con.from_port == port:
+				get_node(con.to).update_input_level(side, con.to_port, level)
+		else:
+			if con.to == part.name and con.to_port == port:
+				get_node(con.from).update_input_level(side, con.from_port, level)
+
+
+func bus_value_changed_handler(part, side, port, value):
+	for con in circuit.connections:
+		if side == RIGHT:
+			if con.from == part.name and con.from_port == port:
+				get_node(con.to).update_bus_input_value(side, con.to_port, value)
+		else:
+			if con.to == part.name and con.to_port == port:
+				get_node(con.from).update_bus_input_value(side, con.from_port, value)
+
+
+func unstable_handler(part, side, port):
+	emit_signal("warning", "Unstable input to %s side: %d port: %d" % [part, side, port])
+
+
+func reset_race_counters():
+	for part in circuit.parts:
+		part.reset_race_counter()

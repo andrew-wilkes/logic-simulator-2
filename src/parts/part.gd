@@ -8,6 +8,7 @@ signal output_level_changed(part, side, port, level)
 signal bus_value_changed(part, side, port, value)
 signal removing_slot(part, port)
 signal right_click_on_part(part)
+signal reset_race_counters()
 
 # Indicate unstable wire and stop flow of level or value
 signal unstable(part, side, port)
@@ -24,6 +25,10 @@ var show_display = true
 
 var race_counter = {} # [side, port]: count
 var pins = {} # [side, port]: level / value
+
+func _ready():
+	print(connect("gui_input", _on_gui_input))
+
 
 func update_input_level(side, port, level):
 	var key = set_pin_value(side, port, level)
@@ -91,8 +96,6 @@ func setup():
 	pass
 
 
-# Connect this signal manually in parts because it is not available
-# during our connect signals function call in the schematic
 func _on_gui_input(event):
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_RIGHT:

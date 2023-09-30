@@ -26,9 +26,18 @@ func _init():
 
 
 func _ready():
+	super()
 	if get_parent().name == "root":
 		test_set_pins() # Done visually when running the scene.
 	$Value.connect("text_submitted", _on_text_submitted)
+	bug_fix()
+
+
+func bug_fix():
+	for node in get_children():
+		if node is LineEdit and node.name != "Tag" and node.name != "Value":
+			remove_child(node)
+			node.queue_free()
 
 
 func setup():
@@ -42,8 +51,8 @@ func set_pins():
 	if to_add > 0:
 		for n in to_add:
 			var wire = $Wire1.duplicate()
-			wire.name = "Wire" + str(n + 2)
 			add_child(wire)
+			wire.name = "Wire" + str(n + 2)
 		# Move Tag to the end
 		var tag_node = $Tag
 		remove_child(tag_node)
@@ -89,6 +98,7 @@ func _on_text_submitted(new_text):
 		value = new_text.hex_to_int()
 	set_display_value(value) # This formats the value as well as updating it from the IO panel
 	current_value = value
+	emit_signal("reset_race_counters")
 	update_output_levels_from_value([0, 1], value)
 	update_output_value(0, 2, value)
 	update_output_value(1, 2, value)
