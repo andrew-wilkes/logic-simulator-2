@@ -160,10 +160,10 @@ func update_internal_input_level(part, side, port, level):
 	for con in circuit.connections:
 		if side == RIGHT:
 			if con.from == part and con.from_port == port:
-				parts[con.to].update_input_level(side, con.to_port, level)
+				parts[con.to].update_input_level(LEFT, con.to_port, level)
 		else:
 			if con.to == part and con.to_port == port:
-				parts[con.from].update_input_level(side, con.from_port, level)
+				parts[con.from].update_input_level(RIGHT, con.from_port, level)
 
 
 func bus_value_changed_handler(part, side, port, value):
@@ -180,7 +180,7 @@ func update_internal_bus_input_value(part, side, port, value):
 	for con in circuit.connections:
 		if side == RIGHT:
 			if con.from == part and con.from_port == port:
-				parts[con.to].update_bus_input_value(side, con.to_port, value)
+				parts[con.to].update_bus_input_value(RIGHT, con.to_port, value)
 		else:
 			if con.to == part and con.to_port == port:
-				parts[con.from].update_bus_input_value(side, con.from_port, value)
+				parts[con.from].update_bus_input_value(LEFT, con.from_port, value)

@@ -21,5 +21,6 @@ func _init():
 
 
 # This is used with circuit blocks where there are no visual elements internally
+# So the scene file is not used, but it's script is instantiated to an object of part_type
 func get_instance(part_name):
 	return scripts[part_name].new()

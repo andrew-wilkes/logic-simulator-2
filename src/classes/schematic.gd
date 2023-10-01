@@ -194,6 +194,7 @@ func add_parts():
 		connect_signals(part)
 		part.name = node.node_name
 		part.position_offset = node.position_offset
+		part.title = part.name
 
 
 func add_connections():
@@ -246,20 +247,20 @@ func output_level_changed_handler(part, side, port, level):
 	for con in circuit.connections:
 		if side == RIGHT:
 			if con.from == part.name and con.from_port == port:
-				get_node(con.to).update_input_level(side, con.to_port, level)
+				get_node(NodePath(con.to)).update_input_level(LEFT, con.to_port, level)
 		else:
 			if con.to == part.name and con.to_port == port:
-				get_node(con.from).update_input_level(side, con.from_port, level)
+				get_node(NodePath(con.from)).update_input_level(RIGHT, con.from_port, level)
 
 
 func bus_value_changed_handler(part, side, port, value):
 	for con in circuit.connections:
 		if side == RIGHT:
 			if con.from == part.name and con.from_port == port:
-				get_node(con.to).update_bus_input_value(side, con.to_port, value)
+				get_node(NodePath(con.to)).update_bus_input_value(LEFT, con.to_port, value)
 		else:
 			if con.to == part.name and con.to_port == port:
-				get_node(con.from).update_bus_input_value(side, con.from_port, value)
+				get_node(NodePath(con.from)).update_bus_input_value(RIGHT, con.from_port, value)
 
 
 func unstable_handler(part, side, port):
@@ -267,5 +268,6 @@ func unstable_handler(part, side, port):
 
 
 func reset_race_counters():
-	for part in circuit.parts:
-		part.reset_race_counter()
+	for node in get_children():
+		if node is Part:
+			node.race_counter.clear()

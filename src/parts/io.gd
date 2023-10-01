@@ -30,7 +30,7 @@ func _ready():
 	if get_parent().name == "root":
 		test_set_pins() # Done visually when running the scene.
 	$Value.connect("text_submitted", _on_text_submitted)
-	bug_fix()
+	bug_fix() # Godot 4.1.stable
 
 
 func bug_fix():
@@ -86,6 +86,7 @@ func set_pin_colors():
 			set_slot_color_left(idx, data.bus_color)
 			set_slot_color_right(idx, data.bus_color)
 	# Ensure that the Tag doesn't have pins
+	# !!! Check if this is related to the extra Tag bug !!!
 	set_slot_enabled_left(data.num_wires + 3, false)
 	set_slot_enabled_right(data.num_wires + 3, false)
 
@@ -96,12 +97,15 @@ func _on_text_submitted(new_text):
 		value = int(new_text)
 	if new_text.is_valid_hex_number(true):
 		value = new_text.hex_to_int()
-	set_display_value(value) # This formats the value as well as updating it from the IO panel
+	# This formats the value as well as updating it from the IO panel
+	set_display_value(value)
 	current_value = value
+	# The change may propagate before the race reset has occurred,
+	# so the threshold value may need to be increased
 	emit_signal("reset_race_counters")
 	update_output_levels_from_value([0, 1], value)
-	update_output_value(0, 2, value)
-	update_output_value(1, 2, value)
+	update_output_value(0, 0, value)
+	update_output_value(1, 0, value)
 
 
 func update_output_levels_from_value(sides: Array, value: int):
@@ -110,7 +114,7 @@ func update_output_levels_from_value(sides: Array, value: int):
 		var level = bool(value % 2)
 		value /= 2
 		for side in sides:
-			update_output_level(side, n + 3, level)
+			update_output_level(side, n + 1, level)
 
 
 func set_display_value(value):
@@ -124,8 +128,8 @@ func evaluate_output_level(side, port, level):
 	var value = 0
 	for n in data.num_wires:
 		value *= 2
-		value += int(pins.get([side, data.num_wires + 2 - n], false))
-	evaluate_bus_output_value(side, 2, value, false)
+		value += int(pins.get([side, data.num_wires - n], false))
+	evaluate_bus_output_value(side, 0, value, false)
 
 
 func evaluate_bus_output_value(side, port, value, update_levels = true):

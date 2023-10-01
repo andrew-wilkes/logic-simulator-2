@@ -5,10 +5,10 @@ extends Resource
 @export var title = ""
 @export var connections = []
 @export var parts = []
-@export var id_num = 0
+@export var id_num = 0 # This is appended to new part names and then incremented
 @export var version = 2.0
 
-# Settings
+# Graph settings
 @export var scroll_offset = Vector2.ZERO
 @export var snap_distance = 20
 @export var use_snap = true

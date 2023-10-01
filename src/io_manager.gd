@@ -160,9 +160,9 @@ func _on_update_timer_timeout():
 
 
 func update_value():
-	emit_signal("reset_race_counters")
-	part.evaluate_bus_output_value(0, 2, part.current_value)
-	part.evaluate_bus_output_value(1, 2, part.current_value)
+	part.emit_signal("reset_race_counters")
+	part.evaluate_bus_output_value(0, 0, part.current_value)
+	part.evaluate_bus_output_value(1, 0, part.current_value)
 	set_display_value()
 	set_slider_value()
 
@@ -180,8 +180,8 @@ func set_slider_value():
 		var limit = DEFAULT_SLIDER_LIMIT
 		if part.data.range > 0:
 			limit = part.data.range
-		%VSlider.value = part.current_value * %VSlider.max_value / limit
 		ignore_slider_signal = true
+		%VSlider.value = part.current_value * %VSlider.max_value / limit
 
 
 func set_range(value):

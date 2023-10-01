@@ -31,12 +31,14 @@ func _ready():
 
 
 func update_input_level(side, port, level):
+	var nom = name
+	prints("update_input_level", nom, side, port, level)
 	var key = set_pin_value(side, port, level)
 	if key != null:
 		if race_counter.has(key):
 			race_counter[key] += 1
 			if race_counter[key] == 2:
-				emit_signal("unstable", self, side, port)
+				emit_signal("unstable", name, side, port)
 				return
 		else:
 			race_counter[key] = 1
@@ -58,18 +60,15 @@ func set_pin_value(side, port, value):
 
 
 func update_bus_input_value(side, port, value):
+	var nom = name
+	prints("update_bus_input_value", nom, side, port, value)
 	if set_pin_value(side, port, value) != null:
 		evaluate_bus_output_value(side, port, value)
 
 
-func reset_race_counter():
-	for key in race_counter:
-		race_counter[key] = 0
-
-
 # Override this function in extended parts
 func evaluate_output_level(side, port, level):
-	# Logic to derive the new level
+	# Put logic here to derive the new level
 	side = (side + 1) % 2 # Used with IO part to alternate sides
 	update_output_level(side, port, level)
 
@@ -81,7 +80,7 @@ func update_output_level(side, port, level):
 
 # Override this function in extended parts
 func evaluate_bus_output_value(side, port, value):
-	# Logic to derive the new value
+	# Put logic here to derive the new value
 	side = (side + 1) % 2
 	update_output_value(side, port, value)
 
@@ -96,6 +95,7 @@ func setup():
 	pass
 
 
+# We can trigger opening of PopUp windows using this after a user right-clicks on a part
 func _on_gui_input(event):
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_RIGHT:

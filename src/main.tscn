@@ -64,6 +64,7 @@ script = ExtResource("2_evx7y")
 [node name="WarningPanel" type="PopupPanel" parent="."]
 size = Vector2i(106, 50)
 visible = true
+always_on_top = true
 theme_override_styles/panel = SubResource("StyleBoxFlat_dua6n")
 script = ExtResource("4_u4i6y")
 
