@@ -12,7 +12,7 @@ enum { LEFT, RIGHT }
 var circuit: Circuit
 var selected_parts = []
 var part_initial_offset_delta = Vector2.ZERO
-var file_name = "res://temp.tres"
+var parent_file = ""
 
 func _ready():
 	circuit = Circuit.new()
@@ -26,7 +26,6 @@ func _ready():
 
 func connect_wire(from_part, from_pin, to_part, to_pin):
 	# Add guards against invalid connections
-	# Think about how to handle reverse (right to left) flow
 	# The Part class is designed to be bi-directional
 	# Only allow 1 connection to an input
 	for con in get_connection_list():
@@ -50,11 +49,6 @@ func clear():
 	clear_connections()
 	for node in get_children():
 		if node is Part:
-			""" Delete this later if all is OK
-			# Change the node name to avoid conflicts with loaded scene part names
-			# whilst the old objects may not be freed up when new parts are being added
-			node.name = node.name + "x"
-			"""
 			remove_child(node) # Added this after the above fix
 			node.queue_free() # This is delayed
 
@@ -132,12 +126,12 @@ func add_part(part):
 	part.name = part.part_type + circuit.get_next_id()
 
 
-func add_block(circuit_file):
-	if file_name == circuit_file:
+func add_block(file_name):
+	if file_name == parent_file:
 		emit_signal("warning", "cannot open parent circuit as block.")
 	else:
 		var block = Parts.scenes["BLOCK"].instantiate()
-		block.data.circuit_file = circuit_file
+		block.data.circuit_file = file_name
 		add_part(block)
 
 
@@ -156,7 +150,7 @@ func update_part_initial_offset_delta():
 	part_initial_offset_delta = Vector2(x, y)
 
 
-func save_circuit():
+func save_circuit(file_name):
 	circuit.connections = get_connection_list()
 	circuit.parts = []
 	for node in get_children():
@@ -173,12 +167,16 @@ func save_circuit():
 	circuit.save_data(file_name)
 
 
-func load_circuit():
+func load_circuit(file_name):
+	parent_file = file_name
 	clear()
 	circuit = Circuit.new().load_data(file_name)
-	setup_graph()
-	add_parts()
-	add_connections()
+	if circuit is Circuit:
+		setup_graph()
+		add_parts()
+		add_connections()
+	else:
+		emit_signal("warning", "The circuit data was invalid!")
 
 
 func add_parts():
@@ -244,7 +242,7 @@ func right_click_on_part(part):
 
 
 func output_level_changed_handler(part, side, port, level):
-	for con in circuit.connections:
+	for con in get_connection_list():
 		if side == RIGHT:
 			if con.from == part.name and con.from_port == port:
 				get_node(NodePath(con.to)).update_input_level(LEFT, con.to_port, level)
@@ -254,7 +252,7 @@ func output_level_changed_handler(part, side, port, level):
 
 
 func bus_value_changed_handler(part, side, port, value):
-	for con in circuit.connections:
+	for con in get_connection_list():
 		if side == RIGHT:
 			if con.from == part.name and con.from_port == port:
 				get_node(NodePath(con.to)).update_bus_input_value(LEFT, con.to_port, value)

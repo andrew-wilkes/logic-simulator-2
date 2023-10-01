@@ -27,7 +27,7 @@ var race_counter = {} # [side, port]: count
 var pins = {} # [side, port]: level / value
 
 func _ready():
-	print(connect("gui_input", _on_gui_input))
+	connect("gui_input", _on_gui_input)
 
 
 func update_input_level(side, port, level):
