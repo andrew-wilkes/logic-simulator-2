@@ -76,6 +76,11 @@ func _on_file_dialog_file_selected(file_path):
 func save_file():
 	$VB/Schematic.save_circuit(settings.last_dir + "/" + settings.current_file)
 
+
+func _on_new_button_pressed():
+	settings.current_file = ""
+	$VB/Schematic.clear()
+
 #### /FILE CODE ####
 
 
@@ -111,7 +116,3 @@ func quit():
 	get_tree().quit()
 
 #### /QUIT CODE ####
-
-
-func _on_new_button_pressed():
-	pass # Replace with function body.

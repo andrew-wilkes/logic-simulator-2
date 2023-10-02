@@ -36,6 +36,10 @@ theme_override_constants/separation = 20
 layout_mode = 2
 theme_override_constants/separation = 20
 
+[node name="NewButton" type="Button" parent="VB/HB"]
+layout_mode = 2
+text = "New"
+
 [node name="SaveButton" type="Button" parent="VB/HB"]
 layout_mode = 2
 text = "Save"
@@ -95,6 +99,7 @@ ok_button_text = "Save"
 access = 2
 filters = PackedStringArray("*.tres ; Circuit files")
 
+[connection signal="pressed" from="VB/HB/NewButton" to="." method="_on_new_button_pressed"]
 [connection signal="pressed" from="VB/HB/SaveButton" to="." method="_on_save_button_pressed"]
 [connection signal="pressed" from="VB/HB/LoadButton" to="." method="_on_load_button_pressed"]
 [connection signal="pressed" from="VB/HB/BlockButton" to="." method="_on_block_button_pressed"]

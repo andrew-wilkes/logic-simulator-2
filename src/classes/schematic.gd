@@ -49,7 +49,7 @@ func clear():
 	clear_connections()
 	for node in get_children():
 		if node is Part:
-			remove_child(node) # Added this after the above fix
+			remove_child(node)
 			node.queue_free() # This is delayed
 
 
