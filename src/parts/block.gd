@@ -140,7 +140,7 @@ func evaluate_output_level(side, port, level):
 	parts[map[PART]].update_input_level(side, map[PORT], level)
 
 
-# Map external input to internal part
+# Map external bus input to internal part
 func evaluate_bus_output_value(side, port, value):
 	var map = get_map(side, port)
 	parts[map[PART]].update_bus_input_value(side, map[PORT], value)
@@ -180,7 +180,7 @@ func update_internal_bus_input_value(part, side, port, value):
 	for con in circuit.connections:
 		if side == RIGHT:
 			if con.from == part and con.from_port == port:
-				parts[con.to].update_bus_input_value(RIGHT, con.to_port, value)
+				parts[con.to].update_bus_input_value(LEFT, con.to_port, value)
 		else:
 			if con.to == part and con.to_port == port:
-				parts[con.from].update_bus_input_value(LEFT, con.from_port, value)
+				parts[con.from].update_bus_input_value(RIGHT, con.from_port, value)
