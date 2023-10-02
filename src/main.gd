@@ -17,6 +17,7 @@ func _ready():
 	add_part_menu.index_pressed.connect(part_to_add)
 	
 	$VB/Schematic.connect("warning", $WarningPanel.open)
+	$VB/Schematic.connect("changed", set_current_file_color)
 
 
 func part_to_add(part_index):
@@ -38,6 +39,11 @@ func _on_block_button_pressed():
 	do_action(OPEN_AS_BLOCK)
 
 
+func _on_new_button_pressed():
+	set_current_file("")
+	$VB/Schematic.clear()
+
+
 func do_action(action):
 	menu_action = action
 	match menu_action:
@@ -51,6 +57,7 @@ func do_action(action):
 				$SaveDialog.current_file = settings.current_file
 				$SaveDialog.popup_centered()
 			else:
+				set_current_file_color(false)
 				save_file()
 
 
@@ -62,7 +69,7 @@ func _on_file_dialog_file_selected(file_path):
 	if menu_action != OPEN_AS_BLOCK:
 		# When saving, the file associated with current schematic is to be saved
 		# The file loaded as a block doesn't need to be remembered
-		settings.current_file = file_path.get_file()
+		set_current_file(file_path.get_file())
 		settings.last_dir = file_path.get_base_dir()
 	match menu_action:
 		SAVE:
@@ -77,12 +84,17 @@ func save_file():
 	$VB/Schematic.save_circuit(settings.last_dir + "/" + settings.current_file)
 
 
-func _on_new_button_pressed():
-	settings.current_file = ""
-	$VB/Schematic.clear()
+func set_current_file(file_name, changed = false):
+	%CurrentFile.text = file_name
+	set_current_file_color(changed)
+	settings.current_file = file_name
+
+
+func set_current_file_color(changed = true):
+	var color = Color.RED if changed else Color.WHITE
+	%CurrentFile.set("theme_override_colors/font_color", color)
 
 #### /FILE CODE ####
-
 
 #### QUIT CODE ####
 

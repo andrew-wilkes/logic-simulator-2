@@ -56,6 +56,10 @@ text = "Load As Block"
 layout_mode = 2
 text = "Add Part"
 
+[node name="CurrentFile" type="Label" parent="VB/HB"]
+unique_name_in_owner = true
+layout_mode = 2
+
 [node name="Schematic" type="GraphEdit" parent="VB"]
 layout_mode = 2
 size_flags_vertical = 3
@@ -64,10 +68,10 @@ arrange_nodes_button_hidden = true
 script = ExtResource("2_evx7y")
 
 [node name="IOManager" parent="VB/Schematic" instance=ExtResource("3_x8pl6")]
+visible = false
 
 [node name="WarningPanel" type="PopupPanel" parent="."]
 size = Vector2i(106, 50)
-visible = true
 always_on_top = true
 theme_override_styles/panel = SubResource("StyleBoxFlat_dua6n")
 script = ExtResource("4_u4i6y")

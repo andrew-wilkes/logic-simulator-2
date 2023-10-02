@@ -4,6 +4,7 @@ extends GraphEdit
 
 signal invalid_instance(ob, note)
 signal warning(text)
+signal changed
 
 const PART_INITIAL_OFFSET = Vector2(50, 50)
 
@@ -33,16 +34,19 @@ func connect_wire(from_part, from_pin, to_part, to_pin):
 			return
 	connect_node(from_part, from_pin, to_part, to_pin)
 	# Propagate bus value or level
+	emit_signal("changed")
 
 
 func disconnect_wire(from_part, from_pin, to_part, to_pin):
 	disconnect_node(from_part, from_pin, to_part, to_pin)
+	emit_signal("changed")
 
 
 func remove_connections_to_part(part):
 	for con in get_connection_list():
 		if con.to == part.name or con.from == part.name:
 			disconnect_node(con.from, con.from_port, con.to, con.to_port)
+	emit_signal("changed")
 
 
 func clear():
@@ -75,9 +79,11 @@ func delete_selected_part(part):
 			disconnect_node(con.from, con.from_port, con.to, con.to_port)
 	remove_child(part)
 	part.queue_free()
+	emit_signal("changed")
 
 
 func duplicate_selected_parts():
+	emit_signal("changed")
 	# Base the location off the first selected part relative to the mouse cursor
 	var offset = abs(get_local_mouse_position())
 	var first_part = true
@@ -119,6 +125,7 @@ func add_part(part):
 	update_part_initial_offset_delta()
 	add_child(part)
 	connect_signals(part)
+	emit_signal("changed")
 	
 	# We want precise control of node names to keep circuit data robust
 	# Godot can sneak in @ marks to the node name, so we assign the name after
@@ -269,3 +276,5 @@ func reset_race_counters():
 	for node in get_children():
 		if node is Part:
 			node.race_counter.clear()
+			if node is Block:
+				node.reset_block_race_counters()

@@ -31,8 +31,7 @@ func _ready():
 
 
 func update_input_level(side, port, level):
-	var nom = name
-	prints("update_input_level", nom, side, port, level)
+	prints("part update_input_level", self.name, side, port, level)
 	var key = set_pin_value(side, port, level)
 	if key != null:
 		if race_counter.has(key):
@@ -60,20 +59,20 @@ func set_pin_value(side, port, value):
 
 
 func update_bus_input_value(side, port, value):
-	var nom = name
-	prints("update_bus_input_value", nom, side, port, value)
 	if set_pin_value(side, port, value) != null:
 		evaluate_bus_output_value(side, port, value)
 
 
 # Override this function in extended parts
 func evaluate_output_level(side, port, level):
+	prints("part evaluate_output_level", self.name, side, port, level)
 	# Put logic here to derive the new level
 	side = (side + 1) % 2 # Used with IO part to alternate sides
 	update_output_level(side, port, level)
 
 
 func update_output_level(side, port, level):
+	prints("part update_output_level", self.name, side, port, level)
 	if set_pin_value(side, port, level) != null:
 		emit_signal("output_level_changed", self, side, port, level)
 

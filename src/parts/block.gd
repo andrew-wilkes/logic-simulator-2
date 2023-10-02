@@ -125,9 +125,11 @@ func add_parts():
 		part.part_type = node.part_type
 		part.data = node.data
 		part.name = node.node_name
-		parts[part.name] = part
+		part.node_name = node.node_name # Useful for debugging
+		part.show_display = false
 		part.connect("output_level_changed", output_level_changed_handler)
 		part.connect("bus_value_changed", bus_value_changed_handler)
+		parts[part.name] = part
 
 
 func get_map(side, port):
@@ -136,51 +138,59 @@ func get_map(side, port):
 
 # Map external input to internal part
 func evaluate_output_level(side, port, level):
+	prints("block evaluate_output_level", self.name, side, port, level)
 	var map = get_map(side, port)
-	parts[map[PART]].update_input_level(side, map[PORT], level)
+	parts[map[PART]].update_output_level(side, map[PORT], level)
 
 
 # Map external bus input to internal part
 func evaluate_bus_output_value(side, port, value):
 	var map = get_map(side, port)
-	parts[map[PART]].update_bus_input_value(side, map[PORT], value)
+	side = (side + 1) % 2 # Flip the side to the output side
+	parts[map[PART]].update_output_value(side, map[PORT], value)
 
 
 func output_level_changed_handler(part, side, port, level):
-	var map_idx = [part, port]
-	var port_idx = [input_map, output_map][side].find(map_idx)
+	prints("block output_level_changed_handler", part.name, side, port, level)
+	var map_idx = [part.name, port]
+	var port_idx = [output_map, input_map][side].find(map_idx)
 	if port_idx > -1:
 		emit_signal("output_level_changed", self, side, port_idx, level)
 	else:
-		prints("output_level_changed", part, side, port, level)
 		update_internal_input_level(part, side, port, level)
 
 
 func update_internal_input_level(part, side, port, level):
+	prints("block update_internal_input_level", part.name, side, port, level)
 	for con in circuit.connections:
 		if side == RIGHT:
-			if con.from == part and con.from_port == port:
+			if con.from == part.name and con.from_port == port:
 				parts[con.to].update_input_level(LEFT, con.to_port, level)
 		else:
-			if con.to == part and con.to_port == port:
+			if con.to == part.name and con.to_port == port:
 				parts[con.from].update_input_level(RIGHT, con.from_port, level)
 
 
 func bus_value_changed_handler(part, side, port, value):
-	var map_idx = [part, port]
+	var map_idx = [part.name, port]
 	var port_idx = [input_map, output_map][side].find(map_idx)
 	if port_idx > -1:
-		emit_signal("bus_level_changed", self, side, port_idx, value)
+		emit_signal("bus_value_changed", self, side, port_idx, value)
 	else:
-		prints("bus_value_changed", part, side, port, value)
 		update_internal_bus_input_value(part, side, port, value)
 
 
 func update_internal_bus_input_value(part, side, port, value):
 	for con in circuit.connections:
 		if side == RIGHT:
-			if con.from == part and con.from_port == port:
+			if con.from == part.name and con.from_port == port:
 				parts[con.to].update_bus_input_value(LEFT, con.to_port, value)
 		else:
-			if con.to == part and con.to_port == port:
+			if con.to == part.name and con.to_port == port:
 				parts[con.from].update_bus_input_value(RIGHT, con.from_port, value)
+
+
+func reset_block_race_counters():
+	for part in parts:
+		if part is Block:
+			part.reset_block_race_counters()
