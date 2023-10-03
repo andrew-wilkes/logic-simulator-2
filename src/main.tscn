@@ -44,6 +44,10 @@ text = "New"
 layout_mode = 2
 text = "Save"
 
+[node name="SaveAsButton" type="Button" parent="VB/HB"]
+layout_mode = 2
+text = "Save As"
+
 [node name="LoadButton" type="Button" parent="VB/HB"]
 layout_mode = 2
 text = "Load"
@@ -89,7 +93,7 @@ text = "Warning"
 title = "Quit without saving?"
 
 [node name="LoadDialog" type="FileDialog" parent="."]
-title = "Load Circuit"
+title = "Open a File"
 size = Vector2i(600, 400)
 ok_button_text = "Open"
 file_mode = 0
@@ -105,6 +109,7 @@ filters = PackedStringArray("*.tres ; Circuit files")
 
 [connection signal="pressed" from="VB/HB/NewButton" to="." method="_on_new_button_pressed"]
 [connection signal="pressed" from="VB/HB/SaveButton" to="." method="_on_save_button_pressed"]
+[connection signal="pressed" from="VB/HB/SaveAsButton" to="." method="_on_save_as_button_pressed"]
 [connection signal="pressed" from="VB/HB/LoadButton" to="." method="_on_load_button_pressed"]
 [connection signal="pressed" from="VB/HB/BlockButton" to="." method="_on_block_button_pressed"]
 [connection signal="confirmed" from="Confirm" to="." method="_on_confirm_confirmed"]

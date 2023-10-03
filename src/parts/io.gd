@@ -33,6 +33,11 @@ func _ready():
 	bug_fix() # Godot 4.1.stable
 
 
+func clear():
+	super()
+	current_value = 0
+
+
 func bug_fix():
 	for node in get_children():
 		if node is LineEdit and node.name != "Tag" and node.name != "Value":
@@ -59,7 +64,7 @@ func set_pins():
 		add_child(tag_node)
 	if to_add < 0:
 		for n in -to_add:
-			emit_signal("removing_slot", self, num_wires - n)
+			controller.removing_slot(self, num_wires - n)
 			get_child(-2).queue_free()
 			remove_child(get_child(-2))
 	set_pin_colors()
@@ -102,7 +107,7 @@ func _on_text_submitted(new_text):
 	current_value = value
 	# The change may propagate before the race reset has occurred,
 	# so the threshold value may need to be increased
-	emit_signal("reset_race_counters")
+	controller.reset_race_counters()
 	update_output_levels_from_value([0, 1], value)
 	update_output_value(0, 0, value)
 	update_output_value(1, 0, value)

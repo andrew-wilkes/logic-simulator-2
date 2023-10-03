@@ -31,6 +31,11 @@ func _on_save_button_pressed():
 	do_action(SAVE)
 
 
+func _on_save_as_button_pressed():
+	settings.current_file = ""
+	do_action(SAVE)
+
+
 func _on_load_button_pressed():
 	do_action(OPEN)
 

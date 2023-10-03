@@ -50,6 +50,7 @@ func remove_connections_to_part(part):
 
 
 func clear():
+	parent_file = ""
 	clear_connections()
 	for node in get_children():
 		if node is Part:
@@ -108,9 +109,9 @@ func duplicate_selected_parts():
 		new_part.position_offset += offset
 		new_part.data = part.data.duplicate()
 		new_part.part_type = part.part_type
+		new_part.controller = self
 		add_child(new_part)
 		new_part.name = part.part_type + circuit.get_next_id()
-		new_part.connect("right_click_on_part", right_click_on_part)
 
 
 func add_part_by_name(part_name):
@@ -124,7 +125,7 @@ func add_part(part):
 		+ part_initial_offset_delta
 	update_part_initial_offset_delta()
 	add_child(part)
-	connect_signals(part)
+	part.controller = self
 	emit_signal("changed")
 	
 	# We want precise control of node names to keep circuit data robust
@@ -162,10 +163,15 @@ func save_circuit(file_name):
 	circuit.parts = []
 	for node in get_children():
 		if node is Part:
+			# Don't change node in the scene
+			var part = node.duplicate()
 			# Save the name of the node
-			node.node_name = node.name
-			node.tag = node.get_node("Tag").text
-			circuit.parts.append(node)
+			part.node_name = node.name
+			part.tag = node.get_node("Tag").text
+			part.part_type = node.part_type
+			part.data = node.data
+			part.clear() # Wipe member values that we don't want to save
+			circuit.parts.append(part)
 	circuit.snap_distance = snap_distance
 	circuit.use_snap = use_snap
 	circuit.minimap_enabled = minimap_enabled
@@ -196,7 +202,7 @@ func add_parts():
 		part.data = node.data
 		add_child(part)
 		part.setup()
-		connect_signals(part)
+		part.controller = self
 		part.name = node.node_name
 		part.position_offset = node.position_offset
 		part.title = part.name
@@ -205,15 +211,6 @@ func add_parts():
 func add_connections():
 	for con in circuit.connections:
 		connect_node(con.from, con.from_port, con.to, con.to_port)
-
-
-func connect_signals(part: Part):
-	part.connect("removing_slot", removing_slot)
-	part.connect("right_click_on_part", right_click_on_part)
-	part.connect("output_level_changed", output_level_changed_handler)
-	part.connect("bus_value_changed", bus_value_changed_handler)
-	part.connect("unstable", unstable_handler)
-	part.connect("reset_race_counters", reset_race_counters)
 
 
 func setup_graph():

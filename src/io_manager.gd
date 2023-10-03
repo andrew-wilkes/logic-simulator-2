@@ -160,7 +160,7 @@ func _on_update_timer_timeout():
 
 
 func update_value():
-	part.emit_signal("reset_race_counters")
+	part.controller.reset_race_counters()
 	part.evaluate_bus_output_value(0, 0, part.current_value)
 	part.evaluate_bus_output_value(1, 0, part.current_value)
 	set_display_value()

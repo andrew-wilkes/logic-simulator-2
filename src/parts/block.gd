@@ -23,6 +23,14 @@ func _init():
 }
 
 
+func clear():
+	super()
+	circuit = null
+	parts = {}
+	input_map = []
+	output_map = []
+
+
 func _ready():
 	circuit = Circuit.new().load_data(data.circuit_file)
 	var input_pin_count = 0
@@ -127,8 +135,7 @@ func add_parts():
 		part.name = node.node_name
 		part.node_name = node.node_name # Useful for debugging
 		part.show_display = false
-		part.connect("output_level_changed", output_level_changed_handler)
-		part.connect("bus_value_changed", bus_value_changed_handler)
+		part.controller = self
 		parts[part.name] = part
 
 
@@ -140,6 +147,7 @@ func get_map(side, port):
 func evaluate_output_level(side, port, level):
 	prints("block evaluate_output_level", self.name, side, port, level)
 	var map = get_map(side, port)
+	side = (side + 1) % 2 # Flip the side to the output side
 	parts[map[PART]].update_output_level(side, map[PORT], level)
 
 
@@ -153,9 +161,9 @@ func evaluate_bus_output_value(side, port, value):
 func output_level_changed_handler(part, side, port, level):
 	prints("block output_level_changed_handler", part.name, side, port, level)
 	var map_idx = [part.name, port]
-	var port_idx = [output_map, input_map][side].find(map_idx)
+	var port_idx = [input_map, output_map][side].find(map_idx)
 	if port_idx > -1:
-		emit_signal("output_level_changed", self, side, port_idx, level)
+		controller.output_level_changed_handler(self, side, port_idx, level)
 	else:
 		update_internal_input_level(part, side, port, level)
 
@@ -175,7 +183,7 @@ func bus_value_changed_handler(part, side, port, value):
 	var map_idx = [part.name, port]
 	var port_idx = [input_map, output_map][side].find(map_idx)
 	if port_idx > -1:
-		emit_signal("bus_value_changed", self, side, port_idx, value)
+		controller.bus_value_changed_handler(self, side, port_idx, value)
 	else:
 		update_internal_bus_input_value(part, side, port, value)
 
@@ -191,6 +199,11 @@ func update_internal_bus_input_value(part, side, port, value):
 
 
 func reset_block_race_counters():
-	for part in parts:
+	for part in parts.values():
+		part.race_counter.clear()
 		if part is Block:
 			part.reset_block_race_counters()
+
+
+func unstable_handler(_name, side, port):
+	controller.unstable_handler(name + ":" + _name, side, port)
