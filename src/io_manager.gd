@@ -69,6 +69,7 @@ func _on_color_picker_color_changed(color):
 		part.data.bus_color = color_picker.color
 	set_button_text_colors()
 	part.set_pin_colors()
+	part.controller.set_io_connection_colors(part)
 
 
 func _on_pins_button_pressed():

@@ -12,7 +12,7 @@ func _init():
 	# The circuit files may be saved as .tscn (text-based) or as .scn (binary).
 	var files = Array(dir.get_files()).filter(func(fn): return fn.ends_with("scn"))
 	for file_name in files:
-		var part_name = file_name.get_file().get_slice('.', 0).to_upper()
+		var part_name = file_name.get_file().get_slice('.', 0).replace('_', '').to_upper()
 		# Don't add the Block part as a Part option in the menu
 		if part_name != "BLOCK":
 			names.append(part_name)

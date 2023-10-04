@@ -188,6 +188,8 @@ func load_circuit(file_name):
 		setup_graph()
 		add_parts()
 		add_connections()
+		set_all_io_connection_colors()
+		colorize_pins()
 	else:
 		emit_signal("warning", "The circuit data was invalid!")
 
@@ -205,12 +207,25 @@ func add_parts():
 		part.controller = self
 		part.name = node.node_name
 		part.position_offset = node.position_offset
-		part.title = part.name
+		part.tooltip_text = part.name
 
 
 func add_connections():
 	for con in circuit.connections:
 		connect_node(con.from, con.from_port, con.to, con.to_port)
+
+
+func colorize_pins():
+	for node in circuit.parts:
+		if node.part_type == "WIRECOLOR" or node.part_type == "BUSCOLOR":
+			set_pin_colors(node.node_name, node.data.color)
+
+
+func set_all_io_connection_colors():
+	for node in circuit.parts:
+		if node.part_type == "IO":
+			var part = get_node(NodePath(node.node_name))
+			set_io_connection_colors(part)
 
 
 func setup_graph():
@@ -275,3 +290,37 @@ func reset_race_counters():
 			node.race_counter.clear()
 			if node is Block:
 				node.reset_block_race_counters()
+
+
+func set_pin_colors(to_part, color):
+	for con in get_connection_list():
+		if con.to == to_part:
+			var from_node = get_node(NodePath(con.from))
+			from_node.set_slot_color_right(from_node.get_connection_output_slot(con.from_port), color)
+			for con2 in get_connection_list():
+				if con2.from == con.from and con2.from_port == con.from_port:
+					var to_node = get_node(NodePath(con2.to))
+					var slot = to_node.get_connection_input_slot(con2.to_port)
+					to_node.set_slot_color_left(slot, color)
+
+
+func set_io_connection_colors(io_part):
+	for con in get_connection_list():
+		if con.from == io_part.name:
+			var color = io_part.data.wire_color\
+				if io_part.get_connection_output_type(con.from_port) == 0\
+					else io_part.data.bus_color
+			var to_node = get_node(NodePath(con.to))
+			var slot = to_node.get_connection_input_slot(con.to_port)
+			to_node.set_slot_color_left(slot, color)
+			slot = io_part.get_connection_output_slot(con.from_port)
+			io_part.set_slot_color_right(slot, color)
+		if con.to == io_part.name:
+			var color = io_part.data.wire_color\
+				if io_part.get_connection_input_type(con.to_port) == 0\
+					else io_part.data.bus_color
+			var from_node = get_node(NodePath(con.from))
+			var slot = from_node.get_connection_output_slot(con.from_port)
+			from_node.set_slot_color_right(slot, color)
+			slot = io_part.get_connection_input_slot(con.to_port)
+			io_part.set_slot_color_left(slot, color)
