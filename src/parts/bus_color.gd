@@ -7,10 +7,17 @@ func _init():
 
 
 func _ready():
-	$ColorPickerButton.color = data.color
+	$ColorRect.color = data.color
+	$ColorPicker/M/ColorPicker.color = data.color
 
 
-func _on_color_picker_button_color_changed(color):
+func _on_color_picker_changed_color(color):
 	data.color = color
 	set_slot_color_left(0, color)
 	controller.set_pin_colors(name, color)
+	$ColorRect.color = color
+
+
+func _on_color_rect_gui_input(event):
+	if event is InputEventMouseButton:
+		$ColorPicker.popup_centered()

@@ -1,0 +1,29 @@
+[gd_scene load_steps=3 format=3 uid="uid://cebba5vujpuxs"]
+
+[ext_resource type="Script" path="res://ColorPicker.gd" id="1_kw6um"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v76vi"]
+bg_color = Color(0.278431, 0.278431, 0.278431, 1)
+
+[node name="ColorPicker" type="PopupPanel"]
+title = "Color Picker"
+size = Vector2i(310, 518)
+visible = true
+borderless = false
+theme_override_styles/panel = SubResource("StyleBoxFlat_v76vi")
+script = ExtResource("1_kw6um")
+
+[node name="M" type="MarginContainer" parent="."]
+offset_right = 310.0
+offset_bottom = 518.0
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="ColorPicker" type="ColorPicker" parent="M"]
+layout_mode = 2
+can_add_swatches = false
+presets_visible = false
+
+[connection signal="color_changed" from="M/ColorPicker" to="." method="_on_color_picker_color_changed"]
