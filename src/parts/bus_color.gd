@@ -1,5 +1,7 @@
 extends Part
 
+class_name BusColor
+
 func _init():
 	data["color"] = Color.YELLOW
 

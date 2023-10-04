@@ -218,9 +218,9 @@ func add_connections():
 
 
 func colorize_pins():
-	for node in circuit.parts:
-		if node.part_type == "WIRECOLOR" or node.part_type == "BUSCOLOR":
-			set_pin_colors(node.node_name, node.data.color)
+	for node in get_children():
+		if node is WireColor or node is BusColor:
+			set_pin_colors(node.name, node.data.color)
 
 
 func set_all_io_connection_colors():
@@ -262,28 +262,28 @@ func right_click_on_part(part):
 
 
 func output_level_changed_handler(part, side, port, level):
-	var is_a_pin = false
 	for con in get_connection_list():
 		if side == RIGHT:
 			if con.from == part.name and con.from_port == port:
-				is_a_pin = true
 				get_node(NodePath(con.to)).update_input_level(LEFT, con.to_port, level)
 		else:
 			if con.to == part.name and con.to_port == port:
-				is_a_pin = true
 				get_node(NodePath(con.from)).update_input_level(RIGHT, con.from_port, level)
-	if indicate_logic_levels and is_a_pin:
-		indicate_output_level(part, side, port, level)
+		if indicate_logic_levels:
+			indicate_output_level(part, side, port, level)
 
 
 func indicate_output_level(part, side, port, level):
 	var color = level_colors[int(level)]
 	if side == LEFT:
-		var slot = part.get_connection_input_slot(port)
-		part.set_slot_color_left(slot, color)
+		# Check that this returns the number of available ports rather than connections
+		if port < part.get_connection_input_count():
+			var slot = part.get_connection_input_slot(port)
+			part.set_slot_color_left(slot, color)
 	else:
-		var slot = part.get_connection_output_slot(port)
-		part.set_slot_color_right(slot, color)
+		if port < part.get_connection_output_count():
+			var slot = part.get_connection_output_slot(port)
+			part.set_slot_color_right(slot, color)
 
 
 func bus_value_changed_handler(part, side, port, value):

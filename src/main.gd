@@ -96,7 +96,7 @@ func set_current_file(file_name, changed = false):
 
 
 func set_current_file_color(changed = true):
-	var color = Color.RED if changed else Color.WHITE
+	var color = Color.RED if changed else Color.GREEN
 	%CurrentFile.set("theme_override_colors/font_color", color)
 
 #### /FILE CODE ####

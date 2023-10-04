@@ -1,5 +1,7 @@
 extends Part
 
+class_name WireColor
+
 func _init():
 	data["color"] = Color.WHITE
 
