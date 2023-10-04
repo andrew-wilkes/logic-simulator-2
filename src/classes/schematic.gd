@@ -7,6 +7,7 @@ signal warning(text)
 signal changed
 
 const PART_INITIAL_OFFSET = Vector2(50, 50)
+const level_colors = [Color.BLUE, Color.RED]
 
 enum { LEFT, RIGHT }
 
@@ -14,6 +15,7 @@ var circuit: Circuit
 var selected_parts = []
 var part_initial_offset_delta = Vector2.ZERO
 var parent_file = ""
+var indicate_logic_levels = true
 
 func _ready():
 	circuit = Circuit.new()
@@ -222,10 +224,9 @@ func colorize_pins():
 
 
 func set_all_io_connection_colors():
-	for node in circuit.parts:
-		if node.part_type == "IO":
-			var part = get_node(NodePath(node.node_name))
-			set_io_connection_colors(part)
+	for node in get_children():
+		if node is IO:
+			set_io_connection_colors(node)
 
 
 func setup_graph():
@@ -261,13 +262,28 @@ func right_click_on_part(part):
 
 
 func output_level_changed_handler(part, side, port, level):
+	var is_a_pin = false
 	for con in get_connection_list():
 		if side == RIGHT:
 			if con.from == part.name and con.from_port == port:
+				is_a_pin = true
 				get_node(NodePath(con.to)).update_input_level(LEFT, con.to_port, level)
 		else:
 			if con.to == part.name and con.to_port == port:
+				is_a_pin = true
 				get_node(NodePath(con.from)).update_input_level(RIGHT, con.from_port, level)
+	if indicate_logic_levels and is_a_pin:
+		indicate_output_level(part, side, port, level)
+
+
+func indicate_output_level(part, side, port, level):
+	var color = level_colors[int(level)]
+	if side == LEFT:
+		var slot = part.get_connection_input_slot(port)
+		part.set_slot_color_left(slot, color)
+	else:
+		var slot = part.get_connection_output_slot(port)
+		part.set_slot_color_right(slot, color)
 
 
 func bus_value_changed_handler(part, side, port, value):
