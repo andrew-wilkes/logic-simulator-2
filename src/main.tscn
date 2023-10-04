@@ -64,6 +64,10 @@ text = "Add Part"
 layout_mode = 2
 text = "Tools"
 
+[node name="SettingsButton" type="Button" parent="VB/HB"]
+layout_mode = 2
+text = "Settings"
+
 [node name="Label" type="Label" parent="VB/HB"]
 layout_mode = 2
 text = "File: "
@@ -137,5 +141,7 @@ filters = PackedStringArray("*.tres ; Circuit files")
 [connection signal="pressed" from="VB/HB/LoadButton" to="." method="_on_load_button_pressed"]
 [connection signal="pressed" from="VB/HB/BlockButton" to="." method="_on_block_button_pressed"]
 [connection signal="confirmed" from="Confirm" to="." method="_on_confirm_confirmed"]
+[connection signal="canceled" from="LoadDialog" to="." method="_on_load_dialog_canceled"]
 [connection signal="file_selected" from="LoadDialog" to="." method="_on_file_dialog_file_selected"]
+[connection signal="canceled" from="SaveDialog" to="." method="_on_save_dialog_canceled"]
 [connection signal="file_selected" from="SaveDialog" to="." method="_on_file_dialog_file_selected"]

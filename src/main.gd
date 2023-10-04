@@ -99,6 +99,14 @@ func set_current_file_color(changed = true):
 	var color = Color.RED if changed else Color.GREEN
 	%CurrentFile.set("theme_override_colors/font_color", color)
 
+
+func _on_save_dialog_canceled():
+	$VB/Schematic.grab_focus()
+
+
+func _on_load_dialog_canceled():
+	$VB/Schematic.grab_focus()
+
 #### /FILE CODE ####
 
 #### QUIT CODE ####

@@ -52,6 +52,7 @@ func remove_connections_to_part(part):
 
 
 func clear():
+	grab_focus()
 	parent_file = ""
 	clear_connections()
 	for node in get_children():
@@ -161,6 +162,7 @@ func update_part_initial_offset_delta():
 
 
 func save_circuit(file_name):
+	grab_focus()
 	circuit.connections = get_connection_list()
 	circuit.parts = []
 	for node in get_children():
@@ -183,6 +185,7 @@ func save_circuit(file_name):
 
 
 func load_circuit(file_name):
+	grab_focus()
 	parent_file = file_name
 	clear()
 	circuit = Circuit.new().load_data(file_name)
