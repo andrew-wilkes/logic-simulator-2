@@ -70,6 +70,7 @@ func _on_color_picker_color_changed(color):
 	set_button_text_colors()
 	part.set_pin_colors()
 	part.controller.set_io_connection_colors(part)
+	part.changed()
 
 
 func _on_pins_button_pressed():
@@ -77,6 +78,7 @@ func _on_pins_button_pressed():
 		hide_pin_names()
 		part.data.labels = %Names.text.split("\n")
 		part.set_labels()
+		part.changed()
 	else:
 		$M/HB/Pins.show()
 
@@ -198,6 +200,7 @@ func _on_range_text_submitted(new_text):
 		value = new_text.hex_to_int()
 	set_range(value)
 	part.data.range = value
+	part.changed()
 
 
 func _on_num_wires_value_changed(value):
@@ -205,3 +208,4 @@ func _on_num_wires_value_changed(value):
 	if new_num != part.data.num_wires:
 		part.data.num_wires = new_num
 		part.set_pins()
+		part.changed()

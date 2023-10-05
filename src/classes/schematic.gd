@@ -135,6 +135,7 @@ func add_part(part):
 	# Godot can sneak in @ marks to the node name, so we assign the name after
 	# the node was added to the scene and Godot gave it a name
 	part.name = part.part_type + circuit.get_next_id()
+	part.connect("position_offset_changed", part.changed)
 
 
 func add_block(file_name):
@@ -213,6 +214,7 @@ func add_parts():
 		part.name = node.node_name
 		part.position_offset = node.position_offset
 		part.tooltip_text = part.name
+		part.connect("position_offset_changed", part.changed)
 
 
 func add_connections():

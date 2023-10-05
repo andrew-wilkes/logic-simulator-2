@@ -64,3 +64,9 @@ layout_mode = 2
 [node name="Tag" type="LineEdit" parent="."]
 layout_mode = 2
 expand_to_text_length = true
+
+[node name="ChangeNotificationTimer" type="Timer" parent="."]
+wait_time = 0.1
+one_shot = true
+
+[connection signal="timeout" from="ChangeNotificationTimer" to="." method="_on_change_notification_timer_timeout"]

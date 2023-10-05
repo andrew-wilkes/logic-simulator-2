@@ -4,9 +4,6 @@ class_name Part
 
 extends GraphNode
 
-# Indicate unstable wire and stop flow of level or value
-signal unstable(part, side, port)
-
 enum { LEFT, RIGHT }
 enum { WIRE_TYPE, BUS_TYPE }
 
@@ -16,13 +13,21 @@ var part_type = ""
 var data = {}
 var node_name = "temp"
 var show_display = true
-
 var controller # The schematic or a parent block
 var race_counter = {} # [side, port]: count
 var pins = {} # [side, port]: level / value
 
+var change_notification_timer: Timer
+
 func _ready():
 	connect("gui_input", _on_gui_input)
+	if $Tag.visible:
+		$Tag.connect("text_changed", _on_tag_text_changed)
+	change_notification_timer = Timer.new()
+	get_child(0).add_child(change_notification_timer)
+	change_notification_timer.one_shot = true
+	change_notification_timer.connect("timeout", _on_change_notification_timer_timeout)
+
 
 func clear():
 	controller = null
@@ -99,3 +104,15 @@ func _on_gui_input(event):
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_RIGHT:
 			controller.right_click_on_part(self)
+
+
+func changed():
+	change_notification_timer.start()
+
+
+func _on_change_notification_timer_timeout():
+	controller.emit_signal("changed")
+
+
+func _on_tag_text_changed(_new_text):
+	changed()
