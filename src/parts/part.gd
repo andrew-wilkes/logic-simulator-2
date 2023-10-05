@@ -7,6 +7,13 @@ extends GraphNode
 enum { LEFT, RIGHT }
 enum { WIRE_TYPE, BUS_TYPE }
 
+# This is based on the number of bits that may change per update of the value.
+# The value is applied bit by bit so a stable state is reached after all of
+# the bit levels have been applied.
+# Using a high threshold should be faster than introducing delays in the part
+# outputs.
+const RACE_COUNT_THRESHOLD = 256
+
 # Part properties
 var tag = ""
 var part_type = ""
@@ -41,7 +48,7 @@ func update_input_level(side, port, level):
 	if key != null:
 		if race_counter.has(key):
 			race_counter[key] += 1
-			if race_counter[key] == 2:
+			if race_counter[key] == RACE_COUNT_THRESHOLD:
 				controller.unstable_handler(name, side, port)
 				return
 		else:
