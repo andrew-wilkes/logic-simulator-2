@@ -23,6 +23,8 @@ func open(_part: IO):
 	set_range(part.data.range)
 	set_display_value()
 	%NumWires.value = part.data.num_wires
+	slider_value_changed = false
+	set_slider_value()
 	popup_centered()
 
 

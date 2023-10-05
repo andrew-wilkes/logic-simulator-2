@@ -16,27 +16,17 @@ var circuit: Circuit
 var parts = {}
 var input_map = []
 var output_map = []
+var input_pin_count = 0
+var output_pin_count = 0
+var inputs = []
+var outputs = []
 
 func _init():
-	data = {
-	"circuit_file": ""
-}
+	data["circuit_file"] = ""
 
 
-func clear():
-	super()
-	circuit = null
-	parts = {}
-	input_map = []
-	output_map = []
-
-
-func _ready():
+func block_setup():
 	circuit = Circuit.new().load_data(data.circuit_file)
-	var input_pin_count = 0
-	var output_pin_count = 0
-	var inputs = []
-	var outputs = []
 	for part in circuit.parts:
 		if part is IO:
 			if is_input(part):
@@ -45,9 +35,6 @@ func _ready():
 			if is_output(part):
 				outputs.append(part)
 				output_pin_count += part.data.num_wires + 1
-	set_slots(max(input_pin_count, output_pin_count))
-	configure_pins(inputs, outputs)
-	add_parts()
 	# Create IO pin maps
 	for io_part in inputs:
 		# [part_name, port]
@@ -59,11 +46,25 @@ func _ready():
 		output_map.append([io_part.node_name, 0])
 		for n in io_part.data.num_wires:
 			output_map.append([io_part.node_name, n + 1])
-	print(input_map)
-	print(output_map)
+	add_parts()
 
 
-func configure_pins(inputs, outputs):
+func clear():
+	super()
+	circuit = null
+	parts = {}
+	input_map = []
+	output_map = []
+
+
+func _ready():
+	super()
+	block_setup()
+	set_slots(max(input_pin_count, output_pin_count))
+	configure_pins()
+
+
+func configure_pins():
 	clear_all_slots()
 	var slot_idx = 1
 	for input in inputs:
@@ -149,6 +150,8 @@ func add_parts():
 		part.node_name = node.node_name # Useful for debugging
 		part.show_display = false
 		part.controller = self
+		if part.part_type == "BLOCK":
+			part.block_setup()
 		parts[part.name] = part
 
 
