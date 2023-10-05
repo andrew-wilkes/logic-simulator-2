@@ -11,7 +11,7 @@ func _ready():
 	settings = settings.load_data()
 	settings.current_file = ""
 
-	var add_part_menu: PopupMenu = $VB/HB/AddPartMenu.get_popup()
+	var add_part_menu: PopupMenu = %AddPartMenu.get_popup()
 	for part_name in Parts.names:
 		add_part_menu.add_item(part_name)
 	add_part_menu.index_pressed.connect(part_to_add)
@@ -111,9 +111,37 @@ func _on_load_dialog_canceled():
 
 #### QUIT CODE ####
 
-func _unhandled_key_input(event):
-	if event.keycode == KEY_ESCAPE:
-		try_to_quit()
+func _unhandled_key_input(event: InputEvent):
+	if event.pressed:
+		match event.keycode:
+			KEY_ESCAPE:
+				try_to_quit()
+			KEY_N:
+				if event.ctrl_pressed:
+					_on_new_button_pressed()
+			KEY_S:
+				if event.ctrl_pressed:
+					if event.shift_pressed:
+						_on_save_as_button_pressed()
+					else:
+						_on_save_button_pressed()
+			KEY_O, KEY_L:
+				if event.ctrl_pressed:
+					if event.shift_pressed:
+						_on_block_button_pressed()
+					else:
+						_on_load_button_pressed()
+			KEY_P:
+				if event.ctrl_pressed:
+					%AddPartMenu.get_popup().show()
+					%AddPartMenu.get_popup().position = \
+						%AddPartMenu.position + Vector2(0, %AddPartMenu.size.y)
+			KEY_T:
+				if event.ctrl_pressed:
+					_on_tools_button_pressed()
+			KEY_H:
+				if event.ctrl_pressed:
+					_on_help_button_pressed()
 
 
 # Listen for notification of quit request such as after user clicked on x of window
@@ -141,3 +169,23 @@ func quit():
 	get_tree().quit()
 
 #### /QUIT CODE ####
+
+
+func _on_tools_button_pressed():
+	pass # Replace with function body.
+
+
+func _on_settings_button_pressed():
+	pass # Replace with function body.
+
+
+func _on_help_button_pressed():
+	pass # Replace with function body.
+
+
+func _on_learn_button_pressed():
+	pass # Replace with function body.
+
+
+func _on_about_button_pressed():
+	pass # Replace with function body.

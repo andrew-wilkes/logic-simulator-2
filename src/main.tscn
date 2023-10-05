@@ -57,6 +57,7 @@ layout_mode = 2
 text = "Load As Block"
 
 [node name="AddPartMenu" type="MenuButton" parent="VB/HB"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Add Part"
 
@@ -140,6 +141,11 @@ filters = PackedStringArray("*.tres ; Circuit files")
 [connection signal="pressed" from="VB/HB/SaveAsButton" to="." method="_on_save_as_button_pressed"]
 [connection signal="pressed" from="VB/HB/LoadButton" to="." method="_on_load_button_pressed"]
 [connection signal="pressed" from="VB/HB/BlockButton" to="." method="_on_block_button_pressed"]
+[connection signal="pressed" from="VB/HB/ToolsButton" to="." method="_on_tools_button_pressed"]
+[connection signal="pressed" from="VB/HB/SettingsButton" to="." method="_on_settings_button_pressed"]
+[connection signal="pressed" from="VB/HB/HelpButton" to="." method="_on_help_button_pressed"]
+[connection signal="pressed" from="VB/HB/LearnButton" to="." method="_on_learn_button_pressed"]
+[connection signal="pressed" from="VB/HB/AboutButton" to="." method="_on_about_button_pressed"]
 [connection signal="confirmed" from="Confirm" to="." method="_on_confirm_confirmed"]
 [connection signal="canceled" from="LoadDialog" to="." method="_on_load_dialog_canceled"]
 [connection signal="file_selected" from="LoadDialog" to="." method="_on_file_dialog_file_selected"]
