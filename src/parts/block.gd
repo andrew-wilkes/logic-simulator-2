@@ -42,7 +42,7 @@ func _ready():
 			if is_input(part):
 				inputs.append(part)
 				input_pin_count += part.data.num_wires + 1
-			else:
+			if is_output(part):
 				outputs.append(part)
 				output_pin_count += part.data.num_wires + 1
 	set_slots(max(input_pin_count, output_pin_count))
@@ -74,7 +74,8 @@ func configure_pins(inputs, outputs):
 		get_child(slot_idx).get_child(0).text = input.data.labels[label_idx]
 		for n in input.data.num_wires:
 			slot_idx += 1
-			label_idx += 1
+			if label_idx + 1 < input.data.labels.size():
+				label_idx += 1
 			get_child(slot_idx).get_child(0).text = input.data.labels[label_idx]
 			set_slot_enabled_left(slot_idx, true)
 			set_slot_type_left(slot_idx, WIRE_TYPE)
@@ -89,7 +90,8 @@ func configure_pins(inputs, outputs):
 		get_child(slot_idx).get_child(1).text = output.data.labels[label_idx]
 		for n in output.data.num_wires:
 			slot_idx += 1
-			label_idx += 1
+			if label_idx + 1 < output.data.labels.size():
+				label_idx += 1
 			get_child(slot_idx).get_child(1).text = output.data.labels[label_idx]
 			set_slot_enabled_right(slot_idx, true)
 			set_slot_type_right(slot_idx, WIRE_TYPE)
@@ -98,9 +100,17 @@ func configure_pins(inputs, outputs):
 
 
 func is_input(part):
-	# If there are no wires connected to the part, then it is an input to the circuit
+	# If there are no wires connected to the part input side, then it is an input to the circuit
 	for con in circuit.connections:
 		if con.to == part.node_name:
+			return false
+	return true
+
+
+func is_output(part):
+	# If there are no wires connected to the part output side, then it is an output to the circuit
+	for con in circuit.connections:
+		if con.from == part.node_name:
 			return false
 	return true
 
@@ -108,6 +118,9 @@ func is_input(part):
 func set_slots(num_slots):
 	var num_pins = get_child_count() - 2
 	var to_add = num_slots - num_pins
+	# Text is added later if there is a pin
+	$Slot1.get_child(0).text = ""
+	$Slot1.get_child(1).text = ""
 	if to_add > 0:
 		for n in to_add:
 			var slot = $Slot1.duplicate()
