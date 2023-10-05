@@ -3,12 +3,10 @@ class_name NAND
 extends Part
 
 func _init():
-	pins = { [0, 1]: false, [0, 2]: false }
+	pins = { [0, 0]: false, [0, 1]: false }
 
 
 func evaluate_output_level(side, _port, level):
-	if side == 0:
-		level = not (pins[[side, 1]] and pins[[side, 2]])
-		# Set output pin level
-		if set_pin_value(1, 1, level) != null:
-			controller.output_level_changed_handler(self, 1, 1, level)
+	if side == LEFT:
+		level = not (pins[[side, 0]] and pins[[side, 1]])
+		update_output_level(RIGHT, 0, level)
