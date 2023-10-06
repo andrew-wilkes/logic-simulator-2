@@ -7,7 +7,6 @@ signal warning(text)
 signal changed
 
 const PART_INITIAL_OFFSET = Vector2(50, 50)
-const level_colors = [Color.BLUE, Color.RED]
 
 enum { LEFT, RIGHT }
 
@@ -16,6 +15,7 @@ var selected_parts = []
 var part_initial_offset_delta = Vector2.ZERO
 var parent_file = ""
 var indicate_logic_levels = true
+var settings: Settings
 
 func _ready():
 	circuit = Circuit.new()
@@ -270,16 +270,22 @@ func output_level_changed_handler(part, side, port, level):
 	for con in get_connection_list():
 		if side == RIGHT:
 			if con.from == part.name and con.from_port == port:
-				get_node(NodePath(con.to)).update_input_level(LEFT, con.to_port, level)
+				var node = get_node(NodePath(con.to))
+				node.update_input_level(LEFT, con.to_port, level)
+				if settings.indicate_to_levels:
+					indicate_level(node, LEFT, con.to_port, level)
 		else:
 			if con.to == part.name and con.to_port == port:
-				get_node(NodePath(con.from)).update_input_level(RIGHT, con.from_port, level)
-		if indicate_logic_levels:
-			indicate_output_level(part, side, port, level)
+				var node = get_node(NodePath(con.from))
+				node.update_input_level(RIGHT, con.from_port, level)
+				if settings.indicate_to_levels:
+					indicate_level(node, RIGHT, con.from_port, level)
+		if settings.indicate_from_levels:
+			indicate_level(part, side, port, level)
 
 
-func indicate_output_level(part, side, port, level):
-	var color = level_colors[int(level)]
+func indicate_level(part, side, port, level):
+	var color = settings.logic_high_color if level else settings.logic_low_color
 	if side == LEFT:
 		# Check that this returns the number of available ports rather than connections
 		if port < part.get_connection_input_count():

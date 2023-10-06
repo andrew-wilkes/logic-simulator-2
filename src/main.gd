@@ -5,11 +5,14 @@ enum { NO_ACTION, NEW, OPEN, OPEN_AS_BLOCK, SAVE, SAVE_AS, QUIT, ABOUT }
 var saved = false
 var menu_action = NO_ACTION
 var settings
+var schematic
 
 func _ready():
+	schematic = $VB/Schematic
 	settings = Settings.new()
 	settings = settings.load_data()
 	settings.current_file = ""
+	schematic.settings = settings
 
 	var add_part_menu: PopupMenu = %AddPartMenu.get_popup()
 	for part_name in Parts.names:
@@ -17,19 +20,19 @@ func _ready():
 	add_part_menu.index_pressed.connect(part_to_add)
 	%ToolsButton.get_popup().add_item("Number parts")
 	%ToolsButton.get_popup().index_pressed.connect(tool_action)
-	$VB/Schematic.connect("warning", $WarningPanel.open)
-	$VB/Schematic.connect("changed", set_current_file_color)
+	schematic.connect("warning", $WarningPanel.open)
+	schematic.connect("changed", set_current_file_color)
 
 
 func part_to_add(part_index):
 	var part_name = Parts.names[part_index]
-	$VB/Schematic.add_part_by_name(part_name)
+	schematic.add_part_by_name(part_name)
 
 
 func tool_action(idx):
 	match idx:
 		0:
-			$VB/Schematic.number_parts()
+			schematic.number_parts()
 
 #### FILE CODE ####
 
@@ -52,7 +55,7 @@ func _on_block_button_pressed():
 
 func _on_new_button_pressed():
 	set_current_file("")
-	$VB/Schematic.clear()
+	schematic.clear()
 
 
 func do_action(action):
@@ -86,13 +89,13 @@ func _on_file_dialog_file_selected(file_path):
 		SAVE:
 			save_file()
 		OPEN:
-			$VB/Schematic.load_circuit(file_path)
+			schematic.load_circuit(file_path)
 		OPEN_AS_BLOCK:
-			$VB/Schematic.add_block(file_path)
+			schematic.add_block(file_path)
 
 
 func save_file():
-	$VB/Schematic.save_circuit(settings.last_dir + "/" + settings.current_file)
+	schematic.save_circuit(settings.last_dir + "/" + settings.current_file)
 
 
 func set_current_file(file_name, changed = false):
@@ -107,11 +110,11 @@ func set_current_file_color(changed = true):
 
 
 func _on_save_dialog_canceled():
-	$VB/Schematic.grab_focus()
+	schematic.grab_focus()
 
 
 func _on_load_dialog_canceled():
-	$VB/Schematic.grab_focus()
+	schematic.grab_focus()
 
 #### /FILE CODE ####
 
