@@ -15,7 +15,8 @@ func _ready():
 	for part_name in Parts.names:
 		add_part_menu.add_item(part_name)
 	add_part_menu.index_pressed.connect(part_to_add)
-	
+	%ToolsButton.get_popup().add_item("Number parts")
+	%ToolsButton.get_popup().index_pressed.connect(tool_action)
 	$VB/Schematic.connect("warning", $WarningPanel.open)
 	$VB/Schematic.connect("changed", set_current_file_color)
 
@@ -24,6 +25,11 @@ func part_to_add(part_index):
 	var part_name = Parts.names[part_index]
 	$VB/Schematic.add_part_by_name(part_name)
 
+
+func tool_action(idx):
+	match idx:
+		0:
+			$VB/Schematic.number_parts()
 
 #### FILE CODE ####
 
@@ -138,7 +144,9 @@ func _unhandled_key_input(event: InputEvent):
 						%AddPartMenu.position + Vector2(0, %AddPartMenu.size.y)
 			KEY_T:
 				if event.ctrl_pressed:
-					_on_tools_button_pressed()
+					%ToolsButton.get_popup().show()
+					%ToolsButton.get_popup().position = \
+						%ToolsButton.position + Vector2(0, %ToolsButton.size.y)
 			KEY_H:
 				if event.ctrl_pressed:
 					_on_help_button_pressed()

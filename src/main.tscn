@@ -61,7 +61,8 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "Add Part"
 
-[node name="ToolsButton" type="Button" parent="VB/HB"]
+[node name="ToolsButton" type="MenuButton" parent="VB/HB"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Tools"
 
@@ -141,7 +142,6 @@ filters = PackedStringArray("*.tres ; Circuit files")
 [connection signal="pressed" from="VB/HB/SaveAsButton" to="." method="_on_save_as_button_pressed"]
 [connection signal="pressed" from="VB/HB/LoadButton" to="." method="_on_load_button_pressed"]
 [connection signal="pressed" from="VB/HB/BlockButton" to="." method="_on_block_button_pressed"]
-[connection signal="pressed" from="VB/HB/ToolsButton" to="." method="_on_tools_button_pressed"]
 [connection signal="pressed" from="VB/HB/SettingsButton" to="." method="_on_settings_button_pressed"]
 [connection signal="pressed" from="VB/HB/HelpButton" to="." method="_on_help_button_pressed"]
 [connection signal="pressed" from="VB/HB/LearnButton" to="." method="_on_learn_button_pressed"]

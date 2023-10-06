@@ -346,3 +346,22 @@ func set_io_connection_colors(io_part):
 			from_node.set_slot_color_right(slot, color)
 			slot = io_part.get_connection_input_slot(con.to_port)
 			io_part.set_slot_color_left(slot, color)
+
+
+func number_parts():
+	# Order the parts based on position in grid
+	# Create dictionary { pos: part }
+	var nodes = {}
+	for node in get_children():
+		if node is Part:
+			nodes[node.position_offset.length()] = node
+	var keys = nodes.keys()
+	keys.sort()
+	var counts = {}
+	for key in keys:
+		var part = nodes[key]
+		if counts.has(part.part_type):
+			counts[part.part_type] += 1
+		else:
+			counts[part.part_type] = 1
+		part.get_node("Tag").text = part.part_type + str(counts[part.part_type])
