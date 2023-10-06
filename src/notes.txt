@@ -1,9 +1,24 @@
 Maybe use a color pallete for setting wire colors?
 
-There could be a part that is only used for setting a wire or bus color when a
- wire or bus is connected to it.
+Idea for block compiler.
 
-Need pin name editor widget for general parts.
+Each part should have a function that does the same as the logic of the part does such as for NAND:
+
+func nand(a, b):
+    return not (a and b)
+
+For NOT:
+
+func not(a):
+    return not a
+
+
+Example compiled circuit:
+
+func io(a, b):
+    return nand(not(a), b)
+
+So, a gdscript file is generated, and this may be loaded and instanced with .new()
 
 --- Bugs ---
 Duplicate of expanded IO part results in extra LineEdit child node being added to the part.
