@@ -1,0 +1,73 @@
+[gd_scene load_steps=2 format=3 uid="uid://cbivksj5j1nmb"]
+
+[ext_resource type="Script" path="res://part_list.gd" id="1_v3nae"]
+
+[node name="PartList" type="MarginContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+script = ExtResource("1_v3nae")
+
+[node name="HB" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="VB1" type="VBoxContainer" parent="HB"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="HB/VB1"]
+layout_mode = 2
+text = "IO Parts"
+
+[node name="ItemList" type="ItemList" parent="HB/VB1"]
+clip_contents = false
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VB2" type="VBoxContainer" parent="HB"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="HB/VB2"]
+layout_mode = 2
+text = "Gates"
+
+[node name="ItemList" type="ItemList" parent="HB/VB2"]
+clip_contents = false
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VB3" type="VBoxContainer" parent="HB"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="HB/VB3"]
+layout_mode = 2
+text = "Chips"
+
+[node name="ItemList" type="ItemList" parent="HB/VB3"]
+clip_contents = false
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="VB4" type="VBoxContainer" parent="HB"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="HB/VB4"]
+layout_mode = 2
+text = "Blocks"
+
+[node name="ItemList" type="ItemList" parent="HB/VB4"]
+clip_contents = false
+layout_mode = 2
+size_flags_vertical = 3
+
+[connection signal="item_clicked" from="HB/VB1/ItemList" to="." method="_on_item_list_item_clicked"]
