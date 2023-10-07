@@ -4,16 +4,10 @@ enum { NO_ACTION, NEW, OPEN, OPEN_AS_BLOCK, SAVE, SAVE_AS, QUIT, ABOUT }
 
 var saved = false
 var menu_action = NO_ACTION
-var settings
 var schematic
 
 func _ready():
 	schematic = $VB/Schematic
-	settings = Settings.new()
-	settings = settings.load_data()
-	settings.current_file = ""
-	schematic.settings = settings
-
 	var add_part_menu: PopupMenu = %AddPartMenu.get_popup()
 	for part_name in Parts.names:
 		add_part_menu.add_item(part_name)
@@ -41,7 +35,7 @@ func _on_save_button_pressed():
 
 
 func _on_save_as_button_pressed():
-	settings.current_file = ""
+	G.settings.current_file = ""
 	do_action(SAVE)
 
 
@@ -62,13 +56,13 @@ func do_action(action):
 	menu_action = action
 	match menu_action:
 		OPEN, OPEN_AS_BLOCK:
-			$LoadDialog.current_dir = settings.last_dir
-			$LoadDialog.current_file = settings.current_file
+			$LoadDialog.current_dir = G.settings.last_dir
+			$LoadDialog.current_file = G.settings.current_file
 			$LoadDialog.popup_centered()
 		SAVE:
-			if settings.current_file == "":
-				$SaveDialog.current_dir = settings.last_dir
-				$SaveDialog.current_file = settings.current_file
+			if G.settings.current_file == "":
+				$SaveDialog.current_dir = G.settings.last_dir
+				$SaveDialog.current_file = G.settings.current_file
 				$SaveDialog.popup_centered()
 			else:
 				set_current_file_color(false)
@@ -84,7 +78,7 @@ func _on_file_dialog_file_selected(file_path):
 		# When saving, the file associated with current schematic is to be saved
 		# The file loaded as a block doesn't need to be remembered
 		set_current_file(file_path.get_file())
-		settings.last_dir = file_path.get_base_dir()
+		G.settings.last_dir = file_path.get_base_dir()
 	match menu_action:
 		SAVE:
 			save_file()
@@ -95,13 +89,13 @@ func _on_file_dialog_file_selected(file_path):
 
 
 func save_file():
-	schematic.save_circuit(settings.last_dir + "/" + settings.current_file)
+	schematic.save_circuit(G.settings.last_dir + "/" + G.settings.current_file)
 
 
 func set_current_file(file_name, changed = false):
 	%CurrentFile.text = file_name
 	set_current_file_color(changed)
-	settings.current_file = file_name
+	G.settings.current_file = file_name
 
 
 func set_current_file_color(changed = true):
@@ -162,9 +156,9 @@ func _notification(what):
 
 
 func try_to_quit():
-	# Always save the settings
+	# Always save the G.settings
 	# The saved var is tracking changes to the circuit
-	settings.save_data()
+	G.settings.save_data()
 	if saved:
 		quit()
 	else:

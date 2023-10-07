@@ -5,18 +5,18 @@ Idea for block compiler.
 Each part should have a function that does the same as the logic of the part does such as for NAND:
 
 func nand(a, b):
-    return not (a and b)
+	return not (a and b)
 
 For NOT:
 
 func not(a):
-    return not a
+	return not a
 
 
 Example compiled circuit:
 
 func io(a, b):
-    return nand(not(a), b)
+	return nand(not(a), b)
 
 So, a gdscript file is generated, and this may be loaded and instanced with .new()
 

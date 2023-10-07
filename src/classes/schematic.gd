@@ -15,7 +15,6 @@ var selected_parts = []
 var part_initial_offset_delta = Vector2.ZERO
 var parent_file = ""
 var indicate_logic_levels = true
-var settings: Settings
 
 func _ready():
 	circuit = Circuit.new()
@@ -102,7 +101,6 @@ func duplicate_selected_parts():
 			# Can only seem to approximate the position when zoomed.
 			# Ideally, the first selected part copy would position itself
 			# exacly where the mouse cursor is.
-			# Are you up for the challenge to fix this?
 			if zoom > 1.1 or zoom < 0.9:
 				part_offset *= 0.8 / zoom
 			offset = Vector2(offset.x / part.position.x * part_offset.x, \
@@ -129,13 +127,13 @@ func add_part(part):
 	update_part_initial_offset_delta()
 	add_child(part)
 	part.controller = self
-	emit_signal("changed")
 	
 	# We want precise control of node names to keep circuit data robust
 	# Godot can sneak in @ marks to the node name, so we assign the name after
 	# the node was added to the scene and Godot gave it a name
 	part.name = part.part_type + circuit.get_next_id()
 	part.connect("position_offset_changed", part.changed)
+	emit_signal("changed")
 
 
 func add_block(file_name):
@@ -272,20 +270,20 @@ func output_level_changed_handler(part, side, port, level):
 			if con.from == part.name and con.from_port == port:
 				var node = get_node(NodePath(con.to))
 				node.update_input_level(LEFT, con.to_port, level)
-				if settings.indicate_to_levels:
+				if G.settings.indicate_to_levels:
 					indicate_level(node, LEFT, con.to_port, level)
 		else:
 			if con.to == part.name and con.to_port == port:
 				var node = get_node(NodePath(con.from))
 				node.update_input_level(RIGHT, con.from_port, level)
-				if settings.indicate_to_levels:
+				if G.settings.indicate_to_levels:
 					indicate_level(node, RIGHT, con.from_port, level)
-		if settings.indicate_from_levels:
+		if G.settings.indicate_from_levels:
 			indicate_level(part, side, port, level)
 
 
 func indicate_level(part, side, port, level):
-	var color = settings.logic_high_color if level else settings.logic_low_color
+	var color = G.settings.logic_high_color if level else G.settings.logic_low_color
 	if side == LEFT:
 		# Check that this returns the number of available ports rather than connections
 		if port < part.get_connection_input_count():

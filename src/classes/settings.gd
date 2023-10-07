@@ -1,6 +1,6 @@
-extends Resource
-
 class_name Settings
+
+extends Resource
 
 const FILENAME = "user://settings.res"
 

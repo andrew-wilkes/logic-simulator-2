@@ -20,6 +20,7 @@ config/icon="res://assets/ui/icon.png"
 [autoload]
 
 Parts="*res://parts.gd"
+G="*res://global.gd"
 
 [editor_plugins]
 
