@@ -5,6 +5,7 @@ extends GraphEdit
 signal invalid_instance(ob, note)
 signal warning(text)
 signal changed
+signal title_changed(text)
 
 const PART_INITIAL_OFFSET = Vector2(50, 50)
 
@@ -194,6 +195,7 @@ func load_circuit(file_name):
 		add_connections()
 		set_all_io_connection_colors()
 		colorize_pins()
+		emit_signal("title_changed", circuit.title)
 	else:
 		emit_signal("warning", "The circuit data was invalid!")
 

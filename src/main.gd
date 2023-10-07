@@ -10,11 +10,12 @@ func _ready():
 	schematic = $VB/Schematic
 	%ToolsButton.get_popup().add_item("Number parts")
 	%ToolsButton.get_popup().index_pressed.connect(tool_action)
-	schematic.connect("warning", $WarningPanel.open)
-	schematic.connect("changed", set_current_file_color)
+	schematic.warning.connect($WarningPanel.open)
+	schematic.changed.connect(set_current_file_color)
+	schematic.title_changed.connect(%Title.set_text)
 	$PartListPanel/PartList.part_selected.connect(schematic.add_part_by_name)
 	$PartListPanel/PartList.block_selected.connect(schematic.add_block)
-
+	%Title.text_submitted.connect(unfocus)
 
 func tool_action(idx):
 	match idx:
@@ -97,11 +98,11 @@ func set_current_file_color(changed = true):
 
 
 func _on_save_dialog_canceled():
-	schematic.grab_focus()
+	unfocus()
 
 
 func _on_load_dialog_canceled():
-	schematic.grab_focus()
+	unfocus()
 
 #### /FILE CODE ####
 
@@ -171,31 +172,30 @@ func quit():
 
 
 func _on_tools_button_pressed():
-	pass # Replace with function body.
-	schematic.grab_focus()
+	unfocus()
 
 
 func _on_settings_button_pressed():
-	pass # Replace with function body.
-	schematic.grab_focus()
+	$SettingsPanel.popup_centered()
+	unfocus()
 
 
 func _on_help_button_pressed():
-	pass # Replace with function body.
-	schematic.grab_focus()
+	unfocus()
 
 
 func _on_learn_button_pressed():
-	pass # Replace with function body.
-	schematic.grab_focus()
+	unfocus()
 
 
 func _on_about_button_pressed():
-	pass # Replace with function body.
-	schematic.grab_focus()
+	unfocus()
 
 
 func _on_add_part_button_pressed():
 	$PartListPanel/PartList.update_block_list()
 	$PartListPanel.popup_centered()
+
+
+func unfocus(_arg = null):
 	schematic.grab_focus()

@@ -1,0 +1,67 @@
+[gd_scene load_steps=2 format=3 uid="uid://0xeyeylg8w8k"]
+
+[ext_resource type="Script" path="res://settings_panel.gd" id="1_x0rhh"]
+
+[node name="SettingsPanel" type="MarginContainer"]
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+script = ExtResource("1_x0rhh")
+
+[node name="HBox" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="VBox" type="VBoxContainer" parent="HBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="IndicateFrom" type="CheckBox" parent="HBox/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+button_pressed = true
+text = "Indicate from levels"
+
+[node name="IndicateTo" type="CheckBox" parent="HBox/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+button_pressed = true
+text = "Indicate to levels"
+
+[node name="HB" type="HBoxContainer" parent="HBox/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="LowColor" type="ColorRect" parent="HBox/VBox/HB"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(26, 26)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBox/VBox/HB"]
+layout_mode = 2
+text = "Logic low color"
+
+[node name="HB2" type="HBoxContainer" parent="HBox/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="HighColor" type="ColorRect" parent="HBox/VBox/HB2"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(26, 26)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HBox/VBox/HB2"]
+layout_mode = 2
+text = "Logic high color"
+
+[node name="ColorPicker" type="ColorPicker" parent="HBox"]
+layout_mode = 2
+can_add_swatches = false
+presets_visible = false
+
+[connection signal="gui_input" from="HBox/VBox/HB/LowColor" to="." method="_on_low_color_gui_input"]
+[connection signal="gui_input" from="HBox/VBox/HB2/HighColor" to="." method="_on_high_color_gui_input"]
+[connection signal="color_changed" from="HBox/ColorPicker" to="." method="_on_color_picker_color_changed"]
