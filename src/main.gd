@@ -8,19 +8,12 @@ var schematic
 
 func _ready():
 	schematic = $VB/Schematic
-	var add_part_menu: PopupMenu = %AddPartMenu.get_popup()
-	for part_name in Parts.names:
-		add_part_menu.add_item(part_name)
-	add_part_menu.index_pressed.connect(part_to_add)
 	%ToolsButton.get_popup().add_item("Number parts")
 	%ToolsButton.get_popup().index_pressed.connect(tool_action)
 	schematic.connect("warning", $WarningPanel.open)
 	schematic.connect("changed", set_current_file_color)
-
-
-func part_to_add(part_index):
-	var part_name = Parts.names[part_index]
-	schematic.add_part_by_name(part_name)
+	$PartListPanel/PartList.part_selected.connect(schematic.add_part_by_name)
+	$PartListPanel/PartList.block_selected.connect(schematic.add_block)
 
 
 func tool_action(idx):
@@ -162,6 +155,7 @@ func try_to_quit():
 	if saved:
 		quit()
 	else:
+		# This doesn't prevent window from closing
 		get_viewport().set_input_as_handled()
 		$Confirm.popup_centered()
 
@@ -178,19 +172,30 @@ func quit():
 
 func _on_tools_button_pressed():
 	pass # Replace with function body.
+	schematic.grab_focus()
 
 
 func _on_settings_button_pressed():
 	pass # Replace with function body.
+	schematic.grab_focus()
 
 
 func _on_help_button_pressed():
 	pass # Replace with function body.
+	schematic.grab_focus()
 
 
 func _on_learn_button_pressed():
 	pass # Replace with function body.
+	schematic.grab_focus()
 
 
 func _on_about_button_pressed():
 	pass # Replace with function body.
+	schematic.grab_focus()
+
+
+func _on_add_part_button_pressed():
+	$PartListPanel/PartList.update_block_list()
+	$PartListPanel.popup_centered()
+	schematic.grab_focus()

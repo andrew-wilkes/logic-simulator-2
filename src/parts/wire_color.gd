@@ -4,6 +4,7 @@ class_name WireColor
 
 func _init():
 	data["color"] = Color.WHITE
+	category = MISC
 
 
 func _ready():

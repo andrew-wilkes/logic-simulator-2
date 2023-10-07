@@ -27,6 +27,12 @@ func _init():
 
 func block_setup():
 	circuit = Circuit.new().load_data(data.circuit_file)
+	# Every circuit opened as a block is added to the list in settings
+	var cname = circuit.title
+	if cname.is_empty():
+		cname = data.circuit_file.get_file()
+	if not G.settings.blocks.has(cname):
+		G.settings.blocks[cname] = data.circuit_file
 	for part in circuit.parts:
 		if part is IO:
 			if is_input(part):

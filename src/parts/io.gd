@@ -23,6 +23,7 @@ func _init():
 		"labels": ["- Data -", "- D0 -"],
 		"range": 0xff
 	}
+	category = I_O
 
 
 func _ready():

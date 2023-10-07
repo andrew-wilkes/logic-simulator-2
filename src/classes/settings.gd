@@ -10,6 +10,7 @@ const FILENAME = "user://settings.res"
 @export var indicate_to_levels = false
 @export var logic_high_color = Color.RED
 @export var logic_low_color = Color.BLUE
+@export var blocks = {}
 
 func save_data():
 	var _e = ResourceSaver.save(self, FILENAME)

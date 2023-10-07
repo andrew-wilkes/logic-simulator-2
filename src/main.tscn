@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://eohxndqnij0x"]
+[gd_scene load_steps=7 format=3 uid="uid://eohxndqnij0x"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_7i1tr"]
 [ext_resource type="Script" path="res://classes/schematic.gd" id="2_evx7y"]
 [ext_resource type="PackedScene" uid="uid://blyoi2nc61uvt" path="res://io_manager.tscn" id="3_x8pl6"]
 [ext_resource type="Script" path="res://WarningPanel.gd" id="4_u4i6y"]
+[ext_resource type="PackedScene" uid="uid://cbivksj5j1nmb" path="res://part_list.tscn" id="5_3p0gq"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dua6n"]
 content_margin_left = 20.0
@@ -56,8 +57,7 @@ text = "Load"
 layout_mode = 2
 text = "Load As Block"
 
-[node name="AddPartMenu" type="MenuButton" parent="VB/HB"]
-unique_name_in_owner = true
+[node name="AddPartButton" type="Button" parent="VB/HB"]
 layout_mode = 2
 text = "Add Part"
 
@@ -137,11 +137,23 @@ ok_button_text = "Save"
 access = 2
 filters = PackedStringArray("*.tres ; Circuit files")
 
+[node name="PartListPanel" type="PopupPanel" parent="."]
+size = Vector2i(600, 400)
+
+[node name="PartList" parent="PartListPanel" instance=ExtResource("5_3p0gq")]
+offset_left = 4.0
+offset_top = 4.0
+offset_right = -4.0
+offset_bottom = -4.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
 [connection signal="pressed" from="VB/HB/NewButton" to="." method="_on_new_button_pressed"]
 [connection signal="pressed" from="VB/HB/SaveButton" to="." method="_on_save_button_pressed"]
 [connection signal="pressed" from="VB/HB/SaveAsButton" to="." method="_on_save_as_button_pressed"]
 [connection signal="pressed" from="VB/HB/LoadButton" to="." method="_on_load_button_pressed"]
 [connection signal="pressed" from="VB/HB/BlockButton" to="." method="_on_block_button_pressed"]
+[connection signal="pressed" from="VB/HB/AddPartButton" to="." method="_on_add_part_button_pressed"]
 [connection signal="pressed" from="VB/HB/SettingsButton" to="." method="_on_settings_button_pressed"]
 [connection signal="pressed" from="VB/HB/HelpButton" to="." method="_on_help_button_pressed"]
 [connection signal="pressed" from="VB/HB/LearnButton" to="." method="_on_learn_button_pressed"]

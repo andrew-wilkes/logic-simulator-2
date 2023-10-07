@@ -6,6 +6,7 @@ extends GraphNode
 
 enum { LEFT, RIGHT }
 enum { WIRE_TYPE, BUS_TYPE }
+enum { I_O, GATE, CHIP, MISC, BLOCK }
 
 # This is based on the number of bits that may change per update of the value.
 # The value is applied bit by bit so a stable state is reached after all of
@@ -17,6 +18,7 @@ const RACE_COUNT_THRESHOLD = 256
 # Part properties
 var tag = ""
 var part_type = ""
+var category = GATE
 var data = {}
 var node_name = "temp"
 var show_display = true

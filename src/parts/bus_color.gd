@@ -4,6 +4,7 @@ class_name BusColor
 
 func _init():
 	data["color"] = Color.YELLOW
+	category = MISC
 
 
 func _ready():
