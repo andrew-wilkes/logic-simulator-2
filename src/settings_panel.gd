@@ -7,6 +7,7 @@ func _ready():
 	%IndicateTo.button_pressed = G.settings.indicate_to_levels
 	%LowColor.color = G.settings.logic_low_color
 	%HighColor.color = G.settings.logic_high_color
+	$HBox/ColorPicker.color = G.settings.logic_low_color
 
 
 func _on_low_color_gui_input(event):
@@ -28,3 +29,11 @@ func _on_color_picker_color_changed(color):
 	else:
 		%HighColor.color = color
 		G.settings.logic_high_color = color
+
+
+func _on_indicate_from_pressed():
+	G.settings.indicate_from_levels = %IndicateFrom.button_pressed
+
+
+func _on_indicate_to_pressed():
+	G.settings.indicate_to_levels = %IndicateTo.button_pressed

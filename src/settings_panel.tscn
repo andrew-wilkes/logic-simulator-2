@@ -23,13 +23,13 @@ theme_override_constants/separation = 10
 unique_name_in_owner = true
 layout_mode = 2
 button_pressed = true
-text = "Indicate from levels"
+text = "Indicate \"from\" levels"
 
 [node name="IndicateTo" type="CheckBox" parent="HBox/VBox"]
 unique_name_in_owner = true
 layout_mode = 2
 button_pressed = true
-text = "Indicate to levels"
+text = "Indicate \"to\" levels"
 
 [node name="HB" type="HBoxContainer" parent="HBox/VBox"]
 layout_mode = 2
@@ -62,6 +62,8 @@ layout_mode = 2
 can_add_swatches = false
 presets_visible = false
 
+[connection signal="pressed" from="HBox/VBox/IndicateFrom" to="." method="_on_indicate_from_pressed"]
+[connection signal="pressed" from="HBox/VBox/IndicateTo" to="." method="_on_indicate_to_pressed"]
 [connection signal="gui_input" from="HBox/VBox/HB/LowColor" to="." method="_on_low_color_gui_input"]
 [connection signal="gui_input" from="HBox/VBox/HB2/HighColor" to="." method="_on_high_color_gui_input"]
 [connection signal="color_changed" from="HBox/ColorPicker" to="." method="_on_color_picker_color_changed"]

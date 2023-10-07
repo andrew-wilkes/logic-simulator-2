@@ -105,7 +105,7 @@ size_flags_horizontal = 3
 [node name="Title" type="LineEdit" parent="VB/HB2"]
 unique_name_in_owner = true
 layout_mode = 2
-placeholder_text = "Untitled"
+placeholder_text = "Edit circuit title"
 expand_to_text_length = true
 
 [node name="Spacer3" type="Control" parent="VB/HB2"]
@@ -156,7 +156,10 @@ access = 2
 filters = PackedStringArray("*.tres ; Circuit files")
 
 [node name="PartListPanel" type="PopupPanel" parent="."]
+title = "Available Parts"
 size = Vector2i(600, 400)
+unresizable = false
+borderless = false
 
 [node name="PartList" parent="PartListPanel" instance=ExtResource("5_3p0gq")]
 offset_left = 4.0
@@ -167,13 +170,14 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="SettingsPanel" type="PopupPanel" parent="."]
+title = "Settings"
 borderless = false
 
 [node name="SettingsPanel" parent="SettingsPanel" instance=ExtResource("6_t623a")]
 offset_left = 4.0
 offset_top = 4.0
-offset_right = 205.0
-offset_bottom = 168.0
+offset_right = 529.0
+offset_bottom = 522.0
 
 [connection signal="pressed" from="VB/HB/NewButton" to="." method="_on_new_button_pressed"]
 [connection signal="pressed" from="VB/HB/SaveButton" to="." method="_on_save_button_pressed"]
