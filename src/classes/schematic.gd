@@ -222,6 +222,21 @@ func add_connections():
 		connect_node(con.from, con.from_port, con.to, con.to_port)
 
 
+func set_all_connection_colors():
+	for node in get_children():
+		if node is Part:
+			for idx in node.get_connection_input_count():
+				var slot = node.get_connection_input_slot(idx)
+				var color = Color.WHITE if node.get_slot_type_left(slot) == 0 else Color.YELLOW
+				node.set_slot_color_left(slot, color)
+			for idx in node.get_connection_output_count():
+				var slot = node.get_connection_output_slot(idx)
+				var color = Color.WHITE if node.get_slot_type_right(slot) == 0 else Color.YELLOW
+				node.set_slot_color_right(slot, color)
+	set_all_io_connection_colors()
+	colorize_pins()
+
+
 func colorize_pins():
 	for node in get_children():
 		if node is WireColor or node is BusColor:

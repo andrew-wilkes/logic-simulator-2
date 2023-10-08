@@ -1,16 +1,16 @@
 [gd_scene load_steps=5 format=3 uid="uid://q5ak32mxsxfd"]
 
-[ext_resource type="StyleBox" uid="uid://blookh74hus7a" path="res://assets/parts/colorizer.tres" id="1_vkeo2"]
-[ext_resource type="StyleBox" uid="uid://bqdalbafaape1" path="res://assets/parts/colorizer-selected.tres" id="2_jwvt1"]
-[ext_resource type="Script" path="res://parts/wire_color.gd" id="3_fr76u"]
-[ext_resource type="PackedScene" uid="uid://cebba5vujpuxs" path="res://color_picker.tscn" id="4_qr6hf"]
+[ext_resource type="StyleBox" uid="uid://blookh74hus7a" path="res://assets/parts/colorizer.tres" id="1_5fsgk"]
+[ext_resource type="StyleBox" uid="uid://bqdalbafaape1" path="res://assets/parts/colorizer-selected.tres" id="2_ike1h"]
+[ext_resource type="Script" path="res://parts/wire_color.gd" id="3_42xq1"]
+[ext_resource type="PackedScene" uid="uid://cebba5vujpuxs" path="res://color_picker.tscn" id="4_7a7ti"]
 
 [node name="WireColor" type="GraphNode"]
 offset_right = 20.0
 offset_bottom = 20.0
 theme_override_constants/port_offset = -5
-theme_override_styles/frame = ExtResource("1_vkeo2")
-theme_override_styles/selected_frame = ExtResource("2_jwvt1")
+theme_override_styles/frame = ExtResource("1_5fsgk")
+theme_override_styles/selected_frame = ExtResource("2_ike1h")
 slot/0/left_enabled = true
 slot/0/left_type = 0
 slot/0/left_color = Color(1, 1, 1, 1)
@@ -29,13 +29,13 @@ slot/1/right_type = 0
 slot/1/right_color = Color(1, 1, 1, 1)
 slot/1/right_icon = null
 slot/1/draw_stylebox = true
-script = ExtResource("3_fr76u")
+script = ExtResource("3_42xq1")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 custom_minimum_size = Vector2(10, 10)
 layout_mode = 2
 
-[node name="ColorPicker" parent="." instance=ExtResource("4_qr6hf")]
+[node name="ColorPicker" parent="." instance=ExtResource("4_7a7ti")]
 visible = false
 
 [node name="Tag" type="Label" parent="."]

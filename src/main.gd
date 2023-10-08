@@ -15,6 +15,7 @@ func _ready():
 	schematic.title_changed.connect(%Title.set_text)
 	$PartListPanel/PartList.part_selected.connect(schematic.add_part_by_name)
 	$PartListPanel/PartList.block_selected.connect(schematic.add_block)
+	$SettingsPanel/SettingsPanel.level_color_changed.connect(schematic.set_all_connection_colors)
 	%Title.text_submitted.connect(unfocus)
 
 func tool_action(idx):
@@ -197,5 +198,6 @@ func _on_add_part_button_pressed():
 	$PartListPanel.popup_centered()
 
 
+# This removes the highlighting around menu buttons
 func unfocus(_arg = null):
 	schematic.grab_focus()

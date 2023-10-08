@@ -23,4 +23,7 @@ func _on_color_picker_changed_color(color):
 
 func _on_color_rect_gui_input(event):
 	if event is InputEventMouseButton:
-		$ColorPicker.popup_centered()
+		if event.button_index == MOUSE_BUTTON_LEFT:
+			$ColorPicker.popup_centered()
+		else:
+			controller.set_all_connection_colors()

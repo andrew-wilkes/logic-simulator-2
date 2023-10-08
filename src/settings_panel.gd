@@ -1,5 +1,7 @@
 extends MarginContainer
 
+signal level_color_changed()
+
 var setting_low_color = true
 
 func _ready():
@@ -33,7 +35,9 @@ func _on_color_picker_color_changed(color):
 
 func _on_indicate_from_pressed():
 	G.settings.indicate_from_levels = %IndicateFrom.button_pressed
+	emit_signal("level_color_changed")
 
 
 func _on_indicate_to_pressed():
 	G.settings.indicate_to_levels = %IndicateTo.button_pressed
+	emit_signal("level_color_changed")
