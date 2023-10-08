@@ -13,6 +13,7 @@ func _ready():
 	schematic.warning.connect($WarningPanel.open)
 	schematic.changed.connect(set_current_file_color)
 	schematic.title_changed.connect(%Title.set_text)
+	%Title.text_changed.connect(schematic.set_circuit_title)
 	$PartListPanel/PartList.part_selected.connect(schematic.add_part_by_name)
 	$PartListPanel/PartList.block_selected.connect(schematic.add_block)
 	$SettingsPanel/SettingsPanel.level_color_changed.connect(schematic.set_all_connection_colors)

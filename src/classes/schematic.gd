@@ -53,6 +53,8 @@ func remove_connections_to_part(part):
 
 func clear():
 	grab_focus()
+	circuit = Circuit.new()
+	emit_signal("title_changed", "")
 	parent_file = ""
 	clear_connections()
 	for node in get_children():
@@ -386,3 +388,8 @@ func number_parts():
 		else:
 			counts[part.part_type] = 1
 		part.get_node("Tag").text = part.part_type + str(counts[part.part_type])
+
+
+func set_circuit_title(text):
+	circuit.title = text
+	emit_signal("changed")
