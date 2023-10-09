@@ -332,7 +332,6 @@ func reset_race_counters():
 	for node in get_children():
 		if node is Part:
 			node.race_counter.clear()
-			prints("Reset ", node.name, node.race_counter)
 			if node is Block:
 				node.reset_block_race_counters()
 

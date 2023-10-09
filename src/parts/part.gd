@@ -14,6 +14,7 @@ enum { I_O, GATE, CHIP, MISC, BLOCK }
 # Using a high threshold should be faster than introducing delays in the part
 # outputs.
 const RACE_COUNT_THRESHOLD = 256
+const DEBUG = false
 
 # Part properties
 var tag = ""
@@ -25,6 +26,7 @@ var show_display = true
 var controller # The schematic or a parent block
 var race_counter = {} # [side, port]: count
 var pins = {} # [side, port]: level / value
+var connections = {} # Used with parts in blocks
 
 var change_notification_timer: Timer
 
@@ -45,7 +47,8 @@ func clear():
 
 
 func update_input_level(side, port, level):
-	prints("part update_input_level", self.name, side, port, level)
+	if DEBUG:
+		prints("part update_input_level", self.name, side, port, level)
 	var key = set_pin_value(side, port, level)
 	if key != null:
 		if race_counter.has(key):
@@ -79,14 +82,16 @@ func update_bus_input_value(side, port, value):
 
 # Override this function in extended parts
 func evaluate_output_level(side, port, level):
-	prints("part evaluate_output_level", self.name, side, port, level)
+	if DEBUG:
+		prints("part evaluate_output_level", self.name, side, port, level)
 	# Put logic here to derive the new level
 	side = (side + 1) % 2 # Used with IO part to alternate sides
 	update_output_level(side, port, level)
 
 
 func update_output_level(side, port, level):
-	prints("part update_output_level", self.name, side, port, level)
+	if DEBUG:
+		prints("part update_output_level", self.name, side, port, level)
 	if set_pin_value(side, port, level) != null:
 		controller.output_level_changed_handler(self, side, port, level)
 
