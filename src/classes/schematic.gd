@@ -325,7 +325,7 @@ func bus_value_changed_handler(part, side, port, value):
 
 
 func unstable_handler(part, side, port):
-	emit_signal("warning", "Unstable input to %s side: %d port: %d" % [part, side, port])
+	emit_signal("warning", "Unstable input to %s on %s side, port: %d" % [part, ["left", "right"][side], port])
 
 
 func reset_race_counters():

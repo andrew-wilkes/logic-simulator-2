@@ -13,7 +13,7 @@ enum { I_O, GATE, CHIP, MISC, BLOCK }
 # the bit levels have been applied.
 # Using a high threshold should be faster than introducing delays in the part
 # outputs.
-const RACE_COUNT_THRESHOLD = 256
+const RACE_COUNT_THRESHOLD = 128
 const DEBUG = false
 
 # Part properties
