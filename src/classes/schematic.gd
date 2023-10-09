@@ -135,6 +135,7 @@ func add_part(part):
 	# Godot can sneak in @ marks to the node name, so we assign the name after
 	# the node was added to the scene and Godot gave it a name
 	part.name = part.part_type + circuit.get_next_id()
+	part.tooltip_text = part.name
 	part.connect("position_offset_changed", part.changed)
 	emit_signal("changed")
 
@@ -371,6 +372,7 @@ func set_io_connection_colors(io_part):
 
 
 func number_parts():
+	var part_names = {}
 	# Order the parts based on position in grid
 	# Create dictionary { pos: part }
 	var nodes = {}
@@ -386,7 +388,18 @@ func number_parts():
 			counts[part.part_type] += 1
 		else:
 			counts[part.part_type] = 1
-		part.get_node("Tag").text = part.part_type + str(counts[part.part_type])
+		var new_name = part.part_type + str(counts[part.part_type])
+		part.get_node("Tag").text = new_name
+		part_names[part.name] = new_name
+		part.name = new_name
+		part.tooltip_text = new_name
+	# Redo the connections with updated part names
+	circuit.connections = get_connection_list()
+	for con in circuit.connections:
+		con.from = part_names[con.from]
+		con.to = part_names[con.to]
+	clear_connections()
+	add_connections()
 
 
 func set_circuit_title(text):
