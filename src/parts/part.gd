@@ -15,6 +15,7 @@ enum { I_O, GATE, CHIP, MISC, BLOCK }
 # outputs.
 const RACE_COUNT_THRESHOLD = 128
 const DEBUG = false
+const FLIP_SIDES = [RIGHT, LEFT]
 
 # Part properties
 var tag = ""
@@ -85,8 +86,7 @@ func evaluate_output_level(side, port, level):
 	if DEBUG:
 		prints("part evaluate_output_level", self.name, side, port, level)
 	# Put logic here to derive the new level
-	side = (side + 1) % 2 # Used with IO part to alternate sides
-	update_output_level(side, port, level)
+	update_output_level(FLIP_SIDES[side], port, level)
 
 
 func update_output_level(side, port, level):
@@ -99,8 +99,7 @@ func update_output_level(side, port, level):
 # Override this function in extended parts
 func evaluate_bus_output_value(side, port, value):
 	# Put logic here to derive the new value
-	side = (side + 1) % 2
-	update_output_value(side, port, value)
+	update_output_value(FLIP_SIDES[side], port, value)
 
 
 func update_output_value(side, port, value):

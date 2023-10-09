@@ -171,15 +171,14 @@ func evaluate_output_level(side, port, level):
 	if DEBUG:
 		prints("block evaluate_output_level", self.name, side, port, level)
 	var map = get_map(side, port)
-	side = (side + 1) % 2 # Flip the side to the output side
-	parts[map[PART]].update_output_level(side, map[PORT], level)
+	parts[map[PART]].update_output_level(FLIP_SIDES[side], map[PORT], level)
 
 
 # Map external bus input to internal part
 func evaluate_bus_output_value(side, port, value):
 	var map = get_map(side, port)
-	side = (side + 1) % 2 # Flip the side to the output side
-	parts[map[PART]].update_output_value(side, map[PORT], value)
+	# Flip the side to the output side
+	parts[map[PART]].update_output_value(FLIP_SIDES[side], map[PORT], value)
 
 
 func output_level_changed_handler(part, side, port, level):
