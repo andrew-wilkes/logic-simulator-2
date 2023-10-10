@@ -2,7 +2,7 @@
 
 [ext_resource type="StyleBox" uid="uid://6ey1ulrt3occ" path="res://assets/parts/frame.stylebox" id="1_nkmoy"]
 [ext_resource type="StyleBox" uid="uid://b51cf2x3pfpfk" path="res://assets/parts/selected-frame.stylebox" id="2_gysk8"]
-[ext_resource type="Script" path="res://parts/io.gd" id="3_h3ig0"]
+[ext_resource type="Script" path="res://parts/IO.gd" id="3_h3ig0"]
 
 [node name="IO" type="GraphNode"]
 offset_left = 32.0

@@ -59,7 +59,7 @@ text = "Load As Block"
 
 [node name="AddPartButton" type="Button" parent="VB/HB"]
 layout_mode = 2
-text = "Add Part"
+text = "Parts"
 
 [node name="ToolsButton" type="MenuButton" parent="VB/HB"]
 unique_name_in_owner = true

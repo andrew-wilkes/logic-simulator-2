@@ -55,14 +55,6 @@ func block_setup():
 	add_parts()
 
 
-func clear():
-	super()
-	circuit = null
-	parts = {}
-	input_map = []
-	output_map = []
-
-
 func _ready():
 	super()
 	block_setup()
@@ -157,7 +149,7 @@ func add_parts():
 		part.show_display = false
 		part.controller = self
 		add_connections_to_part(part)
-		if part.part_type == "BLOCK":
+		if part.part_type == "Block":
 			part.block_setup()
 		parts[part.name] = part
 

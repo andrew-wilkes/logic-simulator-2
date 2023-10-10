@@ -45,7 +45,7 @@ func _on_bus_color_pressed():
 		hide_color_picker()
 	else:
 		set_bus_color = true
-		color_picker.color = part.data.bus_color
+		color_picker.color = Color.hex(part.data.bus_color)
 		color_picker.show()
 
 
@@ -55,20 +55,20 @@ func _on_wire_color_pressed():
 		hide_color_picker()
 	else:
 		set_wire_color = true
-		color_picker.color = part.data.wire_color
+		color_picker.color = Color.hex(part.data.wire_color)
 		color_picker.show()
 
 
 func set_button_text_colors():
-	$M/HB/VB/WireColor.set("theme_override_colors/font_color", part.data.wire_color)
-	$M/HB/VB/BusColor.set("theme_override_colors/font_color", part.data.bus_color)
+	$M/HB/VB/WireColor.set("theme_override_colors/font_color", Color.hex(part.data.wire_color))
+	$M/HB/VB/BusColor.set("theme_override_colors/font_color", Color.hex(part.data.bus_color))
 
 
 func _on_color_picker_color_changed(color):
 	if set_wire_color:
-		part.data.wire_color = color_picker.color
+		part.data.wire_color = color_picker.color.to_rgba32()
 	else:
-		part.data.bus_color = color_picker.color
+		part.data.bus_color = color_picker.color.to_rgba32()
 	set_button_text_colors()
 	part.set_pin_colors()
 	part.controller.set_io_connection_colors(part)

@@ -124,7 +124,7 @@ func add_part_by_name(part_name):
 
 
 func add_part(part):
-	part.part_type = part.name.to_upper()
+	part.part_type = part.name
 	part.position_offset = PART_INITIAL_OFFSET + scroll_offset / zoom \
 		+ part_initial_offset_delta
 	update_part_initial_offset_delta()
@@ -144,7 +144,7 @@ func add_block(file_name):
 	if file_name == parent_file:
 		emit_signal("warning", "cannot open parent circuit as block.")
 	else:
-		var block = Parts.scenes["BLOCK"].instantiate()
+		var block = Parts.scenes["Block"].instantiate()
 		block.data.circuit_file = file_name
 		add_part(block)
 
@@ -166,24 +166,16 @@ func update_part_initial_offset_delta():
 
 func save_circuit(file_name):
 	grab_focus()
-	circuit.connections = get_connection_list()
-	circuit.parts = []
+	circuit.data.connections = get_connection_list()
+	circuit.data.parts = []
 	for node in get_children():
 		if node is Part:
-			# Don't change node in the scene
-			var part = node.duplicate()
-			# Save the name of the node
-			part.node_name = node.name
-			part.tag = node.get_node("Tag").text
-			part.part_type = node.part_type
-			part.data = node.data
-			part.clear() # Wipe member values that we don't want to save
-			circuit.parts.append(part)
-	circuit.snap_distance = snap_distance
-	circuit.use_snap = use_snap
-	circuit.minimap_enabled = minimap_enabled
-	circuit.zoom = zoom
-	circuit.scroll_offset = scroll_offset
+			circuit.data.parts.append(node.get_dict())
+	circuit.data.snap_distance = snap_distance
+	circuit.data.use_snap = use_snap
+	circuit.data.minimap_enabled = minimap_enabled
+	circuit.data.zoom = zoom
+	circuit.data.scroll_offset = [scroll_offset.x, scroll_offset.y]
 	circuit.save_data(file_name)
 
 
@@ -191,22 +183,20 @@ func load_circuit(file_name):
 	grab_focus()
 	parent_file = file_name
 	clear()
-	circuit = Circuit.new().load_data(file_name)
-	if circuit is Circuit:
+	var load_result = circuit.load_data(file_name)
+	if load_result == OK:
 		setup_graph()
 		add_parts()
 		add_connections()
 		set_all_io_connection_colors()
 		colorize_pins()
-		emit_signal("title_changed", circuit.title)
+		emit_signal("title_changed", circuit.data.title)
 	else:
 		emit_signal("warning", "The circuit data was invalid!")
 
 
 func add_parts():
-	for node in circuit.parts:
-		if is_object_instance_invalid(node, "add_parts"):
-			continue
+	for node in circuit.data.parts:
 		var part = Parts.scenes[node.part_type].instantiate()
 		part.get_node("Tag").text = node.tag
 		part.part_type = node.part_type
@@ -215,13 +205,13 @@ func add_parts():
 		part.setup()
 		part.controller = self
 		part.name = node.node_name
-		part.position_offset = node.position_offset
+		part.position_offset = Vector2(node.offset[0], node.offset[1])
 		part.tooltip_text = part.name
 		part.connect("position_offset_changed", part.changed)
 
 
 func add_connections():
-	for con in circuit.connections:
+	for con in circuit.data.connections:
 		connect_node(con.from, con.from_port, con.to, con.to_port)
 
 
@@ -253,11 +243,12 @@ func set_all_io_connection_colors():
 
 
 func setup_graph():
-	snap_distance = circuit.snap_distance
-	use_snap = circuit.use_snap
-	zoom = circuit.zoom
-	scroll_offset = circuit.scroll_offset
-	minimap_enabled = circuit.minimap_enabled
+	snap_distance = circuit.data.snap_distance
+	use_snap = circuit.data.use_snap
+	zoom = circuit.data.zoom
+	var off = circuit.data.scroll_offset
+	scroll_offset = Vector2(off[0], off[1])
+	minimap_enabled = circuit.data.minimap_enabled
 
 
 # This function is included because it is difficult to debug situations 
@@ -341,12 +332,12 @@ func set_pin_colors(to_part, color):
 	for con in get_connection_list():
 		if con.to == to_part:
 			var from_node = get_node(NodePath(con.from))
-			from_node.set_slot_color_right(from_node.get_connection_output_slot(con.from_port), color)
+			from_node.set_slot_color_right(from_node.get_connection_output_slot(con.from_port), Color.hex(color))
 			for con2 in get_connection_list():
 				if con2.from == con.from and con2.from_port == con.from_port:
 					var to_node = get_node(NodePath(con2.to))
 					var slot = to_node.get_connection_input_slot(con2.to_port)
-					to_node.set_slot_color_left(slot, color)
+					to_node.set_slot_color_left(slot, Color.hex(color))
 
 
 func set_io_connection_colors(io_part):
@@ -357,18 +348,18 @@ func set_io_connection_colors(io_part):
 					else io_part.data.bus_color
 			var to_node = get_node(NodePath(con.to))
 			var slot = to_node.get_connection_input_slot(con.to_port)
-			to_node.set_slot_color_left(slot, color)
+			to_node.set_slot_color_left(slot, Color.hex(color))
 			slot = io_part.get_connection_output_slot(con.from_port)
-			io_part.set_slot_color_right(slot, color)
+			io_part.set_slot_color_right(slot, Color.hex(color))
 		if con.to == io_part.name:
 			var color = io_part.data.wire_color\
 				if io_part.get_connection_input_type(con.to_port) == 0\
 					else io_part.data.bus_color
 			var from_node = get_node(NodePath(con.from))
 			var slot = from_node.get_connection_output_slot(con.from_port)
-			from_node.set_slot_color_right(slot, color)
+			from_node.set_slot_color_right(slot, Color.hex(color))
 			slot = io_part.get_connection_input_slot(con.to_port)
-			io_part.set_slot_color_left(slot, color)
+			io_part.set_slot_color_left(slot, Color.hex(color))
 
 
 func number_parts():
@@ -394,8 +385,8 @@ func number_parts():
 		part.name = new_name
 		part.tooltip_text = new_name
 	# Redo the connections with updated part names
-	circuit.connections = get_connection_list()
-	for con in circuit.connections:
+	circuit.data.connections = get_connection_list()
+	for con in circuit.data.connections:
 		con.from = part_names[con.from]
 		con.to = part_names[con.to]
 	clear_connections()
@@ -403,5 +394,5 @@ func number_parts():
 
 
 func set_circuit_title(text):
-	circuit.title = text
+	circuit.data.title = text
 	emit_signal("changed")

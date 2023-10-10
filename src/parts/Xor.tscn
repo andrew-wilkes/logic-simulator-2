@@ -1,18 +1,19 @@
-[gd_scene load_steps=4 format=3 uid="uid://b5k2yvjgieich"]
+[gd_scene load_steps=4 format=3 uid="uid://b6ig0a3e641cb"]
 
-[ext_resource type="StyleBox" uid="uid://6ey1ulrt3occ" path="res://assets/parts/frame.stylebox" id="1_5imi6"]
-[ext_resource type="StyleBox" uid="uid://b51cf2x3pfpfk" path="res://assets/parts/selected-frame.stylebox" id="2_w7vfa"]
-[ext_resource type="Script" path="res://parts/block.gd" id="3_li41d"]
+[ext_resource type="StyleBox" uid="uid://6ey1ulrt3occ" path="res://assets/parts/frame.stylebox" id="1_itg7e"]
+[ext_resource type="StyleBox" uid="uid://b51cf2x3pfpfk" path="res://assets/parts/selected-frame.stylebox" id="2_ltb21"]
+[ext_resource type="Script" path="res://parts/Xor.gd" id="3_sj4jm"]
 
-[node name="Block" type="GraphNode"]
+[node name="Xor" type="GraphNode"]
 offset_left = 32.0
 offset_top = 22.0
 offset_right = 103.0
 offset_bottom = 117.0
+mouse_filter = 1
 theme_override_constants/port_offset = -4
-theme_override_styles/frame = ExtResource("1_5imi6")
-theme_override_styles/selected_frame = ExtResource("2_w7vfa")
-title = "  Block"
+theme_override_styles/frame = ExtResource("1_itg7e")
+theme_override_styles/selected_frame = ExtResource("2_ltb21")
+title = "  XOR"
 slot/0/left_enabled = false
 slot/0/left_type = 1
 slot/0/left_color = Color(0, 0, 1, 1)
@@ -31,7 +32,7 @@ slot/1/right_type = 0
 slot/1/right_color = Color(0.980392, 1, 1, 1)
 slot/1/right_icon = null
 slot/1/draw_stylebox = true
-slot/2/left_enabled = false
+slot/2/left_enabled = true
 slot/2/left_type = 0
 slot/2/left_color = Color(1, 1, 1, 1)
 slot/2/left_icon = null
@@ -40,24 +41,37 @@ slot/2/right_type = 0
 slot/2/right_color = Color(1, 1, 1, 1)
 slot/2/right_icon = null
 slot/2/draw_stylebox = true
-script = ExtResource("3_li41d")
+slot/3/left_enabled = false
+slot/3/left_type = 0
+slot/3/left_color = Color(1, 1, 1, 1)
+slot/3/left_icon = null
+slot/3/right_enabled = false
+slot/3/right_type = 0
+slot/3/right_color = Color(1, 1, 1, 1)
+slot/3/right_icon = null
+slot/3/draw_stylebox = true
+script = ExtResource("3_sj4jm")
 
 [node name="Sp" type="Control" parent="."]
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 
-[node name="Slot1" type="HBoxContainer" parent="."]
+[node name="HB" type="HBoxContainer" parent="."]
 layout_mode = 2
 
-[node name="L1" type="Label" parent="Slot1"]
+[node name="L1" type="Label" parent="HB"]
 layout_mode = 2
-text = "In"
+text = "a"
 
-[node name="L2" type="Label" parent="Slot1"]
+[node name="L2" type="Label" parent="HB"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Out"
+text = "out"
 horizontal_alignment = 2
+
+[node name="L" type="Label" parent="."]
+layout_mode = 2
+text = "b"
 
 [node name="Tag" type="LineEdit" parent="."]
 layout_mode = 2

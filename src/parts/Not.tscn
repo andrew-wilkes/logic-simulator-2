@@ -1,19 +1,19 @@
-[gd_scene load_steps=4 format=3 uid="uid://c4lgjk3me2uh"]
+[gd_scene load_steps=4 format=3 uid="uid://cfudlrdilsa1e"]
 
-[ext_resource type="StyleBox" uid="uid://6ey1ulrt3occ" path="res://assets/parts/frame.stylebox" id="1_mpjdu"]
-[ext_resource type="StyleBox" uid="uid://b51cf2x3pfpfk" path="res://assets/parts/selected-frame.stylebox" id="2_i0d27"]
-[ext_resource type="Script" path="res://parts/nand.gd" id="3_yanhm"]
+[ext_resource type="StyleBox" uid="uid://6ey1ulrt3occ" path="res://assets/parts/frame.stylebox" id="1_481j4"]
+[ext_resource type="StyleBox" uid="uid://b51cf2x3pfpfk" path="res://assets/parts/selected-frame.stylebox" id="2_2rghu"]
+[ext_resource type="Script" path="res://parts/Not.gd" id="3_jju14"]
 
-[node name="Nand" type="GraphNode"]
+[node name="Not" type="GraphNode"]
 offset_left = 32.0
 offset_top = 22.0
 offset_right = 103.0
 offset_bottom = 117.0
 mouse_filter = 1
 theme_override_constants/port_offset = -4
-theme_override_styles/frame = ExtResource("1_mpjdu")
-theme_override_styles/selected_frame = ExtResource("2_i0d27")
-title = "  NAND"
+theme_override_styles/frame = ExtResource("1_481j4")
+theme_override_styles/selected_frame = ExtResource("2_2rghu")
+title = "  NOT"
 slot/0/left_enabled = false
 slot/0/left_type = 1
 slot/0/left_color = Color(0, 0, 1, 1)
@@ -32,7 +32,7 @@ slot/1/right_type = 0
 slot/1/right_color = Color(0.980392, 1, 1, 1)
 slot/1/right_icon = null
 slot/1/draw_stylebox = true
-slot/2/left_enabled = true
+slot/2/left_enabled = false
 slot/2/left_type = 0
 slot/2/left_color = Color(1, 1, 1, 1)
 slot/2/left_icon = null
@@ -41,16 +41,7 @@ slot/2/right_type = 0
 slot/2/right_color = Color(1, 1, 1, 1)
 slot/2/right_icon = null
 slot/2/draw_stylebox = true
-slot/3/left_enabled = false
-slot/3/left_type = 0
-slot/3/left_color = Color(1, 1, 1, 1)
-slot/3/left_icon = null
-slot/3/right_enabled = false
-slot/3/right_type = 0
-slot/3/right_color = Color(1, 1, 1, 1)
-slot/3/right_icon = null
-slot/3/draw_stylebox = true
-script = ExtResource("3_yanhm")
+script = ExtResource("3_jju14")
 
 [node name="Sp" type="Control" parent="."]
 custom_minimum_size = Vector2(0, 20)
@@ -68,10 +59,6 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "out"
 horizontal_alignment = 2
-
-[node name="L" type="Label" parent="."]
-layout_mode = 2
-text = "b"
 
 [node name="Tag" type="LineEdit" parent="."]
 layout_mode = 2

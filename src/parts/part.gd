@@ -6,7 +6,7 @@ extends GraphNode
 
 enum { LEFT, RIGHT }
 enum { WIRE_TYPE, BUS_TYPE }
-enum { I_O, GATE, CHIP, MISC, BLOCK }
+enum { MISC, GATE, CHIP, BLOCK }
 
 # This is based on the number of bits that may change per update of the value.
 # The value is applied bit by bit so a stable state is reached after all of
@@ -22,7 +22,6 @@ var tag = ""
 var part_type = ""
 var category = GATE
 var data = {}
-var node_name = "temp"
 var show_display = true
 var controller # The schematic or a parent block
 var race_counter = {} # [side, port]: count
@@ -30,6 +29,18 @@ var pins = {} # [side, port]: level / value
 var connections = {} # Used with parts in blocks
 
 var change_notification_timer: Timer
+
+func get_dict():
+	return {
+		node_name = name,
+		part_type = part_type,
+		tag = get_node("Tag").text,
+		category = category,
+		show_display = show_display,
+		offset = [position_offset.x, position_offset.y],
+		data = data
+	}
+
 
 func _ready():
 	connect("gui_input", _on_gui_input)
@@ -39,12 +50,6 @@ func _ready():
 	get_child(0).add_child(change_notification_timer)
 	change_notification_timer.one_shot = true
 	change_notification_timer.connect("timeout", _on_change_notification_timer_timeout)
-
-
-func clear():
-	controller = null
-	race_counter = {}
-	pins = {}
 
 
 func update_input_level(side, port, level):

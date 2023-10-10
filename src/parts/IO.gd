@@ -18,12 +18,12 @@ var current_value = 0 # This is accessed by the IO Manager panel
 func _init():
 	data = {
 		"num_wires": 1,
-		"bus_color": Color.YELLOW,
-		"wire_color": Color.WHITE,
+		"bus_color": 0xffff00ff,
+		"wire_color": 0xffffffff,
 		"labels": ["- Data -", "- D0 -"],
 		"range": 0xff
 	}
-	category = I_O
+	category = MISC
 
 
 func _ready():
@@ -32,11 +32,6 @@ func _ready():
 		test_set_pins() # Done visually when running the scene.
 	$Value.connect("text_submitted", _on_text_submitted)
 	bug_fix() # Godot 4.1.stable
-
-
-func clear():
-	super()
-	current_value = 0
 
 
 func bug_fix():
@@ -86,11 +81,11 @@ func set_pin_colors():
 		set_slot_enabled_left(idx, true)
 		set_slot_enabled_right(idx, true)
 		if idx > 2:
-			set_slot_color_left(idx, data.wire_color)
-			set_slot_color_right(idx, data.wire_color)
+			set_slot_color_left(idx, Color.hex(data.wire_color))
+			set_slot_color_right(idx, Color.hex(data.wire_color))
 		else:
-			set_slot_color_left(idx, data.bus_color)
-			set_slot_color_right(idx, data.bus_color)
+			set_slot_color_left(idx, Color.hex(data.bus_color))
+			set_slot_color_right(idx, Color.hex(data.bus_color))
 	# Ensure that the Tag doesn't have pins
 	# !!! Check if this is related to the extra Tag bug !!!
 	set_slot_enabled_left(data.num_wires + 3, false)

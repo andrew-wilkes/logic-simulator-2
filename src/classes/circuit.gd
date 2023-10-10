@@ -1,40 +1,51 @@
 class_name Circuit
 
-extends Resource
+extends Object
 
-@export var title = ""
-@export var connections = []
-@export var parts = []
-@export var id_num = 0 # This is appended to new part names and then incremented
-@export var version = 2.0
+var data = {
+	title = "",
+	connections = [],
+	parts = [],
+	id_num = 0, # This is appended to new part names and then incremented
+	version = 2.0,
 
-# Graph settings
-@export var scroll_offset = Vector2.ZERO
-@export var snap_distance = 20
-@export var use_snap = true
-@export var zoom = 1.0
-@export var minimap_enabled = true
+	# Graph settings
+	scroll_offset = [0, 0],
+	snap_distance = 20,
+	use_snap = true,
+	zoom = 1.0,
+	minimap_enabled = true,
 
-var saved_to = ""
+	saved_to = "",
+}
 
 func load_data(file_name):
-	if ResourceLoader.exists(file_name):
-		return ResourceLoader.load(file_name)
+	if FileAccess.file_exists(file_name):
+		var file = FileAccess.open(file_name, FileAccess.READ)
+		if file:
+			var json_text = file.get_as_text()
+			data = JSON.parse_string(json_text)
+			if data:
+				return OK
+			# data is null if parse failed
+		else:
+			return FileAccess.get_open_error()
 	else:
 		return ERR_FILE_NOT_FOUND
 
 
 func save_data(file_name, check_if_exists = false):
 	var error = OK
-	if check_if_exists and saved_to != file_name and ResourceLoader.exists(file_name):
+	if check_if_exists and data.saved_to != file_name and FileAccess.file_exists(file_name):
 		error = ERR_ALREADY_EXISTS
 	else:
-		error = ResourceSaver.save(self, file_name)
-		if error == OK:
-			saved_to = file_name
+		var save_file = FileAccess.open(file_name, FileAccess.WRITE)
+		if save_file:
+			var json_string = JSON.stringify(data, "\t")
+			save_file.store_line(json_string)
 	return error
 
 
 func get_next_id():
-	id_num += 1
-	return str(id_num)
+	data.id_num += 1
+	return str(data.id_num)

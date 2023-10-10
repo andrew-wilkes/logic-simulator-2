@@ -3,20 +3,20 @@ extends Part
 class_name WireColor
 
 func _init():
-	data["color"] = Color.WHITE
+	data["color"] = 0xffffffff
 	category = MISC
 
 
 func _ready():
 	super()
-	$ColorRect.color = data.color
-	$ColorPicker/M/ColorPicker.color = data.color
+	$ColorRect.color = Color.hex(data.color)
+	$ColorPicker/M/ColorPicker.color = Color.hex(data.color)
 
 
 func _on_color_picker_changed_color(color):
-	data.color = color
+	data.color = color.to_rgba32()
 	set_slot_color_left(0, color)
-	controller.set_pin_colors(name, color)
+	controller.set_pin_colors(name, color.to_rgba32())
 	$ColorRect.color = color
 	changed()
 

@@ -24,7 +24,7 @@ size_flags_horizontal = 3
 
 [node name="Label" type="Label" parent="HB/VB1"]
 layout_mode = 2
-text = "IO Parts"
+text = "Misc. Parts"
 
 [node name="ItemList" type="ItemList" parent="HB/VB1"]
 clip_contents = false
@@ -63,22 +63,9 @@ size_flags_horizontal = 3
 
 [node name="Label" type="Label" parent="HB/VB4"]
 layout_mode = 2
-text = "Misc"
-
-[node name="ItemList" type="ItemList" parent="HB/VB4"]
-clip_contents = false
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="VB5" type="VBoxContainer" parent="HB"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="Label" type="Label" parent="HB/VB5"]
-layout_mode = 2
 text = "Blocks"
 
-[node name="ItemList" type="ItemList" parent="HB/VB5"]
+[node name="ItemList" type="ItemList" parent="HB/VB4"]
 clip_contents = false
 layout_mode = 2
 size_flags_vertical = 3
