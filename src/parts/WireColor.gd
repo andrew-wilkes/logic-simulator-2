@@ -5,6 +5,7 @@ class_name WireColor
 func _init():
 	data["color"] = 0xffffffff
 	category = MISC
+	order = 80
 
 
 func _ready():

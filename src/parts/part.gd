@@ -21,6 +21,7 @@ const FLIP_SIDES = [RIGHT, LEFT]
 var tag = ""
 var part_type = ""
 var category = GATE
+var order = 0
 var data = {}
 var show_display = true
 var controller # The schematic or a parent block
@@ -35,7 +36,6 @@ func get_dict():
 		node_name = name,
 		part_type = part_type,
 		tag = get_node("Tag").text,
-		category = category,
 		show_display = show_display,
 		offset = [position_offset.x, position_offset.y],
 		data = data

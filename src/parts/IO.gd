@@ -24,6 +24,7 @@ func _init():
 		"range": 0xff
 	}
 	category = MISC
+	order = 100
 
 
 func _ready():
