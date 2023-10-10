@@ -229,6 +229,7 @@ func set_all_connection_colors():
 				node.set_slot_color_right(slot, color)
 	set_all_io_connection_colors()
 	colorize_pins()
+	clear_pins() # Allow V+ and Gnd to re-color the wire after the next input
 
 
 func colorize_pins():
@@ -339,6 +340,12 @@ func reset_race_counters():
 			node.reset_race_counter()
 			if node is Block:
 				node.reset_block_race_counters()
+
+
+func clear_pins():
+	for node in get_children():
+		if node is Part:
+			node.pins.clear()
 
 
 func set_pin_colors(to_part, color):
