@@ -117,6 +117,10 @@ func setup():
 	pass
 
 
+func reset_race_counter():
+	race_counter.clear()
+
+
 # We can trigger opening of PopUp windows using this after a user right-clicks on a part
 func _on_gui_input(event):
 	if event is InputEventMouseButton:

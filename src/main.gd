@@ -16,7 +16,9 @@ func _ready():
 	%Title.text_changed.connect(schematic.set_circuit_title)
 	$PartListPanel/PartList.part_selected.connect(schematic.add_part_by_name)
 	$PartListPanel/PartList.block_selected.connect(schematic.add_block)
-	$SettingsPanel/SettingsPanel.level_color_changed.connect(schematic.set_all_connection_colors)
+	$SettingsPanel/SettingsPanel.level_indication_changed.connect(schematic.set_all_connection_colors)
+	$SettingsPanel/SettingsPanel.low_color_changed.connect(schematic.set_low_color)
+	$SettingsPanel/SettingsPanel.high_color_changed.connect(schematic.set_high_color)
 	%Title.text_submitted.connect(unfocus)
 
 func tool_action(idx):

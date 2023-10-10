@@ -215,6 +215,7 @@ func add_connections():
 		connect_node(con.from, con.from_port, con.to, con.to_port)
 
 
+# This called to remove the effect of level indications
 func set_all_connection_colors():
 	for node in get_children():
 		if node is Part:
@@ -232,7 +233,7 @@ func set_all_connection_colors():
 
 func colorize_pins():
 	for node in get_children():
-		if node is WireColor or node is BusColor:
+		if node in [WireColor, BusColor, Vcc, Gnd]:
 			set_pin_colors(node.name, node.data.color)
 
 
@@ -240,6 +241,18 @@ func set_all_io_connection_colors():
 	for node in get_children():
 		if node is IO:
 			set_io_connection_colors(node)
+
+
+func set_low_color():
+	for node in get_children():
+		if node is Gnd:
+			node.set_color()
+
+
+func set_high_color():
+	for node in get_children():
+		if node is Vcc:
+			node.set_color()
 
 
 func setup_graph():
@@ -323,7 +336,7 @@ func unstable_handler(part, side, port):
 func reset_race_counters():
 	for node in get_children():
 		if node is Part:
-			node.race_counter.clear()
+			node.reset_race_counter()
 			if node is Block:
 				node.reset_block_race_counters()
 
