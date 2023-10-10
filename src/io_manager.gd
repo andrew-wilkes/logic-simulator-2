@@ -4,6 +4,7 @@ signal bus_color_changed(part, color)
 signal wire_color_changed(part, color)
 
 const DEFAULT_SLIDER_LIMIT = 0xff
+const PIN_NAMES_BUTTON_TEXTS = [ "Edit pin names", "Apply pin names" ]
 
 @onready var color_picker = $M/HB/ColorPicker
 
@@ -37,6 +38,7 @@ func hide_color_picker():
 
 func _on_popup_hide():
 	hide_color_picker()
+	%PinsButton.text = PIN_NAMES_BUTTON_TEXTS[0]
 
 
 func _on_bus_color_pressed():
@@ -81,8 +83,10 @@ func _on_pins_button_pressed():
 		part.data.labels = %Names.text.split("\n")
 		part.set_labels()
 		part.changed()
+		%PinsButton.text = PIN_NAMES_BUTTON_TEXTS[0]
 	else:
 		$M/HB/Pins.show()
+		%PinsButton.text = PIN_NAMES_BUTTON_TEXTS[1]
 
 
 func _on_gen_pin_names_button_pressed():

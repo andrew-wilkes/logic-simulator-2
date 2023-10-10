@@ -124,6 +124,7 @@ action_mode = 0
 text = "Wire color"
 
 [node name="PinsButton" type="Button" parent="M/HB/VB"]
+unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 text = "Edit pin names"
