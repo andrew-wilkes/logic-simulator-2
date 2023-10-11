@@ -1,4 +1,4 @@
-extends PopupPanel
+extends MarginContainer
 
 signal bus_color_changed(part, color)
 signal wire_color_changed(part, color)
@@ -6,7 +6,7 @@ signal wire_color_changed(part, color)
 const DEFAULT_SLIDER_LIMIT = 0xff
 const PIN_NAMES_BUTTON_TEXTS = [ "Edit pin names", "Apply pin names" ]
 
-@onready var color_picker = $M/HB/ColorPicker
+@onready var color_picker = $HB/ColorPicker
 
 var part
 var step := 0
@@ -26,19 +26,13 @@ func open(_part: IO):
 	%NumWires.value = part.data.num_wires
 	slider_value_changed = false
 	set_slider_value()
-	popup_centered()
 
 
 func hide_color_picker():
 	color_picker.hide()
-	size = Vector2.ZERO
+	get_parent().size = Vector2.ZERO
 	set_bus_color = false
 	set_wire_color = false
-
-
-func _on_popup_hide():
-	hide_color_picker()
-	%PinsButton.text = PIN_NAMES_BUTTON_TEXTS[0]
 
 
 func _on_bus_color_pressed():
@@ -46,6 +40,7 @@ func _on_bus_color_pressed():
 	if set_bus_color:
 		hide_color_picker()
 	else:
+		hide_pin_names()
 		set_bus_color = true
 		color_picker.color = Color.hex(part.data.bus_color)
 		color_picker.show()
@@ -56,14 +51,15 @@ func _on_wire_color_pressed():
 	if set_wire_color:
 		hide_color_picker()
 	else:
+		hide_pin_names()
 		set_wire_color = true
 		color_picker.color = Color.hex(part.data.wire_color)
 		color_picker.show()
 
 
 func set_button_text_colors():
-	$M/HB/VB/WireColor.set("theme_override_colors/font_color", Color.hex(part.data.wire_color))
-	$M/HB/VB/BusColor.set("theme_override_colors/font_color", Color.hex(part.data.bus_color))
+	$HB/VB/WireColor.set("theme_override_colors/font_color", Color.hex(part.data.wire_color))
+	$HB/VB/BusColor.set("theme_override_colors/font_color", Color.hex(part.data.bus_color))
 
 
 func _on_color_picker_color_changed(color):
@@ -78,14 +74,15 @@ func _on_color_picker_color_changed(color):
 
 
 func _on_pins_button_pressed():
-	if $M/HB/Pins.visible:
+	if $HB/Pins.visible:
 		hide_pin_names()
 		part.data.labels = %Names.text.split("\n")
 		part.set_labels()
 		part.changed()
 		%PinsButton.text = PIN_NAMES_BUTTON_TEXTS[0]
 	else:
-		$M/HB/Pins.show()
+		hide_color_picker()
+		$HB/Pins.show()
 		%PinsButton.text = PIN_NAMES_BUTTON_TEXTS[1]
 
 
@@ -100,8 +97,8 @@ func _on_gen_pin_names_button_pressed():
 
 
 func hide_pin_names():
-	$M/HB/Pins.hide()
-	size = Vector2.ZERO
+	$HB/Pins.hide()
+	get_parent().size = Vector2.ZERO
 
 
 func list_pin_names():
@@ -215,3 +212,8 @@ func _on_num_wires_value_changed(value):
 		part.data.num_wires = new_num
 		part.set_pins()
 		part.changed()
+
+
+func _on_hidden():
+	hide_color_picker()
+	%PinsButton.text = PIN_NAMES_BUTTON_TEXTS[0]

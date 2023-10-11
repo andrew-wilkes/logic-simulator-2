@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://cebba5vujpuxs"]
 
-[ext_resource type="Script" path="res://ColorPicker.gd" id="1_kw6um"]
+[ext_resource type="Script" path="res://scenes/ColorPicker.gd" id="1_kw6um"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v76vi"]
 bg_color = Color(0.278431, 0.278431, 0.278431, 1)

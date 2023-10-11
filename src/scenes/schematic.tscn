@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://cq3v3io0y1kms"]
+
+[ext_resource type="Script" path="res://scenes/schematic.gd" id="1_q7w2l"]
+[ext_resource type="PackedScene" uid="uid://1ugdcg3f5q1w" path="res://scenes/IOManager.tscn" id="2_7dp20"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ydr2j"]
+bg_color = Color(0.14902, 0.14902, 0.14902, 1)
+
+[node name="Schematic" type="GraphEdit"]
+size_flags_vertical = 3
+right_disconnects = true
+arrange_nodes_button_hidden = true
+script = ExtResource("1_q7w2l")
+
+[node name="IOManagerPanel" type="PopupPanel" parent="."]
+title = "IO Manager"
+borderless = false
+theme_override_styles/panel = SubResource("StyleBoxFlat_ydr2j")
+
+[node name="IOManager" parent="IOManagerPanel" instance=ExtResource("2_7dp20")]
+offset_right = 714.0

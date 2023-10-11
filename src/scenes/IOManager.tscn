@@ -1,0 +1,176 @@
+[gd_scene load_steps=4 format=3 uid="uid://1ugdcg3f5q1w"]
+
+[ext_resource type="Script" path="res://scenes/IOManager.gd" id="1_ecwra"]
+[ext_resource type="Texture2D" uid="uid://dy1sd78ikc231" path="res://assets/parts/up.png" id="1_g0hwp"]
+[ext_resource type="Texture2D" uid="uid://nebjnvr6aqnq" path="res://assets/parts/down.png" id="2_tow2c"]
+
+[node name="IOManager" type="MarginContainer"]
+offset_right = 798.0
+offset_bottom = 518.0
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+script = ExtResource("1_ecwra")
+
+[node name="HB" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="VB" type="VBoxContainer" parent="HB"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Label2" type="Label" parent="HB/VB"]
+layout_mode = 2
+text = "Value"
+horizontal_alignment = 1
+
+[node name="Value" type="LineEdit" parent="HB/VB"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0x00"
+alignment = 1
+
+[node name="HB" type="HBoxContainer" parent="HB/VB"]
+layout_mode = 2
+
+[node name="Sp" type="Control" parent="HB/VB/HB"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VSlider" type="VSlider" parent="HB/VB/HB"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 128)
+layout_mode = 2
+max_value = 255.0
+
+[node name="Sp2" type="Control" parent="HB/VB/HB"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VB" type="VBoxContainer" parent="HB/VB/HB"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Sp" type="Control" parent="HB/VB/HB/VB"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="UpButton" type="Button" parent="HB/VB/HB/VB"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+action_mode = 0
+icon = ExtResource("1_g0hwp")
+
+[node name="DownButton" type="Button" parent="HB/VB/HB/VB"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+action_mode = 0
+icon = ExtResource("2_tow2c")
+
+[node name="Sp2" type="Control" parent="HB/VB/HB/VB"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="RB" type="HBoxContainer" parent="HB/VB"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="HB/VB/RB"]
+layout_mode = 2
+text = "Range:"
+
+[node name="Range" type="LineEdit" parent="HB/VB/RB"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0xff"
+
+[node name="Label" type="Label" parent="HB/VB"]
+layout_mode = 2
+text = "Number of wires"
+horizontal_alignment = 1
+
+[node name="NumWires" type="SpinBox" parent="HB/VB"]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 1.0
+max_value = 256.0
+value = 1.0
+
+[node name="BusColor" type="Button" parent="HB/VB"]
+layout_mode = 2
+focus_mode = 0
+theme_override_colors/font_color = Color(0, 0.658824, 0, 1)
+action_mode = 0
+text = "Bus color"
+
+[node name="WireColor" type="Button" parent="HB/VB"]
+layout_mode = 2
+focus_mode = 0
+action_mode = 0
+text = "Wire color"
+
+[node name="PinsButton" type="Button" parent="HB/VB"]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+text = "Edit pin names"
+
+[node name="ColorPicker" type="ColorPicker" parent="HB"]
+layout_mode = 2
+presets_visible = false
+
+[node name="Pins" type="VBoxContainer" parent="HB"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="HB" type="HBoxContainer" parent="HB/Pins"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Prefix" type="LineEdit" parent="HB/Pins/HB"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Prefix"
+text = "D"
+placeholder_text = "Prefix"
+
+[node name="GenPinNamesButton" type="Button" parent="HB/Pins/HB"]
+layout_mode = 2
+text = "Generate"
+
+[node name="Suffix" type="LineEdit" parent="HB/Pins/HB"]
+unique_name_in_owner = true
+layout_mode = 2
+tooltip_text = "Suffix"
+placeholder_text = "Suffix"
+
+[node name="Names" type="TextEdit" parent="HB/Pins"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="UpdateTimer" type="Timer" parent="."]
+wait_time = 0.2
+one_shot = true
+
+[node name="RepeatTimer" type="Timer" parent="."]
+wait_time = 0.1
+one_shot = true
+
+[connection signal="hidden" from="." to="." method="_on_hidden"]
+[connection signal="text_submitted" from="HB/VB/Value" to="." method="_on_value_text_submitted"]
+[connection signal="value_changed" from="HB/VB/HB/VSlider" to="." method="_on_v_slider_value_changed"]
+[connection signal="pressed" from="HB/VB/HB/VB/UpButton" to="." method="_on_up_button_pressed"]
+[connection signal="pressed" from="HB/VB/HB/VB/DownButton" to="." method="_on_down_button_pressed"]
+[connection signal="text_submitted" from="HB/VB/RB/Range" to="." method="_on_range_text_submitted"]
+[connection signal="value_changed" from="HB/VB/NumWires" to="." method="_on_num_wires_value_changed"]
+[connection signal="pressed" from="HB/VB/BusColor" to="." method="_on_bus_color_pressed"]
+[connection signal="pressed" from="HB/VB/WireColor" to="." method="_on_wire_color_pressed"]
+[connection signal="pressed" from="HB/VB/PinsButton" to="." method="_on_pins_button_pressed"]
+[connection signal="color_changed" from="HB/ColorPicker" to="." method="_on_color_picker_color_changed"]
+[connection signal="pressed" from="HB/Pins/HB/GenPinNamesButton" to="." method="_on_gen_pin_names_button_pressed"]
+[connection signal="timeout" from="UpdateTimer" to="." method="_on_update_timer_timeout"]
+[connection signal="timeout" from="RepeatTimer" to="." method="_on_repeat_timer_timeout"]

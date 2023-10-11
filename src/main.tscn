@@ -1,13 +1,12 @@
-[gd_scene load_steps=10 format=3 uid="uid://eohxndqnij0x"]
+[gd_scene load_steps=9 format=3 uid="uid://eohxndqnij0x"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_7i1tr"]
-[ext_resource type="Script" path="res://classes/schematic.gd" id="2_evx7y"]
-[ext_resource type="PackedScene" uid="uid://blyoi2nc61uvt" path="res://io_manager.tscn" id="3_x8pl6"]
-[ext_resource type="Script" path="res://WarningPanel.gd" id="4_u4i6y"]
-[ext_resource type="PackedScene" uid="uid://cbivksj5j1nmb" path="res://part_list.tscn" id="5_3p0gq"]
-[ext_resource type="PackedScene" uid="uid://0xeyeylg8w8k" path="res://settings_panel.tscn" id="6_t623a"]
-[ext_resource type="PackedScene" uid="uid://b1a77l6rte3i" path="res://help_tabs.tscn" id="7_qqehi"]
-[ext_resource type="PackedScene" uid="uid://c0cj0gppj2q23" path="res://learn_tabs.tscn" id="8_pmmh5"]
+[ext_resource type="PackedScene" uid="uid://cq3v3io0y1kms" path="res://scenes/schematic.tscn" id="2_qticl"]
+[ext_resource type="Script" path="res://scenes/WarningPanel.gd" id="4_u4i6y"]
+[ext_resource type="PackedScene" uid="uid://cbivksj5j1nmb" path="res://scenes/part_list.tscn" id="5_3p0gq"]
+[ext_resource type="PackedScene" uid="uid://0xeyeylg8w8k" path="res://scenes/settings_panel.tscn" id="6_t623a"]
+[ext_resource type="PackedScene" uid="uid://b1a77l6rte3i" path="res://scenes/help_tabs.tscn" id="7_qqehi"]
+[ext_resource type="PackedScene" uid="uid://c0cj0gppj2q23" path="res://scenes/learn_tabs.tscn" id="8_pmmh5"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dua6n"]
 content_margin_left = 20.0
@@ -114,15 +113,8 @@ expand_to_text_length = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Schematic" type="GraphEdit" parent="VB"]
+[node name="Schematic" parent="VB" instance=ExtResource("2_qticl")]
 layout_mode = 2
-size_flags_vertical = 3
-right_disconnects = true
-arrange_nodes_button_hidden = true
-script = ExtResource("2_evx7y")
-
-[node name="IOManager" parent="VB/Schematic" instance=ExtResource("3_x8pl6")]
-visible = false
 
 [node name="WarningPanel" type="PopupPanel" parent="."]
 size = Vector2i(106, 50)
@@ -166,8 +158,8 @@ borderless = false
 [node name="PartList" parent="PartListPanel" instance=ExtResource("5_3p0gq")]
 offset_left = 4.0
 offset_top = 4.0
-offset_right = 596.0
-offset_bottom = 396.0
+offset_right = -4.0
+offset_bottom = -4.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -187,8 +179,8 @@ size = Vector2i(600, 400)
 [node name="HelpTabs" parent="HelpPanel" instance=ExtResource("7_qqehi")]
 offset_left = 4.0
 offset_top = 4.0
-offset_right = 596.0
-offset_bottom = 396.0
+offset_right = -4.0
+offset_bottom = -4.0
 
 [node name="LearnPanel" type="PopupPanel" parent="."]
 size = Vector2i(600, 400)

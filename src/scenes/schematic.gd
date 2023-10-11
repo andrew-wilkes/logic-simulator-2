@@ -286,7 +286,8 @@ func removing_slot(part, port):
 func right_click_on_part(part):
 	match part.part_type:
 		"IO":
-			$IOManager.open(part)
+			$IOManagerPanel/IOManager.open(part)
+			$IOManagerPanel.popup_centered()
 
 
 func output_level_changed_handler(part, side, port, level):
