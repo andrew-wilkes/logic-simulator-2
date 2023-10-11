@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://c0cj0gppj2q23"]
+
+[node name="LearnTabs" type="TabContainer"]
+
+[node name="Boolean Logic" type="RichTextLabel" parent="."]
+layout_mode = 2
+
+[node name="Combinational Logic" type="RichTextLabel" parent="."]
+visible = false
+layout_mode = 2
+
+[node name="Sequential Logic" type="RichTextLabel" parent="."]
+visible = false
+layout_mode = 2
+
+[node name="Digital Systems" type="RichTextLabel" parent="."]
+visible = false
+layout_mode = 2

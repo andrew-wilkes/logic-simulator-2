@@ -1,0 +1,15 @@
+[gd_scene format=3 uid="uid://cvfhme8tmg2c5"]
+
+[node name="AboutTabs" type="TabContainer"]
+offset_right = 285.0
+offset_bottom = 173.0
+
+[node name="About" type="RichTextLabel" parent="."]
+layout_mode = 2
+text = "About"
+
+[node name="Licence" type="RichTextLabel" parent="."]
+visible = false
+layout_mode = 2
+bbcode_enabled = true
+text = "Licence Information"

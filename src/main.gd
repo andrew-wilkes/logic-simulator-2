@@ -185,14 +185,17 @@ func _on_settings_button_pressed():
 
 
 func _on_help_button_pressed():
+	$HelpPanel.popup_centered()
 	unfocus()
 
 
 func _on_learn_button_pressed():
+	$LearnPanel.popup_centered()
 	unfocus()
 
 
 func _on_about_button_pressed():
+	$AboutPanel.popup_centered()
 	unfocus()
 
 
