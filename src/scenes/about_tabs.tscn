@@ -6,7 +6,11 @@ offset_bottom = 173.0
 
 [node name="About" type="RichTextLabel" parent="."]
 layout_mode = 2
-text = "About"
+bbcode_enabled = true
+text = "This software was created by Andrew Wilkes in 2023.
+
+[url]Buy me a Coffee[/url]
+"
 
 [node name="Licence" type="RichTextLabel" parent="."]
 visible = false

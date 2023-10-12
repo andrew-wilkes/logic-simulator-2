@@ -9,6 +9,7 @@ func _ready():
 	for idx in lists.size():
 		lists[idx] = []
 	for part_name in Parts.names:
+		# We need to instantiate a part just to see its' properties
 		var part = Parts.get_instance(part_name)
 		lists[part.category].append([part.order, part_name])
 		part.free()
@@ -17,13 +18,14 @@ func _ready():
 	for idx in lists.size():
 		var item_list = $HB.get_child(idx).get_child(1)
 		for item in lists[idx]:
-			item_list.add_item(item[1]) # Add part name
+			item_list.add_item(item[1]) # Add part name to the menu
 	update_block_list()
 	for idx in $HB.get_child_count():
 		$HB.get_child(idx).get_child(1).item_clicked.connect(_on_list_item_clicked.bind(idx))
 
 
 func update_block_list():
+	# This list may change via user interaction such as loading blocks or deleting the entries 
 	var list = $HB.get_child(Part.BLOCK).get_child(1)
 	var listed_blocks = []
 	for idx in list.item_count:
