@@ -4,7 +4,7 @@ class_name Gnd
 
 func _init():
 	category = MISC
-	order = 60
+	order = 80
 
 
 func _ready():

@@ -10,29 +10,27 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = ExtResource("1_nkbun")
 
-[node name="Circuit Creation" type="MarginContainer" parent="."]
+[node name="Overview" type="MarginContainer" parent="."]
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
-[node name="RichText" type="RichTextLabel" parent="Circuit Creation"]
+[node name="RichText" type="RichTextLabel" parent="Overview"]
 layout_mode = 2
 theme_override_colors/default_color = Color(0.152941, 0.152941, 0.152941, 1)
 bbcode_enabled = true
 text = "[b]Placing Parts[/b]
 Circuits are created by selecting parts from the Parts List panel which get placed near the top left of the schematic area.
 
-The parts are then selected with the left mouse button and dragged into position. Clicking in blank space de-selects the part.
-
-Multiple parts may be selected by rubber-band selecting them with the mouse.
+The parts are then selected with the left mouse button and dragged into position. Selected parts become brighter. Multiple parts may be selected by rubber-band selecting them with the mouse. Clicking in blank space de-selects the part(s).
 
 Pressing the delete key, deletes the selected parts.
 
-Ctrl + left click allows for selecting multiple parts one by one.
+Ctrl + Left click allows for selecting multiple parts one by one.
 
-Ctrl + D duplicates the selected parts.
+Ctrl + D duplicates the selected parts at the current position of the mouse based off the first-selected part position.
 
 [b]Wires and Busses[/b]
 Connection lines may be added between pins of the same type. These are designated by color coding. Wires carry bit data of logic 1 or 0. These are by default: white. Bus lines carry integer numbers between bus pins which are yellow by default.
@@ -41,7 +39,7 @@ Connections are made by clicking on a pin and dragging a line out to snap to ano
 
 Pins on the right side of parts may fan out to multiple end points, but pins on the left side only accept one input.
 
-In general, pins on the left of a part are inputs, and pins on the right side of a part are outputs. But IO and some others (to be decided) are bi-directional, however the signal input does not go back along other wires connected to the same pin.
+In general, pins on the left side of a part are inputs, and pins on the right side of a part are outputs. But IO and some others (to be decided) are bi-directional, however the signal input does not go back along other wires connected to the same pin.
 
 To hold a pin high or low, there are parts for V+ and Gnd available.
 
@@ -67,14 +65,18 @@ The IO part may be used to set the bus value and pin levels to stimulate the cir
 
 Right-clicking on the IO part opens a panel that contains controls for entering the value, adjusting the value with a slider, or stepping the value up or down. The step buttons act like on a keyboard with a repeating action if held down. The panel may be moved so as not to obscure parts.
 
-IO parts also, capture and display values that they receive. The bus and wires of the IO part keep in sync as if wired in parallel, but the number of wires limit the range of numbers supported via the wired output pins. So a data input of 0xff may be clipped to 0xf if there were only 4 output wires used to connect the output. It is best practice to only use the bus input or wire inputs for an IO part to avoid them fighting over what is the input value. When manually entering values with the slider or buttons, the Range setting limits the maximum value.
+IO parts also, capture and display values that they receive. The bus and wires of the IO part keep in sync as if wired in parallel, but the number of wires limit the range of numbers supported via the wired output pins. So a data input of 0xff may be clipped to 0xf if there were only 4 output wires used to connect the output.
+
+It is best practice to only use the bus input or wire inputs for an IO part to avoid them fighting over what is the input value. When manually entering values with the slider or buttons, the Range setting limits the maximum value.
 
 [b]Internal Operation[/b]
-Internally, the value is propagated as an integer on the bus lines and as bits on wires. 8 bits take 8 steps to fully apply to 8 wires connected to a part so this may cause up to 8 changes of a parts' output until it is stable. This affect is not seen by the user since it should be between frame updates of the display. It is like the propagation delay in real circuits but much more delayed. There is also detection for unstable circuits where the output is continually cycling and not stabilizing. This condition stops propagation of signals and an alert message is shown to the user with information as to what part and pin the problem was detected at.
+Internally, the value is propagated as an integer on the bus lines and as bits on wires. 8 bits take 8 steps to fully apply to 8 wires connected to a part so this may cause up to 8 changes of a parts' output until it is stable. This affect is not seen by the user since it should be between frame updates of the display. It is like the propagation delay in real circuits but much more delayed.
 
-A speed optimization that is used is to not propagate a level if there is no change to an input. An affect of this may be to not update a downstream wire color if its' color has been changed by the user. The speed of simulation will depend on circuit complexity and the speed of the computer being used.
+There is also detection for unstable circuits where the output is continually cycling and not stabilizing. This condition stops propagation of signals and an alert message is shown to the user with information as to what part and pin the problem was detected at. Hovering the mouse over a part reveals its' part number.
 
-Circuits are saved as text-based JSON data with a .circ file extension. So it's possible to edit and view the files in external text editors.
+A speed optimization that is used is to not propagate a level if there is no change to an input. An affect of this may be to not update a downstream wire color if its' color has been changed by the user. The speed of simulation will depend on circuit complexity and the speed of the computer being used, and what settings are applied to the circuit such as viewing logic levels and probing/displaying values.
+
+Circuits are saved as text-based JSON data with a .circ file extension. So it's possible to edit and view the files in external text editors. Also, external tools could be used to generate or process these files.
 
 [b]Part Numbering[/b]
 When parts are added, they are given an internal part number that is displayed when hovering the mouse over a part. This is the number displayed in any error message or saved with the circuit. But, there is a Tool available to automtically number parts in a more normal way and it also sets the part tags with these numbers. Or the user may label the parts by editing the tag text labels.
@@ -85,4 +87,6 @@ The overall schematic diagram area may be panned and zoomed. Also, the grid can 
 The circuit has an editable Title label which is saved with the circuit and used as a name for an associated block.
 
 The New button erases the circuit, Save saves to the current file or initiates the SaveAs dialog, and Load is used to open a saved circuit. Load as block inserts a block part into the current circuit. The Tools menu is available for tasks such as numbering parts. Settings are saved and loaded with the software. Circuits are saved with the schematic settings, part settings, connections, and data such as colors.
+
+Quit the App. by pressing the Esc key. This prompts you to save the cicuit if unsaved changes exist. Unsaved changes are indicated by a red color of the file name.
 "

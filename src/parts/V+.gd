@@ -4,7 +4,7 @@ class_name Vcc
 
 func _init():
 	category = MISC
-	order = 70
+	order = 90
 
 
 func _ready():

@@ -5,7 +5,7 @@ class_name BusColor
 func _init():
 	data["color"] = 0xffff00ff
 	category = MISC
-	order = 90
+	order = 70
 
 
 func _ready():
