@@ -207,7 +207,7 @@ func add_parts():
 		part.name = node.node_name
 		part.position_offset = Vector2(node.offset[0], node.offset[1])
 		part.tooltip_text = part.name
-		part.connect("position_offset_changed", part.changed)
+		part.position_offset_changed.connect(part.changed)
 
 
 func add_connections():
@@ -215,7 +215,7 @@ func add_connections():
 		connect_node(con.from, con.from_port, con.to, con.to_port)
 
 
-# This called to remove the effect of level indications
+# This is called to remove the effect of level indications
 func set_all_connection_colors():
 	for node in get_children():
 		if node is Part:
@@ -311,7 +311,6 @@ func output_level_changed_handler(part, side, port, level):
 func indicate_level(part, side, port, level):
 	var color = G.settings.logic_high_color if level else G.settings.logic_low_color
 	if side == LEFT:
-		# Check that this returns the number of available ports rather than connections
 		if port < part.get_connection_input_count():
 			var slot = part.get_connection_input_slot(port)
 			part.set_slot_color_left(slot, color)
