@@ -19,7 +19,7 @@ func _ready():
 	$SettingsPanel/SettingsPanel.level_indication_changed.connect(schematic.set_all_connection_colors)
 	$SettingsPanel/SettingsPanel.low_color_changed.connect(schematic.set_low_color)
 	$SettingsPanel/SettingsPanel.high_color_changed.connect(schematic.set_high_color)
-	$AboutPanel/AboutTabs/About.meta_clicked.connect(_on_text_meta_clicked)
+	$AboutPanel/AboutTabs/About/Text.meta_clicked.connect(_on_text_meta_clicked)
 	%Title.text_submitted.connect(unfocus)
 
 func tool_action(idx):

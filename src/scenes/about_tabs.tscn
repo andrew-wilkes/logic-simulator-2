@@ -1,19 +1,38 @@
-[gd_scene format=3 uid="uid://cvfhme8tmg2c5"]
+[gd_scene load_steps=2 format=3 uid="uid://cvfhme8tmg2c5"]
+
+[ext_resource type="StyleBox" uid="uid://gldnkeili0y4" path="res://assets/ui/tab-panel.stylebox" id="1_65w8n"]
 
 [node name="AboutTabs" type="TabContainer"]
-offset_right = 285.0
-offset_bottom = 173.0
+offset_right = 456.0
+offset_bottom = 353.0
+theme_override_styles/panel = ExtResource("1_65w8n")
 
-[node name="About" type="RichTextLabel" parent="."]
+[node name="About" type="MarginContainer" parent="."]
+visible = false
 layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="Text" type="RichTextLabel" parent="About"]
+layout_mode = 2
+theme_override_colors/default_color = Color(0, 0, 0, 1)
 bbcode_enabled = true
 text = "This software was created by Andrew Wilkes in 2023.
 
 [url]Buy me a Coffee[/url]
 "
 
-[node name="Licence" type="RichTextLabel" parent="."]
-visible = false
+[node name="Licence" type="MarginContainer" parent="."]
 layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="Text" type="RichTextLabel" parent="Licence"]
+layout_mode = 2
+theme_override_colors/default_color = Color(0, 0, 0, 1)
 bbcode_enabled = true
 text = "Licence Information"

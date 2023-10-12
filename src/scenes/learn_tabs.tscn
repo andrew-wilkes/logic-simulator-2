@@ -1,6 +1,11 @@
-[gd_scene format=3 uid="uid://c0cj0gppj2q23"]
+[gd_scene load_steps=2 format=3 uid="uid://c0cj0gppj2q23"]
+
+[ext_resource type="StyleBox" uid="uid://gldnkeili0y4" path="res://assets/ui/tab-panel.stylebox" id="1_v7x05"]
 
 [node name="LearnTabs" type="TabContainer"]
+offset_right = 1071.0
+offset_bottom = 595.0
+theme_override_styles/panel = ExtResource("1_v7x05")
 
 [node name="Boolean Logic" type="RichTextLabel" parent="."]
 layout_mode = 2

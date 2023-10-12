@@ -137,7 +137,7 @@ title = "Quit without saving?"
 
 [node name="LoadDialog" type="FileDialog" parent="."]
 title = "Open a File"
-size = Vector2i(600, 400)
+size = Vector2i(900, 500)
 ok_button_text = "Open"
 file_mode = 0
 access = 2
@@ -145,7 +145,7 @@ filters = PackedStringArray("*.circ ; Circuit files")
 
 [node name="SaveDialog" type="FileDialog" parent="."]
 title = "Save Circuit"
-size = Vector2i(600, 400)
+size = Vector2i(900, 500)
 ok_button_text = "Save"
 access = 2
 filters = PackedStringArray("*.circ ; Circuit files")
@@ -159,8 +159,8 @@ borderless = false
 [node name="PartList" parent="PartListPanel" instance=ExtResource("5_3p0gq")]
 offset_left = 4.0
 offset_top = 4.0
-offset_right = 596.0
-offset_bottom = 396.0
+offset_right = -4.0
+offset_bottom = -4.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -175,25 +175,34 @@ offset_right = 529.0
 offset_bottom = 522.0
 
 [node name="HelpPanel" type="PopupPanel" parent="."]
-size = Vector2i(600, 400)
+title = "Help"
+size = Vector2i(800, 500)
+unresizable = false
+borderless = false
 
 [node name="HelpTabs" parent="HelpPanel" instance=ExtResource("7_qqehi")]
 offset_left = 4.0
 offset_top = 4.0
-offset_right = 596.0
-offset_bottom = 396.0
+offset_right = -4.0
+offset_bottom = -4.0
 
 [node name="LearnPanel" type="PopupPanel" parent="."]
-size = Vector2i(600, 400)
+title = "Learn"
+size = Vector2i(800, 500)
+unresizable = false
+borderless = false
 
 [node name="LearnTabs" parent="LearnPanel" instance=ExtResource("8_pmmh5")]
 offset_left = 4.0
 offset_top = 4.0
-offset_right = 596.0
-offset_bottom = 396.0
+offset_right = 796.0
+offset_bottom = 496.0
 
 [node name="AboutPanel" type="PopupPanel" parent="."]
+title = "About"
 size = Vector2i(600, 400)
+unresizable = false
+borderless = false
 
 [node name="AboutTabs" parent="AboutPanel" instance=ExtResource("8_2rex3")]
 offset_left = 4.0
