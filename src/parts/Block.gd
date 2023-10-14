@@ -12,7 +12,7 @@ extends Part
 
 enum { PART, PORT }
 
-var circuit: Circuit
+var circuit
 var parts = {}
 var input_map = []
 var output_map = []
@@ -26,21 +26,28 @@ func _init():
 
 
 func block_setup():
-	circuit = Circuit.new().load_data(data.circuit_file)
-	# Every circuit opened as a block is added to the list in settings
-	var cname = circuit.title
+	circuit = Circuit.new()
+	var load_result = circuit.load_data(data.circuit_file)
+	if load_result != OK:
+		emit_signal("warning", "The circuit block data from %s was invalid!" % [data.circuit_file.get_file()])
+		return
+	# Every circuit opened as a block is added to the available parts list
+	var cname = circuit.data.title
 	if cname.is_empty():
 		cname = data.circuit_file.get_file()
 	if not G.settings.blocks.has(cname):
 		G.settings.blocks[cname] = data.circuit_file
-	for part in circuit.parts:
-		if part is IO:
+	for part in circuit.data.parts:
+		if part.part_type == "IO":
 			if is_input(part):
 				inputs.append(part)
 				input_pin_count += part.data.num_wires + 1
 			if is_output(part):
 				outputs.append(part)
 				output_pin_count += part.data.num_wires + 1
+	# Sort according to position offset
+	inputs.sort_custom(compare_offsets)
+	outputs.sort_custom(compare_offsets)
 	# Create IO pin maps
 	for io_part in inputs:
 		# [part_name, port]
@@ -69,7 +76,7 @@ func configure_pins():
 		var label_idx = 0
 		set_slot_enabled_left(slot_idx, true)
 		set_slot_type_left(slot_idx, BUS_TYPE)
-		set_slot_color_left(slot_idx, input.data.bus_color)
+		set_slot_color_left(slot_idx, Color.hex(input.data.bus_color))
 		get_child(slot_idx).get_child(0).text = input.data.labels[label_idx]
 		for n in input.data.num_wires:
 			slot_idx += 1
@@ -78,14 +85,14 @@ func configure_pins():
 			get_child(slot_idx).get_child(0).text = input.data.labels[label_idx]
 			set_slot_enabled_left(slot_idx, true)
 			set_slot_type_left(slot_idx, WIRE_TYPE)
-			set_slot_color_left(slot_idx, input.data.wire_color)
+			set_slot_color_left(slot_idx, Color.hex(input.data.wire_color))
 		slot_idx += 1
 	slot_idx = 1
 	for output in outputs:
 		var label_idx = 0
 		set_slot_enabled_right(slot_idx, true)
 		set_slot_type_right(slot_idx, BUS_TYPE)
-		set_slot_color_right(slot_idx, output.data.bus_color)
+		set_slot_color_right(slot_idx, Color.hex(output.data.bus_color))
 		get_child(slot_idx).get_child(1).text = output.data.labels[label_idx]
 		for n in output.data.num_wires:
 			slot_idx += 1
@@ -94,21 +101,21 @@ func configure_pins():
 			get_child(slot_idx).get_child(1).text = output.data.labels[label_idx]
 			set_slot_enabled_right(slot_idx, true)
 			set_slot_type_right(slot_idx, WIRE_TYPE)
-			set_slot_color_right(slot_idx, output.data.wire_color)
+			set_slot_color_right(slot_idx, Color.hex(output.data.wire_color))
 		slot_idx += 1
 
 
 func is_input(part):
-	# If there are no wires connected to the part input side, then it is an input to the circuit
-	for con in circuit.connections:
+	# If there are no wires connected to the part input side, then it is an input to the circuit.data
+	for con in circuit.data.connections:
 		if con.to == part.node_name:
 			return false
 	return true
 
 
 func is_output(part):
-	# If there are no wires connected to the part output side, then it is an output to the circuit
-	for con in circuit.connections:
+	# If there are no wires connected to the part output side, then it is an output to the circuit.data
+	for con in circuit.data.connections:
 		if con.from == part.node_name:
 			return false
 	return true
@@ -139,13 +146,13 @@ func set_slots(num_slots):
 
 
 func add_parts():
-	for node in circuit.parts:
+	for node in circuit.data.parts:
 		var part = Parts.get_instance(node.part_type)
 		part.tag = node.tag
 		part.part_type = node.part_type
 		part.data = node.data
+		# Part instances have a name but only circuit.data.parts have node_name
 		part.name = node.node_name
-		part.node_name = node.node_name # Useful for debugging
 		part.show_display = false
 		part.controller = self
 		add_connections_to_part(part)
@@ -176,7 +183,7 @@ func evaluate_bus_output_value(side, port, value):
 func output_level_changed_handler(part, side, port, level):
 	if DEBUG:
 		prints("block output_level_changed_handler", part.name, side, port, level)
-	var map_idx = [part.name, port]
+	var map_idx = [str(part.name), port] # part.name seems to be a pointer to a string
 	var port_idx = [input_map, output_map][side].find(map_idx)
 	if port_idx > -1:
 		controller.output_level_changed_handler(self, side, port_idx, level)
@@ -194,7 +201,7 @@ func update_internal_input_level(part, side, port, level):
 
 
 func add_connections_to_part(part):
-	for con in circuit.connections:
+	for con in circuit.data.connections:
 		if con.from == part.name:
 			var key = [RIGHT, con.from_port]
 			var value = [con.to, con.to_port]
@@ -213,7 +220,7 @@ func add_to_connections(part, key, value):
 
 
 func bus_value_changed_handler(part, side, port, value):
-	var map_idx = [part.name, port]
+	var map_idx = [str(part.name), port]
 	var port_idx = [input_map, output_map][side].find(map_idx)
 	if port_idx > -1:
 		controller.bus_value_changed_handler(self, side, port_idx, value)
@@ -237,3 +244,7 @@ func reset_block_race_counters():
 
 func unstable_handler(_name, side, port):
 	controller.unstable_handler(name + ":" + _name, side, port)
+
+
+func compare_offsets(a, b):
+		return Vector2(a.offset[0], a.offset[1]).length() < Vector2(b.offset[0], b.offset[1]).length()
