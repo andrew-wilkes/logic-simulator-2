@@ -130,7 +130,7 @@ func evaluate_output_level(side, port, level):
 	var value = 0
 	for n in data.num_wires:
 		value *= 2
-		value += int(pins.get([side, data.num_wires - n], false))
+		value += int(pins.get([side, int(data.num_wires - n)], false))
 	evaluate_bus_output_value(side, 0, value, false)
 
 

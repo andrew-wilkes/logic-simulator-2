@@ -165,12 +165,13 @@ func get_map(side, port):
 	return input_map[port] if side == LEFT else output_map[port]
 
 
-# Map external input to internal part
+# Map external input to internal IO part
 func evaluate_output_level(side, port, level):
 	if DEBUG:
 		prints("block evaluate_output_level", self.name, side, port, level)
 	var map = get_map(side, port)
 	parts[map[PART]].update_output_level(FLIP_SIDES[side], map[PORT], level)
+	# Add code to update the output bus of this part
 
 
 # Map external bus input to internal part
@@ -178,6 +179,7 @@ func evaluate_bus_output_value(side, port, value):
 	var map = get_map(side, port)
 	# Flip the side to the output side
 	parts[map[PART]].update_output_value(FLIP_SIDES[side], map[PORT], value)
+	# Add code to update the output wires of this part
 
 
 func output_level_changed_handler(part, side, port, level):
@@ -203,11 +205,11 @@ func update_internal_input_level(part, side, port, level):
 func add_connections_to_part(part):
 	for con in circuit.data.connections:
 		if con.from == part.name:
-			var key = [RIGHT, con.from_port]
+			var key = [RIGHT, int(con.from_port)]
 			var value = [con.to, con.to_port]
 			add_to_connections(part, key, value)
 		elif con.to == part.name:
-			var key = [LEFT, con.to_port]
+			var key = [LEFT, int(con.to_port)]
 			var value = [con.from, con.from_port]
 			add_to_connections(part, key, value)
 
