@@ -9,6 +9,29 @@ const __source = 'res://classes/circuit.gd'
 
 const temp_file = "res://temp.circ"
 
+func test_convert_colors_to_rgba_strings() -> void:
+	var data = {
+		"x": 10,
+		"bg_color": Color.MAGENTA
+	}
+	var circuit = Circuit.new()
+	circuit.convert_colors_to_rgba_strings(data)
+	assert_str(data.bg_color).is_equal(Color.MAGENTA.to_html())
+
+
+func test_convert_rgba_strings_to_colors() -> void:
+	var data = {
+		"x": 10,
+		"bg_color": "#ff00ffff"
+	}
+	var circuit = Circuit.new()
+	circuit.convert_rgba_strings_to_colors(data)
+	assert_object(data.bg_color).is_equal(Color.MAGENTA)
+	data.bg_color = "ff0"
+	circuit.convert_rgba_strings_to_colors(data)
+	assert_object(data.bg_color).is_equal(Color.YELLOW)
+
+
 func test_save_data() -> void:
 	var circuit = Circuit.new()
 	circuit.data.title = "Test Circuit"

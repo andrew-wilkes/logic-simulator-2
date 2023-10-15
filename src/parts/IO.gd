@@ -82,11 +82,11 @@ func set_pin_colors():
 		set_slot_enabled_left(idx, true)
 		set_slot_enabled_right(idx, true)
 		if idx > 2:
-			set_slot_color_left(idx, Color.hex(data.wire_color))
-			set_slot_color_right(idx, Color.hex(data.wire_color))
+			set_slot_color_left(idx, data.wire_color)
+			set_slot_color_right(idx, data.wire_color)
 		else:
-			set_slot_color_left(idx, Color.hex(data.bus_color))
-			set_slot_color_right(idx, Color.hex(data.bus_color))
+			set_slot_color_left(idx, data.bus_color)
+			set_slot_color_right(idx, data.bus_color)
 	# Ensure that the Tag doesn't have pins
 	# !!! Check if this is related to the extra Tag bug !!!
 	set_slot_enabled_left(data.num_wires + 3, false)

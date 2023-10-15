@@ -352,12 +352,12 @@ func set_pin_colors(to_part, color):
 	for con in get_connection_list():
 		if con.to == to_part:
 			var from_node = get_node(NodePath(con.from))
-			from_node.set_slot_color_right(from_node.get_connection_output_slot(con.from_port), Color.hex(color))
+			from_node.set_slot_color_right(from_node.get_connection_output_slot(con.from_port), color)
 			for con2 in get_connection_list():
 				if con2.from == con.from and con2.from_port == con.from_port:
 					var to_node = get_node(NodePath(con2.to))
 					var slot = to_node.get_connection_input_slot(con2.to_port)
-					to_node.set_slot_color_left(slot, Color.hex(color))
+					to_node.set_slot_color_left(slot, color)
 
 
 func set_io_connection_colors(io_part):
@@ -368,18 +368,18 @@ func set_io_connection_colors(io_part):
 					else io_part.data.bus_color
 			var to_node = get_node(NodePath(con.to))
 			var slot = to_node.get_connection_input_slot(con.to_port)
-			to_node.set_slot_color_left(slot, Color.hex(color))
+			to_node.set_slot_color_left(slot, color)
 			slot = io_part.get_connection_output_slot(con.from_port)
-			io_part.set_slot_color_right(slot, Color.hex(color))
+			io_part.set_slot_color_right(slot, color)
 		if con.to == io_part.name:
 			var color = io_part.data.wire_color\
 				if io_part.get_connection_input_type(con.to_port) == 0\
 					else io_part.data.bus_color
 			var from_node = get_node(NodePath(con.from))
 			var slot = from_node.get_connection_output_slot(con.from_port)
-			from_node.set_slot_color_right(slot, Color.hex(color))
+			from_node.set_slot_color_right(slot, color)
 			slot = io_part.get_connection_input_slot(con.to_port)
-			io_part.set_slot_color_left(slot, Color.hex(color))
+			io_part.set_slot_color_left(slot, color)
 
 
 func number_parts():

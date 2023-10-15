@@ -77,7 +77,7 @@ func configure_pins():
 		var label_idx = 0
 		set_slot_enabled_left(slot_idx, true)
 		set_slot_type_left(slot_idx, BUS_TYPE)
-		set_slot_color_left(slot_idx, Color.hex(input.data.bus_color))
+		set_slot_color_left(slot_idx, input.data.bus_color)
 		get_child(slot_idx).get_child(0).text = input.data.labels[label_idx]
 		for n in input.data.num_wires:
 			slot_idx += 1
@@ -86,14 +86,14 @@ func configure_pins():
 			get_child(slot_idx).get_child(0).text = input.data.labels[label_idx]
 			set_slot_enabled_left(slot_idx, true)
 			set_slot_type_left(slot_idx, WIRE_TYPE)
-			set_slot_color_left(slot_idx, Color.hex(input.data.wire_color))
+			set_slot_color_left(slot_idx, input.data.wire_color)
 		slot_idx += 1
 	slot_idx = 1
 	for output in outputs:
 		var label_idx = 0
 		set_slot_enabled_right(slot_idx, true)
 		set_slot_type_right(slot_idx, BUS_TYPE)
-		set_slot_color_right(slot_idx, Color.hex(output.data.bus_color))
+		set_slot_color_right(slot_idx, output.data.bus_color)
 		get_child(slot_idx).get_child(1).text = output.data.labels[label_idx]
 		for n in output.data.num_wires:
 			slot_idx += 1
@@ -102,7 +102,7 @@ func configure_pins():
 			get_child(slot_idx).get_child(1).text = output.data.labels[label_idx]
 			set_slot_enabled_right(slot_idx, true)
 			set_slot_type_right(slot_idx, WIRE_TYPE)
-			set_slot_color_right(slot_idx, Color.hex(output.data.wire_color))
+			set_slot_color_right(slot_idx, output.data.wire_color)
 		slot_idx += 1
 
 

@@ -10,14 +10,14 @@ func _init():
 
 func _ready():
 	super()
-	$ColorRect.color = Color.hex(data.color)
-	$ColorPicker/M/ColorPicker.color = Color.hex(data.color)
+	$ColorRect.color = data.color
+	$ColorPicker/M/ColorPicker.color = data.color
 
 
 func _on_color_picker_changed_color(color):
 	data.color = color.to_rgba32()
 	set_slot_color_left(0, color)
-	controller.set_pin_colors(name, color.to_rgba32())
+	controller.set_pin_colors(name, color)
 	$ColorRect.color = color
 	changed()
 
