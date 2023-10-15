@@ -14,7 +14,7 @@ enum { MISC, GATE, CHIP, BLOCK }
 # Using a high threshold should be faster than introducing delays in the part
 # outputs.
 const RACE_COUNT_THRESHOLD = 128
-const DEBUG = true
+const DEBUG = false
 const FLIP_SIDES = [RIGHT, LEFT]
 
 # Part properties
@@ -71,7 +71,7 @@ func set_pin_value(side, port, value):
 	# value will be an int or a bool to handle a wire or a bus
 	# The function returns null if there was no change or the pin key
 	# This makes it easy to emit a signal or not to indicate a change
-	var key = [side, port]
+	var key = [side, int(port)]
 	if not pins.has(key):
 		pins[key] = null
 	if value == pins[key]:

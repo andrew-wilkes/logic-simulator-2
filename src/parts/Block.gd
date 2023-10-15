@@ -34,7 +34,7 @@ func block_setup():
 	# Every circuit opened as a block is added to the available parts list
 	var cname = circuit.data.title
 	if cname.is_empty():
-		cname = data.circuit_file.get_file()
+		cname = data.circuit_file.get_file().get_slice('.', 0)
 	if not G.settings.blocks.has(cname):
 		G.settings.blocks[cname] = data.circuit_file
 	for part in circuit.data.parts:
@@ -53,12 +53,13 @@ func block_setup():
 		# [part_name, port]
 		input_map.append([io_part.node_name, 0])
 		for n in io_part.data.num_wires:
-			input_map.append([io_part.node_name, n + 1])
+			# n is type float!
+			input_map.append([io_part.node_name, int(n + 1)])
 	for io_part in outputs:
 		# [part_name, port]
 		output_map.append([io_part.node_name, 0])
 		for n in io_part.data.num_wires:
-			output_map.append([io_part.node_name, n + 1])
+			output_map.append([io_part.node_name, int(n + 1)])
 	add_parts()
 
 
@@ -161,28 +162,41 @@ func add_parts():
 		parts[part.name] = part
 
 
-func get_map(side, port):
+func get_map(side: int, port: int):
 	return input_map[port] if side == LEFT else output_map[port]
 
 
 # Map external input to internal IO part
-func evaluate_output_level(side, port, level):
+func evaluate_output_level(input_side: int, port: int, level):
 	if DEBUG:
-		prints("block evaluate_output_level", self.name, side, port, level)
-	var map = get_map(side, port)
-	parts[map[PART]].update_output_level(FLIP_SIDES[side], map[PORT], level)
-	# Add code to update the output bus of this part
+		prints("block evaluate_output_level", self.name, input_side, port, level)
+	var map = get_map(input_side, port)
+	var part = parts[map[PART]]
+	var output_side = FLIP_SIDES[input_side]
+	part.update_output_level(output_side, map[PORT], level)
+	var value = 0
+	for n in part.data.num_wires:
+		value *= 2
+		value += int(part.pins.get([output_side, int(part.data.num_wires - n)], false))
+	part.evaluate_bus_output_value(input_side, 0, value, false)
 
 
 # Map external bus input to internal part
-func evaluate_bus_output_value(side, port, value):
+func evaluate_bus_output_value(side: int, port: int, value, update_levels = true):
 	var map = get_map(side, port)
 	# Flip the side to the output side
-	parts[map[PART]].update_output_value(FLIP_SIDES[side], map[PORT], value)
-	# Add code to update the output wires of this part
+	side = FLIP_SIDES[side]
+	var part = parts[map[PART]]
+	part.update_output_value(side, map[PORT], value)
+	if update_levels:
+		# This will ignore (clip) value bits above the range that the wires cover
+		for n in part.data.num_wires:
+			var level = bool(value % 2)
+			value /= 2
+			part.update_output_level(side, n + 1, level)
 
 
-func output_level_changed_handler(part, side, port, level):
+func output_level_changed_handler(part, side: int, port: int, level):
 	if DEBUG:
 		prints("block output_level_changed_handler", part.name, side, port, level)
 	var map_idx = [str(part.name), port] # part.name seems to be a pointer to a string
@@ -193,7 +207,19 @@ func output_level_changed_handler(part, side, port, level):
 		update_internal_input_level(part, side, port, level)
 
 
-func update_internal_input_level(part, side, port, level):
+func find_array(arr, a):
+	var idx = 0
+	for item in arr:
+		# For unknown reasons arr.find(a) doesn't work
+		# Also, comparing arrays doesn't work here either
+		prints(typeof(item[0]), typeof(item[1]), typeof(a[0]), typeof(a[1]))
+		if item[0] == a[0] and item[1] == a[1]:
+			return idx
+		idx += 1
+	return -1
+
+
+func update_internal_input_level(part, side: int, port: int, level):
 	if DEBUG:
 		prints("block update_internal_input_level", part.name, side, port, level)
 	var cons = part.connections.get([side, port])
@@ -221,7 +247,7 @@ func add_to_connections(part, key, value):
 		part.connections[key] = [value]
 
 
-func bus_value_changed_handler(part, side, port, value):
+func bus_value_changed_handler(part, side: int, port: int, value):
 	var map_idx = [str(part.name), port]
 	var port_idx = [input_map, output_map][side].find(map_idx)
 	if port_idx > -1:
@@ -230,7 +256,7 @@ func bus_value_changed_handler(part, side, port, value):
 		update_internal_bus_input_value(part, side, port, value)
 
 
-func update_internal_bus_input_value(part, side, port, value):
+func update_internal_bus_input_value(part, side: int, port: int, value):
 	var cons = part.connections.get([side, port])
 	if cons:
 		for connection in cons:
