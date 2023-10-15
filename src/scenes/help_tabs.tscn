@@ -69,15 +69,6 @@ IO parts also, capture and display values that they receive. The bus and wires o
 
 It is best practice to only use the bus input or wire inputs for an IO part to avoid them fighting over what is the input value. When manually entering values with the slider or buttons, the Range setting limits the maximum value.
 
-[b]Internal Operation[/b]
-Internally, the value is propagated as an integer on the bus lines and as bits on wires. 8 bits take 8 steps to fully apply to 8 wires connected to a part so this may cause up to 8 changes of a parts' output until it is stable. This affect is not seen by the user since it should be between frame updates of the display. It is like the propagation delay in real circuits but much more delayed.
-
-There is also detection for unstable circuits where the output is continually cycling and not stabilizing. This condition stops propagation of signals and an alert message is shown to the user with information as to what part and pin the problem was detected at. Hovering the mouse over a part reveals its' part number.
-
-A speed optimization that is used is to not propagate a level if there is no change to an input. An affect of this may be to not update a downstream wire color if its' color has been changed by the user. The speed of simulation will depend on circuit complexity and the speed of the computer being used, and what settings are applied to the circuit such as viewing logic levels and probing/displaying values.
-
-Circuits are saved as text-based JSON data with a .circ file extension. So it's possible to edit and view the files in external text editors. Also, external tools could be used to generate or process these files.
-
 [b]Part Numbering[/b]
 When parts are added, they are given an internal part number that is displayed when hovering the mouse over a part. This is the number displayed in any error message or saved with the circuit. But, there is a Tool available to automtically number parts in a more normal way and it also sets the part tags with these numbers. Or the user may label the parts by editing the tag text labels.
 
@@ -89,4 +80,54 @@ The circuit has an editable Title label which is saved with the circuit and used
 The New button erases the circuit, Save saves to the current file or initiates the SaveAs dialog, and Load is used to open a saved circuit. Load as block inserts a block part into the current circuit. The Tools menu is available for tasks such as numbering parts. Settings are saved and loaded with the software. Circuits are saved with the schematic settings, part settings, connections, and data such as colors.
 
 Quit the App. by pressing the Esc key. This prompts you to save the cicuit if unsaved changes exist. Unsaved changes are indicated by a red color of the file name.
+"
+
+[node name="Shortcuts" type="MarginContainer" parent="."]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="RichText" type="RichTextLabel" parent="Shortcuts"]
+layout_mode = 2
+theme_override_colors/default_color = Color(0.152941, 0.152941, 0.152941, 1)
+bbcode_enabled = true
+text = "[b]Keyboard Shortcuts[/b]
+
+Esc - Quit the program
+
+N - New circuit (wipe the current circuit and start a new one)
+
+S - Save the circuit or open the SaveAs popup panel
+
+O or L - Open the panel for Loading circuits
+
+P - open the Part selection panel
+
+T - open the Tool menu
+
+H - open the Help panel"
+
+[node name="Technicalities" type="MarginContainer" parent="."]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="RichText" type="RichTextLabel" parent="Technicalities"]
+layout_mode = 2
+theme_override_colors/default_color = Color(0.152941, 0.152941, 0.152941, 1)
+bbcode_enabled = true
+text = "[b]Internal Operation[/b]
+Internally, the value is propagated as an integer on the bus lines and as bits on wires. 8 bits take 8 steps to fully apply to 8 wires connected to a part so this may cause up to 8 changes of a parts' output until it is stable. This affect is not seen by the user since it should be between frame updates of the display. It is like the propagation delay in real circuits but much more delayed.
+
+There is also detection for unstable circuits where the output is continually cycling and not stabilizing. This condition stops propagation of signals and an alert message is shown to the user with information as to what part and pin the problem was detected at. Hovering the mouse over a part reveals its' part number.
+
+A speed optimization that is used is to not propagate a level if there is no change to an input. An affect of this may be to not update a downstream wire color if its' color has been changed by the user. The speed of simulation will depend on circuit complexity and the speed of the computer being used, and what settings are applied to the circuit such as viewing logic levels and probing/displaying values.
+
+Circuits are saved as text-based JSON data with a .circ file extension. So it's possible to edit and view the files in external text editors. Also, external tools could be used to generate or process these files.
 "
