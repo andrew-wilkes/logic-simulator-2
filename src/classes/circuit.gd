@@ -43,6 +43,7 @@ func save_data(file_name, check_if_exists = false):
 		if save_file:
 			var json_string = JSON.stringify(data, "\t")
 			save_file.store_line(json_string)
+			data.saved_to = file_name
 	return error
 
 

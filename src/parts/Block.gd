@@ -207,18 +207,6 @@ func output_level_changed_handler(part, side: int, port: int, level):
 		update_internal_input_level(part, side, port, level)
 
 
-func find_array(arr, a):
-	var idx = 0
-	for item in arr:
-		# For unknown reasons arr.find(a) doesn't work
-		# Also, comparing arrays doesn't work here either
-		prints(typeof(item[0]), typeof(item[1]), typeof(a[0]), typeof(a[1]))
-		if item[0] == a[0] and item[1] == a[1]:
-			return idx
-		idx += 1
-	return -1
-
-
 func update_internal_input_level(part, side: int, port: int, level):
 	if DEBUG:
 		prints("block update_internal_input_level", part.name, side, port, level)

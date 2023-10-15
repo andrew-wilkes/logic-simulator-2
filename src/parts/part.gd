@@ -60,7 +60,7 @@ func update_input_level(side, port, level):
 		if race_counter.has(key):
 			race_counter[key] += 1
 			if race_counter[key] == RACE_COUNT_THRESHOLD:
-				controller.unstable_handler(name, side, port)
+				controller.unstable_handler(self, side, port)
 				return
 		else:
 			race_counter[key] = 1
