@@ -10,7 +10,6 @@ offset_top = 22.0
 offset_right = 103.0
 offset_bottom = 117.0
 mouse_filter = 1
-theme_override_constants/separation = 10
 theme_override_constants/port_offset = -4
 theme_override_styles/frame = ExtResource("1_a4lvo")
 theme_override_styles/selected_frame = ExtResource("2_ns2fs")

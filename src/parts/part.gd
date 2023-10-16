@@ -50,6 +50,8 @@ func _ready():
 	get_child(0).add_child(change_notification_timer)
 	change_notification_timer.one_shot = true
 	change_notification_timer.connect("timeout", _on_change_notification_timer_timeout)
+	set("theme_override_constants/separation", 10)
+	set("theme_override_constants/port_offset", -6)
 
 
 func update_input_level(side, port, level):
