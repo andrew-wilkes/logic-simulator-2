@@ -13,4 +13,4 @@ func evaluate_output_level(side, _port, _level):
 		var input = pins[[side, 0]]
 		var sel = pins[[side, 1]]
 		update_output_level(RIGHT, 0, 0 if sel else input)
-		update_output_level(RIGHT, 1, input if sel else 0)
+		update_output_level(RIGHT, 1, input if sel else false)

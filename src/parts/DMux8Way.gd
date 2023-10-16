@@ -16,4 +16,4 @@ func evaluate_output_level(side, _port, _level):
 			sel *= 2
 			sel += int(pins[[side, n + 1]])
 		for n in 8:
-			update_output_level(RIGHT, n, input if sel == n else 0)
+			update_output_level(RIGHT, n, input if sel == n else false)
