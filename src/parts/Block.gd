@@ -34,6 +34,7 @@ func block_setup():
 	# Every circuit opened as a block is added to the available parts list
 	var cname = circuit.data.title
 	if cname.is_empty():
+		# Use the file name without the extension
 		cname = data.circuit_file.get_file().get_slice('.', 0)
 	if not G.settings.blocks.has(cname):
 		G.settings.blocks[cname] = data.circuit_file
@@ -54,6 +55,7 @@ func block_setup():
 		input_map.append([io_part.node_name, 0])
 		for n in io_part.data.num_wires:
 			# n is type float!
+			# We use arrays as dictionary keys, so the data types in the array must be as expected
 			input_map.append([io_part.node_name, int(n + 1)])
 	for io_part in outputs:
 		# [part_name, port]
@@ -64,7 +66,7 @@ func block_setup():
 
 
 func _ready():
-	super()
+	super() # It's easy to forget to call the parent _ready code to add the Tag etc.
 	block_setup()
 	set_slots(max(input_pin_count, output_pin_count))
 	configure_pins()
@@ -142,7 +144,7 @@ func set_slots(num_slots):
 			var node_to_remove = get_child(-2 - n)
 			remove_child(node_to_remove)
 			node_to_remove.queue_free()
-	# Shrinking leaves a gap at the bottom
+	# Shrinking leaves a gap at the bottom, so fix it with:
 	size = Vector2.ZERO # Fit to the new size automatically
 
 
@@ -152,7 +154,7 @@ func add_parts():
 		part.tag = node.tag
 		part.part_type = node.part_type
 		part.data = node.data
-		# Part instances have a name but only circuit.data.parts have node_name
+		# Part instances have a name but circuit.data.parts store the name as node_name
 		part.name = node.node_name
 		part.show_display = false
 		part.controller = self
@@ -174,6 +176,7 @@ func evaluate_output_level(input_side: int, port: int, level):
 	var part = parts[map[PART]]
 	var output_side = FLIP_SIDES[input_side]
 	part.update_output_level(output_side, map[PORT], level)
+	# Update the bus
 	var value = 0
 	for n in part.data.num_wires:
 		value *= 2

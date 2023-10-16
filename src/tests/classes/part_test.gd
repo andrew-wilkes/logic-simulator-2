@@ -5,7 +5,7 @@ extends GdUnitTestSuite
 @warning_ignore('return_value_discarded')
 
 # TestSuite generated from
-const __source = 'res://parts/part.gd'
+const __source = 'res://classes/part.gd'
 
 func test_reset_race_counter() -> void:
 	var part = Part.new()
