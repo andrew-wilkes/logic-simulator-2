@@ -1,0 +1,174 @@
+[gd_scene load_steps=4 format=3 uid="uid://djv0c7ers1pj5"]
+
+[ext_resource type="StyleBox" uid="uid://6ey1ulrt3occ" path="res://assets/parts/frame.stylebox" id="1_xrwsa"]
+[ext_resource type="StyleBox" uid="uid://b51cf2x3pfpfk" path="res://assets/parts/selected-frame.stylebox" id="2_7mr4t"]
+[ext_resource type="Script" path="res://parts/ALU.gd" id="3_0r6c3"]
+
+[node name="ALU" type="GraphNode"]
+offset_left = 32.0
+offset_top = 22.0
+offset_right = 103.0
+offset_bottom = 117.0
+mouse_filter = 1
+theme_override_constants/port_offset = -4
+theme_override_styles/frame = ExtResource("1_xrwsa")
+theme_override_styles/selected_frame = ExtResource("2_7mr4t")
+title = "  ALU"
+slot/0/left_enabled = false
+slot/0/left_type = 1
+slot/0/left_color = Color(0, 0, 1, 1)
+slot/0/left_icon = null
+slot/0/right_enabled = false
+slot/0/right_type = 1
+slot/0/right_color = Color(0, 0, 1, 1)
+slot/0/right_icon = null
+slot/0/draw_stylebox = true
+slot/1/left_enabled = true
+slot/1/left_type = 1
+slot/1/left_color = Color(1, 1, 0, 1)
+slot/1/left_icon = null
+slot/1/right_enabled = true
+slot/1/right_type = 1
+slot/1/right_color = Color(1, 1, 0, 1)
+slot/1/right_icon = null
+slot/1/draw_stylebox = true
+slot/2/left_enabled = true
+slot/2/left_type = 1
+slot/2/left_color = Color(1, 1, 0, 1)
+slot/2/left_icon = null
+slot/2/right_enabled = true
+slot/2/right_type = 0
+slot/2/right_color = Color(1, 1, 1, 1)
+slot/2/right_icon = null
+slot/2/draw_stylebox = true
+slot/3/left_enabled = true
+slot/3/left_type = 0
+slot/3/left_color = Color(1, 1, 1, 1)
+slot/3/left_icon = null
+slot/3/right_enabled = true
+slot/3/right_type = 0
+slot/3/right_color = Color(1, 1, 1, 1)
+slot/3/right_icon = null
+slot/3/draw_stylebox = true
+slot/4/left_enabled = true
+slot/4/left_type = 0
+slot/4/left_color = Color(1, 1, 1, 1)
+slot/4/left_icon = null
+slot/4/right_enabled = false
+slot/4/right_type = 0
+slot/4/right_color = Color(1, 1, 1, 1)
+slot/4/right_icon = null
+slot/4/draw_stylebox = true
+slot/5/left_enabled = true
+slot/5/left_type = 0
+slot/5/left_color = Color(1, 1, 1, 1)
+slot/5/left_icon = null
+slot/5/right_enabled = false
+slot/5/right_type = 0
+slot/5/right_color = Color(1, 1, 1, 1)
+slot/5/right_icon = null
+slot/5/draw_stylebox = true
+slot/6/left_enabled = true
+slot/6/left_type = 0
+slot/6/left_color = Color(1, 1, 1, 1)
+slot/6/left_icon = null
+slot/6/right_enabled = false
+slot/6/right_type = 0
+slot/6/right_color = Color(1, 1, 1, 1)
+slot/6/right_icon = null
+slot/6/draw_stylebox = true
+slot/7/left_enabled = true
+slot/7/left_type = 0
+slot/7/left_color = Color(1, 1, 1, 1)
+slot/7/left_icon = null
+slot/7/right_enabled = false
+slot/7/right_type = 0
+slot/7/right_color = Color(1, 1, 1, 1)
+slot/7/right_icon = null
+slot/7/draw_stylebox = true
+slot/8/left_enabled = true
+slot/8/left_type = 0
+slot/8/left_color = Color(1, 1, 1, 1)
+slot/8/left_icon = null
+slot/8/right_enabled = false
+slot/8/right_type = 0
+slot/8/right_color = Color(1, 1, 1, 1)
+slot/8/right_icon = null
+slot/8/draw_stylebox = true
+slot/9/left_enabled = false
+slot/9/left_type = 0
+slot/9/left_color = Color(1, 1, 1, 1)
+slot/9/left_icon = null
+slot/9/right_enabled = false
+slot/9/right_type = 0
+slot/9/right_color = Color(1, 1, 1, 1)
+slot/9/right_icon = null
+slot/9/draw_stylebox = true
+script = ExtResource("3_0r6c3")
+
+[node name="Sp" type="Control" parent="."]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="HB" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="L1" type="Label" parent="HB"]
+layout_mode = 2
+text = "x"
+
+[node name="L2" type="Label" parent="HB"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "out"
+horizontal_alignment = 2
+
+[node name="HB2" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="L1" type="Label" parent="HB2"]
+layout_mode = 2
+text = "y"
+
+[node name="L2" type="Label" parent="HB2"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "zr"
+horizontal_alignment = 2
+
+[node name="HB3" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="L1" type="Label" parent="HB3"]
+layout_mode = 2
+text = "zx"
+
+[node name="L2" type="Label" parent="HB3"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "ng"
+horizontal_alignment = 2
+
+[node name="L" type="Label" parent="."]
+layout_mode = 2
+text = "nx"
+
+[node name="L2" type="Label" parent="."]
+layout_mode = 2
+text = "zy"
+
+[node name="L3" type="Label" parent="."]
+layout_mode = 2
+text = "ny"
+
+[node name="L4" type="Label" parent="."]
+layout_mode = 2
+text = "f"
+
+[node name="L5" type="Label" parent="."]
+layout_mode = 2
+text = "no"
+
+[node name="Tag" type="LineEdit" parent="."]
+layout_mode = 2
+expand_to_text_length = true
