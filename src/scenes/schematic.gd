@@ -121,6 +121,7 @@ func duplicate_selected_parts():
 func add_part_by_name(part_name):
 	var part = Parts.scenes[part_name].instantiate()
 	add_part(part)
+	grab_focus()
 
 
 func add_part(part):
@@ -147,6 +148,7 @@ func add_block(file_name):
 		var block = Parts.scenes["Block"].instantiate()
 		block.data.circuit_file = file_name
 		add_part(block)
+	grab_focus()
 
 
 # Avoid overlapping parts that are added via the menu
