@@ -22,6 +22,10 @@ config/icon="res://assets/ui/icon.png"
 Parts="*res://parts.gd"
 G="*res://global.gd"
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/gdUnit4/plugin.cfg")
+
 [gdunit4]
 
 settings/test/test_root_folder="tests"
