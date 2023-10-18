@@ -6,7 +6,7 @@ var value = 0
 
 func _init():
 	order = 80
-	category = CHIP
+	category = SYNC
 
 
 func evaluate_output_level(side, port, level):

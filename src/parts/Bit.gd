@@ -7,7 +7,7 @@ var state = false
 func _init():
 	order = 90
 	pins = { [0, 0]: false, [0, 1]: false }
-	category = CHIP
+	category = SYNC
 
 
 func evaluate_output_level(side, port, level):

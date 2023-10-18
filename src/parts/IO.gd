@@ -23,7 +23,7 @@ func _init():
 		"labels": ["- Data -", "- D0 -"],
 		"range": 0xff
 	}
-	category = MISC
+	category = UTILITY
 	order = 100
 
 

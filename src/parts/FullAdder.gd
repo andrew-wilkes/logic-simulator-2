@@ -5,7 +5,7 @@ extends Part
 func _init():
 	pins = { [0, 0]: false, [0, 1]: false, [0, 2]: false }
 	order = 80
-	category = GATE
+	category = ASYNC
 
 
 func evaluate_output_level(side, _port, _level):

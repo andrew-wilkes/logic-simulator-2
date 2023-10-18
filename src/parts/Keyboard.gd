@@ -6,7 +6,7 @@ var last_text_length = 0
 
 func _init():
 	order = 0
-	category = MISC
+	category = UTILITY
 
 
 func _on_chars_text_changed(new_text):

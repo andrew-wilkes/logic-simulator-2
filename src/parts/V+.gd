@@ -3,7 +3,7 @@ extends Part
 class_name Vcc
 
 func _init():
-	category = MISC
+	category = UTILITY
 	order = 90
 
 

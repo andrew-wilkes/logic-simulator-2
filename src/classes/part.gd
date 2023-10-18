@@ -6,7 +6,7 @@ extends GraphNode
 
 enum { LEFT, RIGHT }
 enum { WIRE_TYPE, BUS_TYPE }
-enum { MISC, GATE, CHIP, BLOCK }
+enum { UTILITY, ASYNC, SYNC, BLOCK }
 
 # This is based on the number of bits that may change per update of the value.
 # The value is applied bit by bit so a stable state is reached after all of
@@ -20,7 +20,7 @@ const FLIP_SIDES = [RIGHT, LEFT]
 # Part properties
 var tag = ""
 var part_type = ""
-var category = GATE
+var category = ASYNC
 var order = 0
 var data = {}
 var show_display = true
