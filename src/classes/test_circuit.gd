@@ -1,4 +1,4 @@
-class_name Test
+class_name TestCircuit
 
 # This class is used to test cicuits
 # Tests are described in .tst files in the www.nand2tetris.org format

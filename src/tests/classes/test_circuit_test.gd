@@ -1,15 +1,15 @@
 # GdUnit generated TestSuite
-class_name TestTest
+class_name TestTestCircuit
 extends GdUnitTestSuite
 @warning_ignore('unused_parameter')
 @warning_ignore('return_value_discarded')
 
 # TestSuite generated from
-const __source = 'res://classes/test.gd'
+const __source = 'res://classes/test_circuit.gd'
 
 
-func test_run_tests() -> void:
-	var test = Test.new()
+func test_circuit_run_tests() -> void:
+	var test = TestCircuit.new()
 	var _spec = "// This file is part of www.nand2tetris.org
 // and the book \"The Elements of Computing Systems\"
 // by Nisan and Schocken, MIT Press.
@@ -46,25 +46,25 @@ output;
 
 
 func test_format_value() -> void:
-	var test = Test.new()
-	assert_str(test.format_value(10, "S", 4)).is_equal("10  ")
-	assert_str(test.format_value(10, "D", 3)).is_equal("10 ")
-	assert_str(test.format_value(10, "X", 4)).is_equal("000A")
-	assert_str(test.format_value(21, "B", 8)).is_equal("00010101")
-	test.free()
+	var test_circuit = TestCircuit.new()
+	assert_str(test_circuit.format_value(10, "S", 4)).is_equal("10  ")
+	assert_str(test_circuit.format_value(10, "D", 3)).is_equal("10 ")
+	assert_str(test_circuit.format_value(10, "X", 4)).is_equal("000A")
+	assert_str(test_circuit.format_value(21, "B", 8)).is_equal("00010101")
+	test_circuit.free()
 
 
 func test_get_output_header() -> void:
-	var test = Test.new()
+	var test_circuit = TestCircuit.new()
 	var output_pins = ["a", "b"]
 	var output_formats = ["B1.3.1", "D2.4.3"]
-	assert_str(test.get_output_header(output_pins, output_formats)).is_equal("|  a  |    b    |\n")
-	test.free()
+	assert_str(test_circuit.get_output_header(output_pins, output_formats)).is_equal("|  a  |    b    |\n")
+	test_circuit.free()
 
 
 func test_get_output_results() -> void:
-	var test = Test.new()
+	var test_circuit = TestCircuit.new()
 	var results = [[1,10,3,0]]
 	var output_formats = ["D1.3.1", "X1.1.1", "B1.4.1", ""]
-	assert_str(test.get_output_results("", results, output_formats)).is_equal("| 1   | A | 0011 | 0 |\n")
-	test.free()
+	assert_str(test_circuit.get_output_results("", results, output_formats)).is_equal("| 1   | A | 0011 | 0 |\n")
+	test_circuit.free()
