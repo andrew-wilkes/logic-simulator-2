@@ -1,4 +1,23 @@
-Maybe use a color pallete for setting wire colors?
+Running Tests
+
+Set a "Tests" folder path in the settings.
+	Have a folder selection popup.
+
+Add "Run Test" menu item to Tools.
+The circuit title should match the test file name e.g. AND => AND.tst
+Warnings are produced for:
+	No test folder has been set.
+	Circuit has no title.
+	Test file not found.
+	Compare file not found.
+	Circuit is missing IO pins.
+
+After the tests are applied, a summary window is popped up with a report.
+
+Circuits could be have a data parameter to record test status.
+
+----
+Maybe use a color pallete for setting wire colors? - Enable recent colors in Color selector.
 
 --- Bugs ---
 Duplicate of expanded IO part results in extra LineEdit child node being added to the part. But a work-around has been added.
