@@ -4,7 +4,7 @@ class_name NOT
 extends Part
 
 func _init():
-	order = 90
+	order = 900
 
 
 func evaluate_output_level(side, _port, level):

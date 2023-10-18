@@ -5,8 +5,8 @@ extends Part
 var last_text_length = 0
 
 func _init():
-	order = 80
-	category = CHIP
+	order = 0
+	category = MISC
 
 
 func _on_chars_text_changed(new_text):

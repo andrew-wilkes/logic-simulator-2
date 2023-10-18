@@ -151,16 +151,17 @@ access = 2
 filters = PackedStringArray("*.circ ; Circuit files")
 
 [node name="PartListPanel" type="PopupPanel" parent="."]
-title = "Available Parts"
-size = Vector2i(600, 400)
+title = "Part Menu"
+position = Vector2i(0, 36)
+size = Vector2i(800, 600)
 unresizable = false
 borderless = false
 
 [node name="PartList" parent="PartListPanel" instance=ExtResource("5_3p0gq")]
 offset_left = 4.0
 offset_top = 4.0
-offset_right = 596.0
-offset_bottom = 396.0
+offset_right = -4.0
+offset_bottom = -4.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -183,8 +184,8 @@ borderless = false
 [node name="HelpTabs" parent="HelpPanel" instance=ExtResource("7_qqehi")]
 offset_left = 4.0
 offset_top = 4.0
-offset_right = 796.0
-offset_bottom = 496.0
+offset_right = -4.0
+offset_bottom = -4.0
 
 [node name="LearnPanel" type="PopupPanel" parent="."]
 title = "Learn"

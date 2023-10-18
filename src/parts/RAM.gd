@@ -9,7 +9,7 @@ var old_address = 0
 
 func _init():
 	order = 80
-	category = CHIP
+	category = GATE
 	data["bits"] = 16
 	data["size"] = "8K"
 

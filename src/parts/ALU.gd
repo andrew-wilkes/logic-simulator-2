@@ -4,7 +4,7 @@ extends Part
 
 func _init():
 	order = 80
-	category = CHIP
+	category = GATE
 	pins = { [0, 0]: 0, [0, 1]: 0 }
 	for n in 6:
 		pins[[0, n + 2]] = false

@@ -6,7 +6,7 @@ var ab = [0, 0]
 
 func _init():
 	order = 80
-	category = CHIP
+	category = GATE
 
 
 func evaluate_bus_output_value(side, port, value):

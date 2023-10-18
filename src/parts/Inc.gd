@@ -6,7 +6,7 @@ var max_value = 0
 
 func _init():
 	order = 80
-	category = CHIP
+	category = GATE
 	data["bits"] = 16
 
 

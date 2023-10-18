@@ -4,7 +4,7 @@ extends Part
 
 func _init():
 	order = 80
-	category = CHIP
+	category = GATE
 
 
 func evaluate_bus_output_value(side, _port, value):

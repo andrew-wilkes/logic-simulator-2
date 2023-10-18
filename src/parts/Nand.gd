@@ -4,7 +4,7 @@ extends Part
 
 func _init():
 	pins = { [0, 0]: false, [0, 1]: false }
-	order = 100
+	order = 1000
 
 
 func evaluate_output_level(side, _port, level):
