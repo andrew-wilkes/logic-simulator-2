@@ -106,6 +106,40 @@ func run_tests(spec: String, inputs, outputs):
 	return output
 
 
+func parse_spec(spec: String):
+	# Convert spec to a string without comments or line breaks
+	var lines = spec.replace("\r", "").split("\n", false)
+	var clean_lines = []
+	for line in lines:
+		# Remove comments
+		var pos = line.find("\\")
+		if pos >= 0:
+			line = line.left(pos)
+		clean_lines.append(line)
+	spec = "".join(clean_lines)
+"""
+		# Get keyword at start of line
+		pos = line.find(" ")
+		if pos >= 0:
+			var word = line.substr(0, pos)
+			match word:
+				"set":
+					pass
+				"load":
+					pass
+				"output-file":
+					pass
+				"compare-to":
+					pass
+				"output-list":
+					pass
+				"output":
+					pass
+				"repeat":
+					pass
+"""
+
+
 func get_output_header(output_pins, output_formats):
 	# Form the top line like: |   a   |   b   | out |
 	var output = "|"
