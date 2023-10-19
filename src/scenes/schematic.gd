@@ -419,3 +419,26 @@ func number_parts():
 func set_circuit_title(text):
 	circuit.data.title = text
 	emit_signal("changed")
+
+
+func test_circuit():
+	if circuit.data.title.is_empty():
+		emit_signal("warning", "No circuit title has been set.")
+	else:
+		var test_file = circuit.data.title + ".tst"
+		# Find dir containing this file
+		var result = G.find_file(G.settings.test_dir, test_file)
+		if result.error:
+			emit_signal("warning", "File not found: " + test_file)
+		else:
+			print(result)
+			var test = TestCircuit.new()
+			var io_nodes = test.get_io_nodes(get_children(), get_connection_list())
+			var file = FileAccess.open(result.path + "/" + test_file, FileAccess.READ)
+			if file:
+					var test_spec = file.get_as_text()
+					result = test.run_tests(test_spec, io_nodes[0], io_nodes[1])
+					print(result)
+			else:
+				emit_signal("warning", "Error opening file: " + test_file)
+			test.free()

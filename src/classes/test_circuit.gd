@@ -11,6 +11,8 @@ func get_io_nodes(parts, connections):
 	var inputs = {}
 	var outputs = {}
 	for part in parts:
+		if not part is Part:
+			continue
 		var num_inputs = part.get_connection_input_count()
 		var used_ports = []
 		for con in connections:
@@ -22,7 +24,7 @@ func get_io_nodes(parts, connections):
 			var type = part.get_connection_input_type(port)
 			inputs[get_label_text(part, 0, port)] = [part, port, type]
 		
-		var num_outputs = part.get_connection_input_count()
+		var num_outputs = part.get_connection_output_count()
 		used_ports = []
 		for con in connections:
 			if con.from == part.name:
@@ -50,11 +52,13 @@ func run_tests(spec: String, inputs, outputs):
 	
 	# Get the output pin names of interest
 	var tokens = output_format.split(" ", false)
-	var output_pins = []
+	var output_pins = [] # The pins to output in the report (not all are part outputs)
+	var pin_values = {}
 	var output_formats = []
 	for token in tokens:
 		var pf = token.split("%") # [pin_name, format]
 		output_pins.append(pf[0])
+		pin_values[pf[0]] = "-"
 		output_formats.append(pf[1])
 	
 	var output = get_output_header(output_pins, output_formats)
@@ -68,12 +72,10 @@ func run_tests(spec: String, inputs, outputs):
 		end = spec.find(";", start)
 		if end < 0: # This should not occur
 			break
-		tests.append(spec.substr(start, end - start).replace(" ", "").replace("\n", ""))
+		tests.append(spec.substr(start, end - start).strip_escapes())
 	
 	# Run the tests
-	var results = []
 	for test in tests:
-		var pin_values = []
 		var steps = test.split(",", false)
 		for step in steps:
 			tokens = step.split(" ", false)
@@ -84,11 +86,11 @@ func run_tests(spec: String, inputs, outputs):
 						tokens.resize(3)
 						var pin_name = tokens[1]
 						var value = int(tokens[2])
-						pin_values.append(value)
 						if inputs.has(pin_name):
+							pin_values[pin_name] = value
 							var target = inputs[pin_name] # [part, port, port_type]
 							if target[2] == 0: # Wire
-								target[0].update_input_level(0, target[1], value == "1")
+								target[0].update_input_level(0, target[1], value == 1)
 							else: #Bus
 								target[0].update_bus_input_value(0, target[1], value)
 					"eval":
@@ -98,13 +100,9 @@ func run_tests(spec: String, inputs, outputs):
 								var target = outputs[pin]
 								var pin_key = [1, target[1]] # [side, port]
 								# Cast bools to int and set the value to 0 if the pin has not been touched
-								pin_values.append(int(target[0].pins.get(pin_key, 0)))
-							else:
-								# Even if the pin is not found, add zero as the result value
-								pin_values.append(0)
-						results.append(pin_values)
+								pin_values[pin] = int(target[0].pins.get(pin_key, 0))
 					"output":
-						get_output_results(output, results, output_formats)
+						output += get_output_result(output_pins, pin_values, output_formats)
 	return output
 
 
@@ -122,24 +120,24 @@ func get_output_header(output_pins, output_formats):
 	return output + "\n"
 
 
-func get_output_results(output, results, output_formats):
-	# Add the result lines to output
-	for result in results:
-		output += "|"
-		for idx in output_formats.size():
-			# Format string: (S|B|D|X)PadL.Length.PadR
-			var format = output_formats[idx]
-			if format.length() == 0:
-				format = "B1.1.1" # Default value
-			var widths = format.right(-1).split(".")
-			widths.resize(3) # There should be 3 values: PadL.Length.PadR
-			var value = format_value(int(result[idx]), format[0], int(widths[1]))
-			output += value.lpad(int(widths[0]) + value.length()) + " ".repeat(int(widths[2])) + "|"
-		output += "\n"
-	return output
+func get_output_result(output_pins, values, output_formats):
+	# Add the result line to output
+	var output = "|"
+	for idx in output_pins.size():
+		# Format string: (S|B|D|X)PadL.Length.PadR
+		var format = output_formats[idx]
+		if format.length() == 0:
+			format = "B1.1.1" # Default value
+		var widths = format.right(-1).split(".")
+		widths.resize(3) # There should be 3 values: PadL.Length.PadR
+		var value = format_value(values[output_pins[idx]], format[0], int(widths[1]))
+		output += value.lpad(int(widths[0]) + value.length()) + " ".repeat(int(widths[2])) + "|"
+	return output + "\n"
 
 
 func format_value(value, format, width):
+	if value is String:
+		format = "S"
 	match format:
 		"S", "D":
 			value = str(value).rpad(width, " ")

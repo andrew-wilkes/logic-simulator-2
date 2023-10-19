@@ -1,6 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://0xeyeylg8w8k"]
+[gd_scene load_steps=3 format=3 uid="uid://0xeyeylg8w8k"]
 
 [ext_resource type="Script" path="res://scenes/settings_panel.gd" id="1_x0rhh"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_22jbw"]
+bg_color = Color(0.152941, 0.152941, 0.152941, 1)
 
 [node name="SettingsPanel" type="MarginContainer"]
 offset_right = 40.0
@@ -57,13 +60,45 @@ layout_mode = 2
 layout_mode = 2
 text = "Logic high color"
 
+[node name="VB" type="VBoxContainer" parent="HBox/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="Label2" type="Label" parent="HBox/VBox/VB"]
+layout_mode = 2
+text = "Test File Directory"
+
+[node name="HB3" type="HBoxContainer" parent="HBox/VBox/VB"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="TestDir" type="Label" parent="HBox/VBox/VB/HB3"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/normal = SubResource("StyleBoxFlat_22jbw")
+autowrap_mode = 1
+
+[node name="TestDirButton" type="Button" parent="HBox/VBox/VB/HB3"]
+layout_mode = 2
+text = "Set"
+
 [node name="ColorPicker" type="ColorPicker" parent="HBox"]
 layout_mode = 2
 can_add_swatches = false
 presets_visible = false
 
+[node name="DirectoryPicker" type="FileDialog" parent="."]
+title = "Choose a Directory"
+size = Vector2i(900, 500)
+ok_button_text = "Select This Folder"
+file_mode = 2
+access = 2
+
 [connection signal="pressed" from="HBox/VBox/IndicateFrom" to="." method="_on_indicate_from_pressed"]
 [connection signal="pressed" from="HBox/VBox/IndicateTo" to="." method="_on_indicate_to_pressed"]
 [connection signal="gui_input" from="HBox/VBox/HB/LowColor" to="." method="_on_low_color_gui_input"]
 [connection signal="gui_input" from="HBox/VBox/HB2/HighColor" to="." method="_on_high_color_gui_input"]
+[connection signal="pressed" from="HBox/VBox/VB/HB3/TestDirButton" to="." method="_on_test_dir_button_pressed"]
 [connection signal="color_changed" from="HBox/ColorPicker" to="." method="_on_color_picker_color_changed"]
+[connection signal="dir_selected" from="DirectoryPicker" to="." method="_on_directory_picker_dir_selected"]

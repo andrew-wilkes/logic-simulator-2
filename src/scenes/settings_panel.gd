@@ -12,7 +12,7 @@ func _ready():
 	%LowColor.color = G.settings.logic_low_color
 	%HighColor.color = G.settings.logic_high_color
 	$HBox/ColorPicker.color = G.settings.logic_low_color
-
+	%TestDir.text = G.settings.test_dir
 
 func _on_low_color_gui_input(event):
 	if event is InputEventMouseButton:
@@ -45,3 +45,13 @@ func _on_indicate_from_pressed():
 func _on_indicate_to_pressed():
 	G.settings.indicate_to_levels = %IndicateTo.button_pressed
 	emit_signal("level_indication_changed")
+
+
+func _on_test_dir_button_pressed():
+	$DirectoryPicker.current_dir = G.settings.last_dir
+	$DirectoryPicker.popup_centered()
+
+
+func _on_directory_picker_dir_selected(dir):
+	%TestDir.text = dir
+	G.settings.test_dir = dir

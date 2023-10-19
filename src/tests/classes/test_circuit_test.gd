@@ -62,9 +62,9 @@ func test_get_output_header() -> void:
 	test_circuit.free()
 
 
-func test_get_output_results() -> void:
+func test_get_output_result() -> void:
 	var test_circuit = TestCircuit.new()
-	var results = [[1,10,3,0]]
+	var result = [[1,10,3,0]]
 	var output_formats = ["D1.3.1", "X1.1.1", "B1.4.1", ""]
-	assert_str(test_circuit.get_output_results("", results, output_formats)).is_equal("| 1   | A | 0011 | 0 |\n")
+	assert_str(test_circuit.get_output_results("", result, output_formats)).is_equal("| 1   | A | 0011 | 0 |\n")
 	test_circuit.free()

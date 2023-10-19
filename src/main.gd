@@ -9,6 +9,7 @@ var schematic
 func _ready():
 	schematic = $VB/Schematic
 	%ToolsButton.get_popup().add_item("Number parts")
+	%ToolsButton.get_popup().add_item("Test circuit")
 	%ToolsButton.get_popup().index_pressed.connect(tool_action)
 	schematic.warning.connect($WarningPanel.open)
 	schematic.changed.connect(set_current_file_color)
@@ -26,6 +27,12 @@ func tool_action(idx):
 	match idx:
 		0:
 			schematic.number_parts()
+		1:
+			# Test circuit
+			if G.settings.test_dir.is_empty():
+				$WarningPanel.open("Test file directory has not been set in settings.")
+			else:
+				schematic.test_circuit()
 
 #### FILE CODE ####
 

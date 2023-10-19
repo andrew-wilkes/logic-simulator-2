@@ -1,9 +1,10 @@
-[gd_scene load_steps=10 format=3 uid="uid://eohxndqnij0x"]
+[gd_scene load_steps=11 format=3 uid="uid://eohxndqnij0x"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_7i1tr"]
 [ext_resource type="PackedScene" uid="uid://cq3v3io0y1kms" path="res://scenes/schematic.tscn" id="2_qticl"]
 [ext_resource type="Script" path="res://scenes/WarningPanel.gd" id="4_u4i6y"]
 [ext_resource type="PackedScene" uid="uid://cbivksj5j1nmb" path="res://scenes/part_list.tscn" id="5_3p0gq"]
+[ext_resource type="StyleBox" uid="uid://b4ts0xs184cax" path="res://assets/ui/popup-panel.stylebox" id="5_lbacc"]
 [ext_resource type="PackedScene" uid="uid://0xeyeylg8w8k" path="res://scenes/settings_panel.tscn" id="6_t623a"]
 [ext_resource type="PackedScene" uid="uid://b1a77l6rte3i" path="res://scenes/help_tabs.tscn" id="7_qqehi"]
 [ext_resource type="PackedScene" uid="uid://cvfhme8tmg2c5" path="res://scenes/about_tabs.tscn" id="8_2rex3"]
@@ -160,20 +161,20 @@ borderless = false
 [node name="PartList" parent="PartListPanel" instance=ExtResource("5_3p0gq")]
 offset_left = 4.0
 offset_top = 4.0
-offset_right = -4.0
-offset_bottom = -4.0
+offset_right = 796.0
+offset_bottom = 596.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="SettingsPanel" type="PopupPanel" parent="."]
 title = "Settings"
+size = Vector2i(533, 526)
 borderless = false
+theme_override_styles/panel = ExtResource("5_lbacc")
 
 [node name="SettingsPanel" parent="SettingsPanel" instance=ExtResource("6_t623a")]
-offset_left = 4.0
-offset_top = 4.0
-offset_right = 529.0
-offset_bottom = 522.0
+offset_right = 533.0
+offset_bottom = 526.0
 
 [node name="HelpPanel" type="PopupPanel" parent="."]
 title = "Help"
@@ -184,8 +185,8 @@ borderless = false
 [node name="HelpTabs" parent="HelpPanel" instance=ExtResource("7_qqehi")]
 offset_left = 4.0
 offset_top = 4.0
-offset_right = -4.0
-offset_bottom = -4.0
+offset_right = 796.0
+offset_bottom = 496.0
 
 [node name="LearnPanel" type="PopupPanel" parent="."]
 title = "Learn"

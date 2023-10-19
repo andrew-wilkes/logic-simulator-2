@@ -52,7 +52,7 @@ layout_mode = 2
 
 [node name="L1" type="Label" parent="HB"]
 layout_mode = 2
-text = "a"
+text = "in"
 
 [node name="L2" type="Label" parent="HB"]
 layout_mode = 2
