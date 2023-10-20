@@ -50,9 +50,9 @@ slot/3/right_type = 0
 slot/3/right_color = Color(1, 1, 1, 1)
 slot/3/right_icon = null
 slot/3/draw_stylebox = true
-slot/4/left_enabled = false
-slot/4/left_type = 0
-slot/4/left_color = Color(1, 1, 1, 1)
+slot/4/left_enabled = true
+slot/4/left_type = 1
+slot/4/left_color = Color(1, 1, 0, 1)
 slot/4/left_icon = null
 slot/4/right_enabled = true
 slot/4/right_type = 0
@@ -113,8 +113,16 @@ size_flags_horizontal = 3
 text = "c"
 horizontal_alignment = 2
 
-[node name="L3" type="Label" parent="."]
+[node name="HB4" type="HBoxContainer" parent="."]
 layout_mode = 2
+
+[node name="L1" type="Label" parent="HB4"]
+layout_mode = 2
+text = "sel"
+
+[node name="L2" type="Label" parent="HB4"]
+layout_mode = 2
+size_flags_horizontal = 3
 text = "d"
 horizontal_alignment = 2
 

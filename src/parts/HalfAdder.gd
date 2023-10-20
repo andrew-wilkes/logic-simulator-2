@@ -11,4 +11,4 @@ func _init():
 func evaluate_output_level(side, _port, _level):
 	if side == LEFT:
 		update_output_level(RIGHT, 0, pins[[side, 0]] != pins[[side, 1]])
-		update_output_level(RIGHT, 0, pins[[side, 0]] and pins[[side, 1]])
+		update_output_level(RIGHT, 1, pins[[side, 0]] and pins[[side, 1]])

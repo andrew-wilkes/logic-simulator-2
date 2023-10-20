@@ -37,7 +37,9 @@ func get_io_nodes(parts, connections):
 
 
 func get_label_text(part, side, port):
-	var node = part.get_child(part.get_connection_input_slot(port))
+	var slot = part.get_connection_input_slot(port) if side == 0 else \
+		part.get_connection_output_slot(port)
+	var node = part.get_child(slot)
 	if not node is Label:
 		node = node.get_child(side)
 	return node.text
@@ -62,7 +64,7 @@ func run_tests(spec: String, inputs, outputs):
 				var value = get_int_from_string(task[2])
 				pin_states[pin_name] = "-"
 				if inputs.has(pin_name):
-					pin_states[pin_name] = task[2]
+					pin_states[pin_name] = strip_format_from_number(task[2])
 					var target = inputs[pin_name] # [part, port, port_type]
 					if target[2] == 0: # Wire
 						target[0].update_input_level(0, target[1], value == 1)
@@ -224,12 +226,24 @@ func format_value(value, format, width):
 			value = format % [value]
 		"B":
 			var bits = PackedStringArray()
+			var negative = false
+			if value < 1:
+				negative = true
+				value = -value
 			for n in width:
 				if value % 2:
 					bits.append("1")
 				else:
 					bits.append("0")
 				value /= 2
+			if negative:
+				var flip = false
+				for idx in width:
+					if flip:
+						bits[idx] = "0" if bits[idx] == "1" else "1"
+					else:
+						if bits[idx] == "1":
+							flip = true
 			bits.reverse()
 			value = "".join(bits)
 	return value
@@ -252,3 +266,9 @@ func get_int_from_string(s):
 	else:
 		x = int(s)
 	return x
+
+
+func strip_format_from_number(s):
+	if s[0] == "%":
+		return s.right(-2)
+	return s
