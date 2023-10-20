@@ -8,11 +8,11 @@ extends GdUnitTestSuite
 const __source = 'res://classes/test_circuit.gd'
 
 const spec_file = "// This file is part of www.nand2tetris.org
-// and the book \"The Elements of Computing Systems\"
-// by Nisan and Schocken, MIT Press.
-// File name: projects/07/StackArithmetic/SimpleAdd/SimpleAdd.tst
+/* and the book \"The Elements of Computing Systems\"
+ by Nisan and Schocken, MIT Press./
+/** File name: projects/07/StackArithmetic/SimpleAdd/SimpleAdd.tst
 
-// Tests SimpleAdd.asm on the CPU emulator.
+ Tests SimpleAdd.asm on the CPU emulator./
 
 load SimpleAdd.asm,
 output-file SimpleAdd.out,
@@ -25,7 +25,7 @@ repeat 10 {      // enough cycles to complete the execution
 }
 
 // Outputs the stack pointer and the value at the stack's base
-output-list RAM[0]%D2.6.2 RAM[256]%D2.6.2;
+output-list RAM[0] %D2.6.2 RAM[2]%D2.6.2  aaa   %D2.6.2;
 output;"
 
 func test_circuit_run_tests() -> void:

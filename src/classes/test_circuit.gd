@@ -97,11 +97,12 @@ func compare_pos(a, b):
 func get_closest_delimiter_position(text, from_idx, chars):
 	var positions = []
 	for chr in chars:
-		positions.append(text.find(chr, from_idx))
+		positions.append(text.find(chr, from_idx)) # Appends -1 if not found
 	positions.sort_custom(compare_pos)
 	return positions[0]
 
 
+# This function returns with whatever tasks it has listed so far if it hits something unexpected
 func parse_spec(spec: String):
 	var tasks = []
 	# Convert spec to a string without comments or line breaks
@@ -118,6 +119,12 @@ func parse_spec(spec: String):
 	var regex = RegEx.new()
 	regex.compile("[\\s\t]+")
 	spec = regex.sub(spec, " ", true)
+	# Remove other types of comments
+	regex.compile("/[\\*]{1,2}.+/")
+	spec = regex.sub(spec, "", true)
+	# Remove space between string and % since we split the formats based on a space between items
+	regex.compile("\\s%")
+	spec = regex.sub(spec, "%", true)
 	
 	var idx = 0
 	while true:
@@ -130,15 +137,15 @@ func parse_spec(spec: String):
 		idx = pos + 1
 		match token:
 			"load", "output-file", "compare-to":
-				# Find a string ending with ,
-				pos = spec.find(",", idx)
+				# Find a string ending with , but allow for ;
+				pos = get_closest_delimiter_position(spec, idx, ",;")
 				if pos < 0:
 					break # Syntax error
 				tasks.append([token, spec.substr(idx, pos - idx)])
 				idx = pos + 1
 			"output-list":
-				# Find a string ending with ;
-				pos = spec.find(";", idx)
+				# Find a string ending with ; but allow for ,
+				pos = get_closest_delimiter_position(spec, idx, ",;")
 				if pos < 0:
 					break # Syntax error
 				tasks.append([token, spec.substr(idx, pos - idx)])
@@ -155,7 +162,7 @@ func parse_spec(spec: String):
 					break # Syntax error
 				tasks.append(task)
 				idx = pos + 1
-			"repeat":
+			"repeat": # This needs more study to understand the syntax
 				pos = spec.find(" ", idx)
 				if pos < 0:
 					break # Syntax error
