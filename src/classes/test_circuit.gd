@@ -64,7 +64,7 @@ func run_tests(spec: String, inputs, outputs):
 				var value = get_int_from_string(task[2])
 				pin_states[pin_name] = "-"
 				if inputs.has(pin_name):
-					pin_states[pin_name] = strip_format_from_number(task[2])
+					pin_states[pin_name] = value
 					var target = inputs[pin_name] # [part, port, port_type]
 					if target[2] == 0: # Wire
 						target[0].update_input_level(0, target[1], value == 1)
@@ -94,6 +94,14 @@ func compare_pos(a, b):
 		return true
 
 
+func get_closest_delimiter_position(text, from_idx, chars):
+	var positions = []
+	for chr in chars:
+		positions.append(text.find(chr, from_idx))
+	positions.sort_custom(compare_pos)
+	return positions[0]
+
+
 func parse_spec(spec: String):
 	var tasks = []
 	# Convert spec to a string without comments or line breaks
@@ -116,9 +124,7 @@ func parse_spec(spec: String):
 		if idx >= spec.length():
 			break
 		# Get the shortest distance to the next delimiter from the start of the line
-		var delims = [spec.find(" ", idx), spec.find(",", idx), spec.find(";", idx)]
-		delims.sort_custom(compare_pos)
-		var pos = delims[0]
+		var pos = get_closest_delimiter_position(spec, idx, " ,;")
 		var token = spec.substr(idx, pos - idx)
 		print(token)
 		idx = pos + 1
@@ -127,48 +133,48 @@ func parse_spec(spec: String):
 				# Find a string ending with ,
 				pos = spec.find(",", idx)
 				if pos < 0:
-					break; # Syntax error
+					break # Syntax error
 				tasks.append([token, spec.substr(idx, pos - idx)])
 				idx = pos + 1
 			"output-list":
 				# Find a string ending with ;
 				pos = spec.find(";", idx)
 				if pos < 0:
-					break; # Syntax error
+					break # Syntax error
 				tasks.append([token, spec.substr(idx, pos - idx)])
 				idx = pos + 1
 			"output", "eval":
 				tasks.append([token])
 			"set":
-				# Find a string ending with ,
-				pos = spec.find(",", idx)
+				# Find a string ending with , or ;
+				pos = get_closest_delimiter_position(spec, idx, ",;")
 				if pos < 0:
-					break; # Syntax error
+					break # Syntax error
 				var task = [token] + Array(spec.substr(idx, pos - idx).split(" "))
 				if task.size() != 3:
-					break; # Syntax error
+					break # Syntax error
 				tasks.append(task)
 				idx = pos + 1
 			"repeat":
 				pos = spec.find(" ", idx)
 				if pos < 0:
-					break; # Syntax error
+					break # Syntax error
 				var reps = spec.substr(idx, pos - idx)
 				if reps.is_valid_int():
 					reps = int(reps)
 					idx = pos + 1
 					if spec[idx] != "{":
-						break; # Syntax error
+						break # Syntax error
 					idx += 1
 					pos = spec.find("}", idx)
 					if pos < 0:
-						break; # Syntax error
+						break # Syntax error
 					var sub_task = spec.substr(idx, pos - idx - 1).strip_edges()
 					for n in reps:
 						tasks.append([sub_task])
 					idx = pos + 1
 				else:
-					break; # Syntax error
+					break # Syntax error
 	return tasks
 
 
@@ -266,9 +272,3 @@ func get_int_from_string(s):
 	else:
 		x = int(s)
 	return x
-
-
-func strip_format_from_number(s):
-	if s[0] == "%":
-		return s.right(-2)
-	return s

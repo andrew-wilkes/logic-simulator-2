@@ -10,6 +10,7 @@ func _ready():
 	schematic = $VB/Schematic
 	%ToolsButton.get_popup().add_item("Number parts")
 	%ToolsButton.get_popup().add_item("Test circuit")
+	%ToolsButton.get_popup().add_item("Load HDL circuit")
 	%ToolsButton.get_popup().index_pressed.connect(tool_action)
 	schematic.warning.connect($WarningPanel.open)
 	schematic.changed.connect(set_current_file_color)
@@ -33,6 +34,8 @@ func tool_action(idx):
 				$WarningPanel.open("Test file directory has not been set in settings.")
 			else:
 				schematic.test_circuit()
+		2:
+			$WarningPanel.open("HDL file importing is not implemented yet.")
 
 #### FILE CODE ####
 
