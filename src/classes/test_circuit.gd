@@ -45,126 +45,170 @@ func get_label_text(part, side, port):
 
 # Parse a .tst file
 func run_tests(spec: String, inputs, outputs):
-	# Get output list format
-	var start = spec.find("output-list")
-	var end = spec.find(";", start)
-	var output_format = spec.substr(start + 12, end - start - 12)
-	
-	# Get the output pin names of interest
-	var tokens = output_format.split(" ", false)
-	var output_pins = [] # The pins to output in the report (not all are part outputs)
-	var pin_values = {}
-	var output_formats = []
-	for token in tokens:
-		var pf = token.split("%") # [pin_name, format]
-		output_pins.append(pf[0])
-		pin_values[pf[0]] = "-"
-		output_formats.append(pf[1])
-	
-	var output = get_output_header(output_pins, output_formats)
+	var output = ""
+	var output_format = ""
+	var pin_states = {}
+	var tasks = parse_spec(spec)
 
-	# Get the test specifications
-	var tests = []
-	while true:
-		start = spec.find("set", end)
-		if start < 0: # Ends the parsing while loop
-			break
-		end = spec.find(";", start)
-		if end < 0: # This should not occur
-			break
-		tests.append(spec.substr(start, end - start).strip_escapes())
-	
-	# Run the tests
-	for test in tests:
-		var steps = test.split(",", false)
-		for step in steps:
-			tokens = step.split(" ", false)
-			if tokens.size() > 0:
-				match tokens[0]:
-					"set":
-						# Apply input levels and values to the parts
-						tokens.resize(3)
-						var pin_name = tokens[1]
-						var value = int(tokens[2])
-						if inputs.has(pin_name):
-							pin_values[pin_name] = value
-							var target = inputs[pin_name] # [part, port, port_type]
-							if target[2] == 0: # Wire
-								target[0].update_input_level(0, target[1], value == 1)
-							else: #Bus
-								target[0].update_bus_input_value(0, target[1], value)
-					"eval":
-						# Get the required outputs from the parts
-						for pin in output_pins:
-							if outputs.has(pin):
-								var target = outputs[pin]
-								var pin_key = [1, target[1]] # [side, port]
-								# Cast bools to int and set the value to 0 if the pin has not been touched
-								pin_values[pin] = int(target[0].pins.get(pin_key, 0))
-					"output":
-						output += get_output_result(output_pins, pin_values, output_formats)
+	# Process the tasks
+	for task in tasks:
+		match task[0]:
+			"output-list":
+				output_format = task[1]
+				output = get_output_header(output_format)
+			"set":
+				# Apply input levels and values to the parts
+				var pin_name = task[1]
+				var value = get_int_from_string(task[2])
+				pin_states[pin_name] = "-"
+				if inputs.has(pin_name):
+					pin_states[pin_name] = task[2]
+					var target = inputs[pin_name] # [part, port, port_type]
+					if target[2] == 0: # Wire
+						target[0].update_input_level(0, target[1], value == 1)
+					else: #Bus
+						target[0].update_bus_input_value(0, target[1], value)
+			"eval":
+				# Get the required outputs from the parts
+				for pin in get_pin_list(tasks):
+					if not pin_states.has(pin):
+						pin_states[pin] = "-"
+					if outputs.has(pin):
+						var target = outputs[pin]
+						var pin_key = [1, target[1]] # [side, port]
+						# Cast bools to int and set the value to 0 if the pin has not been touched
+						pin_states[pin] = int(target[0].pins.get(pin_key, 0))
+			"output":
+				output += get_output_result(pin_states, output_format)
 	return output
 
 
+func compare_pos(a, b):
+	if a < 0:
+		return false
+	if b < 0:
+		return true
+	if a < b:
+		return true
+
+
 func parse_spec(spec: String):
+	var tasks = []
 	# Convert spec to a string without comments or line breaks
 	var lines = spec.replace("\r", "").split("\n", false)
 	var clean_lines = []
 	for line in lines:
 		# Remove comments
-		var pos = line.find("\\")
+		var pos = line.find("//")
 		if pos >= 0:
 			line = line.left(pos)
 		clean_lines.append(line)
 	spec = "".join(clean_lines)
-"""
-		# Get keyword at start of line
-		pos = line.find(" ")
-		if pos >= 0:
-			var word = line.substr(0, pos)
-			match word:
-				"set":
-					pass
-				"load":
-					pass
-				"output-file":
-					pass
-				"compare-to":
-					pass
-				"output-list":
-					pass
-				"output":
-					pass
-				"repeat":
-					pass
-"""
+	# Replace multiple spaces and tabs with 1 space
+	var regex = RegEx.new()
+	regex.compile("[\\s\t]+")
+	spec = regex.sub(spec, " ", true)
+	
+	var idx = 0
+	while true:
+		if idx >= spec.length():
+			break
+		# Get the shortest distance to the next delimiter from the start of the line
+		var delims = [spec.find(" ", idx), spec.find(",", idx), spec.find(";", idx)]
+		delims.sort_custom(compare_pos)
+		var pos = delims[0]
+		var token = spec.substr(idx, pos - idx)
+		print(token)
+		idx = pos + 1
+		match token:
+			"load", "output-file", "compare-to":
+				# Find a string ending with ,
+				pos = spec.find(",", idx)
+				if pos < 0:
+					break; # Syntax error
+				tasks.append([token, spec.substr(idx, pos - idx)])
+				idx = pos + 1
+			"output-list":
+				# Find a string ending with ;
+				pos = spec.find(";", idx)
+				if pos < 0:
+					break; # Syntax error
+				tasks.append([token, spec.substr(idx, pos - idx)])
+				idx = pos + 1
+			"output", "eval":
+				tasks.append([token])
+			"set":
+				# Find a string ending with ,
+				pos = spec.find(",", idx)
+				if pos < 0:
+					break; # Syntax error
+				var task = [token] + Array(spec.substr(idx, pos - idx).split(" "))
+				if task.size() != 3:
+					break; # Syntax error
+				tasks.append(task)
+				idx = pos + 1
+			"repeat":
+				pos = spec.find(" ", idx)
+				if pos < 0:
+					break; # Syntax error
+				var reps = spec.substr(idx, pos - idx)
+				if reps.is_valid_int():
+					reps = int(reps)
+					idx = pos + 1
+					if spec[idx] != "{":
+						break; # Syntax error
+					idx += 1
+					pos = spec.find("}", idx)
+					if pos < 0:
+						break; # Syntax error
+					var sub_task = spec.substr(idx, pos - idx - 1).strip_edges()
+					for n in reps:
+						tasks.append([sub_task])
+					idx = pos + 1
+				else:
+					break; # Syntax error
+	return tasks
 
 
-func get_output_header(output_pins, output_formats):
+func get_output_header(output_format: String):
+	var output_formats = output_format.split(" ")
 	# Form the top line like: |   a   |   b   | out |
 	var output = "|"
-	for idx in output_pins.size():
-		var widths = output_formats[idx].right(-1).split(".")
+	for format in output_formats:
+		var pnf = format.split("%")
+		var widths = pnf[1].split(".")
 		widths.resize(3) # There should be 3 values: PadL.Length.PadR
 		# Center align the pin name
 		var min_length = int(widths[0]) + int(widths[1]) + int(widths[2])
-		var pin_name = output_pins[idx]
+		var pin_name = pnf[0]
+		@warning_ignore("integer_division")
 		pin_name = pin_name.lpad((min_length + pin_name.length()) / 2, " ")
 		output += pin_name.rpad(min_length, " ") + "|"
 	return output + "\n"
 
 
-func get_output_result(output_pins, values, output_formats):
-	# Add the result line to output
+func get_pin_list(tasks):
+	var pins = []
+	for task in tasks:
+		if task[0] == "output-list":
+			var output_formats = task[1].split(" ")
+			for format in output_formats:
+				var pnf = format.split("%")
+				pins.append(pnf[0])
+	return pins
+
+
+func get_output_result(pin_states, output_format):
+	var formats = output_format.split(" ")
 	var output = "|"
-	for idx in output_pins.size():
+	for idx in pin_states.size():
 		# Format string: (S|B|D|X)PadL.Length.PadR
-		var format = output_formats[idx]
-		if format.length() == 0:
-			format = "B1.1.1" # Default value
-		var widths = format.right(-1).split(".")
+		var pnf = formats[idx].split("%")
+		if pnf.size() == 1:
+			pnf.append("B1.1.1") # Default value
+		var widths = pnf[1].right(-1).split(".")
 		widths.resize(3) # There should be 3 values: PadL.Length.PadR
-		var value = format_value(values[output_pins[idx]], format[0], int(widths[1]))
+		var value = format_value(pin_states[pnf[0]], pnf[1][0], int(widths[1]))
 		output += value.lpad(int(widths[0]) + value.length()) + " ".repeat(int(widths[2])) + "|"
 	return output + "\n"
 
@@ -189,3 +233,22 @@ func format_value(value, format, width):
 			bits.reverse()
 			value = "".join(bits)
 	return value
+
+
+func get_int_from_string(s):
+	var x = 0
+	if s[0] == "%":
+		if s.length() > 2:
+			var num = s.right(-2)
+			match s[1]:
+				"B":
+					if num.is_valid_int():
+						for idx in num.length():
+							x *= 2
+							x += int(num[idx])
+				"X":
+					if num.is_valid_hex_number():
+						x = num.hex_to_int()
+	else:
+		x = int(s)
+	return x

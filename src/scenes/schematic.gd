@@ -431,12 +431,12 @@ func test_circuit():
 		if result.error:
 			emit_signal("warning", "File not found: " + test_file)
 		else:
-			print(result)
 			var test = TestCircuit.new()
 			var io_nodes = test.get_io_nodes(get_children(), get_connection_list())
 			var file = FileAccess.open(result.path + "/" + test_file, FileAccess.READ)
 			if file:
 					var test_spec = file.get_as_text()
+					print(test_spec)
 					result = test.run_tests(test_spec, io_nodes[0], io_nodes[1])
 					print(result)
 			else:
