@@ -89,9 +89,9 @@ can_add_swatches = false
 presets_visible = false
 
 [node name="DirectoryPicker" type="FileDialog" parent="."]
-title = "Choose a Directory"
+title = "Open a Directory"
 size = Vector2i(900, 500)
-ok_button_text = "Select This Folder"
+ok_button_text = "Select Current Folder"
 file_mode = 2
 access = 2
 

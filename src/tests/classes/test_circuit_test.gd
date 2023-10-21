@@ -18,10 +18,15 @@ load SimpleAdd.asm,
 output-file SimpleAdd.out,
 compare-to SimpleAdd.cmp,
 
+echo \"Hello\",
+
 set RAM[0] 256,  // initializes the stack pointer 
 
-repeat 10 {      // enough cycles to complete the execution
-  ticktock;
+repeat 4 {      // enough cycles to complete the execution
+	tick,
+	output;
+	tock,
+	output;
 }
 
 // Outputs the stack pointer and the value at the stack's base

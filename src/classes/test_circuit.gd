@@ -150,7 +150,7 @@ func parse_spec(spec: String):
 					break # Syntax error
 				tasks.append([token, spec.substr(idx, pos - idx)])
 				idx = pos + 1
-			"output", "eval":
+			"output", "eval", "tick", "tock":
 				tasks.append([token])
 			"set":
 				# Find a string ending with , or ;
@@ -162,26 +162,35 @@ func parse_spec(spec: String):
 					break # Syntax error
 				tasks.append(task)
 				idx = pos + 1
-			"repeat": # This needs more study to understand the syntax
-				pos = spec.find(" ", idx)
+			"echo":
+				if spec[idx] != '"':
+					break # Syntax error
+				idx += 1
+				pos = spec.find('"', idx)
 				if pos < 0:
 					break # Syntax error
-				var reps = spec.substr(idx, pos - idx)
-				if reps.is_valid_int():
-					reps = int(reps)
+				tasks.append([token, spec.substr(idx, pos - idx)])
+			"repeat":
+				var reps = 0 # Continuous loop
+				if spec[idx] != "{":
+					pos = spec.find(" ", idx)
+					if pos < 0:
+						break # Syntax error
+					reps = spec.substr(idx, pos - idx)
+					if reps.is_valid_int():
+						reps = int(reps)
+					else:
+						break # Syntax error
 					idx = pos + 1
 					if spec[idx] != "{":
 						break # Syntax error
-					idx += 1
-					pos = spec.find("}", idx)
-					if pos < 0:
-						break # Syntax error
-					var sub_task = spec.substr(idx, pos - idx - 1).strip_edges()
-					for n in reps:
-						tasks.append([sub_task])
-					idx = pos + 1
-				else:
+				idx += 1
+				pos = spec.find("}", idx)
+				if pos < 0:
 					break # Syntax error
+				var sub_task = spec.substr(idx, pos - idx).strip_edges()
+				tasks.append([token, reps, sub_task])
+				idx = pos + 1
 	return tasks
 
 
