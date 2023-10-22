@@ -442,3 +442,60 @@ func test_circuit():
 			else:
 				emit_signal("warning", "Error opening file: " + test_file)
 			test.free()
+
+
+func add_bus_io(label, pos):
+	var part = Parts.scenes["IO"].instantiate()
+	part.data.labels = [label, ""]
+	part.set_labels()
+	add_part(part)
+	part.position_offset = pos
+
+
+func add_wired_io(labels, pos):
+	var part = Parts.scenes["IO"].instantiate()
+	part.data.num_wires = labels.size() - 1
+	part.set_pins()
+	part.data.labels = labels
+	part.set_labels()
+	add_part(part)
+	part.position_offset = pos
+
+
+func create_circuit_from_hdl(file_path):
+	var file = FileAccess.open(file_path, FileAccess.READ)
+	if not file:
+		emit_signal("warning", "Error opening file: " + file_path)
+		return
+	var hdl = file.get_as_text()
+	clear()
+	var test = TestCircuit.new()
+	var details = test.get_ios_from_hdl(hdl)
+	test.free()
+	circuit.data.title = details.title
+	emit_signal("title_changed", circuit.data.title)
+	var count = 0
+	# Add data bus inputs
+	var input_wires = [""]
+	for input in details.inputs:
+		if input[1] == 1:
+			add_bus_io(input[0], Vector2(100, 40 + 200 * count))
+			count += 1
+		else:
+			input_wires.append(input[0])
+	# Add wire inputs
+	if input_wires.size() > 1:
+		add_wired_io(input_wires, Vector2(100, 40 + 200 * count))
+	count = 0
+	# Add data bus outputs
+	var output_wires = [""]
+	for output in details.outputs:
+		if output[1] == 1:
+			add_bus_io(output[0], Vector2(600, 40 + 200 * count))
+			count += 1
+		else:
+			output_wires.append(output[0])
+	# Add wire outputs
+	if output_wires.size() > 1:
+		add_wired_io(output_wires, Vector2(600, 40 + 200 * count))
+	grab_focus()

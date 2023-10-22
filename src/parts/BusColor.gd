@@ -3,7 +3,7 @@ extends Part
 class_name BusColor
 
 func _init():
-	data["color"] = 0xffff00ff
+	data["color"] = "ffff00ff"
 	category = UTILITY
 	order = 70
 

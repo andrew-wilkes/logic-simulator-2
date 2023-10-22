@@ -3,7 +3,7 @@ extends Part
 class_name WireColor
 
 func _init():
-	data["color"] = 0xffffffff
+	data["color"] = "ffffffff"
 	category = UTILITY
 	order = 60
 

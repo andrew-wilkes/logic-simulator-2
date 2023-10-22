@@ -144,6 +144,14 @@ file_mode = 0
 access = 2
 filters = PackedStringArray("*.circ ; Circuit files")
 
+[node name="LoadHDL" type="FileDialog" parent="."]
+title = "Open a File"
+size = Vector2i(900, 500)
+ok_button_text = "Open"
+file_mode = 0
+access = 2
+filters = PackedStringArray("*.hdl ; HDL files")
+
 [node name="SaveDialog" type="FileDialog" parent="."]
 title = "Save Circuit"
 size = Vector2i(900, 500)
@@ -225,5 +233,7 @@ offset_bottom = 396.0
 [connection signal="confirmed" from="Confirm" to="." method="_on_confirm_confirmed"]
 [connection signal="canceled" from="LoadDialog" to="." method="_on_load_dialog_canceled"]
 [connection signal="file_selected" from="LoadDialog" to="." method="_on_file_dialog_file_selected"]
+[connection signal="canceled" from="LoadHDL" to="." method="_on_load_dialog_canceled"]
+[connection signal="file_selected" from="LoadHDL" to="." method="_on_load_hdl_file_selected"]
 [connection signal="canceled" from="SaveDialog" to="." method="_on_save_dialog_canceled"]
 [connection signal="file_selected" from="SaveDialog" to="." method="_on_file_dialog_file_selected"]

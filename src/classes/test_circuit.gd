@@ -5,6 +5,10 @@ class_name TestCircuit
 
 extends Node
 
+const CLOCK_PIN = "clk"
+
+var running = true
+
 func get_io_nodes(parts, connections):
 	# Inputs are unconnected pins on the left side of parts
 	# Outputs are unconnected pins on the right side of parts
@@ -51,8 +55,10 @@ func run_tests(spec: String, inputs, outputs):
 	var output_format = ""
 	var pin_states = {}
 	var tasks = parse_spec(spec)
+	process_tasks(tasks, output_format, pin_states, output, inputs, outputs)
 
-	# Process the tasks
+
+func process_tasks(tasks, output_format, pin_states, output, inputs, outputs):
 	for task in tasks:
 		match task[0]:
 			"output-list":
@@ -82,6 +88,21 @@ func run_tests(spec: String, inputs, outputs):
 						pin_states[pin] = int(target[0].pins.get(pin_key, 0))
 			"output":
 				output += get_output_result(pin_states, output_format)
+			"tick", "tock":
+				if inputs.has(CLOCK_PIN):
+					var target = inputs[CLOCK_PIN] # [part, port, port_type]
+					target[0].update_input_level(0, target[1], task[0] == "tick")
+			"repeat":
+				var count = task[1]
+				var dec = 0
+				if count > 0:
+					dec = 1
+				else:
+					count = 1
+				while running and count > 0:
+					count -= dec
+					var repetitive_tasks = parse_spec(task[2])
+					process_tasks(repetitive_tasks, output_format, pin_states, output, inputs, outputs)
 	return output
 
 
@@ -105,27 +126,7 @@ func get_closest_delimiter_position(text, from_idx, chars):
 # This function returns with whatever tasks it has listed so far if it hits something unexpected
 func parse_spec(spec: String):
 	var tasks = []
-	# Convert spec to a string without comments or line breaks
-	var lines = spec.replace("\r", "").split("\n", false)
-	var clean_lines = []
-	for line in lines:
-		# Remove comments
-		var pos = line.find("//")
-		if pos >= 0:
-			line = line.left(pos)
-		clean_lines.append(line)
-	spec = "".join(clean_lines)
-	# Replace multiple spaces and tabs with 1 space
-	var regex = RegEx.new()
-	regex.compile("[\\s\t]+")
-	spec = regex.sub(spec, " ", true)
-	# Remove other types of comments
-	regex.compile("/[\\*]{1,2}.+/")
-	spec = regex.sub(spec, "", true)
-	# Remove space between string and % since we split the formats based on a space between items
-	regex.compile("\\s%")
-	spec = regex.sub(spec, "%", true)
-	
+	spec = clean_src(spec)
 	var idx = 0
 	while true:
 		if idx >= spec.length():
@@ -192,6 +193,29 @@ func parse_spec(spec: String):
 				tasks.append([token, reps, sub_task])
 				idx = pos + 1
 	return tasks
+
+
+func clean_src(spec):
+	# Convert spec to a string without comments or line breaks
+	var lines = spec.replace("\r", "").split("\n", false)
+	var clean_lines = []
+	for line in lines:
+		# Remove comments
+		var pos = line.find("//")
+		if pos >= 0:
+			line = line.left(pos)
+		clean_lines.append(line)
+	spec = "".join(clean_lines)
+	# Replace multiple spaces and tabs with 1 space
+	var regex = RegEx.new()
+	regex.compile("[\\s\t]+")
+	spec = regex.sub(spec, " ", true)
+	# Remove other types of comments
+	regex.compile("/[\\*]{1,2}.+/")
+	spec = regex.sub(spec, "", true)
+	# Remove space between string and % since we split the formats based on a space between items
+	regex.compile("\\s%")
+	return regex.sub(spec, "%", true)
 
 
 func get_output_header(output_format: String):
@@ -288,3 +312,49 @@ func get_int_from_string(s):
 	else:
 		x = int(s)
 	return x
+
+
+func get_ios_from_hdl(hdl):
+	hdl = clean_src(hdl)
+	var result = {
+		title = "",
+		inputs = [],
+		outputs = []
+	}
+	var idx = hdl.find("CHIP")
+	if idx > -1:
+		idx += 5
+		var pos = hdl.find(" ", idx)
+		if pos > idx:
+			result.title = hdl.substr(idx, pos - idx)
+			idx = pos
+			pos = hdl.find("{", idx)
+			if pos > idx:
+				idx = pos
+				pos = hdl.find("IN", idx)
+				if pos > idx:
+					idx = pos + 2
+					pos = hdl.find(";", idx)
+					if pos > idx:
+						var pin_text = hdl.substr(idx, pos - idx)
+						idx = pos
+						var items = pin_text.replace(" ", "").split(",")
+						for item in items:
+							if item.find("[") > -1:
+								result.inputs.append([item, 1]) # Bus
+							else:
+								result.inputs.append([item, 0]) # Wire
+				pos = hdl.find("OUT", idx)
+				if pos > idx:
+					idx = pos + 3
+					pos = hdl.find(";", idx)
+					if pos > idx:
+						var pin_text = hdl.substr(idx, pos - idx)
+						idx = pos
+						var items = pin_text.replace(" ", "").split(",")
+						for item in items:
+							if item.find("[") > -1:
+								result.outputs.append([item, 1]) # Bus
+							else:
+								result.outputs.append([item, 0]) # Wire
+	return result

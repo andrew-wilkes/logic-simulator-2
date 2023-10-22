@@ -33,42 +33,24 @@ repeat 4 {      // enough cycles to complete the execution
 output-list RAM[0] %D2.6.2 RAM[2]%D2.6.2  aaa   %D2.6.2;
 output;"
 
-func test_circuit_run_tests() -> void:
-	var test = TestCircuit.new()
-	var _spec = "// This file is part of www.nand2tetris.org
-// and the book \"The Elements of Computing Systems\"
-// by Nisan and Schocken, MIT Press.
-// File name: projects/01/And.tst
+var hdl_file = "// if (no == 1) sets out = !out   // bitwise not
+CHIP ALU {
+	IN  
+		x[16], y[16],  // 16-bit inputs        
+		zx, // zero the x input?
+		nx, // negate the x input?
+		zy, // zero the y input?
+		ny, // negate the y input?
+		f,  // compute (out = x + y) or (out = x & y)?
+		no; // negate the out output?
+	OUT 
+		out[16], // 16-bit output
+		zr,      // (out == 0, 1, 0)
+		ng;      // (out < 0,  1, 0)
 
-load And.hdl,
-output-file And.out,
-compare-to And.cmp,
-output-list a%B3.1.3 b%B3.1.3 out%B3.1.3;
-
-set a 0,
-set b 0,
-eval,
-output;
-
-set a 0,
-set b 1,
-eval,
-output;
-
-set a 1,
-set b 0,
-eval,
-output;
-
-set a 1,
-set b 1,
-eval,
-output;
-"
-	#test.run_tests(spec, [], [])
-	assert_not_yet_implemented()
-	test.free()
-
+	PARTS:
+	//// Replace this comment with your code.
+}"
 
 func test_format_value() -> void:
 	var test_circuit = TestCircuit.new()
@@ -114,4 +96,14 @@ func test_get_int_from_string() -> void:
 	assert_int(test_circuit.get_int_from_string("8")).is_equal(8)
 	assert_int(test_circuit.get_int_from_string("%B1111111111111111")).is_equal(65535)
 	assert_int(test_circuit.get_int_from_string("%XFF")).is_equal(255)
+	test_circuit.free()
+
+
+func test_get_ios_from_hdl() -> void:
+	var test_circuit = TestCircuit.new()
+	assert_object(test_circuit.get_ios_from_hdl(hdl_file)).is_equal({
+		"title": "ALU",
+		"inputs": [["x[16]", 1], ["y[16]", 1], ["zx", 0], ["nx", 0], ["zy", 0], ["ny", 0], ["f", 0], ["no", 0]],
+		"outputs": [["out[16]", 1], ["zr", 0], ["ng", 0]]
+	})
 	test_circuit.free()

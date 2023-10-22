@@ -35,7 +35,11 @@ func tool_action(idx):
 			else:
 				schematic.test_circuit()
 		2:
-			$WarningPanel.open("HDL file importing is not implemented yet.")
+			if G.settings.test_dir.is_empty():
+				$LoadHDL.current_dir = G.settings.last_dir
+			else:
+				$LoadHDL.current_dir = G.settings.test_dir
+			$LoadHDL.popup_centered()
 
 #### FILE CODE ####
 
@@ -222,3 +226,8 @@ func unfocus(_arg = null):
 
 func _on_text_meta_clicked(_meta):
 	var _e = OS.shell_open("https://buymeacoffee.com/gdscriptdude")
+
+
+func _on_load_hdl_file_selected(path):
+	set_current_file("")
+	schematic.create_circuit_from_hdl(path)

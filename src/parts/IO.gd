@@ -18,8 +18,8 @@ var current_value = 0 # This is accessed by the IO Manager panel
 func _init():
 	data = {
 		"num_wires": 1,
-		"bus_color": 0xffff00ff,
-		"wire_color": 0xffffffff,
+		"bus_color": "ffff00ff",
+		"wire_color": "ffffffff",
 		"labels": ["- Data -", "- D0 -"],
 		"range": 0xff
 	}
