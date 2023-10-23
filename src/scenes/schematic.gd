@@ -445,19 +445,15 @@ func test_circuit():
 
 
 func add_bus_io(label, pos):
-	var part = Parts.scenes["IO"].instantiate()
-	part.data.labels = [label, ""]
-	part.set_labels()
+	var part = Parts.scenes["Bus"].instantiate()
+	part.get_node("Tag").text = label
 	add_part(part)
 	part.position_offset = pos
 
 
-func add_wired_io(labels, pos):
-	var part = Parts.scenes["IO"].instantiate()
-	part.data.num_wires = labels.size() - 1
-	part.set_pins()
-	part.data.labels = labels
-	part.set_labels()
+func add_wire_io(label, pos):
+	var part = Parts.scenes["Wire"].instantiate()
+	part.get_node("Tag").text = label
 	add_part(part)
 	part.position_offset = pos
 
@@ -479,23 +475,25 @@ func create_circuit_from_hdl(file_path):
 	var input_wires = [""]
 	for input in details.inputs:
 		if input[1] == 1:
-			add_bus_io(input[0], Vector2(100, 40 + 200 * count))
+			add_bus_io(input[0], Vector2(100, 40 + 80 * count))
 			count += 1
 		else:
 			input_wires.append(input[0])
 	# Add wire inputs
-	if input_wires.size() > 1:
-		add_wired_io(input_wires, Vector2(100, 40 + 200 * count))
+	for input_wire in input_wires:
+		add_wire_io(input_wire, Vector2(100, 40 + 80 * count))
+		count += 1
 	count = 0
 	# Add data bus outputs
 	var output_wires = [""]
 	for output in details.outputs:
 		if output[1] == 1:
-			add_bus_io(output[0], Vector2(600, 40 + 200 * count))
+			add_bus_io(output[0], Vector2(600, 40 + 80 * count))
 			count += 1
 		else:
 			output_wires.append(output[0])
 	# Add wire outputs
-	if output_wires.size() > 1:
-		add_wired_io(output_wires, Vector2(600, 40 + 200 * count))
+	for output_wire in output_wires:
+		add_wire_io(output_wire, Vector2(600, 40 + 80 * count))
+		count += 1
 	grab_focus()

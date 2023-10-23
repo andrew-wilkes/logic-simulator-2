@@ -32,8 +32,6 @@ slot/1/right_color = Color(1, 1, 0, 1)
 slot/1/right_icon = null
 slot/1/draw_stylebox = true
 script = ExtResource("3_gxedj")
-slot/1/left_color = Color(1, 1, 0, 1)
-slot/1/right_color = Color(1, 1, 0, 1)
 
 [node name="Sp" type="Control" parent="."]
 layout_mode = 2

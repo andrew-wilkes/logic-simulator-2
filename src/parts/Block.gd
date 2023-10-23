@@ -52,6 +52,13 @@ func block_setup(_file_chain = []):
 			if is_output(part):
 				outputs.append(part)
 				output_pin_count += part.data.num_wires + 1
+		if part.part_type == "Bus" or part.part_type == "Wire":
+			if is_input(part):
+				inputs.append(part)
+				input_pin_count += 1
+			if is_output(part):
+				outputs.append(part)
+				output_pin_count += 1
 	# Sort according to position offset
 	inputs.sort_custom(compare_offsets)
 	outputs.sort_custom(compare_offsets)
@@ -59,15 +66,17 @@ func block_setup(_file_chain = []):
 	for io_part in inputs:
 		# [part_name, port]
 		input_map.append([io_part.node_name, 0])
-		for n in io_part.data.num_wires:
-			# n is type float!
-			# We use arrays as dictionary keys, so the data types in the array must be as expected
-			input_map.append([io_part.node_name, int(n + 1)])
+		if io_part is IO:
+			for n in io_part.data.num_wires:
+				# n is type float!
+				# We use arrays as dictionary keys, so the data types in the array must be as expected
+				input_map.append([io_part.node_name, int(n + 1)])
 	for io_part in outputs:
 		# [part_name, port]
 		output_map.append([io_part.node_name, 0])
-		for n in io_part.data.num_wires:
-			output_map.append([io_part.node_name, int(n + 1)])
+		if io_part is IO:
+			for n in io_part.data.num_wires:
+				output_map.append([io_part.node_name, int(n + 1)])
 	add_parts()
 
 
@@ -84,33 +93,37 @@ func configure_pins():
 	for input in inputs:
 		var label_idx = 0
 		set_slot_enabled_left(slot_idx, true)
-		set_slot_type_left(slot_idx, BUS_TYPE)
+		set_slot_type_left(slot_idx, BUS_TYPE if not input is Wire else WIRE_TYPE)
 		set_slot_color_left(slot_idx, input.data.bus_color)
-		get_child(slot_idx).get_child(0).text = input.data.labels[label_idx]
-		for n in input.data.num_wires:
-			slot_idx += 1
-			if label_idx + 1 < input.data.labels.size():
-				label_idx += 1
-			get_child(slot_idx).get_child(0).text = input.data.labels[label_idx]
-			set_slot_enabled_left(slot_idx, true)
-			set_slot_type_left(slot_idx, WIRE_TYPE)
-			set_slot_color_left(slot_idx, input.data.wire_color)
+		get_child(slot_idx).get_child(0).text = input.data.labels[label_idx]\
+			if input is IO else input.tag
+		if input is IO:
+			for n in input.data.num_wires:
+				slot_idx += 1
+				if label_idx + 1 < input.data.labels.size():
+					label_idx += 1
+				get_child(slot_idx).get_child(0).text = input.data.labels[label_idx]
+				set_slot_enabled_left(slot_idx, true)
+				set_slot_type_left(slot_idx, WIRE_TYPE)
+				set_slot_color_left(slot_idx, input.data.wire_color)
 		slot_idx += 1
 	slot_idx = 1
 	for output in outputs:
 		var label_idx = 0
 		set_slot_enabled_right(slot_idx, true)
-		set_slot_type_right(slot_idx, BUS_TYPE)
+		set_slot_type_right(slot_idx, BUS_TYPE if not output is Wire else WIRE_TYPE)
 		set_slot_color_right(slot_idx, output.data.bus_color)
-		get_child(slot_idx).get_child(1).text = output.data.labels[label_idx]
-		for n in output.data.num_wires:
-			slot_idx += 1
-			if label_idx + 1 < output.data.labels.size():
-				label_idx += 1
-			get_child(slot_idx).get_child(1).text = output.data.labels[label_idx]
-			set_slot_enabled_right(slot_idx, true)
-			set_slot_type_right(slot_idx, WIRE_TYPE)
-			set_slot_color_right(slot_idx, output.data.wire_color)
+		get_child(slot_idx).get_child(1).text = output.data.labels[label_idx]\
+			if output is IO else output.tag
+		if output is IO:
+			for n in output.data.num_wires:
+				slot_idx += 1
+				if label_idx + 1 < output.data.labels.size():
+					label_idx += 1
+				get_child(slot_idx).get_child(1).text = output.data.labels[label_idx]
+				set_slot_enabled_right(slot_idx, true)
+				set_slot_type_right(slot_idx, WIRE_TYPE)
+				set_slot_color_right(slot_idx, output.data.wire_color)
 		slot_idx += 1
 
 
