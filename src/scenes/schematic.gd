@@ -472,7 +472,7 @@ func create_circuit_from_hdl(file_path):
 	emit_signal("title_changed", circuit.data.title)
 	var count = 0
 	# Add data bus inputs
-	var input_wires = [""]
+	var input_wires = []
 	for input in details.inputs:
 		if input[1] == 1:
 			add_bus_io(input[0], Vector2(100, 40 + 80 * count))
@@ -485,7 +485,7 @@ func create_circuit_from_hdl(file_path):
 		count += 1
 	count = 0
 	# Add data bus outputs
-	var output_wires = [""]
+	var output_wires = []
 	for output in details.outputs:
 		if output[1] == 1:
 			add_bus_io(output[0], Vector2(600, 40 + 80 * count))
