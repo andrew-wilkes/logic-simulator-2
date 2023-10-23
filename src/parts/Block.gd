@@ -20,13 +20,19 @@ var input_pin_count = 0
 var output_pin_count = 0
 var inputs = []
 var outputs = []
+var file_chain = []
 
 func _init():
 	data["circuit_file"] = ""
 
 
-func block_setup():
+func block_setup(_file_chain = []):
+	file_chain = _file_chain
 	circuit = Circuit.new()
+	if file_chain.has(data.circuit_file):
+		emit_signal("warning", "Detected an infinite loop! %s was previously loaded as a block." % [data.circuit_file.get_file()])
+		return
+	file_chain.append(data.circuit_file)
 	var load_result = circuit.load_data(data.circuit_file)
 	if load_result != OK:
 		emit_signal("warning", "The circuit block data from %s was invalid!" % [data.circuit_file.get_file()])
@@ -160,7 +166,7 @@ func add_parts():
 		part.controller = self
 		add_connections_to_part(part)
 		if part.part_type == "Block":
-			part.block_setup()
+			part.block_setup(file_chain)
 		parts[part.name] = part
 
 

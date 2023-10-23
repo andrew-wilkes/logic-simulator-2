@@ -214,6 +214,7 @@ func clean_src(spec):
 	regex.compile("/[\\*]{1,2}.+/")
 	spec = regex.sub(spec, "", true)
 	# Remove space between string and % since we split the formats based on a space between items
+	# An example in the Nand2Tetris docs Appendix B had a space between the pin name and %
 	regex.compile("\\s%")
 	return regex.sub(spec, "%", true)
 

@@ -129,8 +129,8 @@ func add_part(part):
 	part.position_offset = PART_INITIAL_OFFSET + scroll_offset / zoom \
 		+ part_initial_offset_delta
 	update_part_initial_offset_delta()
-	add_child(part)
 	part.controller = self
+	add_child(part)
 	
 	# We want precise control of node names to keep circuit data robust
 	# Godot can sneak in @ marks to the node name, so we assign the name after
@@ -183,8 +183,8 @@ func save_circuit(file_name):
 
 func load_circuit(file_name):
 	grab_focus()
-	parent_file = file_name
 	clear()
+	parent_file = file_name
 	var load_result = circuit.load_data(file_name)
 	if load_result == OK:
 		setup_graph()
@@ -203,9 +203,9 @@ func add_parts():
 		part.get_node("Tag").text = node.tag
 		part.part_type = node.part_type
 		part.data = node.data
+		part.controller = self
 		add_child(part)
 		part.setup()
-		part.controller = self
 		part.name = node.node_name
 		part.position_offset = Vector2(node.offset[0], node.offset[1])
 		part.tooltip_text = part.name
