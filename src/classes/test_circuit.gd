@@ -256,12 +256,12 @@ func set_output_result():
 	var formats = output_format.split(" ")
 	output = "|"
 	for idx in pin_states.size():
-		# Format string: (S|B|D|X)PadL.Length.PadR
+		# Format string: (S|B|D|X)%PadL.Length.PadR
 		var pnf = formats[idx].split("%")
 		if pnf.size() == 1:
 			pnf.append("B1.1.1") # Default value
 		var widths = pnf[1].right(-1).split(".")
-		widths.resize(3) # There should be 3 values: PadL.Length.PadR
+		widths.resize(3) # There should be 3 values: [PadL, Length, PadR]
 		var value = format_value(pin_states[pnf[0]], pnf[1][0], int(widths[1]))
 		output += value.lpad(int(widths[0]) + value.length()) + " ".repeat(int(widths[2])) + "|"
 	output += "\n"
