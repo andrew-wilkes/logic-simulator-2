@@ -13,7 +13,6 @@ var step := 0
 var set_bus_color = false
 var set_wire_color = false
 var slider_value_changed = false
-var ignore_slider_signal = false
 
 func open(_part: IO):
 	part = _part
@@ -127,15 +126,12 @@ func up_down_initiate(_step):
 
 
 func _on_v_slider_value_changed(value):
-	if ignore_slider_signal:
-		ignore_slider_signal = false
-	else:
-		var limit = DEFAULT_SLIDER_LIMIT
-		if part.data.range > 0:
-			limit = part.data.range
-		part.current_value = value * limit / %VSlider.max_value
-		slider_value_changed = true
-		$UpdateTimer.start()
+	var limit = DEFAULT_SLIDER_LIMIT
+	if part.data.range > 0:
+		limit = part.data.range
+	part.current_value = value * limit / %VSlider.max_value
+	slider_value_changed = true
+	$UpdateTimer.start()
 
 
 func _on_repeat_timer_timeout():
@@ -186,8 +182,7 @@ func set_slider_value():
 		var limit = DEFAULT_SLIDER_LIMIT
 		if part.data.range > 0:
 			limit = part.data.range
-		ignore_slider_signal = true
-		%VSlider.value = part.current_value * %VSlider.max_value / limit
+		%VSlider.set_value_no_signal(part.current_value * %VSlider.max_value / limit)
 
 
 func set_range(value):
