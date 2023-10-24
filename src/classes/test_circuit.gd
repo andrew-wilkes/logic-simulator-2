@@ -8,12 +8,21 @@ extends Node
 const CLOCK_PIN = "clk"
 
 var running = true
+var tasks
+var output_format
+var pin_states
+var output
+var inputs
+var outputs
+var repetitive_tasks
+var repeat_counter = 0
+var repeat_decrement = 1
 
 func get_io_nodes(parts, connections):
 	# Inputs are unconnected pins on the left side of parts
 	# Outputs are unconnected pins on the right side of parts
-	var inputs = {}
-	var outputs = {}
+	inputs = {}
+	outputs = {}
 	for part in parts:
 		if not part is Part:
 			continue
@@ -50,60 +59,54 @@ func get_label_text(part, side, port):
 
 
 # Parse a .tst file
-func run_tests(spec: String, inputs, outputs):
-	var output = ""
-	var output_format = ""
-	var pin_states = {}
-	var tasks = parse_spec(spec)
-	return process_tasks(tasks, output_format, pin_states, output, inputs, outputs)
+func init_tests(spec: String):
+	output = ""
+	output_format = ""
+	pin_states = {}
+	tasks = parse_spec(spec)
 
 
-func process_tasks(tasks, output_format, pin_states, output, inputs, outputs):
-	for task in tasks:
-		match task[0]:
-			"output-list":
-				output_format = task[1]
-				output = get_output_header(output_format)
-			"set":
-				# Apply input levels and values to the parts
-				var pin_name = task[1]
-				var value = get_int_from_string(task[2])
-				pin_states[pin_name] = "-"
-				if inputs.has(pin_name):
-					pin_states[pin_name] = value
-					var target = inputs[pin_name] # [part, port, port_type]
-					if target[2] == 0: # Wire
-						target[0].update_input_level(0, target[1], value == 1)
-					else: #Bus
-						target[0].update_bus_input_value(0, target[1], value)
-			"eval":
-				# Get the required outputs from the parts
-				for pin in get_pin_list(tasks):
-					if not pin_states.has(pin):
-						pin_states[pin] = "-"
-					if outputs.has(pin):
-						var target = outputs[pin]
-						var pin_key = [1, target[1]] # [side, port]
-						# Cast bools to int and set the value to 0 if the pin has not been touched
-						pin_states[pin] = int(target[0].pins.get(pin_key, 0))
-			"output":
-				output += get_output_result(pin_states, output_format)
-			"tick", "tock":
-				if inputs.has(CLOCK_PIN):
-					var target = inputs[CLOCK_PIN] # [part, port, port_type]
-					target[0].update_input_level(0, target[1], task[0] == "tick")
-			"repeat":
-				var count = task[1]
-				var dec = 0
-				if count > 0:
-					dec = 1
-				else:
-					count = 1
-				while running and count > 0:
-					count -= dec
-					var repetitive_tasks = parse_spec(task[2])
-					process_tasks(repetitive_tasks, output_format, pin_states, output, inputs, outputs)
-	return output
+func process_task(task):
+	match task[0]:
+		"output-list":
+			output_format = task[1]
+			set_output_header()
+		"set":
+			# Apply input levels and values to the parts
+			var pin_name = task[1]
+			var value = get_int_from_string(task[2])
+			pin_states[pin_name] = "-"
+			if inputs.has(pin_name):
+				pin_states[pin_name] = value
+				var target = inputs[pin_name] # [part, port, port_type]
+				if target[2] == 0: # Wire
+					target[0].update_input_level(0, target[1], value == 1)
+				else: #Bus
+					target[0].update_bus_input_value(0, target[1], value)
+		"eval":
+			# Get the required outputs from the parts
+			for pin in get_pin_list():
+				if not pin_states.has(pin):
+					pin_states[pin] = "-"
+				if outputs.has(pin):
+					var target = outputs[pin]
+					var pin_key = [1, target[1]] # [side, port]
+					# Cast bools to int and set the value to 0 if the pin has not been touched
+					pin_states[pin] = int(target[0].pins.get(pin_key, 0))
+		"output":
+			set_output_result()
+		"tick", "tock":
+			if inputs.has(CLOCK_PIN):
+				var target = inputs[CLOCK_PIN] # [part, port, port_type]
+				target[0].update_input_level(0, target[1], task[0] == "tick")
+		"repeat":
+			repeat_counter = task[1]
+			repetitive_tasks = parse_spec(task[2])
+			repeat_decrement = 0
+			if repeat_counter > 0:
+				repeat_decrement = 1
+			else:
+				repeat_counter = 1
 
 
 func compare_pos(a, b):
@@ -125,7 +128,7 @@ func get_closest_delimiter_position(text, from_idx, chars):
 
 # This function returns with whatever tasks it has listed so far if it hits something unexpected
 func parse_spec(spec: String):
-	var tasks = []
+	tasks = []
 	spec = clean_src(spec)
 	var idx = 0
 	while true:
@@ -219,10 +222,10 @@ func clean_src(spec):
 	return regex.sub(spec, "", true)
 
 
-func get_output_header(output_format: String):
+func set_output_header():
 	var output_formats = output_format.split(" ")
 	# Form the top line like: |   a   |   b   | out |
-	var output = "|"
+	output = "|"
 	for format in output_formats:
 		var pnf = format.split("%")
 		var widths = pnf[1].split(".")
@@ -233,10 +236,10 @@ func get_output_header(output_format: String):
 		@warning_ignore("integer_division")
 		pin_name = pin_name.lpad((min_length + pin_name.length()) / 2, " ")
 		output += pin_name.rpad(min_length, " ") + "|"
-	return output + "\n"
+	output += "\n"
 
 
-func get_pin_list(tasks):
+func get_pin_list():
 	var pins = []
 	for task in tasks:
 		if task[0] == "output-list":
@@ -247,9 +250,9 @@ func get_pin_list(tasks):
 	return pins
 
 
-func get_output_result(pin_states, output_format):
+func set_output_result():
 	var formats = output_format.split(" ")
-	var output = "|"
+	output = "|"
 	for idx in pin_states.size():
 		# Format string: (S|B|D|X)PadL.Length.PadR
 		var pnf = formats[idx].split("%")
@@ -259,7 +262,7 @@ func get_output_result(pin_states, output_format):
 		widths.resize(3) # There should be 3 values: PadL.Length.PadR
 		var value = format_value(pin_states[pnf[0]], pnf[1][0], int(widths[1]))
 		output += value.lpad(int(widths[0]) + value.length()) + " ".repeat(int(widths[2])) + "|"
-	return output + "\n"
+	output += "\n"
 
 
 func format_value(value, format, width):
