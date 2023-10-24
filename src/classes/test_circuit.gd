@@ -59,7 +59,9 @@ func get_label_text(part, side, port):
 
 
 # Parse a .tst file
-func init_tests(spec: String):
+func init_tests(spec: String, io_nodes):
+	inputs = io_nodes[0]
+	outputs = io_nodes[1]
 	output = ""
 	output_format = ""
 	pin_states = {}

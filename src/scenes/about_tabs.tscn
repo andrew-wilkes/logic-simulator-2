@@ -8,7 +8,6 @@ offset_bottom = 353.0
 theme_override_styles/panel = ExtResource("1_65w8n")
 
 [node name="About" type="MarginContainer" parent="."]
-visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
@@ -25,6 +24,7 @@ text = "This software was created by Andrew Wilkes in 2023.
 "
 
 [node name="Licence" type="MarginContainer" parent="."]
+visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10

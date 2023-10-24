@@ -124,12 +124,12 @@ func add_part_by_name(part_name):
 
 
 func add_part(part):
+	add_child(part)
 	part.part_type = part.name
 	part.position_offset = PART_INITIAL_OFFSET + scroll_offset / zoom \
 		+ part_initial_offset_delta
 	update_part_initial_offset_delta()
 	part.controller = self
-	add_child(part)
 	
 	# We want precise control of node names to keep circuit data robust
 	# Godot can sneak in @ marks to the node name, so we assign the name after
@@ -425,19 +425,30 @@ func test_circuit():
 		G.warning.open("No circuit title has been set.")
 	else:
 		var test_file = circuit.data.title + ".tst"
-		# Find dir containing this file
+		# Find dir containing these files
 		var result = G.find_file(G.settings.test_dir, test_file)
 		if result.error:
 			G.warning.open("File not found: " + test_file)
 		else:
+			var compare_lines = []
+			var compare_file = result.path + "/" + circuit.data.title + ".cmp"
+			if FileAccess.file_exists(compare_file):
+				compare_file = FileAccess.open(compare_file, FileAccess.READ)
+				if compare_file:
+					compare_lines = compare_file.get_as_text().replace("\r", "").split("\n", false)
 			var test = TestCircuit.new()
 			var io_nodes = test.get_io_nodes(get_children(), get_connection_list())
 			var file = FileAccess.open(result.path + "/" + test_file, FileAccess.READ)
 			if file:
 					var test_spec = file.get_as_text()
 					print(test_spec)
-					result = test.run_tests(test_spec, io_nodes[0], io_nodes[1])
-					print(result)
+					test.init_tests(test_spec, io_nodes)
+					for task in test.tasks:
+						test.process_task(task)
+						if task[0] == "output-list":
+							print(test.output)
+						if task[0] == "output":
+							print(test.output)
 			else:
 				G.warning.open("Error opening file: " + test_file)
 			test.free()
