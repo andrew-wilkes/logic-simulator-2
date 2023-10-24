@@ -74,7 +74,7 @@ func set_labels():
 	for n in data.labels.size():
 		if n > data.num_wires:
 			break
-		get_child(2 + n).get_child(0).text = data.labels[n]
+		get_child(2 + n).text = data.labels[n]
 
 
 func set_pin_colors():
