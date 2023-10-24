@@ -12,7 +12,6 @@ func _ready():
 	%ToolsButton.get_popup().add_item("Test circuit")
 	%ToolsButton.get_popup().add_item("Load HDL circuit")
 	%ToolsButton.get_popup().index_pressed.connect(tool_action)
-	schematic.warning.connect($WarningPanel.open)
 	schematic.changed.connect(set_current_file_color)
 	schematic.title_changed.connect(%Title.set_text)
 	%Title.text_changed.connect(schematic.set_circuit_title)
@@ -23,6 +22,7 @@ func _ready():
 	$SettingsPanel/SettingsPanel.high_color_changed.connect(schematic.set_high_color)
 	$AboutPanel/AboutTabs/About/Text.meta_clicked.connect(_on_text_meta_clicked)
 	%Title.text_submitted.connect(unfocus)
+	G.warning = $WarningPanel
 
 func tool_action(idx):
 	match idx:
@@ -31,7 +31,7 @@ func tool_action(idx):
 		1:
 			# Test circuit
 			if G.settings.test_dir.is_empty():
-				$WarningPanel.open("Test file directory has not been set in settings.")
+				G.warning.open("Test file directory has not been set in settings.")
 			else:
 				schematic.test_circuit()
 		2:
@@ -85,7 +85,7 @@ func do_action(action):
 func _on_file_dialog_file_selected(file_path):
 	var file_name = file_path.get_file()
 	if file_name.length() < 6:
-		$WarningPanel.open("An invalid file name was entered!")
+		G.warning.open("An invalid file name was entered!")
 		return
 	if menu_action != OPEN_AS_BLOCK:
 		# When saving, the file associated with current schematic is to be saved

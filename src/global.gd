@@ -3,6 +3,7 @@ extends Node
 # Autoload with class name G
 
 var settings
+var warning
 
 func _init():
 	settings = Settings.new()

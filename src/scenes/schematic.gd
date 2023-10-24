@@ -3,7 +3,6 @@ class_name Schematic
 extends GraphEdit
 
 signal invalid_instance(ob, note)
-signal warning(text)
 signal changed
 signal title_changed(text)
 
@@ -143,7 +142,7 @@ func add_part(part):
 
 func add_block(file_name):
 	if file_name == parent_file:
-		emit_signal("warning", "cannot open parent circuit as block.")
+		G.warning.open("cannot open parent circuit as block.")
 	else:
 		var block = Parts.scenes["Block"].instantiate()
 		block.data.circuit_file = file_name
@@ -194,7 +193,7 @@ func load_circuit(file_name):
 		colorize_pins()
 		emit_signal("title_changed", circuit.data.title)
 	else:
-		emit_signal("warning", "The circuit data was invalid!")
+		G.warning.open("The circuit data was invalid!")
 
 
 func add_parts():
@@ -333,7 +332,7 @@ func bus_value_changed_handler(part, side, port, value):
 
 
 func unstable_handler(part, side, port):
-	emit_signal("warning", "Unstable input to %s on %s side, port: %d" % [part.name, ["left", "right"][side], port])
+	G.warning.open("Unstable input to %s on %s side, port: %d" % [part.name, ["left", "right"][side], port])
 
 
 func reset_race_counters():
@@ -423,13 +422,13 @@ func set_circuit_title(text):
 
 func test_circuit():
 	if circuit.data.title.is_empty():
-		emit_signal("warning", "No circuit title has been set.")
+		G.warning.open("No circuit title has been set.")
 	else:
 		var test_file = circuit.data.title + ".tst"
 		# Find dir containing this file
 		var result = G.find_file(G.settings.test_dir, test_file)
 		if result.error:
-			emit_signal("warning", "File not found: " + test_file)
+			G.warning.open("File not found: " + test_file)
 		else:
 			var test = TestCircuit.new()
 			var io_nodes = test.get_io_nodes(get_children(), get_connection_list())
@@ -440,7 +439,7 @@ func test_circuit():
 					result = test.run_tests(test_spec, io_nodes[0], io_nodes[1])
 					print(result)
 			else:
-				emit_signal("warning", "Error opening file: " + test_file)
+				G.warning.open("Error opening file: " + test_file)
 			test.free()
 
 
@@ -461,7 +460,7 @@ func add_wire_io(label, pos):
 func create_circuit_from_hdl(file_path):
 	var file = FileAccess.open(file_path, FileAccess.READ)
 	if not file:
-		emit_signal("warning", "Error opening file: " + file_path)
+		G.warning.open("Error opening file: " + file_path)
 		return
 	var hdl = file.get_as_text()
 	clear()

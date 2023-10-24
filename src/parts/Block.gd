@@ -30,12 +30,12 @@ func block_setup(_file_chain = []):
 	file_chain = _file_chain
 	circuit = Circuit.new()
 	if file_chain.has(data.circuit_file):
-		emit_signal("warning", "Detected an infinite loop! %s was previously loaded as a block." % [data.circuit_file.get_file()])
+		G.warning.open("Detected an infinite loop! %s was previously loaded as a block." % [data.circuit_file.get_file()])
 		return
 	file_chain.append(data.circuit_file)
 	var load_result = circuit.load_data(data.circuit_file)
 	if load_result != OK:
-		emit_signal("warning", "The circuit block data from %s was invalid!" % [data.circuit_file.get_file()])
+		G.warning.open("The circuit block data from %s was invalid!" % [data.circuit_file.get_file()])
 		return
 	# Every circuit opened as a block is added to the available parts list
 	var cname = circuit.data.title
