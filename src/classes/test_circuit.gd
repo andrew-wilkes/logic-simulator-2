@@ -44,7 +44,7 @@ func get_label_text(part, side, port):
 	var slot = part.get_connection_input_slot(port) if side == 0 else \
 		part.get_connection_output_slot(port)
 	var node = part.get_child(slot)
-	if not node is Label:
+	if node is Container:
 		node = node.get_child(side)
 	return node.text
 
@@ -55,7 +55,7 @@ func run_tests(spec: String, inputs, outputs):
 	var output_format = ""
 	var pin_states = {}
 	var tasks = parse_spec(spec)
-	process_tasks(tasks, output_format, pin_states, output, inputs, outputs)
+	return process_tasks(tasks, output_format, pin_states, output, inputs, outputs)
 
 
 func process_tasks(tasks, output_format, pin_states, output, inputs, outputs):
@@ -149,7 +149,11 @@ func parse_spec(spec: String):
 				pos = get_closest_delimiter_position(spec, idx, ",;")
 				if pos < 0:
 					break # Syntax error
-				tasks.append([token, spec.substr(idx, pos - idx)])
+				# Remove space between string and % since we split the formats based on a space between items
+				# An example in the Nand2Tetris docs Appendix B had a space between the pin name and %
+				var regex = RegEx.new()
+				regex.compile("\\s%")
+				tasks.append([token, regex.sub(spec.substr(idx, pos - idx), "%", true)])
 				idx = pos + 1
 			"output", "eval", "tick", "tock":
 				tasks.append([token])
@@ -212,11 +216,7 @@ func clean_src(spec):
 	spec = regex.sub(spec, " ", true)
 	# Remove other types of comments
 	regex.compile("/[\\*]{1,2}.+/")
-	spec = regex.sub(spec, "", true)
-	# Remove space between string and % since we split the formats based on a space between items
-	# An example in the Nand2Tetris docs Appendix B had a space between the pin name and %
-	regex.compile("\\s%")
-	return regex.sub(spec, "%", true)
+	return regex.sub(spec, "", true)
 
 
 func get_output_header(output_format: String):
@@ -341,8 +341,9 @@ func get_ios_from_hdl(hdl):
 						idx = pos
 						var items = pin_text.replace(" ", "").split(",")
 						for item in items:
-							if item.find("[") > -1:
-								result.inputs.append([item, 1]) # Bus
+							pos = item.find("[")
+							if pos > -1:
+								result.inputs.append([item.left(pos), 1]) # Bus
 							else:
 								result.inputs.append([item, 0]) # Wire
 				pos = hdl.find("OUT", idx)
@@ -354,8 +355,9 @@ func get_ios_from_hdl(hdl):
 						idx = pos
 						var items = pin_text.replace(" ", "").split(",")
 						for item in items:
-							if item.find("[") > -1:
-								result.outputs.append([item, 1]) # Bus
+							pos = item.find("[")
+							if pos > -1:
+								result.outputs.append([item.left(pos), 1]) # Bus
 							else:
 								result.outputs.append([item, 0]) # Wire
 	return result
