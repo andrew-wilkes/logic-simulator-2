@@ -131,3 +131,40 @@ A speed optimization that is used is to not propagate a level if there is no cha
 
 Circuits are saved as text-based JSON data with a .circ file extension. So it's possible to edit and view the files in external text editors. Also, external tools could be used to generate or process these files.
 "
+
+[node name="Tools" type="MarginContainer" parent="."]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="RichText" type="RichTextLabel" parent="Tools"]
+layout_mode = 2
+theme_override_colors/default_color = Color(0.152941, 0.152941, 0.152941, 1)
+bbcode_enabled = true
+text = "[b]Number parts[/b]
+
+This is a utility to add part numbers to the Tags of the parts.
+
+The part number index is based off the distance of the part from the top left corner of the schematic diagram.
+
+The name prefix is taken from the name of the part.
+
+This is just a quick way to get started with assigning part labels to your circuit.
+
+[b]Test circuit[/b]
+
+This uses the Title of your circuit to search for a test script under the directory that is specified in the settings for the Test Directory.
+
+A warning is displayed if the test file cannot be found.
+
+[b]Load HDL circuit[/b]
+
+This generates the Input and Output pins for a circuit from the data contained in an HDL specification file.
+
+It's up to you to create the internal circuit to connect the inputs to the outputs to fulfill the function of the circuit, and then test it.
+
+
+"
