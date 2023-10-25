@@ -1,3 +1,5 @@
+class_name CustomPopup
+
 extends PanelContainer
 
 signal left_button_pressed()
@@ -6,6 +8,11 @@ var sizing_x = false
 var sizing_y = false
 var initial_mouse_position = Vector2.ZERO
 var initial_panel_position = Vector2.ZERO
+@onready var text_area = $M/VB/RichTextLabel
+
+func _ready():
+	set_text("")
+
 
 func open():
 	position = (get_window().size - Vector2i(size)) / 2
@@ -17,7 +24,7 @@ func set_title(title):
 
 
 func set_text(text):
-	$M/VB/RichTextLabel.text = text
+	text_area.text = text
 
 
 func _on_close_button_pressed():

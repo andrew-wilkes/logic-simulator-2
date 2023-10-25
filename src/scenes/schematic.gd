@@ -15,6 +15,11 @@ var selected_parts = []
 var part_initial_offset_delta = Vector2.ZERO
 var parent_file = ""
 var indicate_logic_levels = true
+var tester
+var test_step = 0
+var test_output_line = 0
+var compare_lines = []
+@onready var test_runner = $C/TestRunner
 
 func _ready():
 	circuit = Circuit.new()
@@ -430,28 +435,23 @@ func test_circuit():
 		if result.error:
 			G.warning.open("File not found: " + test_file)
 		else:
-			var compare_lines = []
 			var compare_file = result.path + "/" + circuit.data.title + ".cmp"
 			if FileAccess.file_exists(compare_file):
 				compare_file = FileAccess.open(compare_file, FileAccess.READ)
 				if compare_file:
 					compare_lines = compare_file.get_as_text().replace("\r", "").split("\n", false)
-			var test = TestCircuit.new()
-			var io_nodes = test.get_io_nodes(get_children(), get_connection_list())
+				tester = TestCircuit.new()
+			var io_nodes = tester.get_io_nodes(get_children(), get_connection_list())
 			var file = FileAccess.open(result.path + "/" + test_file, FileAccess.READ)
 			if file:
 					var test_spec = file.get_as_text()
+					test_runner.set_title(test_file)
+					test_runner.open()
 					print(test_spec)
-					test.init_tests(test_spec, io_nodes)
-					for task in test.tasks:
-						test.process_task(task)
-						if task[0] == "output-list":
-							print(test.output)
-						if task[0] == "output":
-							print(test.output)
+					tester.init_tests(test_spec, io_nodes)
 			else:
 				G.warning.open("Error opening file: " + test_file)
-			test.free()
+				tester.free()
 
 
 func add_bus_io(label, pos):
@@ -511,3 +511,74 @@ func create_circuit_from_hdl(file_path):
 		add_wire_io(output_wire, Vector2(600, 40 + 80 * count))
 		count += 1
 	grab_focus()
+
+
+func _on_test_runner_play():
+	pass # Replace with function body.
+
+
+func _on_test_runner_reset():
+	test_step = 0
+	test_output_line = 0
+	test_runner.set_text("")
+	test_runner.text_area.clear()
+
+
+func _on_test_runner_step():
+	while test_step < tester.tasks.size():
+		var task = tester.tasks[test_step]
+		tester.process_task(task)
+		if task[0] == "output-list":
+			test_runner.text_area.add_text(tester.output)
+			test_output_line += 1
+		elif task[0] == "output":
+			if test_output_line < compare_lines.size():
+				add_compared_string(tester.output, compare_lines[test_output_line], test_runner.text_area)
+			else:
+				test_runner.text_area.add_text(tester.output)
+			break
+		test_step += 1
+	test_step += 1
+	test_output_line += 1
+	if test_step == tester.tasks.size():
+		test_runner.text_area.add_text("DONE")
+
+
+func _on_test_runner_stop():
+	pass # Replace with function body.
+
+
+func add_compared_string(out, comp, text_area: RichTextLabel):
+	print(out)
+	print(comp)
+	var green = false
+	var red = false
+	for idx in out.length():
+		if idx < comp.length():
+			if idx == 0:
+				if out[idx] == comp[idx]:
+					text_area.push_color(Color.GREEN)
+					green = true
+				else:
+					text_area.push_color(Color.RED)
+					red = true
+			else:
+				if out[idx] == comp[idx]:
+					if red:
+						text_area.pop()
+						red = false
+						text_area.push_color(Color.GREEN)
+						green = true
+				else:
+					if green:
+						text_area.pop()
+						green = false
+						text_area.push_color(Color.RED)
+						red = true
+		elif red or green:
+			text_area.pop()
+			green = false
+			red = false
+		text_area.add_text(out[idx])
+	if red or green:
+		text_area.pop()
