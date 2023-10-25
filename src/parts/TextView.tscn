@@ -3,7 +3,7 @@
 [ext_resource type="StyleBox" uid="uid://6ey1ulrt3occ" path="res://assets/parts/frame.stylebox" id="1_q3aaj"]
 [ext_resource type="StyleBox" uid="uid://b51cf2x3pfpfk" path="res://assets/parts/selected-frame.stylebox" id="2_m4xqd"]
 [ext_resource type="Script" path="res://parts/TextView.gd" id="3_ah2hu"]
-[ext_resource type="StyleBox" uid="uid://b4ts0xs184cax" path="res://assets/ui/popup-panel.stylebox" id="4_w0vtl"]
+[ext_resource type="PackedScene" uid="uid://r0ltsytc18a2" path="res://scenes/CustomPopup.tscn" id="4_d40v0"]
 
 [node name="TextView" type="GraphNode"]
 offset_left = 29.0
@@ -67,55 +67,13 @@ filters = PackedStringArray("*.txt ,*.hdl,*.tst,*.cmp; Text files")
 
 [node name="C" type="CanvasLayer" parent="."]
 
-[node name="Panel" type="PanelContainer" parent="C"]
-top_level = true
-custom_minimum_size = Vector2(300, 400)
-offset_left = 26.0
-offset_top = 66.0
-offset_right = 326.0
-offset_bottom = 466.0
-theme_override_styles/panel = ExtResource("4_w0vtl")
+[node name="Panel" parent="C" instance=ExtResource("4_d40v0")]
+offset_right = 470.0
+offset_bottom = 503.0
 
-[node name="M" type="MarginContainer" parent="C/Panel"]
-layout_mode = 2
-theme_override_constants/margin_left = 10
-theme_override_constants/margin_top = 10
-theme_override_constants/margin_right = 10
-theme_override_constants/margin_bottom = 10
-
-[node name="VB" type="VBoxContainer" parent="C/Panel/M"]
-layout_mode = 2
-theme_override_constants/separation = 20
-
-[node name="Title" type="Label" parent="C/Panel/M/VB"]
-unique_name_in_owner = true
-layout_mode = 2
-horizontal_alignment = 1
-
-[node name="Label" type="RichTextLabel" parent="C/Panel/M/VB"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="HB" type="HBoxContainer" parent="C/Panel/M/VB"]
-layout_mode = 2
-theme_override_constants/separation = 20
-
-[node name="FileButton" type="Button" parent="C/Panel/M/VB/HB"]
-layout_mode = 2
-text = "Open File"
-
-[node name="Sp" type="Control" parent="C/Panel/M/VB/HB"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="CloseButton" type="Button" parent="C/Panel/M/VB/HB"]
-layout_mode = 2
-text = "Close"
-
-[connection signal="position_offset_changed" from="." to="." method="_on_position_offset_changed"]
 [connection signal="pressed" from="ViewButton" to="." method="_on_view_button_pressed"]
 [connection signal="canceled" from="FileDialog" to="." method="_on_file_dialog_canceled"]
 [connection signal="file_selected" from="FileDialog" to="." method="_on_file_dialog_file_selected"]
-[connection signal="pressed" from="C/Panel/M/VB/HB/FileButton" to="." method="_on_file_button_pressed"]
-[connection signal="pressed" from="C/Panel/M/VB/HB/CloseButton" to="." method="_on_close_button_pressed"]
+[connection signal="hidden" from="C/Panel" to="." method="_on_panel_hidden"]
+[connection signal="left_button_pressed" from="C/Panel" to="." method="_on_custom_popup_left_button_pressed"]
+[connection signal="resized" from="C/Panel" to="." method="_on_panel_resized"]
