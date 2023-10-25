@@ -475,6 +475,10 @@ func create_circuit_from_hdl(file_path):
 		return
 	var hdl = file.get_as_text()
 	clear()
+	var text_view = Parts.scenes["TextView"].instantiate()
+	text_view.data.file = file_path
+	add_child(text_view)
+	text_view.position_offset = Vector2(800, 40)
 	var test = TestCircuit.new()
 	var details = test.get_ios_from_hdl(hdl)
 	test.free()
