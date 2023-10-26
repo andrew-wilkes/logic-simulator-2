@@ -149,9 +149,7 @@ func _unhandled_key_input(event: InputEvent):
 						_on_load_button_pressed()
 			KEY_P:
 				if event.ctrl_pressed:
-					%AddPartMenu.get_popup().show()
-					%AddPartMenu.get_popup().position = \
-						%AddPartMenu.position + Vector2(0, %AddPartMenu.size.y)
+					_on_add_part_button_pressed()
 			KEY_T:
 				if event.ctrl_pressed:
 					%ToolsButton.get_popup().show()

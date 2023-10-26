@@ -9,7 +9,7 @@ func _ready():
 	for idx in lists.size():
 		lists[idx] = []
 	for part_name in Parts.names:
-		# We need to instantiate a part just to see its' properties
+		# We need to instantiate a part just to see its properties
 		var part = Parts.get_instance(part_name)
 		lists[part.category].append([part.order, part_name])
 		part.free()

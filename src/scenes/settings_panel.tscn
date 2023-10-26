@@ -66,7 +66,7 @@ theme_override_constants/separation = 0
 
 [node name="Label2" type="Label" parent="HBox/VBox/VB"]
 layout_mode = 2
-text = "Test File Directory"
+text = "Test file directory"
 
 [node name="HB3" type="HBoxContainer" parent="HBox/VBox/VB"]
 layout_mode = 2

@@ -61,6 +61,7 @@ layout_mode = 2
 text = "Load As Block"
 
 [node name="AddPartButton" type="Button" parent="VB/HB"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Parts"
 
