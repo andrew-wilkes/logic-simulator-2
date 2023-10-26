@@ -19,6 +19,7 @@ var tester
 var test_step = 0
 var test_output_line = 0
 var compare_lines = []
+var test_playing = false
 @onready var test_runner = $C/TestRunner
 
 func _ready():
@@ -513,10 +514,6 @@ func create_circuit_from_hdl(file_path):
 	grab_focus()
 
 
-func _on_test_runner_play():
-	pass # Replace with function body.
-
-
 func _on_test_runner_reset():
 	test_step = 0
 	test_output_line = 0
@@ -542,10 +539,19 @@ func _on_test_runner_step():
 	test_output_line += 1
 	if test_step == tester.tasks.size():
 		test_runner.text_area.add_text("DONE")
+		test_playing = false
+	if test_playing:
+		$TestTimer.start()
+
+
+func _on_test_runner_play():
+	test_playing = true
+	$TestTimer.start()
 
 
 func _on_test_runner_stop():
-	pass # Replace with function body.
+	$TestTimer.stop()
+	test_playing = false
 
 
 func add_compared_string(out, comp, text_area: RichTextLabel):
@@ -582,3 +588,7 @@ func add_compared_string(out, comp, text_area: RichTextLabel):
 		text_area.add_text(out[idx])
 	if red or green:
 		text_area.pop()
+
+
+func _on_test_timer_timeout():
+	_on_test_runner_step()
