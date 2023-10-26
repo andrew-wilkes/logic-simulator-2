@@ -17,6 +17,8 @@ var outputs
 var repetitive_tasks
 var repeat_counter = 0
 var repeat_decrement = 1
+var time = 0
+var tick = false
 
 func get_io_nodes(parts, connections):
 	# Inputs are unconnected pins on the left side of parts
@@ -68,6 +70,13 @@ func init_tests(spec: String, io_nodes):
 	tasks = parse_spec(spec)
 
 
+func reset():
+	time = 0
+	tick = false
+	for key in pin_states:
+		pin_states[key] = 0
+
+
 func process_task(task):
 	match task[0]:
 		"output-list":
@@ -86,21 +95,17 @@ func process_task(task):
 				else: #Bus
 					target[0].update_bus_input_value(0, target[1], value)
 		"eval":
-			# Get the required outputs from the parts
-			for pin in get_pin_list():
-				if not pin_states.has(pin):
-					pin_states[pin] = "-"
-				if outputs.has(pin):
-					var target = outputs[pin]
-					var pin_key = [1, target[1]] # [side, port]
-					# Cast bools to int and set the value to 0 if the pin has not been touched
-					pin_states[pin] = int(target[0].pins.get(pin_key, 0))
+			get_output_values()
 		"output":
 			set_output_result()
 		"tick", "tock":
+			tick = true if task[0] == "tick" else false
+			if not tick:
+				time += 1 # tock
 			if inputs.has(CLOCK_PIN):
 				var target = inputs[CLOCK_PIN] # [part, port, port_type]
-				target[0].update_input_level(0, target[1], task[0] == "tick")
+				target[0].update_input_level(0, target[1], tick)
+			get_output_values()
 		"repeat":
 			repeat_counter = task[1]
 			repetitive_tasks = parse_spec(task[2])
@@ -109,6 +114,18 @@ func process_task(task):
 				repeat_decrement = 1
 			else:
 				repeat_counter = 1
+
+
+func get_output_values():
+	# Get the required outputs from the parts
+	for pin in get_pin_list():
+		if not pin_states.has(pin):
+			pin_states[pin] = "-"
+		if outputs.has(pin):
+			var target = outputs[pin]
+			var pin_key = [1, target[1]] # [side, port]
+			# Cast bools to int and set the value to 0 if the pin has not been touched
+			pin_states[pin] = int(target[0].pins.get(pin_key, 0))
 
 
 func compare_pos(a, b):
@@ -248,30 +265,45 @@ func get_pin_list():
 			for format in output_formats:
 				var pnf = format.split("%")
 				pins.append(pnf[0])
+			break
 	return pins
 
 
 func set_output_result():
 	var formats = output_format.split(" ")
 	output = "|"
-	for idx in pin_states.size():
+	for idx in formats.size():
 		# Format string: (S|B|D|X)%PadL.Length.PadR
 		var pnf = formats[idx].split("%")
 		if pnf.size() == 1:
 			pnf.append("B1.1.1") # Default value
 		var widths = pnf[1].right(-1).split(".")
 		widths.resize(3) # There should be 3 values: [PadL, Length, PadR]
-		var value = format_value(pin_states[pnf[0]], pnf[1][0], int(widths[1]))
+		var value = get_tick_tock_str() if pnf[0] == "time" else pin_states[pnf[0]]
+		value = format_value(value, pnf[1][0], int(widths[1]))
 		output += value.lpad(int(widths[0]) + value.length()) + " ".repeat(int(widths[2])) + "|"
 	output += "\n"
+
+
+func get_tick_tock_str():
+	if tick:
+		return str(time) + "+"
+	else:
+		return str(time)
 
 
 func format_value(value, format, width):
 	if value is String:
 		format = "S"
 	match format:
-		"S", "D":
+		"S":
 			value = str(value).rpad(width, " ")
+		"D":
+			if value > 0:
+				value &= 0xffff
+				if value > 0x7fff: # negative?
+					value = -1 - value / 2
+			value = str(value).lpad(width, " ")
 		"X":
 			format =  "%0" + str(width) + "X"
 			value = format % [value]

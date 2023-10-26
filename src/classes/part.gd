@@ -140,3 +140,8 @@ func _on_change_notification_timer_timeout():
 
 func _on_tag_text_changed(_new_text):
 	changed()
+
+
+# Override this function to apply a reset to a part that has memory
+func reset():
+	pass

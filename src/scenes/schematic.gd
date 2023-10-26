@@ -524,10 +524,15 @@ func _on_test_runner_reset():
 	test_output_line = 0
 	test_runner.set_text("")
 	test_runner.text_area.clear() # Clear bbcode tags
+	tester.reset()
+	for part in get_children():
+		if part is Part:
+			part.reset()
 
 
 func _on_test_runner_step():
 	while test_step < tester.tasks.size():
+		reset_race_counters()
 		var task = tester.tasks[test_step]
 		tester.process_task(task)
 		if task[0] == "output-list":

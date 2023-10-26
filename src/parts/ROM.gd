@@ -12,6 +12,7 @@ func _init():
 	category = ASYNC
 	data["bits"] = 16
 	data["size"] = "8K"
+	pins = { [0, 0]: 0, [0, 1]: 0 }
 
 
 func _ready():
@@ -55,14 +56,16 @@ func get_max_address(dsize: String) -> int:
 	return n - 1
 
 
-func evaluate_output_level(side, _port, _level):
-	if side == LEFT:
-		var address = clampi(values[pins[[side, 0]]], 0, max_address)
-		if old_address != address:
-			old_address = address
-			%Address.text = "%04X" % [address]
-			%Data.text = "%02X" % [values[address]]
-			update_output_value(RIGHT, 0, values[address])
+func evaluate_bus_output_value(side, port, _value):
+	if side == LEFT and port == 1: # Change of address
+		set_output_data()
+
+
+func set_output_data():
+	var address = clampi(pins[[LEFT, 1]], 0, max_address)
+	$Address.text = "%04X" % [address]
+	$Data.text = "%02X" % [values[address]]
+	update_output_value(RIGHT, 0, values[address])
 
 
 func resize_memory(num_bytes):

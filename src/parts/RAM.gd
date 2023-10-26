@@ -5,13 +5,13 @@ extends Part
 var max_value = 0
 var max_address = 0
 var values = []
-var old_address = 0
 
 func _init():
 	order = 80
-	category = ASYNC
+	category = SYNC
 	data["bits"] = 16
 	data["size"] = "8K"
+	pins = { [0, 0]: 0, [0, 1]: 0, [1, 0]: 0 }
 
 
 func _ready():
@@ -57,21 +57,32 @@ func get_max_address(dsize: String) -> int:
 
 func evaluate_output_level(side, port, level):
 	if side == LEFT:
-		var address = clampi(values[pins[[side, 1]]], 0, max_address)
+		var address = clampi(pins[[side, 1]], 0, max_address)
 		if port == 3: # clk
-			if level and pins[[side, 2]]: # load
-				var value = clampi(pins[[side, 0]], 0, max_value)
-				values[address] = value
-				%Data.text = "%02X" % [value]
+			if level:
+				if pins[[side, 2]]: # load
+					var value = clampi(pins[[side, 0]], 0, max_value)
+					values[address] = value
 			else:
-				update_output_value(RIGHT, 0, values[address])
-		if old_address != address:
-			old_address = address
-			%Address.text = "%04X" % [address]
-			%Data.text = "%02X" % [values[address]]
-			update_output_value(RIGHT, 0, values[address])
+				set_output_data()
+
+
+func evaluate_bus_output_value(side, port, _value):
+	if side == LEFT and port == 1: # Change of address
+		set_output_data()
+
+
+func set_output_data():
+	var address = clampi(pins[[LEFT, 1]], 0, max_address)
+	$Address.text = "%04X" % [address]
+	$Data.text = "%02X" % [values[address]]
+	update_output_value(RIGHT, 0, values[address])
 
 
 func resize_memory(num_bytes):
 	values.resize(num_bytes)
+	values.fill(0)
+
+
+func reset():
 	values.fill(0)
