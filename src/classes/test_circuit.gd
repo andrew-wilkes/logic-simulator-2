@@ -139,7 +139,6 @@ func parse_spec(spec: String):
 		# Get the shortest distance to the next delimiter from the start of the line
 		var pos = get_closest_delimiter_position(spec, idx, " ,;")
 		var token = spec.substr(idx, pos - idx)
-		print(token)
 		idx = pos + 1
 		match token:
 			"load", "output-file", "compare-to":

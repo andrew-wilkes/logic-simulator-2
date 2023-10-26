@@ -447,9 +447,14 @@ func test_circuit():
 			if file:
 					var test_spec = file.get_as_text()
 					test_runner.set_title(test_file)
-					test_runner.open()
-					print(test_spec)
 					tester.init_tests(test_spec, io_nodes)
+					# Make panel fit the width of the test output
+					for task in tester.tasks:
+						if task[0] == "output-list":
+							var width = task[1].length() * 8.2
+							if test_runner.size.x < width:
+								test_runner.size.x = width
+					test_runner.open()
 			else:
 				G.warning.open("Error opening file: " + test_file)
 				tester.free()
@@ -555,8 +560,6 @@ func _on_test_runner_stop():
 
 
 func add_compared_string(out, comp, text_area: RichTextLabel):
-	print(out)
-	print(comp)
 	var green = false
 	var red = false
 	for idx in out.length():
