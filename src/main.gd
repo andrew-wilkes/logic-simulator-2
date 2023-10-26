@@ -20,7 +20,8 @@ func _ready():
 	$SettingsPanel/SettingsPanel.level_indication_changed.connect(schematic.set_all_connection_colors)
 	$SettingsPanel/SettingsPanel.low_color_changed.connect(schematic.set_low_color)
 	$SettingsPanel/SettingsPanel.high_color_changed.connect(schematic.set_high_color)
-	$AboutPanel/AboutTabs/About/Text.meta_clicked.connect(_on_text_meta_clicked)
+	$AboutPanel/AboutTabs/About/Text.meta_clicked.connect(_on_about_text_meta_clicked)
+	$HelpPanel/HelpTabs/Nand2Tetris/RichText.meta_clicked.connect(_on_nand_text_meta_clicked)
 	%Title.text_submitted.connect(unfocus)
 	G.warning = $WarningPanel
 
@@ -222,8 +223,12 @@ func unfocus(_arg = null):
 	schematic.grab_focus()
 
 
-func _on_text_meta_clicked(_meta):
+func _on_about_text_meta_clicked(_meta):
 	var _e = OS.shell_open("https://buymeacoffee.com/gdscriptdude")
+
+
+func _on_nand_text_meta_clicked(_meta):
+	var _e = OS.shell_open("https://www.nand2tetris.org/software")
 
 
 func _on_load_hdl_file_selected(path):
