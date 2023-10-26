@@ -28,17 +28,18 @@ func update_outputs():
 	if pins[[LEFT, 2]]: # zx
 		x = 0
 	if pins[[LEFT, 3]]: # nx
-		x = -x
+		x = ~x
 	if pins[[LEFT, 4]]: # zy
 		y = 0
 	if pins[[LEFT, 5]]: # ny
-		y = -y
+		y = ~y
 	if pins[[LEFT, 6]]: # f
 		result = x + y
 	else:
 		result = x & y
 	if pins[[LEFT, 7]]: # no
-		result = -result
+		result = ~result
+	result &= 0xffff
 	update_output_value(RIGHT, 0, result)
 	update_output_level(RIGHT, 1, result == 0)
-	update_output_level(RIGHT, 2, result < 0)
+	update_output_level(RIGHT, 2, result > 0x0fff)

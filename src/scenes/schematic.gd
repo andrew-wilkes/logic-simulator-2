@@ -521,7 +521,7 @@ func _on_test_runner_reset():
 	test_step = 0
 	test_output_line = 0
 	test_runner.set_text("")
-	test_runner.text_area.clear()
+	test_runner.text_area.clear() # Clear bbcode tags
 
 
 func _on_test_runner_step():
