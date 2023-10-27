@@ -29,7 +29,7 @@ offset_top = 0.0
 offset_bottom = 369.0
 
 [node name="TestTimer" type="Timer" parent="."]
-wait_time = 0.5
+wait_time = 0.2
 one_shot = true
 
 [connection signal="play" from="C/TestRunner" to="." method="_on_test_runner_play"]

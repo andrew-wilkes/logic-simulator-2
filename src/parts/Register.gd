@@ -12,8 +12,17 @@ func _init():
 func evaluate_output_level(side, port, level):
 	if side == LEFT:
 		if port == 2: # clk
-			if level and pins[[side, 1]]: # load
-				value = pins[[side, 0]]
-				$Value.text = "%02X" % [value]
+			if level:
+				if pins[[side, 1]]: # load
+					value = pins[[side, 0]]
+					$Value.text = "%02X" % [value]
 			else:
 				update_output_value(RIGHT, 0, value)
+
+
+func evaluate_bus_output_value(_side, _port, _value):
+	pass
+
+
+func reset():
+	value = 0

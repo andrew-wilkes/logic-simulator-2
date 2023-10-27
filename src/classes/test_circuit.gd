@@ -282,7 +282,6 @@ func set_output_result():
 		var value = get_tick_tock_str() if pnf[0] == "time" else pin_states[pnf[0]]
 		value = format_value(value, pnf[1][0], int(widths[1]))
 		output += value.lpad(int(widths[0]) + value.length()) + " ".repeat(int(widths[2])) + "|"
-	output += "\n"
 
 
 func get_tick_tock_str():
@@ -343,6 +342,10 @@ func get_int_from_string(s):
 						for idx in num.length():
 							x *= 2
 							x += int(num[idx])
+					if x > 0x7fff: # negative?
+						x = ~x + 1
+						x &= 0xffff
+						x = -x
 				"X":
 					if num.is_valid_hex_number():
 						x = num.hex_to_int()

@@ -568,34 +568,32 @@ func add_compared_string(out, comp, text_area: RichTextLabel):
 	var green = false
 	var red = false
 	for idx in out.length():
-		if idx < comp.length():
-			if idx == 0:
-				if out[idx] == comp[idx]:
+		if idx == comp.length():
+			break
+		if idx == 0:
+			if out[idx] == comp[idx]:
+				text_area.push_color(Color.GREEN)
+				green = true
+			else:
+				text_area.push_color(Color.RED)
+				red = true
+		else:
+			if out[idx] == comp[idx]:
+				if red:
+					text_area.pop()
+					red = false
 					text_area.push_color(Color.GREEN)
 					green = true
-				else:
+			else:
+				if green:
+					text_area.pop()
+					green = false
 					text_area.push_color(Color.RED)
 					red = true
-			else:
-				if out[idx] == comp[idx]:
-					if red:
-						text_area.pop()
-						red = false
-						text_area.push_color(Color.GREEN)
-						green = true
-				else:
-					if green:
-						text_area.pop()
-						green = false
-						text_area.push_color(Color.RED)
-						red = true
-		elif red or green:
-			text_area.pop()
-			green = false
-			red = false
-		text_area.add_text(out[idx])
+		text_area.add_text(comp[idx]) # Display the correct char
 	if red or green:
 		text_area.pop()
+	text_area.add_text("\n")
 
 
 func _on_test_timer_timeout():
