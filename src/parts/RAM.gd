@@ -50,8 +50,8 @@ func get_max_address(dsize: String) -> int:
 	else:
 		n = int(dsize.left(-1))
 		if dsize.right(1) == "M":
-			n *= 1000
-		n *= 1000
+			n *= 1024
+		n *= 1024
 	return n - 1
 
 
