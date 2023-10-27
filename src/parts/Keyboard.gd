@@ -18,3 +18,9 @@ func _on_chars_text_changed(new_text):
 			print(char_code)
 		update_output_value(RIGHT, 0, char_code)
 	last_text_length = length
+
+
+# Emit 0 when key is released
+func _unhandled_key_input(event):
+	if not event.pressed:
+		update_output_value(RIGHT, 0, 0)
