@@ -2,6 +2,8 @@ class_name Bit
 
 extends Part
 
+enum { BIT_LOAD = 1, BIT_CLK }
+
 var state = false
 
 func _init():
@@ -12,8 +14,8 @@ func _init():
 
 func evaluate_output_level(side, port, level):
 	if side == LEFT:
-		if port == 2: # clk
-			if level and pins[[side, 1]]: # load
-				state = pins[[side, 0]]
+		if port == BIT_CLK:
+			if level and pins[[side, BIT_LOAD]]:
+				state = pins[[side, IN]]
 			else:
-				update_output_level(RIGHT, 0, state)
+				update_output_level(RIGHT, OUT, state)

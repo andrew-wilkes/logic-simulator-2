@@ -7,6 +7,7 @@ extends GraphNode
 enum { LEFT, RIGHT }
 enum { WIRE_TYPE, BUS_TYPE }
 enum { UTILITY, ASYNC, SYNC, BLOCK }
+enum { A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P }
 
 # This is based on the number of bits that may change per update of the value.
 # The value is applied bit by bit so a stable state is reached after all of
@@ -16,6 +17,8 @@ enum { UTILITY, ASYNC, SYNC, BLOCK }
 const RACE_COUNT_THRESHOLD = 128
 const DEBUG = false
 const FLIP_SIDES = [RIGHT, LEFT]
+const IN = 0
+const OUT = 0
 
 # Part properties
 var tag = ""

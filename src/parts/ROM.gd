@@ -65,7 +65,7 @@ func set_output_data():
 	var address = clampi(pins[[LEFT, 1]], 0, max_address)
 	$Address.text = "%04X" % [address]
 	$Data.text = "%02X" % [values[address]]
-	update_output_value(RIGHT, 0, values[address])
+	update_output_value(RIGHT, OUT, values[address])
 
 
 func resize_memory(num_bytes):

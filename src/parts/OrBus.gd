@@ -8,4 +8,4 @@ func _init():
 
 
 func evaluate_bus_output_value(_side, _port, value):
-	update_output_level(RIGHT, 0, value > 0)
+	update_output_level(RIGHT, OUT, value > 0)

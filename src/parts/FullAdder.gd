@@ -10,6 +10,6 @@ func _init():
 
 func evaluate_output_level(side, _port, _level):
 	if side == LEFT:
-		var sum = int(pins[[side, 0]]) + int(pins[[side, 1]]) + int(pins[[side, 2]])
+		var sum = int(pins[[side, A]]) + int(pins[[side, B]]) + int(pins[[side, C]])
 		update_output_level(RIGHT, 0, sum % 2 == 1)
 		update_output_level(RIGHT, 1, sum > 1)

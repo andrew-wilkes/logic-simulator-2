@@ -14,6 +14,6 @@ func evaluate_output_level(side, port, level):
 	if side == LEFT:
 		if port == 1: # clk
 			if level:
-				state = pins[[side, 0]]
+				state = pins[[side, IN]]
 			else:
-				update_output_level(RIGHT, 0, state)
+				update_output_level(RIGHT, OUT, state)

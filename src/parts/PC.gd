@@ -29,7 +29,7 @@ func evaluate_output_level(side, port, level):
 					value = 0
 				$Value.text = "%02X" % [value]
 			else:
-				update_output_value(RIGHT, 0, value)
+				update_output_value(RIGHT, OUT, value)
 
 
 func _on_bits_text_submitted(new_text):

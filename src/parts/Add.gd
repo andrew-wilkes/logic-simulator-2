@@ -12,4 +12,4 @@ func _init():
 func evaluate_bus_output_value(side, port, value):
 	if side == LEFT:
 		ab[port] = value
-		update_output_value(RIGHT, 0, ab[0] + ab[1])
+		update_output_value(RIGHT, OUT, ab[A] + ab[B])
