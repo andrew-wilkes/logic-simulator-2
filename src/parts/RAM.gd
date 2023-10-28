@@ -17,10 +17,11 @@ func _init():
 func _ready():
 	super()
 	set_max_value()
-	%Bits.text = str(data.bits)
 	max_address = get_max_address(data.size)
 	resize_memory(max_address + 1)
-	$Size.text = data.size
+	if category == SYNC:
+		%Bits.text = str(data.bits)
+		$Size.text = data.size
 
 
 func _on_size_text_submitted(new_text):
@@ -61,10 +62,13 @@ func evaluate_output_level(side, port, level):
 		if port == 3: # clk
 			if level:
 				if pins[[side, 2]]: # load
-					var value = clampi(pins[[side, 0]], 0, max_value)
-					values[address] = value
+					var value = clampi(pins[[side, 0]], -max_value - 1, max_value)
+					update_value(value, address)
 			else:
 				set_output_data()
+
+func update_value(value, address):
+	values[address] = value
 
 
 func evaluate_bus_output_value(side, port, _value):
@@ -74,8 +78,8 @@ func evaluate_bus_output_value(side, port, _value):
 
 func set_output_data():
 	var address = clampi(pins[[LEFT, 1]], 0, max_address)
-	$Address.text = "%04X" % [address]
-	$Data.text = "%02X" % [values[address]]
+	%Address.text = "%04X" % [address]
+	%Data.text = "%02X" % [values[address]]
 	update_output_value(RIGHT, 0, values[address])
 
 

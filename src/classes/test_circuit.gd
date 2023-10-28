@@ -56,7 +56,7 @@ func get_label_text(part, side, port):
 		part.get_connection_output_slot(port)
 	var node = part.get_child(slot)
 	if node is Container:
-		node = node.get_child(side)
+		node = node.get_child(side if side == 0 else -1)
 	return node.text
 
 

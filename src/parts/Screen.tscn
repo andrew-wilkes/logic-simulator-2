@@ -31,12 +31,12 @@ slot/0/right_color = Color(0, 0, 1, 1)
 slot/0/right_icon = null
 slot/0/draw_stylebox = true
 slot/1/left_enabled = false
-slot/1/left_type = 1
-slot/1/left_color = Color(1, 1, 0, 1)
+slot/1/left_type = 0
+slot/1/left_color = Color(1, 1, 1, 1)
 slot/1/left_icon = null
 slot/1/right_enabled = false
-slot/1/right_type = 1
-slot/1/right_color = Color(1, 1, 0, 1)
+slot/1/right_type = 0
+slot/1/right_color = Color(1, 1, 1, 1)
 slot/1/right_icon = null
 slot/1/draw_stylebox = true
 slot/2/left_enabled = true
@@ -44,7 +44,7 @@ slot/2/left_type = 1
 slot/2/left_color = Color(1, 1, 0, 1)
 slot/2/left_icon = null
 slot/2/right_enabled = true
-slot/2/right_type = 0
+slot/2/right_type = 1
 slot/2/right_color = Color(1, 1, 0, 1)
 slot/2/right_icon = null
 slot/2/draw_stylebox = true
@@ -111,6 +111,7 @@ layout_mode = 2
 text = "in"
 
 [node name="Data" type="Label" parent="HB"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 tooltip_text = "Data"
@@ -134,6 +135,7 @@ layout_mode = 2
 text = "address"
 
 [node name="Address" type="Label" parent="HB2"]
+unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "Address"
 mouse_filter = 1

@@ -125,6 +125,7 @@ text = "out"
 horizontal_alignment = 2
 
 [node name="Data" type="Label" parent="."]
+unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "Data"
 mouse_filter = 1
@@ -136,6 +137,7 @@ layout_mode = 2
 text = "address"
 
 [node name="Address" type="Label" parent="."]
+unique_name_in_owner = true
 layout_mode = 2
 tooltip_text = "Address"
 mouse_filter = 1
