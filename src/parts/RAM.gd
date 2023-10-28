@@ -19,7 +19,7 @@ func _ready():
 	set_max_value()
 	max_address = get_max_address(data.size)
 	resize_memory(max_address + 1)
-	if category == SYNC:
+	if part_type == RAM:
 		%Bits.text = str(data.bits)
 		$Size.text = data.size
 
@@ -66,6 +66,7 @@ func evaluate_output_level(side, port, level):
 					update_value(value, address)
 			else:
 				set_output_data()
+
 
 func update_value(value, address):
 	values[address] = value
