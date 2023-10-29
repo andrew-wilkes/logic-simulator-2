@@ -14,12 +14,13 @@ var pin_states
 var output
 var inputs
 var outputs
-var repetitive_tasks
+var repetitive_tasks = []
 var repeat_counter = 0
 var repeat_decrement = 1
 var repetitive_task_idx = 0
 var time = 0
 var tick = false
+var while_task
 
 func get_io_nodes(parts, connections):
 	# Inputs are unconnected pins on the left side of parts
@@ -116,8 +117,54 @@ func process_task(task):
 				repeat_decrement = 1
 			else:
 				repeat_counter = 1
+		"while":
+			# while x op y { tasks to repeat }
+			var x = get_pin_value(task[1])
+			var op = task[2]
+			var y = get_pin_value(task[3])
+			var is_true = false
+			match op:
+				">":
+					is_true = x > y
+				"<":
+					is_true = x < y
+				">=":
+					is_true = x >= y
+				"<=":
+					is_true = x <= y
+				"<>":
+					is_true = x != y
+				"=":
+					is_true = x == y
+			if is_true:
+				repetitive_task_idx = -1 # This is incremented after processing the current task
+				if repetitive_tasks.size() == 0:
+					while_task = task
+					repeat_counter = 1 
+					repetitive_tasks = parse_spec(task[4])
+					repeat_decrement = 0
+			else:
+				repeat_counter = 0
+				repetitive_tasks.clear()
+				while_task = null
 		"echo":
 			G.warning.open(task[1], "", Color.DARK_SLATE_BLUE)
+
+
+func get_pin_value(pin: String):
+	if pin.is_valid_int():
+		return int(pin)
+	if outputs.has(pin):
+		var target = outputs[pin]
+		var pin_key = [1, target[1]] # [side, port]
+		# Cast bools to int and set the value to 0 if the pin has not been touched
+		return int(target[0].pins.get(pin_key, 0))
+	if inputs.has(pin):
+		var target = inputs[pin]
+		var pin_key = [0, target[1]] # [side, port]
+		# Cast bools to int and set the value to 0 if the pin has not been touched
+		return int(target[0].pins.get(pin_key, 0))
+	return 0
 
 
 func get_output_values():
@@ -151,7 +198,7 @@ func get_closest_delimiter_position(text, from_idx, chars):
 
 # This function returns with whatever tasks it has listed so far if it hits something unexpected
 func parse_spec(spec: String):
-	tasks = []
+	var _tasks = []
 	spec = clean_src(spec)
 	var idx = 0
 	while true:
@@ -167,7 +214,7 @@ func parse_spec(spec: String):
 				pos = get_closest_delimiter_position(spec, idx, ",;")
 				if pos < 0:
 					break # Syntax error
-				tasks.append([token, spec.substr(idx, pos - idx)])
+				_tasks.append([token, spec.substr(idx, pos - idx)])
 				idx = pos + 1
 			"output-list":
 				# Find a string ending with ; but allow for ,
@@ -178,10 +225,10 @@ func parse_spec(spec: String):
 				# An example in the Nand2Tetris docs Appendix B had a space between the pin name and %
 				var regex = RegEx.new()
 				regex.compile("\\s%")
-				tasks.append([token, regex.sub(spec.substr(idx, pos - idx), "%", true)])
+				_tasks.append([token, regex.sub(spec.substr(idx, pos - idx), "%", true)])
 				idx = pos + 1
 			"output", "eval", "tick", "tock":
-				tasks.append([token])
+				_tasks.append([token])
 			"set":
 				# Find a string ending with , or ;
 				pos = get_closest_delimiter_position(spec, idx, ",;")
@@ -190,7 +237,7 @@ func parse_spec(spec: String):
 				var task = [token] + Array(spec.substr(idx, pos - idx).split(" "))
 				if task.size() != 3:
 					break # Syntax error
-				tasks.append(task)
+				_tasks.append(task)
 				idx = pos + 1
 			"echo":
 				if spec[idx] != '"':
@@ -199,7 +246,7 @@ func parse_spec(spec: String):
 				pos = spec.find('"', idx)
 				if pos < 0:
 					break # Syntax error
-				tasks.append([token, spec.substr(idx, pos - idx)])
+				_tasks.append([token, spec.substr(idx, pos - idx)])
 			"repeat":
 				var reps = 0 # Continuous loop
 				if spec[idx] != "{":
@@ -219,9 +266,34 @@ func parse_spec(spec: String):
 				if pos < 0:
 					break # Syntax error
 				var sub_task = spec.substr(idx, pos - idx).strip_edges()
-				tasks.append([token, reps, sub_task])
+				_tasks.append([token, reps, sub_task])
 				idx = pos + 1
-	return tasks
+			"while":
+				pos = spec.find(" ", idx)
+				if pos < 0:
+					break # Syntax error
+				var x = spec.substr(idx, pos - idx)
+				idx = pos + 1
+				pos = spec.find(" ", idx)
+				if pos < 0:
+					break # Syntax error
+				var op = spec.substr(idx, pos - idx)
+				idx = pos + 1
+				pos = spec.find(" ", idx)
+				if pos < 0:
+					break # Syntax error
+				var y = spec.substr(idx, pos - idx)
+				idx = pos + 1
+				if spec[idx] != "{":
+					break # Syntax error
+				idx += 1
+				pos = spec.find("}", idx)
+				if pos < 0:
+					break # Syntax error
+				var sub_task = spec.substr(idx, pos - idx).strip_edges()
+				_tasks.append([token, x, op, y, sub_task])
+				idx = pos + 1
+	return _tasks
 
 
 func clean_src(spec):
