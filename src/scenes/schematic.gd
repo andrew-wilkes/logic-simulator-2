@@ -20,6 +20,8 @@ var test_step = 0
 var test_output_line = 0
 var compare_lines = []
 var test_playing = false
+var last_scroll_offset = Vector2.ZERO
+var watch_for_scroll_offset_change = true
 @onready var test_runner = $C/TestRunner
 
 func _ready():
@@ -264,6 +266,7 @@ func set_high_color():
 
 
 func setup_graph():
+	watch_for_scroll_offset_change = false
 	snap_distance = circuit.data.snap_distance
 	use_snap = circuit.data.use_snap
 	zoom = circuit.data.zoom
@@ -628,3 +631,10 @@ func _on_test_timer_timeout():
 func _on_test_runner_hidden():
 	if tester:
 		tester.free()
+
+
+func _on_scroll_offset_changed(offset):
+	if last_scroll_offset != offset and watch_for_scroll_offset_change:
+		emit_signal("changed")
+	last_scroll_offset = offset
+	watch_for_scroll_offset_change = true

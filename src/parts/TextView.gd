@@ -9,7 +9,7 @@ func _init():
 	order = 0
 	data = {
 		"file": "",
-		"size": Vector2(470, 500)
+		"size": [470, 500]
 	}
 
 
@@ -17,7 +17,7 @@ func _ready():
 	super()
 	panel = $C/Panel
 	panel.hide()
-	panel.size = data.size
+	panel.size = Vector2(data.size[0], data.size[1])
 	panel.position = get_global_position() + Vector2(120, 0)
 	if G.settings.test_dir.is_empty():
 		$FileDialog.current_dir = G.settings.last_dir
@@ -56,7 +56,7 @@ func open_panel():
 
 
 func _on_popup_panel_size_changed():
-	data.size = panel.size
+	data.size = [panel.size.x, panel.size.y]
 
 
 func _on_custom_popup_left_button_pressed():
@@ -75,7 +75,7 @@ func _on_file_dialog_canceled():
 
 
 func _on_panel_resized():
-	data.size = panel.size
+	data.size = [panel.size.x, panel.size.y]
 
 
 func _on_panel_hidden():
