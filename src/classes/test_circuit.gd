@@ -17,6 +17,7 @@ var outputs
 var repetitive_tasks
 var repeat_counter = 0
 var repeat_decrement = 1
+var repetitive_task_idx = 0
 var time = 0
 var tick = false
 
@@ -110,6 +111,7 @@ func process_task(task):
 			repeat_counter = task[1]
 			repetitive_tasks = parse_spec(task[2])
 			repeat_decrement = 0
+			repetitive_task_idx = 0
 			if repeat_counter > 0:
 				repeat_decrement = 1
 			else:

@@ -533,7 +533,11 @@ func _on_test_runner_reset():
 func _on_test_runner_step():
 	while test_step < tester.tasks.size():
 		reset_race_counters()
-		var task = tester.tasks[test_step]
+		if tester.repeat_counter > 0:
+			if tester.repetitive_task_idx == tester.repetitive_tasks.size():
+				tester.repetitive_task_idx = 0
+		var task = tester.repetitive_tasks[tester.repetitive_task_idx]\
+			if tester.repeat_counter > 0 else tester.tasks[test_step]
 		tester.process_task(task)
 		if task[0] == "output-list":
 			test_runner.text_area.add_text(tester.output)
@@ -544,8 +548,16 @@ func _on_test_runner_step():
 			else:
 				test_runner.text_area.add_text(tester.output)
 			break
+		if tester.repeat_counter > 0:
+			tester.repeat_counter -= tester.repeat_decrement
+			tester.repetitive_task_idx += 1
+		else:
+			test_step += 1
+	if tester.repeat_counter > 0:
+		tester.repeat_counter -= tester.repeat_decrement
+		tester.repetitive_task_idx += 1
+	else:
 		test_step += 1
-	test_step += 1
 	test_output_line += 1
 	if test_step == tester.tasks.size():
 		test_runner.text_area.add_text("DONE")
