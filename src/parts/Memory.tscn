@@ -94,7 +94,6 @@ layout_mode = 2
 
 [node name="HB" type="HBoxContainer" parent="."]
 layout_mode = 2
-tooltip_text = "Address"
 
 [node name="L1" type="Label" parent="HB"]
 custom_minimum_size = Vector2(30, 0)
@@ -118,7 +117,6 @@ horizontal_alignment = 2
 
 [node name="HB2" type="HBoxContainer" parent="."]
 layout_mode = 2
-tooltip_text = "Address"
 
 [node name="Addr" type="Label" parent="HB2"]
 custom_minimum_size = Vector2(70, 0)
@@ -134,7 +132,6 @@ text = "0x0000"
 
 [node name="HB3" type="HBoxContainer" parent="."]
 layout_mode = 2
-tooltip_text = "Address"
 
 [node name="L1" type="Label" parent="HB3"]
 custom_minimum_size = Vector2(70, 0)
@@ -144,15 +141,12 @@ text = "load"
 
 [node name="L2" type="Label" parent="HB3"]
 layout_mode = 2
-tooltip_text = "Address"
 mouse_filter = 1
-text = "screen_data
-"
+text = "screen_data"
 horizontal_alignment = 2
 
 [node name="HB4" type="HBoxContainer" parent="."]
 layout_mode = 2
-tooltip_text = "Address"
 
 [node name="L1" type="Label" parent="HB4"]
 custom_minimum_size = Vector2(70, 0)
@@ -162,14 +156,12 @@ text = "clk"
 
 [node name="L2" type="Label" parent="HB4"]
 layout_mode = 2
-tooltip_text = "Address"
 mouse_filter = 1
 text = "screen_addr"
 horizontal_alignment = 2
 
 [node name="HB5" type="HBoxContainer" parent="."]
 layout_mode = 2
-tooltip_text = "Address"
 theme_override_constants/separation = 20
 
 [node name="L1" type="Label" parent="HB5"]
@@ -180,26 +172,22 @@ text = "keyboard"
 [node name="L2" type="Label" parent="HB5"]
 layout_mode = 2
 size_flags_horizontal = 3
-tooltip_text = "Address"
 mouse_filter = 1
 text = "screen_load"
 horizontal_alignment = 2
 
 [node name="HB6" type="HBoxContainer" parent="."]
 layout_mode = 2
-tooltip_text = "Address"
 theme_override_constants/separation = 20
 
 [node name="L1" type="Label" parent="HB6"]
 custom_minimum_size = Vector2(70, 0)
 layout_mode = 2
-text = "screen_data
-"
+text = "screen_data"
 
 [node name="L2" type="Label" parent="HB6"]
 layout_mode = 2
 size_flags_horizontal = 3
-tooltip_text = "Address"
 mouse_filter = 1
 text = "clk_out"
 horizontal_alignment = 2
