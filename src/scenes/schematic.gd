@@ -448,6 +448,7 @@ func test_circuit():
 					var test_spec = file.get_as_text()
 					test_runner.set_title(test_file)
 					tester.init_tests(test_spec, io_nodes)
+					reset_test_environment()
 					# Make panel fit the width of the test output
 					for task in tester.tasks:
 						if task[0] == "output-list":
@@ -520,6 +521,10 @@ func create_circuit_from_hdl(file_path):
 
 
 func _on_test_runner_reset():
+	reset_test_environment()
+
+
+func reset_test_environment():
 	test_step = 0
 	test_output_line = 0
 	test_runner.set_text("")
@@ -618,3 +623,8 @@ func add_compared_string(out, comp, text_area: RichTextLabel):
 
 func _on_test_timer_timeout():
 	_on_test_runner_step()
+
+
+func _on_test_runner_hidden():
+	if tester:
+		tester.free()
