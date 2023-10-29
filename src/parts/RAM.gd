@@ -5,13 +5,14 @@ extends Part
 var max_value = 0
 var max_address = 0
 var values = []
+var display_values = true
 
 func _init():
 	order = 80
 	category = SYNC
 	data["bits"] = 16
 	data["size"] = "8K"
-	pins = { [0, 0]: 0, [0, 1]: 0, [1, 0]: 0 }
+	pins = { [0, 0]: 0, [0, 1]: 0, [0, 2]: false, [0, 3]: false, [1, 0]: 0 }
 
 
 func _ready():
@@ -19,7 +20,7 @@ func _ready():
 	set_max_value()
 	max_address = get_max_address(data.size)
 	resize_memory(max_address + 1)
-	if part_type == RAM:
+	if display_values:
 		%Bits.text = str(data.bits)
 		$Size.text = data.size
 

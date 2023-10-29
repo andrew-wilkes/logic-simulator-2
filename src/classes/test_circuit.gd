@@ -114,6 +114,8 @@ func process_task(task):
 				repeat_decrement = 1
 			else:
 				repeat_counter = 1
+		"echo":
+			G.warning.open(task[1], "", Color.DARK_SLATE_BLUE)
 
 
 func get_output_values():

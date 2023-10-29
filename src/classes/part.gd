@@ -7,7 +7,7 @@ extends GraphNode
 enum { LEFT, RIGHT }
 enum { WIRE_TYPE, BUS_TYPE }
 enum { UTILITY, ASYNC, SYNC, BLOCK }
-enum { A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P }
+enum { A,B,C,D }
 
 # This is based on the number of bits that may change per update of the value.
 # The value is applied bit by bit so a stable state is reached after all of

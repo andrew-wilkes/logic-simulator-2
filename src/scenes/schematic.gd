@@ -565,6 +565,7 @@ func _on_test_runner_stop():
 
 
 func add_compared_string(out, comp, text_area: RichTextLabel):
+	print(out, comp)
 	var green = false
 	var red = false
 	for idx in out.length():
