@@ -56,9 +56,9 @@ func get_io_nodes(parts, connections):
 func get_label_text(part, side, port):
 	var slot = part.get_connection_input_slot(port) if side == 0 else \
 		part.get_connection_output_slot(port)
-	var node = part.get_child(slot)
+	var node = part.get_child(slot) # There may be a label or a container of nodes
 	if node is Container:
-		node = node.get_child(side if side == 0 else -1)
+		node = node.get_child(side if side == 0 else -1) # Get the left-most or right-most child that should be a label
 	return node.text
 
 
@@ -137,7 +137,8 @@ func process_task(task):
 				"=":
 					is_true = x == y
 			if is_true:
-				repetitive_task_idx = -1 # This is incremented after processing the current task
+				repetitive_task_idx = -1 #This is incremented after processing the current task,
+					# so we want to start from repetitive_tasks[0] on the next pass
 				if repetitive_tasks.size() == 0:
 					while_task = task
 					repeat_counter = 1 
@@ -148,6 +149,7 @@ func process_task(task):
 				repetitive_tasks.clear()
 				while_task = null
 		"echo":
+			# Maybe rename the warning to notification?
 			G.warning.open(task[1], "", Color.DARK_SLATE_BLUE)
 
 
@@ -161,10 +163,9 @@ func get_pin_value(pin: String):
 		return int(target[0].pins.get(pin_key, 0))
 	if inputs.has(pin):
 		var target = inputs[pin]
-		var pin_key = [0, target[1]] # [side, port]
-		# Cast bools to int and set the value to 0 if the pin has not been touched
+		var pin_key = [0, target[1]]
 		return int(target[0].pins.get(pin_key, 0))
-	return 0
+	return 0 # Default to zero (don't support a string value on a pin)
 
 
 func get_output_values():
@@ -196,7 +197,7 @@ func get_closest_delimiter_position(text, from_idx, chars):
 	return positions[0]
 
 
-# This function returns with whatever tasks it has listed so far if it hits something unexpected
+# This simple text parser returns with whatever tasks it has listed so far if it hits something unexpected
 func parse_spec(spec: String):
 	var _tasks = []
 	spec = clean_src(spec)

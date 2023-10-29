@@ -37,9 +37,9 @@ func update_value(new_val, address):
 	values[address] = new_val
 	# Convert negative integers
 	if new_val < 0:
-		new_val = 0xffff + new_val + 1
+		new_val = 0x10000 + new_val
 	if old_val < 0:
-		old_val = 0xffff + old_val + 1
+		old_val = 0x10000 + old_val
 	var x = address % 32 * 16
 	var y = address / 32
 	for n in 16:
