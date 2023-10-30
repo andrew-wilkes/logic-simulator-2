@@ -41,3 +41,24 @@ func dir_search(path, fn, result, depth):
 		if not result.error:
 			break
 	return result
+
+
+func hack_to_array_of_int(hack: String):
+	var words = []
+	var lines = hack.replace("\r", "\n").split("\n", false)
+	for num in lines:
+		var x = 0
+		if num.is_valid_int():
+			for idx in num.length():
+				x *= 2
+				x += int(num[idx])
+		words.append(x)
+	return words
+
+
+func notify_user(msg):
+	warning.open(msg, "", Color.DARK_SLATE_BLUE)
+
+
+func warn_user(msg):
+	warning.open(msg)

@@ -149,8 +149,7 @@ func process_task(task):
 				repetitive_tasks.clear()
 				while_task = null
 		"echo":
-			# Maybe rename the warning to notification?
-			G.warning.open(task[1], "", Color.DARK_SLATE_BLUE)
+			G.notify_user(task[1])
 
 
 func get_pin_value(pin: String):
@@ -299,7 +298,7 @@ func parse_spec(spec: String):
 
 func clean_src(spec):
 	# Convert spec to a string without comments or line breaks
-	var lines = spec.replace("\r", "").split("\n", false)
+	var lines = spec.replace("\r", "\n").split("\n", false)
 	var clean_lines = []
 	for line in lines:
 		# Remove comments
@@ -313,7 +312,7 @@ func clean_src(spec):
 	regex.compile("[\\s\t]+")
 	spec = regex.sub(spec, " ", true)
 	# Remove other types of comments
-	regex.compile("/[\\*]{1,2}.+/")
+	regex.compile("/\\*{1,2}.+\\*/")
 	return regex.sub(spec, "", true)
 
 

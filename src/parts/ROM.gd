@@ -12,6 +12,7 @@ func _init():
 	category = ASYNC
 	data["bits"] = 16
 	data["size"] = "8K"
+	data["file"] = ""
 	pins = { [0, 0]: 0, [0, 1]: 0 }
 
 
@@ -22,6 +23,8 @@ func _ready():
 	max_address = get_max_address(data.size)
 	resize_memory(max_address + 1)
 	$Size.text = data.size
+	if not data.file.is_empty():
+		load_data(data.file)
 
 
 func _on_size_text_submitted(new_text):
@@ -71,3 +74,30 @@ func set_output_data():
 func resize_memory(num_bytes):
 	values.resize(num_bytes)
 	values.fill(0)
+
+
+func open_file():
+	if not data.file.is_empty():
+		$FileDialog.current_dir = data.file.get_base_dir()
+		$FileDialog.current_file = data.file.get_file()
+	elif G.settings.test_dir.is_empty():
+		$FileDialog.current_dir = G.settings.last_dir
+	else:
+		$FileDialog.current_dir = G.settings.test_dir
+	$FileDialog.popup_centered()
+
+
+func _on_file_dialog_file_selected(file_path: String):
+	load_data(file_path)
+
+
+func load_data(file_path):
+	values = []
+	if file_path.get_extension() == "hack":
+		# .hack files contain binary strings
+		values = G.hack_to_array_of_int(FileAccess.get_file_as_string(file_path))
+	else:
+		var bytes = FileAccess.get_file_as_bytes(file_path)
+		for idx in range(0, bytes.size(), 2):
+			values.append(bytes[idx] + 256 * bytes[idx + 1])
+	G.notify_user(str(values.size()) + " words of data was loaded.")

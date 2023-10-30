@@ -298,6 +298,8 @@ func right_click_on_part(part):
 		"IO":
 			$IOManagerPanel/IOManager.open(part)
 			$IOManagerPanel.popup_centered()
+		"ROM":
+			part.open_file()
 
 
 func output_level_changed_handler(part, side, port, level):

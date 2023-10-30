@@ -131,5 +131,14 @@ text = "8K"
 layout_mode = 2
 expand_to_text_length = true
 
+[node name="FileDialog" type="FileDialog" parent="."]
+title = "Open a File"
+size = Vector2i(900, 500)
+ok_button_text = "Open"
+file_mode = 0
+access = 2
+filters = PackedStringArray("*.hack,*.bin ; Code files")
+
 [connection signal="text_submitted" from="HB2/Bits" to="." method="_on_bits_text_submitted"]
 [connection signal="text_submitted" from="Size" to="." method="_on_size_text_submitted"]
+[connection signal="file_selected" from="FileDialog" to="." method="_on_file_dialog_file_selected"]
