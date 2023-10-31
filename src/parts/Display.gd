@@ -7,8 +7,8 @@ func _init():
 	category = UTILITY
 	@warning_ignore("integer_division")
 	data = {
-		mode = 0,
-		color_index = 1 + 128 / 3
+		color_index = 1 + 128 / 3,
+		num_digits = 1
 	}
 
 
@@ -44,6 +44,10 @@ func set_color(color_index):
 		_:
 			color = Color.from_hsv((color_index - 1) / 128.0, 1.0, 1.0)
 			bg_color = Color.BLACK
+	set_digit_colors(color, bg_color)
+	data.color_index = color_index
+
+
+func set_digit_colors(color, bg_color):
 	%Segments.material.set_shader_parameter("color", color)
 	%Segments.material.set_shader_parameter("bg_color", bg_color)
-	data.color_index = color_index
