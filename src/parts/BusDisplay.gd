@@ -40,6 +40,9 @@ func _on_remove_button_pressed():
 		data.num_digits -= 1
 		$HB.get_child(data.num_digits).queue_free()
 		changed()
+		# Shrink the width of the node after the digit was removed
+		await get_tree().create_timer(0.1).timeout
+		size.x = 0
 
 
 func make_unique(node):
