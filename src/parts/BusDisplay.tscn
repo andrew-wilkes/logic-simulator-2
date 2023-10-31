@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://dsa7cuvcaqigu"]
+[gd_scene load_steps=7 format=3 uid="uid://dsa7cuvcaqigu"]
 
 [ext_resource type="StyleBox" uid="uid://6ey1ulrt3occ" path="res://assets/parts/frame.stylebox" id="1_f6680"]
 [ext_resource type="StyleBox" uid="uid://b51cf2x3pfpfk" path="res://assets/parts/selected-frame.stylebox" id="2_8vsq4"]
+[ext_resource type="Script" path="res://parts/BusDisplay.gd" id="3_p70lu"]
 [ext_resource type="Texture2D" uid="uid://nebjnvr6aqnq" path="res://assets/parts/down.png" id="3_rrp7b"]
 
 [sub_resource type="Shader" id="Shader_gt5gw"]
@@ -113,6 +114,7 @@ slot/2/right_type = 0
 slot/2/right_color = Color(1, 1, 1, 1)
 slot/2/right_icon = null
 slot/2/draw_stylebox = true
+script = ExtResource("3_p70lu")
 
 [node name="Sp" type="Control" parent="."]
 custom_minimum_size = Vector2(0, 27)

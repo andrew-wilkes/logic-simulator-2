@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://dq0tfws21flw8"]
+[gd_scene load_steps=7 format=3 uid="uid://dq0tfws21flw8"]
 
 [ext_resource type="StyleBox" uid="uid://6ey1ulrt3occ" path="res://assets/parts/frame.stylebox" id="1_1wcum"]
 [ext_resource type="StyleBox" uid="uid://b51cf2x3pfpfk" path="res://assets/parts/selected-frame.stylebox" id="2_jf40v"]
+[ext_resource type="Script" path="res://parts/Display.gd" id="3_i0ylb"]
 [ext_resource type="Texture2D" uid="uid://nebjnvr6aqnq" path="res://assets/parts/down.png" id="5_0x123"]
 
 [sub_resource type="Shader" id="Shader_gt5gw"]
@@ -16,6 +17,7 @@ uniform bool f = true;
 uniform bool g = true;
 uniform bool dp = true;
 uniform vec4 color: source_color = vec4(0.0, 1.0, 0.0, 1.0);
+uniform vec4 bg_color: source_color = vec4(0.0, 0.0, 0.0, 1.0);
 
 bool hbar(float x, float y) {
 	float dx = 1.4 - abs(x - 2.5);
@@ -31,7 +33,7 @@ void fragment() {
 	const float v = 0.2;
 	float x = UV.x * 5.5;
 	float y = UV.y * 8.0;
-	vec4 col = vec4(0.0, 0.0, 0.0, 1.0);
+	vec4 col = bg_color;
 	if (a && y > 0.5 + v  && y < 1.5 - v && hbar(x, abs(y - 1.0))) {
 		col = color;
 	}
@@ -75,6 +77,7 @@ shader_parameter/f = true
 shader_parameter/g = true
 shader_parameter/dp = true
 shader_parameter/color = Color(0, 1, 0, 1)
+shader_parameter/bg_color = Color(0, 0, 0, 1)
 
 [node name="Display" type="GraphNode"]
 offset_left = 19.0
@@ -176,6 +179,7 @@ slot/9/right_type = 0
 slot/9/right_color = Color(1, 1, 1, 1)
 slot/9/right_icon = null
 slot/9/draw_stylebox = true
+script = ExtResource("3_i0ylb")
 
 [node name="Sp" type="Control" parent="."]
 custom_minimum_size = Vector2(0, 27)
@@ -190,16 +194,22 @@ layout_mode = 2
 offset_left = 15.0
 offset_top = 3.0
 offset_right = 70.0
-offset_bottom = 103.0
+offset_bottom = 216.0
 
 [node name="Segments" type="TextureRect" parent="L1/VB"]
+unique_name_in_owner = true
 material = SubResource("ShaderMaterial_v5ngw")
 custom_minimum_size = Vector2(55, 80)
 layout_mode = 2
 texture = ExtResource("5_0x123")
 
-[node name="Hue" type="HSlider" parent="L1/VB"]
+[node name="Hue" type="VSlider" parent="L1/VB"]
+unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+tooltip_text = "Set color"
+max_value = 129.0
 
 [node name="L2" type="Label" parent="."]
 layout_mode = 2
@@ -233,3 +243,5 @@ text = "dp"
 layout_mode = 2
 alignment = 1
 expand_to_text_length = true
+
+[connection signal="value_changed" from="L1/VB/Hue" to="." method="_on_hue_value_changed"]
