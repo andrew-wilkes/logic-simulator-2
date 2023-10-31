@@ -18,6 +18,7 @@ uniform bool g = true;
 uniform bool dp = true;
 uniform int segs = 127;
 uniform vec4 color: source_color = vec4(0.0, 1.0, 0.0, 1.0);
+uniform vec4 bg_color: source_color = vec4(0.0, 0.0, 0.0, 1.0);
 
 bool hbar(float x, float y) {
 	float dx = 1.4 - abs(x - 2.5);
@@ -33,7 +34,7 @@ void fragment() {
 	const float v = 0.2;
 	float x = UV.x * 5.5;
 	float y = UV.y * 8.0;
-	vec4 col = vec4(0.0, 0.0, 0.0, 1.0);
+	vec4 col = bg_color;
 	if (a && bool(segs & 1) && y > 0.5 + v  && y < 1.5 - v && hbar(x, abs(y - 1.0))) {
 		col = color;
 	}
@@ -78,6 +79,7 @@ shader_parameter/g = true
 shader_parameter/dp = true
 shader_parameter/segs = 127
 shader_parameter/color = Color(0, 1, 0, 1)
+shader_parameter/bg_color = Color(0, 1, 0, 1)
 
 [node name="BusDisplay" type="GraphNode"]
 offset_left = 29.0
@@ -188,6 +190,7 @@ text = "-"
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
+max_value = 129.0
 
 [node name="HB3" type="HBoxContainer" parent="."]
 layout_mode = 2

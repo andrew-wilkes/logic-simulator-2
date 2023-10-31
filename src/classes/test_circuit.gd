@@ -138,7 +138,7 @@ func process_task(task):
 					is_true = x == y
 			if is_true:
 				repetitive_task_idx = -1 #This is incremented after processing the current task,
-					# so we want to start from repetitive_tasks[0] on the next pass
+					# So we want to start from repetitive_tasks[0] on the next pass
 				if repetitive_tasks.size() == 0:
 					while_task = task
 					repeat_counter = 1 
