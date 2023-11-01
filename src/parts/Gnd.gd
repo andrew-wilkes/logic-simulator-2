@@ -14,8 +14,8 @@ func _ready():
 
 func reset_race_counter():
 	super()
-	update_output_level(LEFT, 0, false)
-	update_output_level(RIGHT, 0, false)
+	controller.output_level_changed_handler(self, LEFT, 0, false)
+	controller.output_level_changed_handler(self, RIGHT, 0, false)
 
 
 func set_color():
