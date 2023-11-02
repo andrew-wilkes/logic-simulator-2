@@ -69,6 +69,8 @@ IO parts also, capture and display values that they receive. The bus and wires o
 
 It is best practice to only use the bus input or wire inputs for an IO part to avoid them fighting over what is the input value. When manually entering values with the slider or buttons, the Range setting limits the maximum value.
 
+There are also single-pin parts to use for a bus or a wire input or output. These may be used for the IO pins of circuits that will be loaded as blocks or tested by the circuit testing feature.
+
 [b]Part Numbering[/b]
 When parts are added, they are given an internal part number that is displayed when hovering the mouse over a part. This is the number displayed in any error message or saved with the circuit. But, there is a Tool available to automtically number parts in a more normal way and it also sets the part tags with these numbers. Or the user may label the parts by editing the tag text labels.
 
@@ -131,7 +133,7 @@ bbcode_enabled = true
 text = "[b]Internal Operation[/b]
 Internally, the value is propagated as an integer on the bus lines and as bits on wires. 8 bits take 8 steps to fully apply to 8 wires connected to a part so this may cause up to 8 changes of a parts' output until it is stable. This affect is not seen by the user since it should be between frame updates of the display. It is like the propagation delay in real circuits but much more delayed.
 
-There is also detection for unstable circuits where the output is continually cycling and not stabilizing. This condition stops propagation of signals and an alert message is shown to the user with information as to what part and pin the problem was detected at. Hovering the mouse over a part reveals its' part number.
+There is also detection for unstable circuits where the output is continually cycling and not stabilizing. This condition stops propagation of signals and an alert message is shown to the user with information as to what part and pin the problem was detected at. Hovering the mouse over a part reveals its part number.
 
 A speed optimization that is used is to not propagate a level if there is no change to an input. An affect of this may be to not update a downstream wire color if its' color has been changed by the user. The speed of simulation will depend on circuit complexity and the speed of the computer being used, and what settings are applied to the circuit such as viewing logic levels and probing/displaying values.
 
@@ -198,6 +200,35 @@ In order to process these files, they need to be downloaded, and a path to their
 They are in a [i]projects[/i] directory after downloading and unzipping the [i]Nand2tetris Software Suite[/i] file from the [url=https://www.nand2tetris.org/software]Nand2tetris Software[/url] website page. The path to this [i]projects[/i] directory needs to be set in the [i]Test file directory[/i] setting in [b]Settings[/b].
 
 Once this is set up, you should be able to make use of them in the [i]Tools[/i] menu.
+
+A set of IO pins may be automatically produced by loading an HDL file from the Tools menu. Then, you may construct a circuit to fulfill the requirements of the specification in the HDL file which may be displayed by clicking of the TextView part that is produced. Then run the tests on your circuit to see if it passes with the Test runner panel which is opened via the Tools menu.
+
+
+
+
+"
+
+[node name="SpecialParts" type="MarginContainer" parent="."]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="RichText" type="RichTextLabel" parent="SpecialParts"]
+layout_mode = 2
+theme_override_colors/default_color = Color(0.152941, 0.152941, 0.152941, 1)
+bbcode_enabled = true
+text = "[b]Special Parts[/b]
+
+Some parts have functionality that is accessed by right-clicking on the part to pop up a window. These parts are:
+
+[ul]
+ IO - the popup panel allows for setting the number of wires, the number range, colors of wires, naming of pins, and to change the data value via a slider, step buttons, or by editing the value
+ ROM - the popup panel allows for choosing a data file (in .hack or .bin format) to load into the memory
+ TextView - the popup panel allows for choosing a text file to be associated with this part
+[/ul]
 
 
 

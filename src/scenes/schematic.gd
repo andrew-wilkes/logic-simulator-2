@@ -179,7 +179,7 @@ func add_part(part):
 
 func add_block(file_name):
 	if file_name == parent_file:
-		G.warning.open("cannot open parent circuit as block.")
+		G.warn_user("cannot open parent circuit as block.")
 	else:
 		var block = Parts.scenes["Block"].instantiate()
 		block.data.circuit_file = file_name
@@ -230,7 +230,7 @@ func load_circuit(file_name):
 		colorize_pins()
 		emit_signal("title_changed", circuit.data.title)
 	else:
-		G.warning.open("The circuit data was invalid!")
+		G.warn_user("The circuit data was invalid!")
 
 
 func add_parts():
@@ -372,7 +372,7 @@ func bus_value_changed_handler(part, side, port, value):
 
 
 func unstable_handler(part, side, port):
-	G.warning.open("Unstable input to %s on %s side, port: %d" % [part.name, ["left", "right"][side], port])
+	G.warn_user("Unstable input to %s on %s side, port: %d" % [part.name, ["left", "right"][side], port])
 
 
 func reset_race_counters():
@@ -462,13 +462,13 @@ func set_circuit_title(text):
 
 func test_circuit():
 	if circuit.data.title.is_empty():
-		G.warning.open("No circuit title has been set.")
+		G.warn_user("No circuit title has been set.")
 	else:
 		var test_file = circuit.data.title + ".tst"
 		# Find dir containing these files
 		var result = G.find_file(G.settings.test_dir, test_file)
 		if result.error:
-			G.warning.open("File not found: " + test_file)
+			G.warn_user("File not found: " + test_file)
 		else:
 			var compare_file = result.path + "/" + circuit.data.title + ".cmp"
 			if FileAccess.file_exists(compare_file):
@@ -491,7 +491,7 @@ func test_circuit():
 								test_runner.size.x = width
 					test_runner.open()
 			else:
-				G.warning.open("Error opening file: " + test_file)
+				G.warn_user("Error opening file: " + test_file)
 				tester.free()
 
 
@@ -512,7 +512,7 @@ func add_wire_io(label, pos):
 func create_circuit_from_hdl(file_path):
 	var file = FileAccess.open(file_path, FileAccess.READ)
 	if not file:
-		G.warning.open("Error opening file: " + file_path)
+		G.warn_user("Error opening file: " + file_path)
 		return
 	var hdl = file.get_as_text()
 	clear()
