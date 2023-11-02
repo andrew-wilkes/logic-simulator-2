@@ -129,7 +129,7 @@ func _on_v_slider_value_changed(value):
 	var limit = DEFAULT_SLIDER_LIMIT
 	if part.data.range > 0:
 		limit = part.data.range
-	part.current_value = value * limit / %VSlider.max_value
+	part.current_value = int(value * limit / %VSlider.max_value)
 	slider_value_changed = true
 	$UpdateTimer.start()
 

@@ -66,7 +66,7 @@ func block_setup(_file_chain = []):
 	for io_part in inputs:
 		# [part_name, port]
 		input_map.append([io_part.node_name, 0])
-		if io_part is IO:
+		if io_part.part_type == "IO":
 			for n in io_part.data.num_wires:
 				# n is type float!
 				# We use arrays as dictionary keys, so the data types in the array must be as expected
@@ -74,7 +74,7 @@ func block_setup(_file_chain = []):
 	for io_part in outputs:
 		# [part_name, port]
 		output_map.append([io_part.node_name, 0])
-		if io_part is IO:
+		if io_part.part_type == "IO":
 			for n in io_part.data.num_wires:
 				output_map.append([io_part.node_name, int(n + 1)])
 	add_parts()
@@ -93,11 +93,11 @@ func configure_pins():
 	for input in inputs:
 		var label_idx = 0
 		set_slot_enabled_left(slot_idx, true)
-		set_slot_type_left(slot_idx, BUS_TYPE if not input is Wire else WIRE_TYPE)
+		set_slot_type_left(slot_idx, BUS_TYPE if input.part_type != "Wire" else WIRE_TYPE)
 		set_slot_color_left(slot_idx, input.data.bus_color)
 		get_child(slot_idx).get_child(0).text = input.data.labels[label_idx]\
-			if input is IO else input.tag
-		if input is IO:
+			if input.part_type == "IO" else input.tag
+		if input.part_type == "IO":
 			for n in input.data.num_wires:
 				slot_idx += 1
 				if label_idx + 1 < input.data.labels.size():
@@ -111,11 +111,11 @@ func configure_pins():
 	for output in outputs:
 		var label_idx = 0
 		set_slot_enabled_right(slot_idx, true)
-		set_slot_type_right(slot_idx, BUS_TYPE if not output is Wire else WIRE_TYPE)
+		set_slot_type_right(slot_idx, BUS_TYPE if output.part_type != "Wire" else WIRE_TYPE)
 		set_slot_color_right(slot_idx, output.data.bus_color)
 		get_child(slot_idx).get_child(1).text = output.data.labels[label_idx]\
-			if output is IO else output.tag
-		if output is IO:
+			if output.part_type == "IO" else output.tag
+		if output.part_type == "IO":
 			for n in output.data.num_wires:
 				slot_idx += 1
 				if label_idx + 1 < output.data.labels.size():
@@ -195,22 +195,23 @@ func evaluate_output_level(input_side: int, port: int, level):
 	var part = parts[map[PART]]
 	var output_side = FLIP_SIDES[input_side]
 	part.update_output_level(output_side, map[PORT], level)
-	# Update the bus
-	var value = 0
-	for n in part.data.num_wires:
-		value *= 2
-		value += int(part.pins.get([output_side, int(part.data.num_wires - n)], false))
-	part.evaluate_bus_output_value(input_side, 0, value, false)
+	if part.part_type == "IO":
+		# Update the bus
+		var value = 0
+		for n in part.data.num_wires:
+			value *= 2
+			value += int(part.pins.get([output_side, int(part.data.num_wires - n)], false))
+		part.evaluate_bus_output_value(input_side, 0, value, false)
 
 
 # Map external bus input to internal part
-func evaluate_bus_output_value(side: int, port: int, value, update_levels = true):
+func evaluate_bus_output_value(side: int, port: int, value: int, update_levels = true):
 	var map = get_map(side, port)
 	# Flip the side to the output side
 	side = FLIP_SIDES[side]
 	var part = parts[map[PART]]
 	part.update_output_value(side, map[PORT], value)
-	if update_levels:
+	if update_levels and part.part_type == "IO":
 		# This will ignore (clip) value bits above the range that the wires cover
 		for n in part.data.num_wires:
 			var level = bool(value % 2)
@@ -257,11 +258,17 @@ func add_to_connections(part, key, value):
 		part.connections[key] = [value]
 
 
-func bus_value_changed_handler(part, side: int, port: int, value):
+func bus_value_changed_handler(part, side: int, port: int, value: int):
 	var map_idx = [str(part.name), port]
 	var port_idx = [input_map, output_map][side].find(map_idx)
 	if port_idx > -1:
 		controller.bus_value_changed_handler(self, side, port_idx, value)
+		if part is IO:
+			for n in part.data.num_wires:
+				port_idx += 1
+				var level = value % 2 == 1
+				value /= 2
+				controller.output_level_changed_handler(self, side, port_idx, level)
 	else:
 		update_internal_bus_input_value(part, side, port, value)
 
