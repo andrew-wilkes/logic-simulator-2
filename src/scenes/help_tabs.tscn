@@ -108,7 +108,13 @@ Ctrl + P - open the Part selection panel
 
 Ctrl + T - open the Tool menu
 
-Ctrl + H - open the Help panel"
+Ctrl + H - open the Help panel
+
+DEL - delete selected parts
+
+Crtl + D - duplicate selected parts
+
+Crtl + R - remove connections between selected parts"
 
 [node name="Technicalities" type="MarginContainer" parent="."]
 visible = false

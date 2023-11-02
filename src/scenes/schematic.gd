@@ -34,6 +34,11 @@ func _ready():
 	duplicate_nodes_request.connect(duplicate_selected_parts)
 
 
+func _unhandled_key_input(event):
+	if event.keycode == KEY_R and event.ctrl_pressed:
+		remove_connections_between_selected_parts()
+
+
 func connect_wire(from_part, from_pin, to_part, to_pin):
 	# Add guards against invalid connections
 	# The Part class is designed to be bi-directional
@@ -79,11 +84,15 @@ func deselect_part(part):
 
 
 func delete_selected_parts(_arr):
+	var flag_changed = false
 	# _arr only lists parts that have a close button
 	for part in selected_parts:
 		if not is_object_instance_invalid(part, "delete_selected_parts"):
 			delete_selected_part(part)
+			flag_changed = true
 	selected_parts.clear()
+	if flag_changed:
+		emit_signal("changed")
 
 
 func delete_selected_part(part):
@@ -92,18 +101,19 @@ func delete_selected_part(part):
 			disconnect_node(con.from, con.from_port, con.to, con.to_port)
 	remove_child(part)
 	part.queue_free()
-	emit_signal("changed")
 
 
 func duplicate_selected_parts():
-	emit_signal("changed")
+	var flag_changed = false
 	# Base the location off the first selected part relative to the mouse cursor
 	var offset = abs(get_local_mouse_position())
 	var first_part = true
+	var part_map = {}
 	for part in selected_parts:
 		# Sometimes a previously freed part is one of the selected parts
 		if is_object_instance_invalid(part, "duplicate_selected_parts"):
 			continue
+		flag_changed = true
 		if first_part:
 			first_part = false
 			offset = offset - part.position
@@ -123,6 +133,25 @@ func duplicate_selected_parts():
 		new_part.controller = self
 		add_child(new_part)
 		new_part.name = part.part_type + circuit.get_next_id()
+		part_map[part.name] = new_part.name
+	# Duplicate connections between duplicated parts
+	for con in get_connection_list():
+		if part_map.has(con.from) and part_map.has(con.to):
+			connect_node(part_map[con.from], con.from_port, part_map[con.to], con.to_port)
+	if flag_changed:
+		emit_signal("changed")
+
+func remove_connections_between_selected_parts():
+	var flag_changed = false
+	var part_names = []
+	for part in selected_parts:
+		part_names.append(part.name)
+	for con in get_connection_list():
+		if part_names.has(con.from) and part_names.has(con.to):
+			flag_changed = true
+			disconnect_node(con.from, con.from_port, con.to, con.to_port)
+	if flag_changed:
+		emit_signal("changed")
 
 
 func add_part_by_name(part_name):
