@@ -1,4 +1,4 @@
-class_name Wire
+class_name Bus
 
 extends Part
 

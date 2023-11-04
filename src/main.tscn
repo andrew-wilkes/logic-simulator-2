@@ -2,22 +2,14 @@
 
 [ext_resource type="Script" path="res://main.gd" id="1_7i1tr"]
 [ext_resource type="PackedScene" uid="uid://cq3v3io0y1kms" path="res://scenes/schematic.tscn" id="2_qticl"]
+[ext_resource type="StyleBox" uid="uid://d2pelybf770tb" path="res://assets/ui/warning-panel.stylebox" id="3_3bxnd"]
 [ext_resource type="Script" path="res://scenes/WarningPanel.gd" id="4_u4i6y"]
 [ext_resource type="PackedScene" uid="uid://cbivksj5j1nmb" path="res://scenes/part_list.tscn" id="5_3p0gq"]
 [ext_resource type="StyleBox" uid="uid://b4ts0xs184cax" path="res://assets/ui/popup-panel.stylebox" id="5_lbacc"]
 [ext_resource type="PackedScene" uid="uid://0xeyeylg8w8k" path="res://scenes/settings_panel.tscn" id="6_t623a"]
 [ext_resource type="PackedScene" uid="uid://b1a77l6rte3i" path="res://scenes/help_tabs.tscn" id="7_qqehi"]
 [ext_resource type="PackedScene" uid="uid://cvfhme8tmg2c5" path="res://scenes/about_tabs.tscn" id="8_2rex3"]
-[ext_resource type="PackedScene" uid="uid://c0cj0gppj2q23" path="res://scenes/learn_tabs.tscn" id="8_pmmh5"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dua6n"]
-content_margin_left = 20.0
-content_margin_right = 20.0
-bg_color = Color(0.854902, 0.407843, 0.0235294, 1)
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
+[ext_resource type="PackedScene" uid="uid://k4j50g4q56tt" path="res://scenes/LearnTabs.tscn" id="8_41uro"]
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -122,7 +114,7 @@ layout_mode = 2
 [node name="WarningPanel" type="PopupPanel" parent="."]
 size = Vector2i(106, 50)
 always_on_top = true
-theme_override_styles/panel = SubResource("StyleBoxFlat_dua6n")
+theme_override_styles/panel = ExtResource("3_3bxnd")
 script = ExtResource("4_u4i6y")
 
 [node name="C" type="CenterContainer" parent="WarningPanel"]
@@ -203,7 +195,7 @@ size = Vector2i(800, 500)
 unresizable = false
 borderless = false
 
-[node name="LearnTabs" parent="LearnPanel" instance=ExtResource("8_pmmh5")]
+[node name="Learn" parent="LearnPanel" instance=ExtResource("8_41uro")]
 offset_left = 4.0
 offset_top = 4.0
 offset_right = 796.0

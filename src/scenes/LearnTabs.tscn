@@ -1,0 +1,304 @@
+[gd_scene load_steps=2 format=3 uid="uid://k4j50g4q56tt"]
+
+[ext_resource type="Theme" uid="uid://gleoxvoch1e4" path="res://assets/ui/tab_panel_theme.tres" id="1_nnruc"]
+
+[node name="Learn" type="TabContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource("1_nnruc")
+all_tabs_in_front = true
+
+[node name="Numbers" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+
+[node name="HBox" type="HBoxContainer" parent="Numbers"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="RT" type="RichTextLabel" parent="Numbers/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+bbcode_enabled = true
+text = "Numbers
+
+Numbers in digital systems are represented by logic levels of zeros and ones which form binary numbers.
+
+Using the Number Spinner you can see how the numbers change when incrementing or decrementing.
+
+Also, conditions for when signed overflow, carry, and borrow are indicated.
+
+Change the number of bits between 4 and 8.
+
+The left-most bit may be used as a sign bit.
+
+[b]Negation[/b]
+
+To negate a binary number we invert the bits and add 1.
+
+0001 => 1110 + 1 => 1111
+1111 => 0000 + 1 => 0001
+
+[b]Convert Binary to Decimal[/b]
+
+Starting at the left-most bit, add the bit and then times by 2. Repeat for the remaining bits.
+
+0101 => 0 x 2 => 0 + 1 => 1 * 2 => 2 + 0 => 2 * 2 => 4  + 1 => 5
+
+[b]Convert Binary to Hex[/b]
+
+Arrange the binary bits in groups of 4 and convert to decimals. Then, with practice, write down the corresponding hex digit.
+
+Remember A = 10, B = 11, F = 15 etc. Bits have values of 8, 4, 2, 1
+
+1010 => 8 + 2 => 10 => A
+0111 => 7
+1111 => F"
+
+[node name="Boolean Logic" type="MarginContainer" parent="."]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+
+[node name="HBox" type="HBoxContainer" parent="Boolean Logic"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="RT" type="RichTextLabel" parent="Boolean Logic/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+bbcode_enabled = true
+text = "[b]Boolean Logic[/b]
+
+[i]Boolean Algebra[/i] defines operations that are performed on binary numbers. The basic operations are [b]NOT[/b], [b]AND[/b], and [b]OR[/b].
+
+The operations are like in mathematics where we have functions with inputs and an output.
+
+NOT inverts a single input so 1 becomes 0 and 0 becomes 1.
+AND only outputs 1 if all of its 2 or more inputs are 1 otherwise it outputs 0.
+OR outputs a 1 if any of its 2 or more inputs are 1. It outputs a 0 if all of its inputs are 0.
+
+We may specify this with Truth Tables. The inputs are A and B.
+[table=3][cell][img]res://assets/pics/not-tt.png[/img][/cell][cell][img]res://assets/pics/and-tt.png[/img] [/cell][cell][img]res://assets/pics/or-tt.png[/img] [/cell][/table]
+All the combinations of inputs are listed along with the output value.
+
+Basic logic gates are available to wire up into circuits called combinational logic. Some more common logic functions are NAND, NOR, and Exclusive Or (XOR). Here are their truth tables:
+[table=3][cell][img]res://assets/pics/nand-tt.png[/img][/cell][cell][img]res://assets/pics/nor-tt.png[/img][/cell][cell][img]res://assets/pics/xor-tt.png[/img][/cell][/table]
+
+A logic function may be written like so: A + B * C \\ = Y This means A OR B AND NOT C. The operator precedence is the same as with mathematics.
+
+We may specify the logic rules for a digital circuit using a Truth Table.
+[img]res://assets/pics/example-tt.png[/img]
+In this Truth Table, the X's mean don't care (0 or 1 is ok). This saves us having to write all 16 input combinations.
+
+Then we may extract a logic function from the Truth Table by writing down the \"products\" that give a 1 output and \"ORing\" these products together to give a single output. This is called a Sum of Products (SOP).
+
+In this example: A.B + B.C\\ + C.D To get a 1 output we need A AND B OR B AND NOT C OR C AND D
+
+To realize this in a circuit we need 3 AND gates, a NOT gate, and a 3-input OR gate. And the circuit has 4 inputs (A, B, C, D).
+
+In many cases the SOP function will be long and may be shortened (simplified) to some other equation. This is important to minimize the number of logic gates that are needed. Various techniques and tools have been developed since the 1950s to accomplish this task. Now it is built into logic chip design software.
+
+To learn more about these techniques, you might search on \"Boolean Algebra\", and \"Karnaugh Maps\".
+
+[b]Rules and Laws[/b]
+[table=3][cell]Name[/cell][cell]AND[/cell][cell]OR[/cell]
+[cell]Commutative law[/cell][cell]A * B = B * A[/cell][cell]A + B = B + A[/cell]
+[cell]Associative law[/cell][cell]A * (B * C) = (A * B) * C[/cell][cell]A + (B + C) = (A + B) + C[/cell]
+[cell]Distributive law[/cell][cell]A * (B + C) = (A * B) + (A * C)    [/cell][cell]A + (B * C) = (A + B) * (A + C)[/cell]
+[/table]
+
+[b]Other useful rules[/b]
+[table=2][cell]A * 0 = 0[/cell][cell]A + 1 = 1[/cell]
+[cell]A * 0 = 0[/cell][cell]A + 1 = 1[/cell]
+[cell]A * 1 = A[/cell][cell]A + 0 = A[/cell]
+[cell]A * A = A[/cell][cell]A + A = A[/cell]
+[cell]A * A\\ = 0[/cell][cell]A + A\\ = A[/cell]
+[cell]A + A\\ * B = A + B    [/cell][cell]A * (A/ + B) = A * B[/cell]
+[/table]
+
+A very useful rule is [i]De Morgan's rule[/i].
+A\\ * B\\ = (A + B)\\
+A\\ + \\B = (A * B)\\
+
+This is used when simplifying digital circuits. For example, using a NOR gate for the first form and a NAND gate for the second form.
+"
+
+[node name="Combinational Logic" type="MarginContainer" parent="."]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+
+[node name="HBox" type="HBoxContainer" parent="Combinational Logic"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="RT" type="RichTextLabel" parent="Combinational Logic/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+bbcode_enabled = true
+text = "[b]Combinational Logic[/b]
+
+Logic gates are available in packages such as Quad 2-input NAND gates. These may be wired up to build circuits of combinational logic.
+
+In practice the bare minimum of individual gates are used, instead we use the most common building blocks such as flip-flops, and decoders.
+
+Let's look at some common building blocks and how they are made from logic gates.
+
+[b]Decoder[/b]
+
+This has a binary input that is mapped to a desired output pattern. For example, to drive the segments of an LED display. We would have 4 input bits that are decoded to produce 7 signals to drive the segments corresponding to each digit.
+
+[img]res://assets/pics/decoder.png[/img]
+
+Another example is an address decoder. This is used to select the correct memory chip for a block of memory depending on the state of some high order address bits.
+
+To scan the keys of a keyboard, we could use a decoder to select individual scan lines.
+
+[b]Encoder[/b]
+
+An encoder does the opposite of a decoder. It could be fed with the lines of a keyboard matrix to output the binary value of a column when a key is pressed.
+
+[img]res://assets/pics/encoder.png[/img]
+
+[b]Multiplexer[/b]
+
+A multiplexer is used to select one of several inputs. The selected input value is then copied to the output.
+
+[img]res://assets/pics/mult.png[/img]
+
+[b]Adder[/b]
+
+This does binary addition of 2 inputs. It has a sum and carry output. However, to make it more useful, we include a carry in signal to create a full adder. Adders may then be chained together to handle multi-bit binary inputs.
+
+[img]res://assets/pics/adder.png[/img]
+
+[b]Subtractor[/b]
+
+We may convert the adder to a subtractor by inverting its B input and adding a 1 by injecting 1 into the carry in input.
+
+[img]res://assets/pics/sub.png[/img]
+
+A key component of a CPU is the Arithmetic and Logic Unit (ALU) which uses this kind of circuit."
+
+[node name="Sequential Logic" type="MarginContainer" parent="."]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+
+[node name="HBox" type="HBoxContainer" parent="Sequential Logic"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="RT" type="RichTextLabel" parent="Sequential Logic/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+bbcode_enabled = true
+text = "[b]Sequential Logic[/b]
+
+Sequential logic is a form of memory device containing an internal state. Its output depends not only on its inputs but also the current state.
+
+Also, a clock signal may be applied which causes changes on the rising or falling edges of the square wave of the clock.
+
+There are many types of sequential logic devices. We will start with the D Flip-Flop (DFF) and add extra features to it to create other sequential logic circuits.
+
+[b]D Flip Flop[/b]
+
+The simple form (D Latch) has a Data input which is remembered when the Enable input is high. The cross-connected NOR gates form an SR flip-flop. The feedback signals cause it to latch to the current state.
+
+[img]res://assets/pics/d-ff.png[/img]
+
+We can improve upon this by connecting the output to the input of another DFF. Then connect the Enable signal via a NOT gate to the second DFF. Then we have an Edge-triggered D flip-flop. In this case the Enable signal is called the Clock signal.
+
+[img]res://assets/pics/etdff.png[/img]
+
+The data is clocked in on the rising edge of the clock to the first flip flop and remebered after the falling edge of the clock where the data is latched onto the second flip flop.
+
+We may also add Set and Reset inputs to allow for setting the state without using the clock.
+
+[img]res://assets/pics/srdff.png[/img]
+
+[b]Register[/b]
+
+A [i]register[/i] stores bits of data over successive clock cycles such as 4 or 8 bits. We can make this using D flip-flops, but we need to add a multiplexer to steer either the input or the output to the D input so that on each clock cycle, the correct state is captured by the flip-flop.
+
+[img]res://assets/pics/reg.png[/img]
+
+We have a LD input to Load the Data when LD is high.
+
+[b]Counter[/b]
+
+We may modify the register by adding an incrementer in the feedback path from the output such that 1 is added to the value on each clock cycle.
+
+This circuit would need to be expanded to handle several bits of data.
+[img]res://assets/pics/counter.png[/img]
+
+[b]Shift Register[/b]
+
+The previous register has parallel input data, but a [i]shift register[/i] allows for a serial input and output. It may be loaded with data, and the bits shited out in either direction bit by bit with each clock cycle. Or we may shift bits in to form a data value."
+
+[node name="Digital Systems" type="MarginContainer" parent="."]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+
+[node name="HBox" type="HBoxContainer" parent="Digital Systems"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="RT" type="RichTextLabel" parent="Digital Systems/HBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+bbcode_enabled = true
+text = "[b]Digtal Systems[/b]
+
+Digital systems combine building blocks connected with data busses, signals, and tend to be driven with a clock.
+
+Data busses are groups of wires carring binary data such as 8-bit bytes or 16-bit words. These may be used as addresses for memory device locations, or for data and I/O (Input/Output values).
+
+A typical digital system is a computer. Here is an example of a a simple 8-bit CPU (Central Processing Unit) with a program ROM attached. It features a classic Von Neumann architecture comprising a simple data path with a few registers, an ALU (Arithmetic Logic Unit), and IO (keyboard inputs and a display output).
+
+[img]res://assets/pics/system.png[/img]
+
+[b]Controller[/b]
+
+The controller has a ROM containing a microprogram to direct all the control signals.
+
+[img]res://assets/pics/mpc.png[/img]
+
+[b]Memory Mapper[/b]
+
+If the ALU has flags, we may use these to change the microinstruction memory address to handle conditional branching. Without branching in a program it is not very useful.
+
+[img]res://assets/pics/mapper.png[/img]
+
+[b]Challenges[/b]
+
+One challenge is to efficiently add microinstructions to the Microprogram memory in the limited address range available.
+
+Microinstructions are 16 bit values that are passed to the MIR with each update of the MPC, each bit affects a control line of the system.
+
+The sequence of these instructions action the OP codes of the assembly language for the CPU.
+
+The entry point for each assembly language instruction is the value in the program memory that is used as an address that is loaded into the MPC from the MBR.
+
+The ultimate challenge is to create your own computer circuit, write the Microprogram code that is loaded into the Microprogram memory, test out the circuit and code, then run your assembly language programs on your computer.
+
+Of course, it is extremely difficult to do all of this without following a tutorial, but possible. One tip is to program your own tools for compiling your code and driving the inputs with simulation data such as for a digital calculator."

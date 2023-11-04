@@ -1,0 +1,8 @@
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://gleoxvoch1e4"]
+
+[ext_resource type="StyleBox" uid="uid://gldnkeili0y4" path="res://assets/ui/tab-panel.stylebox" id="1_fap68"]
+
+[resource]
+Label/colors/font_color = Color(0.0862745, 0.0862745, 0.0862745, 1)
+RichTextLabel/colors/default_color = Color(0.0980392, 0.0980392, 0.0980392, 1)
+TabContainer/styles/panel = ExtResource("1_fap68")
