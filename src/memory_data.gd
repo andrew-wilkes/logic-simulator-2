@@ -2,6 +2,8 @@ extends Resource
 
 class_name MemoryData
 
+var _mem_size = 0
+
 @export var mem_size: int:
 	set(v):
 		set_mem_size(v)
@@ -22,28 +24,28 @@ const mem_sizes = {
 }
 
 func set_mem_size(v):
-	mem_size = v
+	_mem_size = v
 	var old_size = words.size()
-	words.resize(mem_size)
-	if mem_size > old_size:
-		for idx in range(old_size, mem_size):
+	words.resize(_mem_size)
+	if _mem_size > old_size:
+		for idx in range(old_size, _mem_size):
 			words[idx] = 0
 
 
 func fill():
-	for idx in mem_size:
-		words[idx] = (idx + 1) % mem_size
+	for idx in _mem_size:
+		words[idx] = (idx + 1) % _mem_size
 
 
 func trim():
 	var lim = 0x100 if width == 8 else 0x10000
-	for idx in mem_size:
+	for idx in _mem_size:
 		words[idx] %= lim
 
 
 func erase() -> bool:
 	var updated = false
-	for idx in mem_size:
+	for idx in _mem_size:
 		if words[idx] > 0:
 			updated = true
 		words[idx] = 0
@@ -55,4 +57,4 @@ func set_indexed_mem_size(idx):
 
 
 func get_mem_size_str():
-	return mem_sizes[mem_size]
+	return mem_sizes[_mem_size]

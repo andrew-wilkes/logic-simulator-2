@@ -25,7 +25,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_colors/default_color = Color(0, 0, 0, 1)
 bbcode_enabled = true
-text = "Numbers
+text = "[b]Numbers[/b]
 
 Numbers in digital systems are represented by logic levels of zeros and ones which form binary numbers.
 

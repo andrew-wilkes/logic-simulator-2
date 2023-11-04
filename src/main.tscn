@@ -203,15 +203,16 @@ offset_bottom = 496.0
 
 [node name="AboutPanel" type="PopupPanel" parent="."]
 title = "About"
-size = Vector2i(600, 400)
+size = Vector2i(700, 500)
+visible = true
 unresizable = false
 borderless = false
 
 [node name="AboutTabs" parent="AboutPanel" instance=ExtResource("8_2rex3")]
 offset_left = 4.0
 offset_top = 4.0
-offset_right = 596.0
-offset_bottom = 396.0
+offset_right = 696.0
+offset_bottom = 496.0
 
 [connection signal="pressed" from="VB/HB/NewButton" to="." method="_on_new_button_pressed"]
 [connection signal="pressed" from="VB/HB/SaveButton" to="." method="_on_save_button_pressed"]

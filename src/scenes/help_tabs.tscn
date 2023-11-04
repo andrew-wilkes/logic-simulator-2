@@ -227,8 +227,19 @@ Some parts have functionality that is accessed by right-clicking on the part to 
 [ul]
  IO - the popup panel allows for setting the number of wires, the number range, colors of wires, naming of pins, and to change the data value via a slider, step buttons, or by editing the value
  ROM - the popup panel allows for choosing a data file (in .hack or .bin format) to load into the memory
+ RAM - the popup panel provides a hex viewer/editor for the contents of the memory
  TextView - the popup panel allows for choosing a text file to be associated with this part
 [/ul]
+
+[b]RAM Memory Inspector[/b]
+s
+Using this pop-up panel of a RAM chip, you are able to step through pages of the memory to view the contents of the words/bytes of data and see any ASCII characters that may be present.
+
+The data cells are editable. You may enter a decimal, hex (0xff) or binary (b1000) style of input value and press Enter to change the value.
+
+Hovering the mouse over a cell will display the value in binary form.
+
+You may also erase the memory, and reconfigure its size and bit depth.
 
 [b]ALU[/b]
 

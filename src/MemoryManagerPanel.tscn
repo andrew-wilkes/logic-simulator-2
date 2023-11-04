@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://01smnnivox5d"]
+
+[ext_resource type="PackedScene" uid="uid://bbrlsn3soy3um" path="res://scenes/MemoryManager.tscn" id="3_4ios3"]
+[ext_resource type="PackedScene" path="res://NumberInputPanel.tscn" id="5"]
+
+[node name="MemoryManagerPanel" type="PopupPanel"]
+size = Vector2i(351, 156)
+visible = true
+
+[node name="NumberInputPanel" parent="." instance=ExtResource("5")]
+
+[node name="MemoryManager" parent="." instance=ExtResource("3_4ios3")]
+
+[connection signal="popup_hide" from="NumberInputPanel" to="." method="_on_NumberInputPanel_popup_hide"]
