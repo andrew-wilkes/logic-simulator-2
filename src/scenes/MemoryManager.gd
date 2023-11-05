@@ -1,21 +1,31 @@
 extends Container
 
 var base_addr = 0
-var mem_size = 1024
-var num_bits = 16
-var mem = []
+var ram
+var list
 
 func _ready():
-	mem.resize(1024)
-	mem.fill(0x123)
-	var list = %SizeList.get_popup()
+	list = %SizeList.get_popup()
 	var x = 1
 	for n in 8:
 		list.add_item(str(x) + "K")
 		x *= 2
+	list.index_pressed.connect(list_item_selected)
+
+
+func list_item_selected(idx):
+	ram.data.size = list.get_item_text(idx)
+	ram.update()
+	%SizeLabel.text = ram.data.size
+
+
+func open(_ram: RAM):
+	ram = _ram
 	init_grid()
-	set_word_visibility(false)
+	set_word_visibility(ram.data.bits == 8)
 	update_grid()
+	%SizeLabel.text = ram.data.size
+	set_width_text(ram.data.bits)
 
 
 func init_grid():
@@ -45,7 +55,7 @@ func update_grid():
 	var num_words =  16
 	var format = "%02x"
 	var wide = false
-	if num_bits == 16:
+	if ram.data.bits == 16:
 		format = "%04x"
 		wide = true
 		num_words = 8
@@ -54,18 +64,18 @@ func update_grid():
 		var chrs = []
 		%Grid.get_child(idx).text = "%04x:" % [base_addr + row * num_words]
 		for n in num_words:
-			var word = mem[base_addr + row * num_words + n]
+			var word = ram.values[base_addr + row * num_words + n]
 			%Grid.get_child(idx + n + 1).text = format % [word]
 			%Grid.get_child(idx + n + 1).tooltip_text = int2bin(word)
+			chrs.append(get_chr(word % 256))
 			if wide:
 				chrs.append(get_chr(word / 256))
-			chrs.append(get_chr(word % 256))
 		idx += 18
 		%Grid.get_child(idx - 1).text = "".join(chrs)
 
 
 func get_chr(n):
-	return String.chr(n) if n > 31 or n < 127 else "-"
+	return String.chr(n) if n > 31 and n < 127 else "-"
 
 
 func set_word_visibility(show_all):
@@ -88,51 +98,58 @@ func _on_text_submitted(new_text, node, row, col):
 				value *= 2
 				if new_text[idx] == "1":
 					value += 1
-	if num_bits == 8:
-		mem[base_addr + row * 16 + col] = value
+	if ram.data.bits == 8:
+		ram.values[base_addr + row * 16 + col] = value
 	else:
-		mem[base_addr + row * 8 + col] = value
+		ram.values[base_addr + row * 8 + col] = value
 	update_grid()
 	node.caret_column = node.text.length()
 
 
 func int2bin(x: int) -> String:
 	var b = ""
-	for n in num_bits:
+	for n in ram.data.bits:
 		b = str(x % 2) + b
 		x /= 2
 	return b
 
 
 func _on_up_button_pressed():
-	var step = 0x80 if num_bits == 16 else 0x100
+	var step = 0x80 if ram.data.bits == 16 else 0x100
 	base_addr = maxi(base_addr - step, 0)
 	update_grid()
 
 
 func _on_down_button_pressed():
-	var step = 0x80 if num_bits == 16 else 0x100
-	if base_addr + step < mem_size:
+	var step = 0x80 if ram.data.bits == 16 else 0x100
+	if base_addr + step <= ram.max_address:
 		base_addr = base_addr + step
 	update_grid()
 
 
 func _on_width_button_pressed():
-	if num_bits == 8:
-		num_bits = 16
+	if ram.data.bits == 8:
+		ram.data.bits = 16
 	else:
-		num_bits = 8
-	%WidthLabel.text = str(num_bits)
+		ram.data.bits = 8
+	set_width_text(ram.data.bits)
+	ram.update()
+
+
+func set_width_text(n):
+	%WidthLabel.text = str(n) + "bits"
 
 
 func _on_save_button_pressed():
-	pass # Replace with function body.
+	$FileDialog.popup_centered()
 
 
 func _on_erase_button_pressed():
-	mem.fill(0)
+	ram.values.fill(0)
 	update_grid()
 
 
-func _on_ok_button_pressed():
-	hide()
+func _on_file_dialog_file_selected(path):
+	var file = FileAccess.open(path, FileAccess.WRITE)
+	file.store_buffer(ram.values)
+	G.notify_user("File saved")

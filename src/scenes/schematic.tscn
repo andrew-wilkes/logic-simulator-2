@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://cq3v3io0y1kms"]
+[gd_scene load_steps=6 format=3 uid="uid://cq3v3io0y1kms"]
 
 [ext_resource type="Script" path="res://scenes/schematic.gd" id="1_q7w2l"]
 [ext_resource type="PackedScene" uid="uid://1ugdcg3f5q1w" path="res://scenes/IOManager.tscn" id="2_7dp20"]
+[ext_resource type="PackedScene" uid="uid://soo142csxxxi" path="res://scenes/MemoryManager.tscn" id="3_3rybu"]
 [ext_resource type="PackedScene" uid="uid://c7pcrpp8inqwr" path="res://scenes/TestRunner.tscn" id="3_lacat"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ydr2j"]
@@ -20,6 +21,17 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_ydr2j")
 
 [node name="IOManager" parent="IOManagerPanel" instance=ExtResource("2_7dp20")]
 offset_right = 714.0
+
+[node name="MemoryManagerPanel" type="PopupPanel" parent="."]
+title = "Memory Manager"
+borderless = false
+theme_override_styles/panel = SubResource("StyleBoxFlat_ydr2j")
+
+[node name="MemoryManager" parent="MemoryManagerPanel" instance=ExtResource("3_3rybu")]
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 423.0
+offset_bottom = 100.0
 
 [node name="C" type="CanvasLayer" parent="."]
 

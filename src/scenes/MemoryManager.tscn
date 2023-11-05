@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://bbrlsn3soy3um"]
+[gd_scene load_steps=5 format=3 uid="uid://soo142csxxxi"]
 
 [ext_resource type="Texture2D" uid="uid://ss0cek62ksv5" path="res://assets/ui/up.png" id="1_o2ut6"]
 [ext_resource type="Script" path="res://scenes/MemoryManager.gd" id="1_xkkyp"]
@@ -8,7 +8,7 @@
 [node name="MemoryManager" type="MarginContainer"]
 offset_left = 4.0
 offset_top = 4.0
-offset_right = 490.0
+offset_right = 841.0
 offset_bottom = 226.0
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
@@ -21,6 +21,7 @@ layout_mode = 2
 
 [node name="Top" type="HBoxContainer" parent="VBox"]
 layout_mode = 2
+theme_override_constants/separation = 10
 
 [node name="UpButton" type="TextureButton" parent="VBox/Top"]
 layout_mode = 2
@@ -30,6 +31,10 @@ texture_normal = ExtResource("1_o2ut6")
 layout_mode = 2
 texture_normal = ExtResource("2_w0hc1")
 
+[node name="C" type="Control" parent="VBox/Top"]
+layout_mode = 2
+size_flags_horizontal = 3
+
 [node name="SizeList" type="MenuButton" parent="VBox/Top"]
 unique_name_in_owner = true
 layout_mode = 2
@@ -37,8 +42,10 @@ text = "Size:"
 flat = false
 
 [node name="SizeLabel" type="Label" parent="VBox/Top"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "64K"
+vertical_alignment = 2
 
 [node name="WidthButton" type="Button" parent="VBox/Top"]
 layout_mode = 2
@@ -48,11 +55,20 @@ text = "Width:"
 unique_name_in_owner = true
 layout_mode = 2
 text = "8"
+vertical_alignment = 2
+
+[node name="C2" type="Control" parent="VBox/Top"]
+layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="SaveButton" type="Button" parent="VBox/Top"]
 layout_mode = 2
 focus_mode = 0
 text = "Save"
+
+[node name="EraseButton" type="Button" parent="VBox/Top"]
+layout_mode = 2
+text = "Erase"
 
 [node name="Grid" type="GridContainer" parent="VBox"]
 unique_name_in_owner = true
@@ -79,21 +95,13 @@ text = "...abc..."
 [node name="Tray" type="HBoxContainer" parent="VBox"]
 layout_mode = 2
 
-[node name="EraseButton" type="Button" parent="VBox/Tray"]
-layout_mode = 2
-text = "Erase"
-
-[node name="C" type="Control" parent="VBox/Tray"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="OKButton" type="Button" parent="VBox/Tray"]
-layout_mode = 2
-text = "OK"
+[node name="FileDialog" type="FileDialog" parent="."]
+size = Vector2i(900, 500)
+access = 2
 
 [connection signal="pressed" from="VBox/Top/UpButton" to="." method="_on_up_button_pressed"]
 [connection signal="pressed" from="VBox/Top/DownButton" to="." method="_on_down_button_pressed"]
 [connection signal="pressed" from="VBox/Top/WidthButton" to="." method="_on_width_button_pressed"]
 [connection signal="pressed" from="VBox/Top/SaveButton" to="." method="_on_save_button_pressed"]
-[connection signal="pressed" from="VBox/Tray/EraseButton" to="." method="_on_erase_button_pressed"]
-[connection signal="pressed" from="VBox/Tray/OKButton" to="." method="_on_ok_button_pressed"]
+[connection signal="pressed" from="VBox/Top/EraseButton" to="." method="_on_erase_button_pressed"]
+[connection signal="file_selected" from="FileDialog" to="." method="_on_file_dialog_file_selected"]

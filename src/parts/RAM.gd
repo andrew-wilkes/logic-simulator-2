@@ -17,6 +17,10 @@ func _init():
 
 func _ready():
 	super()
+	update()
+
+
+func update():
 	set_max_value()
 	max_address = get_max_address(data.size)
 	resize_memory(max_address + 1)

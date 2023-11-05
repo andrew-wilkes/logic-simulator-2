@@ -329,6 +329,9 @@ func right_click_on_part(part):
 			$IOManagerPanel.popup_centered()
 		"ROM":
 			part.open_file()
+		"RAM":
+			$MemoryManagerPanel/MemoryManager.open(part)
+			$MemoryManagerPanel.popup_centered()
 
 
 func output_level_changed_handler(part, side, port, level):
