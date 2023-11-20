@@ -232,7 +232,6 @@ Some parts have functionality that is accessed by right-clicking on the part to 
 [/ul]
 
 [b]RAM Memory Inspector[/b]
-s
 Using this pop-up panel of a RAM chip, you are able to step through pages of the memory to view the contents of the words/bytes of data and see any ASCII characters that may be present.
 
 The data cells are editable. You may enter a decimal, hex (0xff) or binary (b1000) style of input value and press Enter to change the value.

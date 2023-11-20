@@ -34,10 +34,12 @@ func _on_pulse_button_button_up():
 
 func _on_reset_button_button_down():
 	update_output_level(RIGHT, 1, true)
+	indicate_level(RIGHT, 1, true)
 
 
 func _on_reset_button_button_up():
 	update_output_level(RIGHT, 1, false)
+	indicate_level(RIGHT, 1, false)
 
 
 func output_clock(level):
@@ -46,3 +48,4 @@ func output_clock(level):
 		race_counter_reset_counter = 0
 		controller.reset_race_counters()
 	update_output_level(RIGHT, OUT, level)
+	indicate_level(RIGHT, OUT, level)

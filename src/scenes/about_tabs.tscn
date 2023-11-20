@@ -22,9 +22,9 @@ text = "This software was created by Andrew Wilkes (aw2010@gmail.com) in 2023.
 
 [url]Buy me a Coffee[/url]
 
-[img]res://assets/pics/knuth.jpg[/img]
 
-Award winning computer scientist Donald Knuth, age 20, operating an IBM 650 computer in 1958.
+
+
 "
 
 [node name="License" type="MarginContainer" parent="."]

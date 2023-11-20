@@ -55,6 +55,7 @@ func _ready():
 	change_notification_timer.connect("timeout", _on_change_notification_timer_timeout)
 	set("theme_override_constants/separation", 10)
 	set("theme_override_constants/port_offset", -6)
+	set("mouse_default_cursor_shape", CURSOR_DRAG)
 
 
 func update_input_level(side, port, level):
@@ -148,3 +149,15 @@ func _on_tag_text_changed(_new_text):
 # Override this function to apply a reset to a part that has memory
 func reset():
 	pass
+
+
+func indicate_level(side, port, level):
+	var color = G.settings.logic_high_color if level else G.settings.logic_low_color
+	if side == LEFT:
+		if port < get_connection_input_count():
+			var slot = get_connection_input_slot(port)
+			set_slot_color_left(slot, color)
+	else:
+		if port < get_connection_output_count():
+			var slot = get_connection_output_slot(port)
+			set_slot_color_right(slot, color)

@@ -30,7 +30,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_ydr2j")
 [node name="MemoryManager" parent="MemoryManagerPanel" instance=ExtResource("3_3rybu")]
 offset_left = 0.0
 offset_top = 0.0
-offset_right = 423.0
+offset_right = 382.0
 offset_bottom = 100.0
 
 [node name="C" type="CanvasLayer" parent="."]

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cxguofjwxdjio"
-path="res://.godot/imported/knuth.jpg-58e78fbdd252a23909201bbfc81849c0.ctex"
+uid="uid://bm8heftbcuq8t"
+path="res://.godot/imported/andy.jpg-4aac99230f7a4b1ce8d9b19f1ec146b2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/pics/knuth.jpg"
-dest_files=["res://.godot/imported/knuth.jpg-58e78fbdd252a23909201bbfc81849c0.ctex"]
+source_file="res://assets/pics/andy.jpg"
+dest_files=["res://.godot/imported/andy.jpg-4aac99230f7a4b1ce8d9b19f1ec146b2.ctex"]
 
 [params]
 

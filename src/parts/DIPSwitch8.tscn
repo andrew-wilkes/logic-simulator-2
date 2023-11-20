@@ -255,18 +255,10 @@ size_flags_horizontal = 3
 text = "8b"
 horizontal_alignment = 2
 
-[node name="HB9" type="HBoxContainer" parent="."]
+[node name="L1" type="Label" parent="."]
 layout_mode = 2
-
-[node name="L1" type="Label" parent="HB9"]
-layout_mode = 2
-text = "OFF"
-
-[node name="L2" type="Label" parent="HB9"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "ON"
-horizontal_alignment = 2
+text = "off _ on"
+horizontal_alignment = 1
 
 [node name="Tag" type="LineEdit" parent="."]
 layout_mode = 2

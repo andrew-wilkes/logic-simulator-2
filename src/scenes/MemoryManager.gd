@@ -3,6 +3,7 @@ extends Container
 var base_addr = 0
 var ram
 var list
+var not_opened_yet = true
 
 func _ready():
 	list = %SizeList.get_popup()
@@ -20,12 +21,14 @@ func list_item_selected(idx):
 
 
 func open(_ram: RAM):
-	ram = _ram
-	init_grid()
-	set_word_visibility(ram.data.bits == 8)
-	update_grid()
-	%SizeLabel.text = ram.data.size
-	set_width_text(ram.data.bits)
+	if not_opened_yet:
+		not_opened_yet = false
+		ram = _ram
+		init_grid()
+		set_word_visibility(ram.data.bits == 8)
+		update_grid()
+		%SizeLabel.text = ram.data.size
+		set_width_text(ram.data.bits)
 
 
 func init_grid():

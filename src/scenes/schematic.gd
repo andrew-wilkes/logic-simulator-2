@@ -341,27 +341,15 @@ func output_level_changed_handler(part, side, port, level):
 				var node = get_node(NodePath(con.to))
 				node.update_input_level(LEFT, con.to_port, level)
 				if G.settings.indicate_to_levels:
-					indicate_level(node, LEFT, con.to_port, level)
+					node.indicate_level(LEFT, con.to_port, level)
 		else:
 			if con.to == part.name and con.to_port == port:
 				var node = get_node(NodePath(con.from))
 				node.update_input_level(RIGHT, con.from_port, level)
 				if G.settings.indicate_to_levels:
-					indicate_level(node, RIGHT, con.from_port, level)
+					node.indicate_level(RIGHT, con.from_port, level)
 		if G.settings.indicate_from_levels:
-			indicate_level(part, side, port, level)
-
-
-func indicate_level(part, side, port, level):
-	var color = G.settings.logic_high_color if level else G.settings.logic_low_color
-	if side == LEFT:
-		if port < part.get_connection_input_count():
-			var slot = part.get_connection_input_slot(port)
-			part.set_slot_color_left(slot, color)
-	else:
-		if port < part.get_connection_output_count():
-			var slot = part.get_connection_output_slot(port)
-			part.set_slot_color_right(slot, color)
+			part.indicate_level(side, port, level)
 
 
 func bus_value_changed_handler(part, side, port, value):

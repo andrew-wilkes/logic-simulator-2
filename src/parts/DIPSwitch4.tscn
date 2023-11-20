@@ -151,18 +151,11 @@ size_flags_horizontal = 3
 text = "4b"
 horizontal_alignment = 2
 
-[node name="HB5" type="HBoxContainer" parent="."]
-layout_mode = 2
-
-[node name="L1" type="Label" parent="HB5"]
-layout_mode = 2
-text = "OFF"
-
-[node name="L2" type="Label" parent="HB5"]
+[node name="L1" type="Label" parent="."]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "ON"
-horizontal_alignment = 2
+text = "off _ on"
+horizontal_alignment = 1
 
 [node name="Tag" type="LineEdit" parent="."]
 layout_mode = 2
