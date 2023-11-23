@@ -1,10 +1,10 @@
 [gd_scene load_steps=4 format=3 uid="uid://cdaar2uo22ghn"]
 
-[ext_resource type="StyleBox" uid="uid://6ey1ulrt3occ" path="res://assets/parts/frame.stylebox" id="1_63ta7"]
-[ext_resource type="StyleBox" uid="uid://b51cf2x3pfpfk" path="res://assets/parts/selected-frame.stylebox" id="2_yyc8x"]
-[ext_resource type="Script" path="res://parts/Toggle.gd" id="3_a2twc"]
+[ext_resource type="StyleBox" uid="uid://6ey1ulrt3occ" path="res://assets/parts/frame.stylebox" id="1_endrv"]
+[ext_resource type="StyleBox" uid="uid://b51cf2x3pfpfk" path="res://assets/parts/selected-frame.stylebox" id="2_ljyai"]
+[ext_resource type="Script" path="res://parts/ToggleSwitch.gd" id="3_i82n2"]
 
-[node name="Toggle" type="GraphNode"]
+[node name="ToggleSwitch" type="GraphNode"]
 offset_left = 32.0
 offset_top = 22.0
 offset_right = 103.0
@@ -12,9 +12,9 @@ offset_bottom = 117.0
 mouse_filter = 1
 theme_override_constants/separation = 20
 theme_override_constants/port_offset = -4
-theme_override_styles/frame = ExtResource("1_63ta7")
-theme_override_styles/selected_frame = ExtResource("2_yyc8x")
-title = "Toggle"
+theme_override_styles/frame = ExtResource("1_endrv")
+theme_override_styles/selected_frame = ExtResource("2_ljyai")
+title = "ToggleSwitch"
 slot/0/left_enabled = false
 slot/0/left_type = 1
 slot/0/left_color = Color(0, 0, 1, 1)
@@ -42,7 +42,7 @@ slot/2/right_type = 0
 slot/2/right_color = Color(1, 1, 1, 1)
 slot/2/right_icon = null
 slot/2/draw_stylebox = true
-script = ExtResource("3_a2twc")
+script = ExtResource("3_i82n2")
 
 [node name="Sp" type="Control" parent="."]
 custom_minimum_size = Vector2(0, 26)
@@ -56,7 +56,7 @@ theme_override_constants/separation = 10
 layout_mode = 2
 focus_mode = 0
 toggle_mode = true
-text = "H/L"
+text = "High / Low"
 
 [node name="Label" type="Label" parent="HB"]
 layout_mode = 2

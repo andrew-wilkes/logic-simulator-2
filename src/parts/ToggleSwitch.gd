@@ -1,4 +1,4 @@
-class_name Toggle
+class_name ToggleSwitch
 
 extends Part
 
