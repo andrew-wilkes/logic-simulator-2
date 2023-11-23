@@ -14,11 +14,13 @@ func _ready():
 
 func reset_race_counter():
 	super()
-	controller.output_level_changed_handler(self, LEFT, 0, true)
-	controller.output_level_changed_handler(self, RIGHT, 0, true)
+	controller.bus_value_changed_handler(self, LEFT, 0, 0xffff)
+	controller.bus_value_changed_handler(self, RIGHT, 0, 0xffff)
+	controller.output_level_changed_handler(self, LEFT, 1, true)
+	controller.output_level_changed_handler(self, RIGHT, 1, true)
 
 
 func set_color():
 	$ColorRect.color = G.settings.logic_high_color
-	set_slot_color_left(0, G.settings.logic_high_color)
-	set_slot_color_right(0, G.settings.logic_high_color)
+	set_slot_color_left(1, G.settings.logic_high_color)
+	set_slot_color_right(1, G.settings.logic_high_color)
