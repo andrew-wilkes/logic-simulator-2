@@ -3,7 +3,7 @@ class_name ROM
 extends Part
 
 var max_value = 0
-var max_address = 0
+var mem_size = 0
 var values = []
 var old_address = 0
 
@@ -20,8 +20,8 @@ func _ready():
 	super()
 	set_max_value()
 	%Bits.text = str(data.bits)
-	max_address = get_max_address(data.size)
-	resize_memory(max_address + 1)
+	mem_size = get_mem_size(data.size)
+	resize_memory(mem_size)
 	$Size.text = data.size
 	if not data.file.is_empty():
 		load_data(data.file)
@@ -32,7 +32,7 @@ func _on_size_text_submitted(new_text):
 		if new_text.is_valid_int() or new_text.right(1) in ["K", "M"]\
 			and new_text.left(-1).is_valid_int():
 				data.size = new_text
-				max_address = get_max_address(data.size)
+				mem_size = get_mem_size(data.size)
 
 
 func _on_bits_text_submitted(new_text):
@@ -47,16 +47,16 @@ func set_max_value():
 	max_value = int(pow(2, data.bits) - 1)
 
 
-func get_max_address(dsize: String) -> int:
+func get_mem_size(dsize: String) -> int:
 	var n = 0
 	if dsize.is_valid_int():
 		n = int(dsize)
 	else:
 		n = int(dsize.left(-1))
 		if dsize.right(1) == "M":
-			n *= 1000
-		n *= 1000
-	return n - 1
+			n *= 1024
+		n *= 1024
+	return n
 
 
 func evaluate_bus_output_value(side, port, _value):
@@ -65,9 +65,9 @@ func evaluate_bus_output_value(side, port, _value):
 
 
 func set_output_data():
-	var address = clampi(pins[[LEFT, 0]], 0, max_address)
+	var address = pins[[LEFT, 0]] % mem_size
 	%Address.text = "%04X" % [address]
-	%Data.text = "%02X" % [values[address]]
+	%Data.text = "%04X" % [values[address]]
 	update_output_value(RIGHT, OUT, values[address])
 
 
@@ -92,12 +92,18 @@ func _on_file_dialog_file_selected(file_path: String):
 
 
 func load_data(file_path):
-	values = []
+	values.fill(0)
+	var num_words = 0
 	if file_path.get_extension() == "hack":
 		# .hack files contain binary strings
-		values = G.hack_to_array_of_int(FileAccess.get_file_as_string(file_path))
+		var ints = G.hack_to_array_of_int(FileAccess.get_file_as_string(file_path))
+		for addr in ints.size():
+			values[addr] = ints[addr]
+			num_words += 1
 	else:
 		var bytes = FileAccess.get_file_as_bytes(file_path)
 		for idx in range(0, bytes.size(), 2):
-			values.append(bytes[idx] + 256 * bytes[idx + 1])
-	G.notify_user(str(values.size()) + " words of data was loaded.")
+			@warning_ignore("integer_division")
+			values[idx / 2] = bytes[idx] + 256 * bytes[idx + 1]
+			num_words += 1
+	G.notify_user(str(num_words) + " words of data was loaded.")

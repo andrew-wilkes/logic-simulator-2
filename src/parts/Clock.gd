@@ -14,7 +14,10 @@ func _init():
 func _on_rate_value_changed(value):
 	fps = value
 	if fps > 0.5:
+		%ResetButton.toggle_mode = false
 		$Timer.start(1 / fps)
+	else:
+		%ResetButton.toggle_mode = true
 
 
 func _on_timer_timeout():
@@ -33,13 +36,13 @@ func _on_pulse_button_button_up():
 
 
 func _on_reset_button_button_down():
-	update_output_level(RIGHT, 1, true)
-	indicate_level(RIGHT, 1, true)
+	if fps > 0.5:
+		update_output(true)
 
 
 func _on_reset_button_button_up():
-	update_output_level(RIGHT, 1, false)
-	indicate_level(RIGHT, 1, false)
+	if fps > 0.5:
+		update_output(false)
 
 
 func output_clock(level):
@@ -49,3 +52,14 @@ func output_clock(level):
 		controller.reset_race_counters()
 	update_output_level(RIGHT, OUT, level)
 	indicate_level(RIGHT, OUT, level)
+
+
+func _on_reset_button_toggled(button_pressed):
+	# This allows for resetting when manually pulsing the clock
+	if fps <= 0.5:
+		update_output(button_pressed)
+
+
+func update_output(level):
+	update_output_level(RIGHT, 1, level)
+	indicate_level(RIGHT, 1, level)

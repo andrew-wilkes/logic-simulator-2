@@ -1,15 +1,21 @@
-[gd_scene load_steps=6 format=3 uid="uid://cq3v3io0y1kms"]
+[gd_scene load_steps=8 format=3 uid="uid://cq3v3io0y1kms"]
 
 [ext_resource type="Script" path="res://scenes/schematic.gd" id="1_q7w2l"]
+[ext_resource type="FontFile" uid="uid://ck2sp0iypcks" path="res://assets/fonts/RobotoMono-Regular.ttf" id="1_q54wc"]
 [ext_resource type="PackedScene" uid="uid://1ugdcg3f5q1w" path="res://scenes/IOManager.tscn" id="2_7dp20"]
 [ext_resource type="PackedScene" uid="uid://soo142csxxxi" path="res://scenes/MemoryManager.tscn" id="3_3rybu"]
 [ext_resource type="PackedScene" uid="uid://c7pcrpp8inqwr" path="res://scenes/TestRunner.tscn" id="3_lacat"]
+
+[sub_resource type="Theme" id="Theme_rntxj"]
+default_font = ExtResource("1_q54wc")
+Label/fonts/font = ExtResource("1_q54wc")
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ydr2j"]
 bg_color = Color(0.14902, 0.14902, 0.14902, 1)
 
 [node name="Schematic" type="GraphEdit"]
 size_flags_vertical = 3
+theme = SubResource("Theme_rntxj")
 right_disconnects = true
 arrange_nodes_button_hidden = true
 script = ExtResource("1_q7w2l")
@@ -20,7 +26,8 @@ borderless = false
 theme_override_styles/panel = SubResource("StyleBoxFlat_ydr2j")
 
 [node name="IOManager" parent="IOManagerPanel" instance=ExtResource("2_7dp20")]
-offset_right = 714.0
+offset_right = 692.0
+offset_bottom = 512.0
 
 [node name="MemoryManagerPanel" type="PopupPanel" parent="."]
 title = "Memory Manager"
@@ -30,7 +37,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_ydr2j")
 [node name="MemoryManager" parent="MemoryManagerPanel" instance=ExtResource("3_3rybu")]
 offset_left = 0.0
 offset_top = 0.0
-offset_right = 382.0
+offset_right = 412.0
 offset_bottom = 100.0
 
 [node name="C" type="CanvasLayer" parent="."]

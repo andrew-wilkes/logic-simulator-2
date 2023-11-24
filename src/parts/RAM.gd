@@ -85,7 +85,7 @@ func evaluate_bus_output_value(side, port, _value):
 func set_output_data():
 	var address = clampi(pins[[LEFT, 1]], 0, max_address)
 	%Address.text = "%04X" % [address]
-	%Data.text = "%02X" % [values[address]]
+	%Data.text = "%04X" % [values[address]]
 	update_output_value(RIGHT, OUT, values[address])
 
 

@@ -7,6 +7,7 @@ var value = 0
 func _init():
 	order = 80
 	category = SYNC
+	pins = { [0, 1]: false }
 
 
 func evaluate_output_level(side, port, level):
@@ -15,7 +16,7 @@ func evaluate_output_level(side, port, level):
 			if level:
 				if pins[[side, 1]]: # load
 					value = pins[[side, 0]]
-					$Value.text = "%02X" % [value]
+					$Value.text = "%04X" % [value]
 			else:
 				update_output_value(RIGHT, 0, value)
 

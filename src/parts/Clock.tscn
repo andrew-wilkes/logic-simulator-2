@@ -73,7 +73,6 @@ theme_override_constants/separation = 10
 [node name="PulseButton" type="Button" parent="HB"]
 layout_mode = 2
 focus_mode = 0
-toggle_mode = true
 text = "Pulse"
 
 [node name="Label" type="Label" parent="HB"]
@@ -91,6 +90,7 @@ layout_mode = 2
 theme_override_constants/separation = 10
 
 [node name="ResetButton" type="Button" parent="HB2"]
+unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
 toggle_mode = true
@@ -112,4 +112,5 @@ one_shot = true
 [connection signal="value_changed" from="Rate" to="." method="_on_rate_value_changed"]
 [connection signal="button_down" from="HB2/ResetButton" to="." method="_on_reset_button_button_down"]
 [connection signal="button_up" from="HB2/ResetButton" to="." method="_on_reset_button_button_up"]
+[connection signal="toggled" from="HB2/ResetButton" to="." method="_on_reset_button_toggled"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
