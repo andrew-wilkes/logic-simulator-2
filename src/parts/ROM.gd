@@ -60,14 +60,14 @@ func get_max_address(dsize: String) -> int:
 
 
 func evaluate_bus_output_value(side, port, _value):
-	if side == LEFT and port == 1: # Change of address
+	if side == LEFT and port == 0: # Change of address
 		set_output_data()
 
 
 func set_output_data():
-	var address = clampi(pins[[LEFT, 1]], 0, max_address)
-	$Address.text = "%04X" % [address]
-	$Data.text = "%02X" % [values[address]]
+	var address = clampi(pins[[LEFT, 0]], 0, max_address)
+	%Address.text = "%04X" % [address]
+	%Data.text = "%02X" % [values[address]]
 	update_output_value(RIGHT, OUT, values[address])
 
 

@@ -15,6 +15,7 @@ func _ready():
 	super()
 	set_max_value()
 	%Bits.text = str(data.bits)
+	pins = { [0, 1]: false, [0, 2]: false, [0, 3]: false, [0, 4]: false }
 
 
 func evaluate_output_level(side, port, level):
@@ -25,7 +26,7 @@ func evaluate_output_level(side, port, level):
 					value = clampi(pins[[side, 0]], 0, max_value)
 				elif pins[[side, 2]]: # inc
 					value = clampi(value + 1, 0, max_value)
-				elif pins[[side, 3]]: # reset
+				if pins[[side, 3]]: # reset
 					value = 0
 				$Value.text = "%02X" % [value]
 			else:
