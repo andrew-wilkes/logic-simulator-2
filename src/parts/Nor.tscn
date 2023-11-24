@@ -3,7 +3,7 @@
 [ext_resource type="StyleBox" uid="uid://6ey1ulrt3occ" path="res://assets/parts/frame.stylebox" id="1_tdmdc"]
 [ext_resource type="StyleBox" uid="uid://b51cf2x3pfpfk" path="res://assets/parts/selected-frame.stylebox" id="2_uihod"]
 [ext_resource type="Script" path="res://parts/Nor.gd" id="3_2ubkd"]
-[ext_resource type="Texture2D" uid="uid://bvlnehwvgu3pr" path="res://assets/parts/or.png" id="4_qrx0x"]
+[ext_resource type="Texture2D" uid="uid://cfqjskmlmej0r" path="res://assets/parts/nor.png" id="4_522eo"]
 
 [node name="Nor" type="GraphNode"]
 offset_left = 32.0
@@ -59,7 +59,7 @@ layout_mode = 2
 
 [node name="Symbol" type="Sprite2D" parent="Sp"]
 position = Vector2(40, 60)
-texture = ExtResource("4_qrx0x")
+texture = ExtResource("4_522eo")
 
 [node name="HB" type="HBoxContainer" parent="."]
 layout_mode = 2

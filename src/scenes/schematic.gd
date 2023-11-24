@@ -125,7 +125,11 @@ func duplicate_selected_parts():
 				part_offset *= 0.8 / zoom
 			offset = Vector2(offset.x / part.position.x * part_offset.x, \
 				offset.y / part.position.y * part_offset.y)
-		var new_part = part.duplicate()
+		var new_part = part.duplicate() # This does not work for WireColor or BusColor
+		# after setting the color for some unknown reason
+		if new_part == null:
+			new_part = Parts.scenes[part.part_type].instantiate()
+			new_part.position_offset = part.position_offset
 		new_part.selected = false
 		new_part.position_offset += offset
 		new_part.data = part.data.duplicate()

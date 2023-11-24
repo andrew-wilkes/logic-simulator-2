@@ -14,6 +14,7 @@ func _init():
 func _ready():
 	super()
 	set_bit_mask()
+	%Bit.value = data.bit
 
 
 func evaluate_bus_output_value(side, _port, value):
