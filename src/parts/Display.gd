@@ -51,3 +51,7 @@ func set_color(color_index):
 func set_digit_colors(color, bg_color):
 	%Segments.material.set_shader_parameter("color", color)
 	%Segments.material.set_shader_parameter("bg_color", bg_color)
+
+
+func setup():
+	%Segments.material = %Segments.material.duplicate()

@@ -5,7 +5,7 @@
 [ext_resource type="Script" path="res://parts/Display.gd" id="3_i0ylb"]
 [ext_resource type="Texture2D" uid="uid://nebjnvr6aqnq" path="res://assets/parts/down.png" id="5_0x123"]
 
-[sub_resource type="Shader" id="Shader_gt5gw"]
+[sub_resource type="Shader" id="Shader_6lv6y"]
 code = "shader_type canvas_item;
 
 uniform bool a = true;
@@ -66,8 +66,8 @@ void fragment() {
 }
 "
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_v5ngw"]
-shader = SubResource("Shader_gt5gw")
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_bx0ie"]
+shader = SubResource("Shader_6lv6y")
 shader_parameter/a = true
 shader_parameter/b = true
 shader_parameter/c = true
@@ -198,7 +198,7 @@ offset_bottom = 216.0
 
 [node name="Segments" type="TextureRect" parent="L1/VB"]
 unique_name_in_owner = true
-material = SubResource("ShaderMaterial_v5ngw")
+material = SubResource("ShaderMaterial_bx0ie")
 custom_minimum_size = Vector2(55, 80)
 layout_mode = 2
 texture = ExtResource("5_0x123")
