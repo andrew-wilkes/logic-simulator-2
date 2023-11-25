@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://ch3lbjop1cxgn"]
+[gd_scene load_steps=5 format=3 uid="uid://ch3lbjop1cxgn"]
 
 [ext_resource type="StyleBox" uid="uid://blookh74hus7a" path="res://assets/parts/colorizer.tres" id="1_kyg7r"]
 [ext_resource type="StyleBox" uid="uid://bqdalbafaape1" path="res://assets/parts/colorizer-selected.tres" id="2_y2qog"]
 [ext_resource type="Script" path="res://parts/Gnd.gd" id="3_plm8n"]
+[ext_resource type="PackedScene" uid="uid://cpreryo8h7173" path="res://scenes/color_rect_with_text.tscn" id="4_sy25m"]
 
 [node name="Gnd" type="GraphNode"]
 offset_right = 20.0
@@ -44,10 +45,8 @@ custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 text = "Gnd"
 
-[node name="ColorRect" type="ColorRect" parent="."]
-custom_minimum_size = Vector2(10, 10)
+[node name="ColorRect" parent="." instance=ExtResource("4_sy25m")]
 layout_mode = 2
-color = Color(0, 0, 1, 1)
 
 [node name="Tag" type="Label" parent="."]
 visible = false

@@ -12,7 +12,7 @@ class_name IO
 
 extends Part
 
-var format = "0x%02X"
+var format = "0x%04X"
 var current_value = 0 # This is accessed by the IO Manager panel
 
 func _init():
@@ -153,3 +153,7 @@ func test_set_pins():
 	data.num_wires = 2
 	data.labels = ["DIO","x","The yellow tail"]
 	set_pins()
+
+
+func reset():
+	_on_text_submitted("0")

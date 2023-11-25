@@ -37,12 +37,12 @@ func _on_pulse_button_button_up():
 
 func _on_reset_button_button_down():
 	if fps > 0.5:
-		update_output(true)
+		update_reset_output(true)
 
 
 func _on_reset_button_button_up():
 	if fps > 0.5:
-		update_output(false)
+		update_reset_output(false)
 
 
 func output_clock(level):
@@ -57,9 +57,9 @@ func output_clock(level):
 func _on_reset_button_toggled(button_pressed):
 	# This allows for resetting when manually pulsing the clock
 	if fps <= 0.5:
-		update_output(button_pressed)
+		update_reset_output(button_pressed)
 
 
-func update_output(level):
+func update_reset_output(level):
 	update_output_level(RIGHT, 1, level)
 	indicate_level(RIGHT, 1, level)

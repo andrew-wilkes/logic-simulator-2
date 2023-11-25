@@ -16,14 +16,12 @@ func evaluate_output_level(side, port, level):
 			if level:
 				if pins[[side, 1]]: # load
 					value = pins[[side, 0]]
-					$Value.text = "%04X" % [value]
+					$Value.text = "0x%04X" % [value]
 			else:
-				update_output_value(RIGHT, 0, value)
-
-
-func evaluate_bus_output_value(_side, _port, _value):
-	pass
+				update_output_value(RIGHT, OUT, value)
 
 
 func reset():
 	value = 0
+	$Value.text = "0x%04X" % [value]
+	update_output_value(RIGHT, OUT, value)

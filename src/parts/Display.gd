@@ -54,4 +54,6 @@ func set_digit_colors(color, bg_color):
 
 
 func setup():
+	# This is needed to have separated shaders for the displays so that they don't sync their segment colors.
+	# Marking the material as unique in the Editor does not achieve this aim.
 	%Segments.material = %Segments.material.duplicate()

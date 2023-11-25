@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://cpreryo8h7173"]
+
+[ext_resource type="Script" path="res://scenes/color_rect_with_text.gd" id="1_nou48"]
+
+[node name="ColorRect" type="ColorRect"]
+custom_minimum_size = Vector2(10, 10)
+color = Color(0, 0, 1, 1)
+script = ExtResource("1_nou48")

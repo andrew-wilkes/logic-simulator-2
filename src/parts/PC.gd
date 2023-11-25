@@ -28,7 +28,7 @@ func evaluate_output_level(side, port, level):
 					value = clampi(value + 1, 0, max_value)
 				if pins[[side, 3]]: # reset
 					value = 0
-				$Value.text = "%02X" % [value]
+				$Value.text = "%04X" % [value]
 			else:
 				update_output_value(RIGHT, OUT, value)
 
@@ -43,3 +43,9 @@ func _on_bits_text_submitted(new_text):
 
 func set_max_value():
 	max_value = int(pow(2, data.bits) - 1)
+
+
+func reset():
+	value = 0
+	$Value.text = "%04X" % [value]
+	update_output_value(RIGHT, OUT, value)
