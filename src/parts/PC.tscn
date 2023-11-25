@@ -103,7 +103,7 @@ layout_mode = 2
 
 [node name="Value" type="Label" parent="."]
 layout_mode = 2
-text = "0x00"
+text = "0x0000"
 horizontal_alignment = 1
 
 [node name="HB" type="HBoxContainer" parent="."]

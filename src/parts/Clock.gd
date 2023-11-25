@@ -46,10 +46,11 @@ func _on_reset_button_button_up():
 
 
 func output_clock(level):
+	if race_counter_reset_counter == 0:
+		controller.reset_race_counters()
 	race_counter_reset_counter += 1
 	if race_counter_reset_counter > 3:
 		race_counter_reset_counter = 0
-		controller.reset_race_counters()
 	update_output_level(RIGHT, OUT, level)
 	indicate_level(RIGHT, OUT, level)
 

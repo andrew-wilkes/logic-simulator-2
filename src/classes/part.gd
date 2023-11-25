@@ -161,3 +161,9 @@ func indicate_level(side, port, level):
 		if port < get_connection_output_count():
 			var slot = get_connection_output_slot(port)
 			set_slot_color_right(slot, color)
+
+
+func get_display_hex_value(value):
+	if value < 0:
+		value = 0x10000 + value
+	return "0x%04X" % [value]

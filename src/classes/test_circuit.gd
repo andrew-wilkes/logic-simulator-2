@@ -171,7 +171,7 @@ func get_output_values():
 	# Get the required outputs from the parts
 	for pin in get_pin_list():
 		if not pin_states.has(pin):
-			pin_states[pin] = "-"
+			pin_states[pin] = 0
 		if outputs.has(pin):
 			var target = outputs[pin]
 			var pin_key = [1, target[1]] # [side, port]
