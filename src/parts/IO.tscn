@@ -66,7 +66,8 @@ layout_mode = 2
 
 [node name="Value" type="LineEdit" parent="."]
 layout_mode = 2
-text = "0x00"
+text = "0x0000"
+expand_to_text_length = true
 
 [node name="Bus" type="Label" parent="."]
 layout_mode = 2
