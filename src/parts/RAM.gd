@@ -95,4 +95,5 @@ func resize_memory(num_bytes):
 
 
 func reset():
+	super()
 	values.fill(0)

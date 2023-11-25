@@ -4,7 +4,7 @@ extends Part
 
 func _init():
 	order = 84
-	pins = { [0, 0]: 0, [0, 1]: 0, [0, 2]: false }
+	reset()
 	category = ASYNC
 
 
@@ -25,3 +25,7 @@ func propagate_value(sel):
 		update_output_value(RIGHT, OUT, pins[[LEFT, B]])
 	else:
 		update_output_value(RIGHT, OUT, pins[[LEFT, A]])
+
+
+func reset():
+	pins = { [0, 0]: 0, [0, 1]: 0, [0, 2]: false }

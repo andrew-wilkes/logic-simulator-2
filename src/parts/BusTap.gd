@@ -2,7 +2,7 @@ class_name BusTap
 
 extends Part
 
-var last_bit_value = 0
+var last_bit_value
 var bit_mask = 0
 
 func _init():

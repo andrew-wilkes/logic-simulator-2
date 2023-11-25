@@ -7,7 +7,10 @@ var value = 0
 func _init():
 	order = 80
 	category = SYNC
-	pins = { [0, 1]: false }
+
+
+func _ready():
+	reset()
 
 
 func evaluate_output_level(side, port, level):
@@ -21,7 +24,12 @@ func evaluate_output_level(side, port, level):
 				update_output_value(RIGHT, OUT, value)
 
 
+func evaluate_bus_output_value(_side, _port, _value):
+	# Don't let the load value immediately go to the output
+	pass
+
+
 func reset():
 	value = 0
 	$Value.text = "0x%04X" % [value]
-	update_output_value(RIGHT, OUT, value)
+	pins = { [0, 0]: 0, [0, 1]: false }

@@ -15,7 +15,8 @@ func _ready():
 	super()
 	set_wrap_value()
 	%Bits.text = str(data.bits)
-	pins = { [0, 1]: false, [0, 2]: false, [0, 3]: false, [0, 4]: false }
+	reset()
+	
 
 
 func evaluate_output_level(side, port, level):
@@ -51,7 +52,7 @@ func set_wrap_value():
 func reset():
 	value = 0
 	$Value.text = get_display_hex_value(value)
-	update_output_value(RIGHT, OUT, value)
+	pins = { [0, 1]: false, [0, 2]: false, [0, 3]: false, [0, 4]: false }
 
 
 func evaluate_bus_output_value(_side, _port, _value):

@@ -5,9 +5,7 @@ extends Part
 func _init():
 	order = 80
 	category = ASYNC
-	pins = { [0, 0]: 0, [0, 1]: 0 }
-	for n in 6:
-		pins[[0, n + 2]] = false
+	reset()
 
 
 func evaluate_output_level(side, _port, _level):
@@ -43,3 +41,9 @@ func update_outputs():
 	update_output_value(RIGHT, 0, result)
 	update_output_level(RIGHT, 1, result == 0)
 	update_output_level(RIGHT, 2, result > 0x0fff)
+
+
+func reset():
+	pins = { [0, 0]: 0, [0, 1]: 0 }
+	for n in 6:
+		pins[[0, n + 2]] = false

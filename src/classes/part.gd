@@ -146,9 +146,10 @@ func _on_tag_text_changed(_new_text):
 	changed()
 
 
-# Override this function to apply a reset to a part that has memory
+# Override this function to apply a reset to a part that has volatile memory
+# or a part that needs values on pins to evaluate logic
 func reset():
-	pass
+	pins = {}
 
 
 func indicate_level(side, port, level):
