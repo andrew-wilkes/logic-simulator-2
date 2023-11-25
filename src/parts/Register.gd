@@ -10,6 +10,7 @@ func _init():
 
 
 func _ready():
+	super()
 	reset()
 
 
