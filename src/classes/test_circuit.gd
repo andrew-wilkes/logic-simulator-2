@@ -325,11 +325,18 @@ func set_output_header():
 		var widths = pnf[1].split(".")
 		widths.resize(3) # There should be 3 values: PadL.Length.PadR
 		# Center align the pin name
-		var min_length = int(widths[0]) + int(widths[1]) + int(widths[2])
+		var length = int(widths[0]) + int(widths[1]) + int(widths[2])
 		var pin_name = pnf[0]
-		@warning_ignore("integer_division")
-		pin_name = pin_name.lpad((min_length + pin_name.length()) / 2, " ")
-		output += pin_name.rpad(min_length, " ") + "|"
+		var padsize = length - pin_name.length()
+		if padsize < 0:
+			# Trim
+			pin_name = pin_name.left(padsize)
+		elif padsize > 0:
+			# Add left/right padding
+			@warning_ignore("integer_division")
+			var lpad = padsize / 2
+			pin_name = " ".repeat(lpad) + pin_name + " ".repeat(padsize - lpad)
+		output += pin_name + "|"
 	output += "\n"
 
 
