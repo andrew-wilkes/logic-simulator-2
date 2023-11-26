@@ -20,17 +20,19 @@ func evaluate_output_level(side, port, level):
 			if level:
 				if pins[[side, 1]]: # load
 					value = pins[[side, 0]]
-					$Value.text = "0x%04X" % [value]
+					$Value.text = get_display_hex_value(value)
 			else:
 				update_output_value(RIGHT, OUT, value)
 
 
-func evaluate_bus_output_value(_side, _port, _value):
+func evaluate_bus_output_value(side, _port, _value):
 	# Don't let the load value immediately go to the output
-	pass
+	if pins[[side, 1]] and pins[[side, 2]]:
+		value = _value
+		$Value.text = get_display_hex_value(value)
 
 
 func reset():
 	value = 0
-	$Value.text = "0x%04X" % [value]
-	pins = { [0, 0]: 0, [0, 1]: false }
+	$Value.text = "0x0000"
+	pins = { [0, 0]: 0, [0, 1]: false, [0, 2]: false }

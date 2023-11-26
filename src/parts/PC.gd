@@ -55,6 +55,8 @@ func reset():
 	pins = { [0, 1]: false, [0, 2]: false, [0, 3]: false, [0, 4]: false }
 
 
-func evaluate_bus_output_value(_side, _port, _value):
+func evaluate_bus_output_value(side, _port, _value):
 	# Don't let the load value immediately go to the output
-	pass
+	if pins[[side, 1]] and pins[[side, 4]]:
+		value = _value
+		$Value.text = get_display_hex_value(value)
