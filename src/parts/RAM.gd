@@ -12,7 +12,6 @@ func _init():
 	category = SYNC
 	data["bits"] = 16
 	data["size"] = "8K"
-	pins = { [0, 0]: 0, [0, 1]: 0, [0, 2]: false, [0, 3]: false, [1, 0]: 0 }
 
 
 func _ready():
@@ -61,16 +60,16 @@ func get_max_address(dsize: String) -> int:
 	return n - 1
 
 
-func evaluate_output_level(side, port, level):
+func evaluate_output_level(side, port, _level):
 	if side == LEFT:
-		var address = clampi(pins[[side, 1]], 0, max_address)
-		if port == 3: # clk
-			if level:
-				if pins[[side, 2]]: # load
-					var value = clampi(pins[[side, 0]], -max_value - 1, max_value)
-					update_value(value, address)
-			else:
-				set_output_data()
+		var address = clampi(pins.get([LEFT, 1], 0), 0, max_address)
+		var ld = pins.get([LEFT, 2], false)
+		var clk = pins.get([LEFT, 3], false)
+		if clk and ld:
+			var value = clampi(pins.get([LEFT, 0], 0), -max_value - 1, max_value)
+			update_value(value, address)
+		if port == 3 and not clk:
+			set_output_data()
 
 
 func update_value(value, address):
@@ -84,8 +83,8 @@ func evaluate_bus_output_value(side, port, _value):
 
 func set_output_data():
 	var address = clampi(pins[[LEFT, 1]], 0, max_address)
-	%Address.text = "%04X" % [address]
-	%Data.text = "%04X" % [values[address]]
+	%Address.text = get_display_hex_value(address)
+	%Data.text = get_display_hex_value(values[address])
 	update_output_value(RIGHT, OUT, values[address])
 
 

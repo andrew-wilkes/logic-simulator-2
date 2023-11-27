@@ -16,25 +16,20 @@ func _ready():
 	set_wrap_value()
 	%Bits.text = str(data.bits)
 	reset()
-	
 
 
 func evaluate_output_level(side, port, level):
-	if side == LEFT:
-		if port == 4: # clk
-			if level:
-				if pins[[side, 1]]: # load
-					value = pins[[side, 0]]
-				elif pins[[side, 2]]: # inc
-					value += 1
-					# Stop memory address from being exceeded
-					if value >= wrap_value:
-						value = wrapi(value, 0, wrap_value)
-				if pins[[side, 3]]: # reset
-					value = 0
-				$Value.text = get_display_hex_value(value)
-			else:
-				update_output_value(RIGHT, OUT, value)
+	if side == LEFT and port == 4: # clk edge
+		if level:
+			if pins.get([LEFT, 3], false): # reset
+				value = 0
+			elif pins.get([LEFT, 1], false): # load
+				value = pins.get([LEFT, 0], 0)
+			elif pins.get([LEFT, 2], false): # inc
+				value += 1
+			set_limited_value()
+		else:
+			update_output_value(RIGHT, OUT, value)
 
 
 func _on_bits_text_submitted(new_text):
@@ -52,11 +47,17 @@ func set_wrap_value():
 func reset():
 	value = 0
 	$Value.text = get_display_hex_value(value)
-	pins = { [0, 1]: false, [0, 2]: false, [0, 3]: false, [0, 4]: false }
 
 
 func evaluate_bus_output_value(side, _port, _value):
-	# Don't let the load value immediately go to the output
-	if pins[[side, 1]] and pins[[side, 4]]:
+	# load and clk
+	if pins.get([side, 1], false) and pins.get([side, 4], false):
 		value = _value
-		$Value.text = get_display_hex_value(value)
+		set_limited_value()
+
+
+func set_limited_value():
+	# Stop memory address from being exceeded
+	if value >= wrap_value:
+		value = wrapi(value, 0, wrap_value)
+	$Value.text = get_display_hex_value(value)

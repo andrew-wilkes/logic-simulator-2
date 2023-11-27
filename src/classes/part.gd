@@ -165,6 +165,8 @@ func indicate_level(side, port, level):
 
 
 func get_display_hex_value(value):
+	if value < - 0x10000:
+		return "HIGH-Z"
 	if value < 0:
 		value = 0x10000 + value
 	return "0x%04X" % [value]

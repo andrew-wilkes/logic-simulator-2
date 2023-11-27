@@ -4,7 +4,6 @@ extends Part
 
 func _init():
 	order = 90
-	pins = { [0, 0]: false, [0, 1]: false, [0, 2]: false }
 	category = ASYNC
 
 
@@ -13,7 +12,7 @@ func evaluate_output_level(side, _port, _level):
 		var sel = 0
 		for n in 2:
 			sel *= 2
-			sel += int(pins[[side, n + 1]])
+			sel += int(pins.get([side, n + 1], false))
 			update_outputs(sel)
 
 

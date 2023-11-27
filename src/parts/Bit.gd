@@ -8,14 +8,13 @@ var state = false
 
 func _init():
 	order = 90
-	pins = { [0, 0]: false, [0, 1]: false }
 	category = SYNC
 
 
 func evaluate_output_level(side, port, level):
 	if side == LEFT:
 		if port == BIT_CLK:
-			if level and pins[[side, BIT_LOAD]]:
-				state = pins[[side, IN]]
+			if level and pins.get([side, BIT_LOAD], false):
+				state = pins.get([side, IN], false)
 			else:
 				update_output_level(RIGHT, OUT, state)

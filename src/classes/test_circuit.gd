@@ -87,7 +87,7 @@ func process_task(task):
 		"set":
 			# Apply input levels and values to the parts
 			var pin_name = task[1]
-			var value = get_int_from_string(task[2])
+			var value = get_int_from_string(task[2], false)
 			pin_states[pin_name] = "-"
 			if inputs.has(pin_name):
 				pin_states[pin_name] = value
@@ -360,11 +360,20 @@ func set_output_result():
 		var pnf = formats[idx].split("%")
 		if pnf.size() == 1:
 			pnf.append("B1.1.1") # Default value
-		var widths = pnf[1].right(-1).split(".")
-		widths.resize(3) # There should be 3 values: [PadL, Length, PadR]
-		var value = get_tick_tock_str() if pnf[0] == "time" else pin_states[pnf[0]]
-		value = format_value(value, pnf[1][0], int(widths[1]))
-		output += value.lpad(int(widths[0]) + value.length()) + " ".repeat(int(widths[2])) + "|"
+		var _widths = pnf[1].right(-1).split(".")
+		_widths.resize(3) # There should be 3 values: [PadL, Length, PadR]
+		var widths = [int(_widths[0]), int(_widths[1]), int(_widths[2])]
+		var value
+		if pnf[0] == "time":
+			value = get_tick_tock_str()
+		else:
+			value =  pin_states[pnf[0]]
+			# The case for high Z
+			if value < - 0x10000:
+				output += "*".repeat(widths[0] + widths[1] + widths[2]) + "|"
+				continue
+		value = format_value(value, pnf[1][0], widths[1])
+		output += value.lpad(widths[0] + value.length()) + " ".repeat(widths[2]) + "|"
 
 
 func get_tick_tock_str():
@@ -384,7 +393,7 @@ func format_value(value, format, width):
 			if value > 0:
 				value &= 0xffff
 				if value > 0x7fff: # negative?
-					value = -1 - value / 2
+					value -= 0x10000
 			value = str(value).lpad(width, " ")
 		"X":
 			format =  "%0" + str(width) + "X"
@@ -414,7 +423,7 @@ func format_value(value, format, width):
 	return value
 
 
-func get_int_from_string(s):
+func get_int_from_string(s, negate = true):
 	var x = 0
 	if s[0] == "%":
 		if s.length() > 2:
@@ -425,7 +434,7 @@ func get_int_from_string(s):
 						for idx in num.length():
 							x *= 2
 							x += int(num[idx])
-					if x > 0x7fff: # negative?
+					if negate and x > 0x7fff: # negative?
 						x = ~x + 1
 						x &= 0xffff
 						x = -x

@@ -73,8 +73,8 @@ slot/6/left_type = 0
 slot/6/left_color = Color(1, 1, 1, 1)
 slot/6/left_icon = null
 slot/6/right_enabled = false
-slot/6/right_type = 0
-slot/6/right_color = Color(1, 1, 1, 1)
+slot/6/right_type = 1
+slot/6/right_color = Color(1, 1, 0, 1)
 slot/6/right_icon = null
 slot/6/draw_stylebox = true
 slot/7/left_enabled = false
@@ -131,7 +131,7 @@ text = "inc"
 layout_mode = 2
 text = "reset"
 
-[node name="L4" type="Label" parent="."]
+[node name="L1" type="Label" parent="."]
 layout_mode = 2
 text = "clk"
 

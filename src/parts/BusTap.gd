@@ -2,7 +2,7 @@ class_name BusTap
 
 extends Part
 
-var last_bit_value
+var last_bit_value = -1
 var bit_mask = 0
 
 func _init():
@@ -32,3 +32,8 @@ func _on_bit_value_changed(value):
 
 func set_bit_mask():
 	bit_mask = int(pow(2, data.bit))
+
+
+func reset():
+	super()
+	last_bit_value = -1

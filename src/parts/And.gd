@@ -9,9 +9,5 @@ func _init():
 
 func evaluate_output_level(side, _port, level):
 	if side == LEFT:
-		level = pins[[side, A]] and pins[[side, B]]
+		level = pins.get([side, A], false) and pins.get([side, B], false)
 		update_output_level(RIGHT, OUT, level)
-
-
-func reset():
-	pins = { [0, 0]: false, [0, 1]: false }

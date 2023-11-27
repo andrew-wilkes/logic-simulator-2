@@ -8,6 +8,5 @@ func _init():
 
 
 func evaluate_output_level(side, _port, level):
-	level = not pins[[side, IN]]
 	side = (side + 1) % 2
-	update_output_level(side, OUT, level)
+	update_output_level(side, OUT, not level)

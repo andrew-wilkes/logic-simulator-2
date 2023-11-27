@@ -12,7 +12,6 @@ class_name IO
 
 extends Part
 
-var format = "0x%04X"
 var current_value = 0 # This is accessed by the IO Manager panel
 
 func _init():
@@ -120,7 +119,7 @@ func update_output_levels_from_value(sides: Array, value: int):
 
 
 func set_display_value(value):
-	$Value.text = format % [value]
+	$Value.text = get_display_hex_value(value)
 	# The following line avoids the caret blinking at the start of the text
 	$Value.caret_column = $Value.text.length()
 
@@ -156,4 +155,5 @@ func test_set_pins():
 
 
 func reset():
+	super()
 	_on_text_submitted("0")
