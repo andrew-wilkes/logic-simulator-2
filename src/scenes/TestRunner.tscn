@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://c7pcrpp8inqwr"]
 
-[ext_resource type="StyleBox" uid="uid://b4ts0xs184cax" path="res://assets/ui/popup-panel.stylebox" id="1_v5yu7"]
+[ext_resource type="StyleBox" uid="uid://do4htudar5aa" path="res://assets/ui/test-panel.stylebox" id="1_0xr5m"]
 [ext_resource type="Script" path="res://scenes/TestRunner.gd" id="2_o4xdp"]
 [ext_resource type="FontFile" uid="uid://ck2sp0iypcks" path="res://assets/fonts/RobotoMono-Regular.ttf" id="3_p35dm"]
 
@@ -8,7 +8,7 @@
 offset_top = 3.0
 offset_right = 493.0
 offset_bottom = 372.0
-theme_override_styles/panel = ExtResource("1_v5yu7")
+theme_override_styles/panel = ExtResource("1_0xr5m")
 script = ExtResource("2_o4xdp")
 
 [node name="M" type="MarginContainer" parent="."]
@@ -60,6 +60,14 @@ text = "Reset"
 layout_mode = 2
 size_flags_horizontal = 3
 
+[node name="Alpha" type="HSlider" parent="M/VB/HB"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "Set background transparency"
+min_value = 10.0
+value = 10.0
+
 [node name="CloseButton" type="Button" parent="M/VB/HB"]
 layout_mode = 2
 text = "Close"
@@ -74,4 +82,5 @@ text = "Close"
 [connection signal="pressed" from="M/VB/HB/Play" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="M/VB/HB/Stop" to="." method="_on_stop_pressed"]
 [connection signal="pressed" from="M/VB/HB/Reset" to="." method="_on_reset_pressed"]
+[connection signal="value_changed" from="M/VB/HB/Alpha" to="." method="_on_alpha_value_changed"]
 [connection signal="pressed" from="M/VB/HB/CloseButton" to="." method="_on_close_button_pressed"]

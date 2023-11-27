@@ -12,6 +12,7 @@ const FILENAME = "user://settings.res"
 @export var logic_low_color = Color.BLUE
 @export var blocks = {}
 @export var test_dir = ""
+@export var tester_alpha = 0.75
 
 func save_data():
 	var _e = ResourceSaver.save(self, FILENAME)
