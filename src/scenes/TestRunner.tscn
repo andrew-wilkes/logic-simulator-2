@@ -1,8 +1,11 @@
-[gd_scene load_steps=4 format=3 uid="uid://c7pcrpp8inqwr"]
+[gd_scene load_steps=5 format=3 uid="uid://c7pcrpp8inqwr"]
 
 [ext_resource type="StyleBox" uid="uid://do4htudar5aa" path="res://assets/ui/test-panel.stylebox" id="1_0xr5m"]
 [ext_resource type="Script" path="res://scenes/TestRunner.gd" id="2_o4xdp"]
 [ext_resource type="FontFile" uid="uid://ck2sp0iypcks" path="res://assets/fonts/RobotoMono-Regular.ttf" id="3_p35dm"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j4q56"]
+bg_color = Color(0.290196, 0.290196, 0.290196, 1)
 
 [node name="TestRunner" type="PanelContainer"]
 offset_top = 3.0
@@ -25,6 +28,7 @@ theme_override_constants/separation = 20
 [node name="Title" type="Label" parent="M/VB"]
 layout_mode = 2
 mouse_filter = 1
+theme_override_styles/normal = SubResource("StyleBoxFlat_j4q56")
 text = "The Title"
 horizontal_alignment = 1
 
@@ -62,8 +66,8 @@ size_flags_horizontal = 3
 
 [node name="Alpha" type="HSlider" parent="M/VB/HB"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
-size_flags_horizontal = 3
 tooltip_text = "Set background transparency"
 min_value = 10.0
 value = 10.0
