@@ -13,7 +13,6 @@ func _init():
 	super()
 	order = 0
 	category = SYNC
-	display_values = false
 	data["size"] = "16K"
 	pins[[0, RAM_KEYBOARD]] = 0
 	pins[[0, RAM_SCREEN]] = 0

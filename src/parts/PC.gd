@@ -14,7 +14,8 @@ func _init():
 func _ready():
 	super()
 	set_wrap_value()
-	%Bits.text = str(data.bits)
+	if show_display:
+		%Bits.text = str(data.bits)
 	reset()
 
 
@@ -36,7 +37,7 @@ func _on_bits_text_submitted(new_text):
 	if new_text.is_valid_int():
 		data.bits = clampi(int(new_text), 1, 1024)
 		set_wrap_value()
-	else:
+	elif show_display:
 		%Bits.text = ""
 
 
@@ -46,7 +47,8 @@ func set_wrap_value():
 
 func reset():
 	value = 0
-	$Value.text = get_display_hex_value(value)
+	if show_display:
+		$Value.text = get_display_hex_value(value)
 
 
 func evaluate_bus_output_value(side, _port, _value):
@@ -60,4 +62,5 @@ func set_limited_value():
 	# Stop memory address from being exceeded
 	if value >= wrap_value:
 		value = wrapi(value, 0, wrap_value)
-	$Value.text = get_display_hex_value(value)
+	if show_display:
+		$Value.text = get_display_hex_value(value)

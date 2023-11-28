@@ -9,7 +9,6 @@ func _init():
 	super()
 	order = 0
 	category = UTILITY
-	display_values = false
 	data["pixel_color"] = Color.WHITE
 	data["screen_color"] = Color.DARK_BLUE
 
@@ -20,7 +19,8 @@ func _ready():
 	pixels = Image.create(512, 256, false, Image.FORMAT_RGBA8)
 	pixels.fill(data.screen_color)
 	texture = ImageTexture.create_from_image(pixels)
-	$M/Pixels.material.set_shader_parameter("pixels", texture)
+	if show_display:
+		$M/Pixels.material.set_shader_parameter("pixels", texture)
 	if get_parent().name == "root":
 		test()
 
@@ -29,7 +29,8 @@ func test():
 	var start_time = Time.get_ticks_msec()
 	for address in 1024 * 8:
 		update_value(0xff, address) # 0b0101010100000000
-	print(Time.get_ticks_msec() - start_time)
+	if DEBUG:
+		print(Time.get_ticks_msec() - start_time)
 
 
 func update_value(new_val, address):

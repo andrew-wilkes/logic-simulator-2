@@ -5,7 +5,6 @@ extends Part
 var max_value = 0
 var max_address = 0
 var values = []
-var display_values = true
 
 func _init():
 	order = 80
@@ -23,7 +22,7 @@ func update():
 	set_max_value()
 	max_address = get_max_address(data.size)
 	resize_memory(max_address + 1)
-	if display_values:
+	if show_display:
 		%Bits.text = str(data.bits)
 		$Size.text = data.size
 
@@ -40,7 +39,7 @@ func _on_bits_text_submitted(new_text):
 	if new_text.is_valid_int():
 		data.bits = clampi(int(new_text), 1, 1024)
 		set_max_value()
-	else:
+	elif show_display:
 		%Bits.text = ""
 
 
@@ -83,8 +82,9 @@ func evaluate_bus_output_value(side, port, _value):
 
 func set_output_data():
 	var address = clampi(pins[[LEFT, 1]], 0, max_address)
-	%Address.text = get_display_hex_value(address)
-	%Data.text = get_display_hex_value(values[address])
+	if show_display:
+		%Address.text = get_display_hex_value(address)
+		%Data.text = get_display_hex_value(values[address])
 	update_output_value(RIGHT, OUT, values[address])
 
 

@@ -21,6 +21,8 @@ var output_pin_count = 0
 var inputs = []
 var outputs = []
 var file_chain = []
+var wire_color = Color.WHITE
+var bus_color = Color.YELLOW
 
 func _init():
 	data["circuit_file"] = ""
@@ -94,7 +96,7 @@ func configure_pins():
 		var label_idx = 0
 		set_slot_enabled_left(slot_idx, true)
 		set_slot_type_left(slot_idx, BUS_TYPE if input.part_type != "Wire" else WIRE_TYPE)
-		set_slot_color_left(slot_idx, input.data.bus_color)
+		set_slot_color_left(slot_idx, bus_color if input.part_type != "Wire" else wire_color)
 		get_child(slot_idx).get_child(0).text = input.data.labels[label_idx]\
 			if input.part_type == "IO" else input.tag
 		if input.part_type == "IO":
@@ -105,14 +107,14 @@ func configure_pins():
 				get_child(slot_idx).get_child(0).text = input.data.labels[label_idx]
 				set_slot_enabled_left(slot_idx, true)
 				set_slot_type_left(slot_idx, WIRE_TYPE)
-				set_slot_color_left(slot_idx, input.data.wire_color)
+				set_slot_color_left(slot_idx, wire_color)
 		slot_idx += 1
 	slot_idx = 1
 	for output in outputs:
 		var label_idx = 0
 		set_slot_enabled_right(slot_idx, true)
 		set_slot_type_right(slot_idx, BUS_TYPE if output.part_type != "Wire" else WIRE_TYPE)
-		set_slot_color_right(slot_idx, output.data.bus_color)
+		set_slot_color_right(slot_idx, bus_color if output.part_type != "Wire" else wire_color)
 		get_child(slot_idx).get_child(1).text = output.data.labels[label_idx]\
 			if output.part_type == "IO" else output.tag
 		if output.part_type == "IO":
@@ -123,7 +125,7 @@ func configure_pins():
 				get_child(slot_idx).get_child(1).text = output.data.labels[label_idx]
 				set_slot_enabled_right(slot_idx, true)
 				set_slot_type_right(slot_idx, WIRE_TYPE)
-				set_slot_color_right(slot_idx, output.data.wire_color)
+				set_slot_color_right(slot_idx, wire_color)
 		slot_idx += 1
 
 
@@ -225,6 +227,7 @@ func output_level_changed_handler(part, side: int, port: int, level):
 	var map_idx = [str(part.name), port] # part.name seems to be a pointer to a string
 	var port_idx = [input_map, output_map][side].find(map_idx)
 	if port_idx > -1:
+		pins[[side, port]] = level
 		controller.output_level_changed_handler(self, side, port_idx, level)
 	else:
 		update_internal_input_level(part, side, port, level)
@@ -262,12 +265,14 @@ func bus_value_changed_handler(part, side: int, port: int, value: int):
 	var map_idx = [str(part.name), port]
 	var port_idx = [input_map, output_map][side].find(map_idx)
 	if port_idx > -1:
+		pins[[side, port]] = value
 		controller.bus_value_changed_handler(self, side, port_idx, value)
 		if part is IO:
 			for n in part.data.num_wires:
 				port_idx += 1
 				var level = value % 2 == 1
 				value /= 2
+				pins[[side, port_idx]] = level
 				controller.output_level_changed_handler(self, side, port_idx, level)
 	else:
 		update_internal_bus_input_value(part, side, port, value)
@@ -285,6 +290,12 @@ func reset_block_race_counters():
 		part.race_counter.clear()
 		if part is Block:
 			part.reset_block_race_counters()
+
+
+func reset():
+	super()
+	for part in parts.values():
+		part.reset()
 
 
 func unstable_handler(_name, side, port):

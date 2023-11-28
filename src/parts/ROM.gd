@@ -18,10 +18,11 @@ func _init():
 func _ready():
 	super()
 	set_max_value()
-	%Bits.text = str(data.bits)
+	if show_display:
+		%Bits.text = str(data.bits)
+		$Size.text = data.size
 	mem_size = get_mem_size(data.size)
 	resize_memory(mem_size)
-	$Size.text = data.size
 	if not data.file.is_empty():
 		load_data(data.file)
 
@@ -38,7 +39,7 @@ func _on_bits_text_submitted(new_text):
 	if new_text.is_valid_int():
 		data.bits = clampi(int(new_text), 1, 1024)
 		set_max_value()
-	else:
+	elif show_display:
 		%Bits.text = ""
 
 
@@ -65,8 +66,9 @@ func evaluate_bus_output_value(side, port, _value):
 
 func set_output_data():
 	var address = pins[[LEFT, 0]] % mem_size
-	%Address.text = get_display_hex_value(address)
-	%Data.text = get_display_hex_value(values[address])
+	if show_display:
+		%Address.text = get_display_hex_value(address)
+		%Data.text = get_display_hex_value(values[address])
 	update_output_value(RIGHT, OUT, values[address])
 
 
