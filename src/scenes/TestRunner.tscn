@@ -64,6 +64,15 @@ text = "Reset"
 layout_mode = 2
 size_flags_horizontal = 3
 
+[node name="Speed" type="HSlider" parent="M/VB/HB"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+tooltip_text = "Set play speed"
+max_value = 30.0
+step = 0.0
+value = 10.0
+
 [node name="Alpha" type="HSlider" parent="M/VB/HB"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(100, 0)
@@ -86,5 +95,6 @@ text = "Close"
 [connection signal="pressed" from="M/VB/HB/Play" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="M/VB/HB/Stop" to="." method="_on_stop_pressed"]
 [connection signal="pressed" from="M/VB/HB/Reset" to="." method="_on_reset_pressed"]
+[connection signal="value_changed" from="M/VB/HB/Speed" to="." method="_on_speed_value_changed"]
 [connection signal="value_changed" from="M/VB/HB/Alpha" to="." method="_on_alpha_value_changed"]
 [connection signal="pressed" from="M/VB/HB/CloseButton" to="." method="_on_close_button_pressed"]

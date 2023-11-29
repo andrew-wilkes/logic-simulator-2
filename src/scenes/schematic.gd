@@ -22,6 +22,9 @@ var compare_lines = []
 var test_playing = false
 var last_scroll_offset = Vector2.ZERO
 var watch_for_scroll_offset_change = true
+var start_time = 0.0
+var busy = false
+var frame_count = 0
 @onready var test_runner = $C/TestRunner
 
 func _ready():
@@ -562,6 +565,7 @@ func reset_test_environment():
 
 
 func _on_test_runner_step():
+	busy = true
 	while test_step < tester.tasks.size():
 		reset_race_counters()
 		var task
@@ -598,21 +602,30 @@ func _on_test_runner_step():
 			tester.repetitive_tasks.clear()
 	else:
 		test_step += 1
+	busy = false
 	if test_step == tester.tasks.size():
+		if OS.is_debug_build():
+			print("Run time: %dms" % [Time.get_ticks_msec() - start_time])
 		test_runner.text_area.add_text("DONE")
 		test_playing = false
-	if test_playing:
-		$TestTimer.start()
+		set_process(false)
 
 
 func _on_test_runner_play():
+	start_time = Time.get_ticks_msec()
 	test_playing = true
-	$TestTimer.start()
+	set_process(true)
 
 
 func _on_test_runner_stop():
-	$TestTimer.stop()
 	test_playing = false
+
+
+func _process(delta):
+	frame_count -= 1
+	if frame_count < 0 and test_playing and not busy:
+		_on_test_runner_step()
+		frame_count = G.settings.tester_speed / delta / 60.0
 
 
 func add_compared_string(out, comp, text_area: RichTextLabel):
@@ -645,10 +658,6 @@ func add_compared_string(out, comp, text_area: RichTextLabel):
 	if red or green:
 		text_area.pop()
 	text_area.add_text("\n")
-
-
-func _on_test_timer_timeout():
-	_on_test_runner_step()
 
 
 func _on_test_runner_hidden():

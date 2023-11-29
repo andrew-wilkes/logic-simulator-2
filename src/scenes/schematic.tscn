@@ -47,14 +47,9 @@ visible = false
 offset_top = 0.0
 offset_bottom = 369.0
 
-[node name="TestTimer" type="Timer" parent="."]
-wait_time = 0.2
-one_shot = true
-
 [connection signal="scroll_offset_changed" from="." to="." method="_on_scroll_offset_changed"]
 [connection signal="hidden" from="C/TestRunner" to="." method="_on_test_runner_hidden"]
 [connection signal="play" from="C/TestRunner" to="." method="_on_test_runner_play"]
 [connection signal="reset" from="C/TestRunner" to="." method="_on_test_runner_reset"]
 [connection signal="step" from="C/TestRunner" to="." method="_on_test_runner_step"]
 [connection signal="stop" from="C/TestRunner" to="." method="_on_test_runner_stop"]
-[connection signal="timeout" from="TestTimer" to="." method="_on_test_timer_timeout"]
