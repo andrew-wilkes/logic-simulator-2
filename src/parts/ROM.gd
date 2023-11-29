@@ -17,10 +17,13 @@ func _init():
 
 func _ready():
 	super()
-	set_max_value()
 	if show_display:
 		%Bits.text = str(data.bits)
 		$Size.text = data.size
+
+
+func setup_instance():
+	set_max_value()
 	mem_size = get_mem_size(data.size)
 	resize_memory(mem_size)
 	if not data.file.is_empty():
@@ -90,6 +93,7 @@ func open_file():
 
 func _on_file_dialog_file_selected(file_path: String):
 	load_data(file_path)
+	data.file = file_path
 
 
 func load_data(file_path):
