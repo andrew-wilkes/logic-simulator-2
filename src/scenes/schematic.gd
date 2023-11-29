@@ -66,6 +66,8 @@ func remove_connections_to_part(part):
 func clear():
 	grab_focus()
 	circuit = Circuit.new()
+	scroll_offset = Vector2.ZERO
+	zoom = 1.0
 	emit_signal("title_changed", "")
 	parent_file = ""
 	clear_connections()
