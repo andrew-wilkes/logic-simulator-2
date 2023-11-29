@@ -13,8 +13,11 @@ func _init():
 
 func _ready():
 	super()
-	set_bit_mask()
 	%Bit.value = data.bit
+
+
+func setup_instance():
+	set_bit_mask()
 
 
 func evaluate_bus_output_value(side, _port, value):

@@ -13,7 +13,6 @@ func _init():
 
 func _ready():
 	super()
-	set_wrap_value()
 	if show_display:
 		%Bits.text = str(data.bits)
 	reset()
@@ -46,9 +45,14 @@ func set_wrap_value():
 
 
 func reset():
+	super()
 	value = 0
 	if show_display:
 		$Value.text = get_display_hex_value(value)
+
+
+func setup_instance():
+	set_wrap_value()
 
 
 func evaluate_bus_output_value(side, _port, _value):

@@ -29,9 +29,8 @@ var data = {}
 var show_display = true
 var controller # The schematic or a parent block
 var race_counter = {} # [side, port]: count
-var pins = {} # [side, port]: level / value
 var connections = {} # Used with parts in blocks
-
+var pins = {} # [side, port]: level / value
 var change_notification_timer: Timer
 
 func get_dict():
@@ -56,6 +55,12 @@ func _ready():
 	set("theme_override_constants/separation", 10)
 	set("theme_override_constants/port_offset", -6)
 	set("mouse_default_cursor_shape", CURSOR_DRAG)
+	setup_instance()
+
+
+# This function is used to set up vars that are needed by an instance of the class
+func setup_instance():
+	pass
 
 
 func update_input_level(side, port, level):

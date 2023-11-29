@@ -6,7 +6,6 @@ var value = 0
 
 func _init():
 	order = 84
-	reset()
 	category = UTILITY
 
 
@@ -26,3 +25,7 @@ func propagate_value():
 		update_output_value(RIGHT, OUT, value)
 	else:
 		update_output_value(RIGHT, OUT, -INF)
+
+
+func reset():
+	pins = { [RIGHT, OUT]: -INF }

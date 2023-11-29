@@ -54,6 +54,9 @@ func get_io_nodes(parts, connections):
 
 
 func get_label_text(part, side, port):
+	# If the part is Bus, Wire, or TriState then get the part.tag value
+	if part.part_type in ["Bus", "Wire", "TriState"]:
+		return part.get_node("Tag").text
 	var slot = part.get_connection_input_slot(port) if side == 0 else \
 		part.get_connection_output_slot(port)
 	var node = part.get_child(slot) # There may be a label or a container of nodes

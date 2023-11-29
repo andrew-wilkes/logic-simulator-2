@@ -54,7 +54,7 @@ func block_setup(_file_chain = []):
 			if is_output(part):
 				outputs.append(part)
 				output_pin_count += part.data.num_wires + 1
-		if part.part_type == "Bus" or part.part_type == "Wire":
+		if part.part_type in ["Bus", "Wire", "TriState"]:
 			if is_input(part):
 				inputs.append(part)
 				input_pin_count += 1
@@ -95,8 +95,8 @@ func configure_pins():
 	for input in inputs:
 		var label_idx = 0
 		set_slot_enabled_left(slot_idx, true)
-		set_slot_type_left(slot_idx, BUS_TYPE if input.part_type != "Wire" else WIRE_TYPE)
-		set_slot_color_left(slot_idx, bus_color if input.part_type != "Wire" else wire_color)
+		set_slot_type_left(slot_idx, BUS_TYPE if input.part_type in ["IO", "Bus"] else WIRE_TYPE)
+		set_slot_color_left(slot_idx, bus_color if input.part_type in ["IO", "Bus"] else wire_color)
 		get_child(slot_idx).get_child(0).text = input.data.labels[label_idx]\
 			if input.part_type == "IO" else input.tag
 		if input.part_type == "IO":
@@ -113,8 +113,8 @@ func configure_pins():
 	for output in outputs:
 		var label_idx = 0
 		set_slot_enabled_right(slot_idx, true)
-		set_slot_type_right(slot_idx, BUS_TYPE if output.part_type != "Wire" else WIRE_TYPE)
-		set_slot_color_right(slot_idx, bus_color if output.part_type != "Wire" else wire_color)
+		set_slot_type_right(slot_idx, BUS_TYPE if output.part_type in ["IO", "Bus"] else WIRE_TYPE)
+		set_slot_color_right(slot_idx, bus_color if output.part_type in ["IO", "Bus"] else wire_color)
 		get_child(slot_idx).get_child(1).text = output.data.labels[label_idx]\
 			if output.part_type == "IO" else output.tag
 		if output.part_type == "IO":
@@ -178,6 +178,7 @@ func add_parts():
 		# Part instances have a name but circuit.data.parts store the name as node_name
 		part.name = node.node_name
 		part.show_display = false
+		part.setup_instance()
 		part.controller = self
 		add_connections_to_part(part)
 		if part.part_type == "Block":
@@ -227,7 +228,7 @@ func output_level_changed_handler(part, side: int, port: int, level):
 	var map_idx = [str(part.name), port] # part.name seems to be a pointer to a string
 	var port_idx = [input_map, output_map][side].find(map_idx)
 	if port_idx > -1:
-		pins[[side, port]] = level
+		pins[[side, port_idx]] = level
 		controller.output_level_changed_handler(self, side, port_idx, level)
 	else:
 		update_internal_input_level(part, side, port, level)
@@ -265,7 +266,7 @@ func bus_value_changed_handler(part, side: int, port: int, value: int):
 	var map_idx = [str(part.name), port]
 	var port_idx = [input_map, output_map][side].find(map_idx)
 	if port_idx > -1:
-		pins[[side, port]] = value
+		pins[[side, port_idx]] = value
 		controller.bus_value_changed_handler(self, side, port_idx, value)
 		if part is IO:
 			for n in part.data.num_wires:
@@ -296,6 +297,9 @@ func reset():
 	super()
 	for part in parts.values():
 		part.reset()
+	for idx in outputs.size():
+		if outputs[idx].part_type == "TriState":
+			pins[[RIGHT, idx]] = -INF
 
 
 func unstable_handler(_name, side, port):
