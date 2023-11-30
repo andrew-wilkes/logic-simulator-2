@@ -19,10 +19,13 @@ func _ready():
 	pixels = Image.create(512, 256, false, Image.FORMAT_RGBA8)
 	pixels.fill(data.screen_color)
 	texture = ImageTexture.create_from_image(pixels)
-	if show_display:
-		$M/Pixels.material.set_shader_parameter("pixels", texture)
+	$M/Pixels.material.set_shader_parameter("pixels", texture)
 	if get_parent().name == "root":
 		test()
+
+
+func show_bits():
+	pass # Mask off this RAM feature
 
 
 func test():
@@ -50,3 +53,10 @@ func update_value(new_val, address):
 		old_val /= 2
 		new_val /= 2
 	texture.update(pixels)
+
+
+func reset():
+	super()
+	if show_display:
+		pixels.fill(data.screen_color)
+		texture.update(pixels)

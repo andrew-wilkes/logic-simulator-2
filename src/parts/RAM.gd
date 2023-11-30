@@ -15,14 +15,14 @@ func _init():
 
 func _ready():
 	super()
-	update()
-
-
-func update():
 	set_max_value()
 	max_address = get_max_address(data.size)
 	resize_memory(max_address + 1)
 	if show_display:
+		show_bits()
+
+
+func show_bits():
 		%Bits.text = str(data.bits)
 		$Size.text = data.size
 
@@ -81,7 +81,7 @@ func evaluate_bus_output_value(side, port, _value):
 
 
 func set_output_data():
-	var address = clampi(pins[[LEFT, 1]], 0, max_address)
+	var address = clampi(pins.get([LEFT, 1], 0), 0, max_address)
 	if show_display:
 		%Address.text = get_display_hex_value(address)
 		%Data.text = get_display_hex_value(values[address])

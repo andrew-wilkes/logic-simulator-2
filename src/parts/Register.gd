@@ -14,7 +14,7 @@ func evaluate_output_level(side, port, _level):
 		var ld = pins.get([side, 1], false)
 		var clk = pins.get([side, 2], false)
 		if clk and ld:
-			value = pins[[side, 0]]
+			value = pins.get([side, 0], 0)
 			if show_display:
 				$Value.text = get_display_hex_value(value)
 			update_output_value(RIGHT, 1, value)

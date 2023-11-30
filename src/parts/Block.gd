@@ -113,8 +113,8 @@ func configure_pins():
 	for output in outputs:
 		var label_idx = 0
 		set_slot_enabled_right(slot_idx, true)
-		set_slot_type_right(slot_idx, BUS_TYPE if output.part_type in ["IO", "Bus"] else WIRE_TYPE)
-		set_slot_color_right(slot_idx, bus_color if output.part_type in ["IO", "Bus"] else wire_color)
+		set_slot_type_right(slot_idx, BUS_TYPE if output.part_type in ["IO", "Bus", "TriState"] else WIRE_TYPE)
+		set_slot_color_right(slot_idx, bus_color if output.part_type in ["IO", "Bus", "TriState"] else wire_color)
 		get_child(slot_idx).get_child(1).text = output.data.labels[label_idx]\
 			if output.part_type == "IO" else output.tag
 		if output.part_type == "IO":

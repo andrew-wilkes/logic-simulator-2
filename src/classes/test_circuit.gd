@@ -6,6 +6,7 @@ class_name TestCircuit
 extends Node
 
 const CLOCK_PIN = "clk"
+const LOOP_TIME_LIMIT = 10000 # ms
 
 var running = true
 var tasks
@@ -21,6 +22,7 @@ var repetitive_task_idx = 0
 var time = 0
 var tick = false
 var while_task
+var loop_start_time = 0
 
 func get_io_nodes(parts, connections):
 	# Inputs are unconnected pins on the left side of parts
@@ -121,6 +123,8 @@ func process_task(task):
 			else:
 				repeat_counter = 1
 		"while":
+			if loop_start_time == 0:
+				loop_start_time = Time.get_ticks_msec()
 			# while x op y { tasks to repeat }
 			var x = get_pin_value(task[1])
 			var op = task[2]
@@ -139,6 +143,10 @@ func process_task(task):
 					is_true = x != y
 				"=":
 					is_true = x == y
+			if loop_start_time > 0:
+				if Time.get_ticks_msec() - loop_start_time > LOOP_TIME_LIMIT:
+					loop_start_time = 0
+					is_true = false
 			if is_true:
 				repetitive_task_idx = -1 #This is incremented after processing the current task,
 					# So we want to start from repetitive_tasks[0] on the next pass
