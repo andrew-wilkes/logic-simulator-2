@@ -17,8 +17,7 @@ func _ready():
 	set_max_value()
 	max_address = get_max_address(data.size)
 	resize_memory(max_address + 1)
-	if show_display:
-		show_bits()
+	show_bits()
 
 
 func show_bits():

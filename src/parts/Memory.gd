@@ -53,6 +53,6 @@ func evaluate_bus_output_value(side, port, value):
 			elif address == KEYBOARD_ADDRESS:
 				update_output_value(RIGHT, RAM_OUT, pins.get([side, RAM_KEYBOARD], 0))
 		elif port == RAM_KEYBOARD and address == KEYBOARD_ADDRESS:
-			update_output_value(RIGHT, RAM_OUT, pins.get([side, RAM_KEYBOARD]))
+			update_output_value(RIGHT, RAM_OUT, pins.get([side, RAM_KEYBOARD], 0))
 		elif port == RAM_SCREEN and address >= SCREEN_START_ADDRESS and address < KEYBOARD_ADDRESS:
 			update_output_value(RIGHT, RAM_OUT, value)

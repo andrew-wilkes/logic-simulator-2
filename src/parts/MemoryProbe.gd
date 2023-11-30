@@ -44,7 +44,7 @@ func _on_address_text_submitted(new_text):
 func display_address(value):
 	%Address.text = get_display_hex_value(value)
 	# The following line avoids the caret blinking at the start of the text
-	%Address.caret_column =%Address.text.length()
+	%Address.caret_column = %Address.text.length()
 
 
 func display_data(value):

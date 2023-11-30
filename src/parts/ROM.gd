@@ -16,9 +16,8 @@ func _init():
 
 func _ready():
 	super()
-	if show_display:
-		%Bits.text = str(data.bits)
-		$Size.text = data.size
+	%Bits.text = str(data.bits)
+	$Size.text = data.size
 
 
 func setup_instance():

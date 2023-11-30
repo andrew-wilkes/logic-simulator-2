@@ -466,12 +466,12 @@ func number_parts():
 		con.to = part_names[con.to]
 	clear_connections()
 	add_connections()
-	circuit_changed()
+	emit_signal("changed")
 
 
 func set_circuit_title(text):
 	circuit.data.title = text
-	circuit_changed()
+	emit_signal("changed")
 
 
 func test_circuit():
@@ -597,7 +597,7 @@ func _on_test_runner_step():
 			if tester.repetitive_task_idx == tester.repetitive_tasks.size():
 				tester.repetitive_task_idx = 0
 				if tester.while_task:
-					# Repeat the while task and break out of this while loop
+					# Repeat the while task and break out of the outer while loop
 					tester.process_task(tester.while_task)
 					break
 			task = tester.repetitive_tasks[tester.repetitive_task_idx]
@@ -691,7 +691,7 @@ func _on_test_runner_hidden():
 
 func _on_scroll_offset_changed(offset):
 	if last_scroll_offset != offset and watch_for_scroll_offset_change:
-		circuit_changed()
+		emit_signal("changed")
 	last_scroll_offset = offset
 	watch_for_scroll_offset_change = true
 
