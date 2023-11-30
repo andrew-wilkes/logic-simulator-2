@@ -31,13 +31,8 @@ func _ready():
 
 
 func _on_address_text_submitted(new_text):
-	var value = 0
-	if new_text.is_valid_int():
-		value = int(new_text)
-	if new_text.is_valid_hex_number(true):
-		value = new_text.hex_to_int()
-	display_address(value)
-	data.address = value
+	data.address = get_value_from_text(new_text)
+	display_address(data.address)
 	update_data()
 
 

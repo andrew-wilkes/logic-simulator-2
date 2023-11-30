@@ -126,7 +126,7 @@ func _on_load_dialog_canceled():
 
 #### /FILE CODE ####
 
-#### QUIT CODE ####
+#### HOT KEY CODE ####
 
 func _unhandled_key_input(event: InputEvent):
 	if event.pressed:

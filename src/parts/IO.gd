@@ -94,11 +94,7 @@ func set_pin_colors():
 
 
 func _on_text_submitted(new_text):
-	var value = 0
-	if new_text.is_valid_int():
-		value = int(new_text)
-	if new_text.is_valid_hex_number(true):
-		value = new_text.hex_to_int()
+	var value = get_value_from_text(new_text)
 	# This formats the value as well as updating it from the IO panel
 	set_display_value(value)
 	current_value = value

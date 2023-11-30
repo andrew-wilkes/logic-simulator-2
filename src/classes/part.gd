@@ -185,3 +185,12 @@ func get_display_hex_value(value):
 	if value < 0:
 		value = 0x10000 + value
 	return "0x%04X" % [value]
+
+
+func get_value_from_text(new_text):
+	var value = 0
+	if new_text.is_valid_int():
+		value = int(new_text)
+	if new_text.is_valid_hex_number(true):
+		value = new_text.hex_to_int()
+	return value
