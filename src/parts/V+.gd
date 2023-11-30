@@ -12,11 +12,6 @@ func _ready():
 	set_color()
 
 
-func reset():
-	super()
-	call_deferred("apply_power")
-
-
 func apply_power():
 	controller.bus_value_changed_handler(self, LEFT, 0, 0xffff)
 	controller.bus_value_changed_handler(self, RIGHT, 0, 0xffff)

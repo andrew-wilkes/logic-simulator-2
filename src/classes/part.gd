@@ -152,9 +152,19 @@ func _on_tag_text_changed(_new_text):
 
 
 # Override this function to apply a reset to a part that has volatile memory
-# or a part that needs values on pins to evaluate logic
 func reset():
 	pins = {}
+	call_deferred("apply_power")
+
+
+# Override this function to apply the levels from clocks or bias levels
+func apply_power():
+	pass
+
+
+func update_output_level_with_color(side, port, level):
+	evaluate_output_level(side, port, level)
+	indicate_level(side, port, level)
 
 
 func indicate_level(side, port, level):

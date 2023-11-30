@@ -241,6 +241,7 @@ func load_circuit(file_name):
 		colorize_pins()
 		emit_signal("title_changed", circuit.data.title)
 		circuit_changed(false)
+		reset_parts()
 	else:
 		G.warn_user("The circuit data was invalid!")
 
@@ -340,7 +341,7 @@ func right_click_on_part(part):
 			$IOManagerPanel.popup_centered()
 		"ROM":
 			part.open_file()
-		"RAM":
+		"RAM", "Memory":
 			$MemoryManagerPanel/MemoryManager.open(part)
 			$MemoryManagerPanel.popup_centered()
 
@@ -555,15 +556,19 @@ func _on_test_runner_reset():
 
 
 func reset_test_environment():
-	for part in get_children():
-		if part is Part:
-			part.reset()
+	reset_parts()
 	set_all_connection_colors()
 	test_step = 0
 	test_output_line = 0
 	test_runner.set_text("")
 	test_runner.text_area.clear() # Clear bbcode tags
 	tester.reset()
+
+
+func reset_parts():
+	for part in get_children():
+		if part is Part:
+			part.reset()
 
 
 func _on_test_runner_step():

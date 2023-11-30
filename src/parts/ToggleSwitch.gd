@@ -14,9 +14,12 @@ func output_clock(level):
 	if race_counter_reset_counter > 3:
 		race_counter_reset_counter = 0
 		controller.reset_race_counters()
-	update_output_level(RIGHT, OUT, level)
-	indicate_level(RIGHT, 0, level)
+	update_output_level_with_color(RIGHT, OUT, level)
 
 
 func _on_button_toggled(button_pressed):
 	output_clock(button_pressed)
+
+
+func apply_power():
+	update_output_level_with_color(RIGHT, OUT, false)

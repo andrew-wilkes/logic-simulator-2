@@ -51,8 +51,11 @@ func output_clock(level):
 	race_counter_reset_counter += 1
 	if race_counter_reset_counter > 3:
 		race_counter_reset_counter = 0
-	update_output_level(RIGHT, OUT, level)
-	indicate_level(RIGHT, OUT, level)
+	update_clock_output(level)
+
+
+func update_clock_output(level):
+	update_output_level_with_color(RIGHT, OUT, level)
 
 
 func _on_reset_button_toggled(button_pressed):
@@ -62,5 +65,9 @@ func _on_reset_button_toggled(button_pressed):
 
 
 func update_reset_output(level):
-	update_output_level(RIGHT, 1, level)
-	indicate_level(RIGHT, 1, level)
+	update_output_level_with_color(RIGHT, 1, level)
+
+
+func apply_power():
+	update_clock_output(false)
+	update_reset_output(false)
