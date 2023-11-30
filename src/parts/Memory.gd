@@ -36,6 +36,7 @@ func evaluate_output_level(side, port, level):
 func update_value(value, address):
 	if address < SCREEN_START_ADDRESS: # Write to 16K RAM
 		values[address] = value
+		update_probes()
 
 
 func evaluate_bus_output_value(side, port, value):

@@ -1,0 +1,95 @@
+[gd_scene load_steps=4 format=3 uid="uid://8q5d5fy826xh"]
+
+[ext_resource type="StyleBox" uid="uid://6ey1ulrt3occ" path="res://assets/parts/frame.stylebox" id="1_hd5f0"]
+[ext_resource type="StyleBox" uid="uid://b51cf2x3pfpfk" path="res://assets/parts/selected-frame.stylebox" id="2_y6w6x"]
+[ext_resource type="Script" path="res://parts/MemoryProbe.gd" id="3_6ca0k"]
+
+[node name="MemoryProbe" type="GraphNode"]
+offset_left = 29.0
+offset_top = 9.0
+offset_right = 172.0
+offset_bottom = 155.0
+mouse_filter = 1
+theme_override_constants/separation = 10
+theme_override_constants/port_offset = -4
+theme_override_styles/frame = ExtResource("1_hd5f0")
+theme_override_styles/selected_frame = ExtResource("2_y6w6x")
+title = "MemoryProbe"
+slot/0/left_enabled = false
+slot/0/left_type = 1
+slot/0/left_color = Color(0, 0, 1, 1)
+slot/0/left_icon = null
+slot/0/right_enabled = false
+slot/0/right_type = 1
+slot/0/right_color = Color(0, 0, 1, 1)
+slot/0/right_icon = null
+slot/0/draw_stylebox = true
+slot/1/left_enabled = true
+slot/1/left_type = 1
+slot/1/left_color = Color(1, 1, 0, 1)
+slot/1/left_icon = null
+slot/1/right_enabled = false
+slot/1/right_type = 0
+slot/1/right_color = Color(1, 1, 1, 1)
+slot/1/right_icon = null
+slot/1/draw_stylebox = true
+slot/2/left_enabled = false
+slot/2/left_type = 0
+slot/2/left_color = Color(1, 1, 1, 1)
+slot/2/left_icon = null
+slot/2/right_enabled = true
+slot/2/right_type = 1
+slot/2/right_color = Color(1, 1, 0, 1)
+slot/2/right_icon = null
+slot/2/draw_stylebox = true
+slot/3/left_enabled = false
+slot/3/left_type = 0
+slot/3/left_color = Color(1, 1, 1, 1)
+slot/3/left_icon = null
+slot/3/right_enabled = false
+slot/3/right_type = 0
+slot/3/right_color = Color(1, 1, 1, 1)
+slot/3/right_icon = null
+slot/3/draw_stylebox = true
+script = ExtResource("3_6ca0k")
+
+[node name="Sp" type="Control" parent="."]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+mouse_filter = 1
+
+[node name="HB" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="L1" type="Label" parent="HB"]
+layout_mode = 2
+text = "Address:"
+
+[node name="Address" type="LineEdit" parent="HB"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0x0000"
+expand_to_text_length = true
+
+[node name="HB2" type="HBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="L1" type="Label" parent="HB2"]
+layout_mode = 2
+text = "Data:"
+
+[node name="Data" type="Label" parent="HB2"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0x0000"
+horizontal_alignment = 2
+
+[node name="Tag" type="LineEdit" parent="."]
+layout_mode = 2
+alignment = 1
+expand_to_text_length = true
+
+[connection signal="text_submitted" from="HB/Address" to="." method="_on_address_text_submitted"]

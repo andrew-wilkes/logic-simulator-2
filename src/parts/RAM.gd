@@ -1,10 +1,9 @@
 class_name RAM
 
-extends Part
+extends BaseMemory
 
 var max_value = 0
 var max_address = 0
-var values = []
 
 func _init():
 	order = 80
@@ -67,6 +66,7 @@ func evaluate_output_level(side, port, _level):
 		if clk and ld:
 			var value = clampi(pins.get([LEFT, 0], 0), -max_value - 1, max_value)
 			update_value(value, address)
+			update_probes()
 		if port == 3 and not clk:
 			set_output_data()
 

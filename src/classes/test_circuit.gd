@@ -378,7 +378,9 @@ func set_output_result():
 		if pnf[0] == "time":
 			value = get_tick_tock_str()
 		else:
-			value =  pin_states[pnf[0]]
+			if not pin_states.has(pnf[0]):
+				G.warn_user("Missing pin: " + pnf[0])
+			value =  pin_states.get(pnf[0], 0)
 			# The case for high Z
 			if value < - 0x10000:
 				output += "*".repeat(widths[0] + widths[1] + widths[2]) + "|"

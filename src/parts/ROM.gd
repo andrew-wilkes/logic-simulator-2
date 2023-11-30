@@ -1,10 +1,9 @@
 class_name ROM
 
-extends Part
+extends BaseMemory
 
 var max_value = 0
 var mem_size = 0
-var values = []
 var old_address = 0
 
 func _init():
@@ -112,3 +111,4 @@ func load_data(file_path):
 			values[idx / 2] = bytes[idx] + 256 * bytes[idx + 1]
 			num_words += 1
 	G.notify_user(str(num_words) + " words of data was loaded.")
+	update_probes()

@@ -53,6 +53,7 @@ func update_value(new_val, address):
 		old_val /= 2
 		new_val /= 2
 	texture.update(pixels)
+	update_probes()
 
 
 func reset():

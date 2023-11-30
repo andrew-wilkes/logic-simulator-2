@@ -51,19 +51,19 @@ func connect_wire(from_part, from_pin, to_part, to_pin):
 			return
 	connect_node(from_part, from_pin, to_part, to_pin)
 	# Propagate bus value or level
-	emit_signal("changed")
+	circuit_changed()
 
 
 func disconnect_wire(from_part, from_pin, to_part, to_pin):
 	disconnect_node(from_part, from_pin, to_part, to_pin)
-	emit_signal("changed")
+	circuit_changed()
 
 
 func remove_connections_to_part(part):
 	for con in get_connection_list():
 		if con.to == part.name or con.from == part.name:
 			disconnect_node(con.from, con.from_port, con.to, con.to_port)
-	emit_signal("changed")
+	circuit_changed()
 
 
 func clear():
@@ -97,7 +97,7 @@ func delete_selected_parts(_arr):
 			flag_changed = true
 	selected_parts.clear()
 	if flag_changed:
-		emit_signal("changed")
+		circuit_changed()
 
 
 func delete_selected_part(part):
@@ -149,7 +149,8 @@ func duplicate_selected_parts():
 		if part_map.has(con.from) and part_map.has(con.to):
 			connect_node(part_map[con.from], con.from_port, part_map[con.to], con.to_port)
 	if flag_changed:
-		emit_signal("changed")
+		circuit_changed()
+
 
 func remove_connections_between_selected_parts():
 	var flag_changed = false
@@ -161,7 +162,7 @@ func remove_connections_between_selected_parts():
 			flag_changed = true
 			disconnect_node(con.from, con.from_port, con.to, con.to_port)
 	if flag_changed:
-		emit_signal("changed")
+		circuit_changed()
 
 
 func add_part_by_name(part_name):
@@ -184,7 +185,7 @@ func add_part(part):
 	part.name = part.part_type + circuit.get_next_id()
 	part.tooltip_text = part.name
 	part.connect("position_offset_changed", part.changed)
-	emit_signal("changed")
+	circuit_changed()
 
 
 func add_block(file_name):
@@ -239,6 +240,7 @@ func load_circuit(file_name):
 		set_all_io_connection_colors()
 		colorize_pins()
 		emit_signal("title_changed", circuit.data.title)
+		circuit_changed(false)
 	else:
 		G.warn_user("The circuit data was invalid!")
 
@@ -446,12 +448,12 @@ func number_parts():
 		con.to = part_names[con.to]
 	clear_connections()
 	add_connections()
-	emit_signal("changed")
+	circuit_changed()
 
 
 func set_circuit_title(text):
 	circuit.data.title = text
-	emit_signal("changed")
+	circuit_changed()
 
 
 func test_circuit():
@@ -667,6 +669,27 @@ func _on_test_runner_hidden():
 
 func _on_scroll_offset_changed(offset):
 	if last_scroll_offset != offset and watch_for_scroll_offset_change:
-		emit_signal("changed")
+		circuit_changed()
 	last_scroll_offset = offset
 	watch_for_scroll_offset_change = true
+
+
+func circuit_changed(emit = true):
+	if emit:
+		emit_signal("changed")
+	# Update MemoryProbe links
+	var probes = {}
+	var memories = {}
+	for node in get_children():
+		if node is MemoryProbe:
+			node.memory = null
+			probes[node.name] = node
+		if node is BaseMemory:
+			node.probes.clear()
+			memories[node.name] = node
+	for con in get_connection_list():
+		if memories.has(con.from) and probes.has(con.to):
+			memories[con.from].probes.append(probes[con.to])
+			probes[con.to].memory = memories[con.from]
+	for pname in probes:
+		probes[pname].update_data()
