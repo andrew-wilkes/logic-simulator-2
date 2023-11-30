@@ -51,6 +51,23 @@ func connect_wire(from_part, from_pin, to_part, to_pin):
 			return
 	connect_node(from_part, from_pin, to_part, to_pin)
 	# Propagate bus value or level
+	var from
+	for node in get_children():
+		if node.name == from_part:
+			from = node
+			break
+	if from:
+		for node in get_children():
+			if node.name == to_part:
+				var slot = from.get_connection_output_slot(from_pin)
+				var con_type = from.get_slot_type_right(slot)
+				if con_type == 0:
+					var level = from.pins.get([RIGHT, from_pin], false)
+					node.update_input_level(LEFT, to_pin, level)
+					node.update_output_level_with_color(LEFT, to_pin, level)
+				else:
+					node.update_input_value(LEFT, to_pin, from.pins.get([RIGHT, from_pin], 0))
+				break
 	circuit_changed()
 
 

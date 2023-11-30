@@ -18,13 +18,10 @@ func reset():
 
 
 func apply_power():
-	controller.bus_value_changed_handler(self, LEFT, 0, 0)
-	controller.bus_value_changed_handler(self, RIGHT, 0, 0)
-	controller.output_level_changed_handler(self, LEFT, 1, false)
-	controller.output_level_changed_handler(self, RIGHT, 1, false)
+	update_output_level(RIGHT, 1, false)
+	update_output_value(RIGHT, 0, 0)
 
 
 func set_color():
 	$ColorRect.color = G.settings.logic_low_color
-	set_slot_color_left(1, G.settings.logic_low_color)
 	set_slot_color_right(1, G.settings.logic_low_color)

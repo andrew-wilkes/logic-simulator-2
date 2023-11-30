@@ -8,4 +8,5 @@ func _init():
 
 
 func reset():
-	pins = { [RIGHT, OUT]: false }
+	# Set the output pin so that the tester will read it
+	update_output_level_with_color(RIGHT, OUT, false)

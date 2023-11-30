@@ -163,7 +163,7 @@ func apply_power():
 
 
 func update_output_level_with_color(side, port, level):
-	evaluate_output_level(side, port, level)
+	update_output_level(side, port, level)
 	indicate_level(side, port, level)
 
 
