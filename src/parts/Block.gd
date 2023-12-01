@@ -133,7 +133,7 @@ func configure_pins():
 func is_input(part):
 	# If there are no wires connected to the part input side, then it is an input to the circuit.data
 	for con in circuit.data.connections:
-		if con.to == part.node_name:
+		if con.to_node == part.node_name:
 			return false
 	return true
 
@@ -141,7 +141,7 @@ func is_input(part):
 func is_output(part):
 	# If there are no wires connected to the part output side, then it is an output to the circuit.data
 	for con in circuit.data.connections:
-		if con.from == part.node_name:
+		if con.from_node == part.node_name:
 			return false
 	return true
 
@@ -246,13 +246,13 @@ func update_internal_input_level(part, side: int, port: int, level):
 
 func add_connections_to_part(part):
 	for con in circuit.data.connections:
-		if con.from == part.name:
+		if con.from_node == part.name:
 			var key = [RIGHT, int(con.from_port)]
-			var value = [con.to, con.to_port]
+			var value = [con.to_node, con.to_port]
 			add_to_connections(part, key, value)
-		elif con.to == part.name:
+		elif con.to_node == part.name:
 			var key = [LEFT, int(con.to_port)]
-			var value = [con.from, con.from_port]
+			var value = [con.from_node, con.from_port]
 			add_to_connections(part, key, value)
 
 

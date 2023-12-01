@@ -1,7 +1,5 @@
-[gd_scene load_steps=8 format=3 uid="uid://cmiyku2nqpr4j"]
+[gd_scene load_steps=6 format=3 uid="uid://cmiyku2nqpr4j"]
 
-[ext_resource type="StyleBox" uid="uid://6ey1ulrt3occ" path="res://assets/parts/frame.stylebox" id="1_71ca2"]
-[ext_resource type="StyleBox" uid="uid://b51cf2x3pfpfk" path="res://assets/parts/selected-frame.stylebox" id="2_ijj0m"]
 [ext_resource type="Script" path="res://parts/Screen.gd" id="3_iq6l6"]
 [ext_resource type="Texture2D" uid="uid://bawovt7ttsw26" path="res://assets/ui/icon.png" id="4_2wn3b"]
 [ext_resource type="Shader" path="res://assets/parts/screen.gdshader" id="4_vumpj"]
@@ -17,9 +15,6 @@ offset_top = 22.0
 offset_right = 103.0
 offset_bottom = 117.0
 mouse_filter = 1
-theme_override_constants/port_offset = -4
-theme_override_styles/frame = ExtResource("1_71ca2")
-theme_override_styles/selected_frame = ExtResource("2_ijj0m")
 title = "Screen"
 slot/0/left_enabled = false
 slot/0/left_type = 1

@@ -1,7 +1,5 @@
-[gd_scene load_steps=4 format=3 uid="uid://8q5d5fy826xh"]
+[gd_scene load_steps=2 format=3 uid="uid://8q5d5fy826xh"]
 
-[ext_resource type="StyleBox" uid="uid://6ey1ulrt3occ" path="res://assets/parts/frame.stylebox" id="1_hd5f0"]
-[ext_resource type="StyleBox" uid="uid://b51cf2x3pfpfk" path="res://assets/parts/selected-frame.stylebox" id="2_y6w6x"]
 [ext_resource type="Script" path="res://parts/MemoryProbe.gd" id="3_6ca0k"]
 
 [node name="MemoryProbe" type="GraphNode"]
@@ -11,9 +9,6 @@ offset_right = 172.0
 offset_bottom = 155.0
 mouse_filter = 1
 theme_override_constants/separation = 10
-theme_override_constants/port_offset = -4
-theme_override_styles/frame = ExtResource("1_hd5f0")
-theme_override_styles/selected_frame = ExtResource("2_y6w6x")
 title = "MemoryProbe"
 slot/0/left_enabled = false
 slot/0/left_type = 1

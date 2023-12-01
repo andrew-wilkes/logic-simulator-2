@@ -1,16 +1,11 @@
-[gd_scene load_steps=5 format=3 uid="uid://ch3lbjop1cxgn"]
+[gd_scene load_steps=3 format=3 uid="uid://ch3lbjop1cxgn"]
 
-[ext_resource type="StyleBox" uid="uid://blookh74hus7a" path="res://assets/parts/colorizer.tres" id="1_kyg7r"]
-[ext_resource type="StyleBox" uid="uid://bqdalbafaape1" path="res://assets/parts/colorizer-selected.tres" id="2_y2qog"]
 [ext_resource type="Script" path="res://parts/Gnd.gd" id="3_plm8n"]
 [ext_resource type="PackedScene" uid="uid://cpreryo8h7173" path="res://scenes/color_rect_with_text.tscn" id="4_sy25m"]
 
 [node name="Gnd" type="GraphNode"]
 offset_right = 20.0
 offset_bottom = 20.0
-theme_override_constants/port_offset = -5
-theme_override_styles/frame = ExtResource("1_kyg7r")
-theme_override_styles/selected_frame = ExtResource("2_y2qog")
 slot/0/left_enabled = false
 slot/0/left_type = 1
 slot/0/left_color = Color(1, 1, 0, 1)

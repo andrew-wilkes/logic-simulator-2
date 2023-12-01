@@ -171,12 +171,12 @@ func update_output_level_with_color(side, port, level):
 func indicate_level(side, port, level):
 	var color = G.settings.logic_high_color if level else G.settings.logic_low_color
 	if side == LEFT:
-		if port < get_connection_input_count():
-			var slot = get_connection_input_slot(port)
+		if port < get_input_port_count():
+			var slot = get_input_port_slot(port)
 			set_slot_color_left(slot, color)
 	else:
-		if port < get_connection_output_count():
-			var slot = get_connection_output_slot(port)
+		if port < get_output_port_count():
+			var slot = get_output_port_slot(port)
 			set_slot_color_right(slot, color)
 
 

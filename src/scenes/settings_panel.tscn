@@ -74,6 +74,7 @@ theme_override_constants/separation = 10
 
 [node name="TestDir" type="Label" parent="HBox/VBox/VB/HB3"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(152, 23)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/normal = SubResource("StyleBoxFlat_22jbw")

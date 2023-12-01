@@ -1,13 +1,25 @@
-[gd_scene load_steps=8 format=3 uid="uid://cq3v3io0y1kms"]
+[gd_scene load_steps=12 format=3 uid="uid://cq3v3io0y1kms"]
 
+[ext_resource type="StyleBox" uid="uid://6ey1ulrt3occ" path="res://assets/parts/frame.stylebox" id="1_ko8q4"]
 [ext_resource type="Script" path="res://scenes/schematic.gd" id="1_q7w2l"]
 [ext_resource type="FontFile" uid="uid://ck2sp0iypcks" path="res://assets/fonts/RobotoMono-Regular.ttf" id="1_q54wc"]
 [ext_resource type="PackedScene" uid="uid://1ugdcg3f5q1w" path="res://scenes/IOManager.tscn" id="2_7dp20"]
+[ext_resource type="StyleBox" uid="uid://b51cf2x3pfpfk" path="res://assets/parts/selected-frame.stylebox" id="2_xbl4k"]
 [ext_resource type="PackedScene" uid="uid://soo142csxxxi" path="res://scenes/MemoryManager.tscn" id="3_3rybu"]
 [ext_resource type="PackedScene" uid="uid://c7pcrpp8inqwr" path="res://scenes/TestRunner.tscn" id="3_lacat"]
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_x3r5c"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2no1j"]
+
 [sub_resource type="Theme" id="Theme_rntxj"]
 default_font = ExtResource("1_q54wc")
+GraphNode/constants/port_h_offset = -4
+GraphNode/constants/separation = 10
+GraphNode/styles/panel = ExtResource("1_ko8q4")
+GraphNode/styles/panel_selected = ExtResource("2_xbl4k")
+GraphNode/styles/titlebar = SubResource("StyleBoxEmpty_x3r5c")
+GraphNode/styles/titlebar_selected = SubResource("StyleBoxEmpty_2no1j")
 Label/fonts/font = ExtResource("1_q54wc")
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ydr2j"]
@@ -17,7 +29,6 @@ bg_color = Color(0.14902, 0.14902, 0.14902, 1)
 size_flags_vertical = 3
 theme = SubResource("Theme_rntxj")
 right_disconnects = true
-arrange_nodes_button_hidden = true
 script = ExtResource("1_q7w2l")
 
 [node name="IOManagerPanel" type="PopupPanel" parent="."]
@@ -26,8 +37,8 @@ borderless = false
 theme_override_styles/panel = SubResource("StyleBoxFlat_ydr2j")
 
 [node name="IOManager" parent="IOManagerPanel" instance=ExtResource("2_7dp20")]
-offset_right = 692.0
-offset_bottom = 512.0
+offset_right = 700.0
+offset_bottom = 520.0
 
 [node name="MemoryManagerPanel" type="PopupPanel" parent="."]
 title = "Memory Manager"

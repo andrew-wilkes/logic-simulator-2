@@ -1,7 +1,5 @@
-[gd_scene load_steps=4 format=3 uid="uid://dvsnaaquaqqji"]
+[gd_scene load_steps=2 format=3 uid="uid://dvsnaaquaqqji"]
 
-[ext_resource type="StyleBox" uid="uid://6ey1ulrt3occ" path="res://assets/parts/frame.stylebox" id="1_qfrbu"]
-[ext_resource type="StyleBox" uid="uid://b51cf2x3pfpfk" path="res://assets/parts/selected-frame.stylebox" id="2_eeiwy"]
 [ext_resource type="Script" path="res://parts/TriState.gd" id="3_uqoaf"]
 
 [node name="TriState" type="GraphNode"]
@@ -10,9 +8,6 @@ offset_top = 9.0
 offset_right = 100.0
 offset_bottom = 50.0
 mouse_filter = 1
-theme_override_constants/port_offset = -4
-theme_override_styles/frame = ExtResource("1_qfrbu")
-theme_override_styles/selected_frame = ExtResource("2_eeiwy")
 title = "TriState"
 slot/0/left_enabled = false
 slot/0/left_type = 1

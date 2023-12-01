@@ -47,7 +47,7 @@ func connect_wire(from_part, from_pin, to_part, to_pin):
 	# The Part class is designed to be bi-directional
 	# Only allow 1 connection to an input
 	for con in get_connection_list():
-		if to_part == con.to and to_pin == con.to_port:
+		if to_part == con.to_node and to_pin == con.to_port:
 			return
 	connect_node(from_part, from_pin, to_part, to_pin)
 	# Propagate bus value or level
@@ -59,7 +59,7 @@ func connect_wire(from_part, from_pin, to_part, to_pin):
 	if from:
 		for node in get_children():
 			if node.name == to_part:
-				var slot = from.get_connection_output_slot(from_pin)
+				var slot = from.get_port_output_slot(from_pin)
 				var con_type = from.get_slot_type_right(slot)
 				if con_type == 0:
 					var level = from.pins.get([RIGHT, from_pin], false)
@@ -78,8 +78,8 @@ func disconnect_wire(from_part, from_pin, to_part, to_pin):
 
 func remove_connections_to_part(part):
 	for con in get_connection_list():
-		if con.to == part.name or con.from == part.name:
-			disconnect_node(con.from, con.from_port, con.to, con.to_port)
+		if con.to_node == part.name or con.from_node == part.name:
+			disconnect_node(con.from_node, con.from_port, con.to_node, con.to_port)
 	circuit_changed()
 
 
@@ -119,8 +119,8 @@ func delete_selected_parts(_arr):
 
 func delete_selected_part(part):
 	for con in get_connection_list():
-		if con.to == part.name or con.from == part.name:
-			disconnect_node(con.from, con.from_port, con.to, con.to_port)
+		if con.to_node == part.name or con.from_node == part.name:
+			disconnect_node(con.from_node, con.from_port, con.to_node, con.to_port)
 	remove_child(part)
 	part.queue_free()
 
@@ -163,8 +163,8 @@ func duplicate_selected_parts():
 		part_map[part.name] = new_part.name
 	# Duplicate connections between duplicated parts
 	for con in get_connection_list():
-		if part_map.has(con.from) and part_map.has(con.to):
-			connect_node(part_map[con.from], con.from_port, part_map[con.to], con.to_port)
+		if part_map.has(con.from_node) and part_map.has(con.to_node):
+			connect_node(part_map[con.from_node], con.from_port, part_map[con.to_node], con.to_port)
 	if flag_changed:
 		circuit_changed()
 
@@ -175,9 +175,9 @@ func remove_connections_between_selected_parts():
 	for part in selected_parts:
 		part_names.append(part.name)
 	for con in get_connection_list():
-		if part_names.has(con.from) and part_names.has(con.to):
+		if part_names.has(con.from_node) and part_names.has(con.to_node):
 			flag_changed = true
-			disconnect_node(con.from, con.from_port, con.to, con.to_port)
+			disconnect_node(con.from_node, con.from_port, con.to_node, con.to_port)
 	if flag_changed:
 		circuit_changed()
 
@@ -237,8 +237,8 @@ func save_circuit(file_name):
 	for node in get_children():
 		if node is Part:
 			circuit.data.parts.append(node.get_dict())
-	circuit.data.snap_distance = snap_distance
-	circuit.data.use_snap = use_snap
+	circuit.data.snapping_distance = snapping_distance
+	circuit.data.snapping_enabled = snapping_enabled
 	circuit.data.minimap_enabled = minimap_enabled
 	circuit.data.zoom = zoom
 	circuit.data.scroll_offset = [scroll_offset.x, scroll_offset.y]
@@ -280,19 +280,19 @@ func add_parts():
 
 func add_connections():
 	for con in circuit.data.connections:
-		connect_node(con.from, con.from_port, con.to, con.to_port)
+		connect_node(con.from_node, con.from_port, con.to_node, con.to_port)
 
 
 # This is called to remove the effect of level indications
 func set_all_connection_colors():
 	for node in get_children():
 		if node is Part:
-			for idx in node.get_connection_input_count():
-				var slot = node.get_connection_input_slot(idx)
+			for idx in node.get_input_port_count():
+				var slot = node.get_input_port_slot(idx)
 				var color = Color.WHITE if node.get_slot_type_left(slot) == 0 else Color.YELLOW
 				node.set_slot_color_left(slot, color)
-			for idx in node.get_connection_output_count():
-				var slot = node.get_connection_output_slot(idx)
+			for idx in node.get_output_port_count():
+				var slot = node.get_output_port_slot(idx)
 				var color = Color.WHITE if node.get_slot_type_right(slot) == 0 else Color.YELLOW
 				node.set_slot_color_right(slot, color)
 	set_all_io_connection_colors()
@@ -325,8 +325,8 @@ func set_high_color():
 
 func setup_graph():
 	watch_for_scroll_offset_change = false
-	snap_distance = circuit.data.snap_distance
-	use_snap = circuit.data.use_snap
+	snapping_distance = circuit.data.snapping_distance
+	snapping_enabled = circuit.data.snapping_enabled
 	zoom = circuit.data.zoom
 	var off = circuit.data.scroll_offset
 	scroll_offset = Vector2(off[0], off[1])
@@ -346,9 +346,9 @@ func is_object_instance_invalid(ob, note = ""):
 
 func removing_slot(part, port):
 	for con in get_connection_list():
-		if con.to == part.name and con.to_port == port \
-			or con.from == part.name and con.from_port == port:
-			disconnect_node(con.from, con.from_port, con.to, con.to_port)
+		if con.to_node == part.name and con.to_port == port \
+			or con.from_node == part.name and con.from_port == port:
+			disconnect_node(con.from_node, con.from_port, con.to_node, con.to_port)
 
 
 func right_click_on_part(part):
@@ -366,14 +366,14 @@ func right_click_on_part(part):
 func output_level_changed_handler(part, side, port, level):
 	for con in get_connection_list():
 		if side == RIGHT:
-			if con.from == part.name and con.from_port == port:
-				var node = get_node(NodePath(con.to))
+			if con.from_node == part.name and con.from_port == port:
+				var node = get_node(NodePath(con.to_node))
 				node.update_input_level(LEFT, con.to_port, level)
 				if G.settings.indicate_to_levels:
 					node.indicate_level(LEFT, con.to_port, level)
 		else:
-			if con.to == part.name and con.to_port == port:
-				var node = get_node(NodePath(con.from))
+			if con.to_node == part.name and con.to_port == port:
+				var node = get_node(NodePath(con.from_node))
 				node.update_input_level(RIGHT, con.from_port, level)
 				if G.settings.indicate_to_levels:
 					node.indicate_level(RIGHT, con.from_port, level)
@@ -384,11 +384,11 @@ func output_level_changed_handler(part, side, port, level):
 func bus_value_changed_handler(part, side, port, value):
 	for con in get_connection_list():
 		if side == RIGHT:
-			if con.from == part.name and con.from_port == port:
-				get_node(NodePath(con.to)).update_bus_input_value(LEFT, con.to_port, value)
+			if con.from_node == part.name and con.from_port == port:
+				get_node(NodePath(con.to_node)).update_bus_input_value(LEFT, con.to_port, value)
 		else:
-			if con.to == part.name and con.to_port == port:
-				get_node(NodePath(con.from)).update_bus_input_value(RIGHT, con.from_port, value)
+			if con.to_node == part.name and con.to_port == port:
+				get_node(NodePath(con.from_node)).update_bus_input_value(RIGHT, con.from_port, value)
 
 
 func unstable_handler(part, side, port):
@@ -405,35 +405,35 @@ func reset_race_counters():
 
 func set_pin_colors(to_part, color):
 	for con in get_connection_list():
-		if con.to == to_part:
-			var from_node = get_node(NodePath(con.from))
-			from_node.set_slot_color_right(from_node.get_connection_output_slot(con.from_port), color)
+		if con.to_node == to_part:
+			var from_node = get_node(NodePath(con.from_node))
+			from_node.set_slot_color_right(from_node.get_output_port_slot(con.from_port), color)
 			for con2 in get_connection_list():
-				if con2.from == con.from and con2.from_port == con.from_port:
+				if con2.from == con.from_node and con2.from_port == con.from_port:
 					var to_node = get_node(NodePath(con2.to))
-					var slot = to_node.get_connection_input_slot(con2.to_port)
+					var slot = to_node.get_input_port_slot(con2.to_port)
 					to_node.set_slot_color_left(slot, color)
 
 
 func set_io_connection_colors(io_part):
 	for con in get_connection_list():
-		if con.from == io_part.name:
+		if con.from_node == io_part.name:
 			var color = io_part.data.wire_color\
-				if io_part.get_connection_output_type(con.from_port) == 0\
+				if io_part.get_output_port_type(con.from_port) == 0\
 					else io_part.data.bus_color
-			var to_node = get_node(NodePath(con.to))
-			var slot = to_node.get_connection_input_slot(con.to_port)
+			var to_node = get_node(NodePath(con.to_node))
+			var slot = to_node.get_input_port_slot(con.to_port)
 			to_node.set_slot_color_left(slot, color)
-			slot = io_part.get_connection_output_slot(con.from_port)
+			slot = io_part.get_output_port_slot(con.from_port)
 			io_part.set_slot_color_right(slot, color)
-		if con.to == io_part.name:
+		if con.to_node == io_part.name:
 			var color = io_part.data.wire_color\
-				if io_part.get_connection_input_type(con.to_port) == 0\
+				if io_part.get_input_port_type(con.to_port) == 0\
 					else io_part.data.bus_color
-			var from_node = get_node(NodePath(con.from))
-			var slot = from_node.get_connection_output_slot(con.from_port)
+			var from_node = get_node(NodePath(con.from_node))
+			var slot = from_node.get_output_port_slot(con.from_port)
 			from_node.set_slot_color_right(slot, color)
-			slot = io_part.get_connection_input_slot(con.to_port)
+			slot = io_part.get_input_port_slot(con.to_port)
 			io_part.set_slot_color_left(slot, color)
 
 
@@ -462,8 +462,8 @@ func number_parts():
 	# Redo the connections with updated part names
 	circuit.data.connections = get_connection_list()
 	for con in circuit.data.connections:
-		con.from = part_names[con.from]
-		con.to = part_names[con.to]
+		con.from_node = part_names[con.from_node]
+		con.to_node = part_names[con.to_node]
 	clear_connections()
 	add_connections()
 	emit_signal("changed")
@@ -710,8 +710,8 @@ func circuit_changed(emit = true):
 			node.probes.clear()
 			memories[node.name] = node
 	for con in get_connection_list():
-		if memories.has(con.from) and probes.has(con.to):
-			memories[con.from].probes.append(probes[con.to])
-			probes[con.to].memory = memories[con.from]
+		if memories.has(con.from_node) and probes.has(con.to_node):
+			memories[con.from_node].probes.append(probes[con.to_node])
+			probes[con.to_node].memory = memories[con.from_node]
 	for pname in probes:
 		probes[pname].update_data()

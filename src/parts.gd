@@ -13,7 +13,7 @@ func _init():
 	for file_name in files:
 		var part_name = file_name.get_file().get_slice('.', 0)
 		# Don't add the Block part as a Part option in the menu.
-		if part_name != "Block":
+		if part_name not in ["Block"]:
 			names.append(part_name)
 		scenes[part_name] = load(path + file_name)
 		scripts[part_name] = load(path + file_name.get_file().get_slice('.', 0) + ".gd")
