@@ -1,7 +1,5 @@
-[gd_scene load_steps=5 format=3 uid="uid://534rpxtrhwqj"]
+[gd_scene load_steps=3 format=3 uid="uid://534rpxtrhwqj"]
 
-[ext_resource type="StyleBox" uid="uid://6ey1ulrt3occ" path="res://assets/parts/frame.stylebox" id="1_tdmdc"]
-[ext_resource type="StyleBox" uid="uid://b51cf2x3pfpfk" path="res://assets/parts/selected-frame.stylebox" id="2_uihod"]
 [ext_resource type="Script" path="res://parts/Nor.gd" id="3_2ubkd"]
 [ext_resource type="Texture2D" uid="uid://cfqjskmlmej0r" path="res://assets/parts/nor.png" id="4_522eo"]
 
@@ -11,9 +9,6 @@ offset_top = 22.0
 offset_right = 103.0
 offset_bottom = 117.0
 mouse_filter = 1
-theme_override_constants/port_offset = -4
-theme_override_styles/frame = ExtResource("1_tdmdc")
-theme_override_styles/selected_frame = ExtResource("2_uihod")
 title = " Nor"
 slot/0/left_enabled = false
 slot/0/left_type = 1
@@ -57,10 +52,6 @@ script = ExtResource("3_2ubkd")
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 
-[node name="Symbol" type="Sprite2D" parent="Sp"]
-position = Vector2(40, 60)
-texture = ExtResource("4_522eo")
-
 [node name="HB" type="HBoxContainer" parent="."]
 layout_mode = 2
 
@@ -81,3 +72,7 @@ text = "b"
 [node name="Tag" type="LineEdit" parent="."]
 layout_mode = 2
 expand_to_text_length = true
+
+[node name="Symbol" type="Sprite2D" parent="."]
+position = Vector2(58, 103)
+texture = ExtResource("4_522eo")
