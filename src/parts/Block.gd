@@ -87,6 +87,7 @@ func _ready():
 	block_setup()
 	set_slots(max(input_pin_count, output_pin_count))
 	configure_pins()
+	reset()
 
 
 func configure_pins():
@@ -300,6 +301,10 @@ func reset():
 	for idx in outputs.size():
 		if outputs[idx].part_type == "TriState":
 			pins[[RIGHT, idx]] = -INF
+	# Output pins of input parts need to be null
+	# so that they react to outer parts
+	for input in inputs:
+		input.pins = {}
 
 
 func unstable_handler(_name, side, port):

@@ -3,7 +3,6 @@ class_name AND
 extends Part
 
 func _init():
-	reset()
 	order = 800
 
 

@@ -5,7 +5,6 @@ extends Part
 func _init():
 	order = 80
 	category = ASYNC
-	reset()
 
 
 func evaluate_output_level(side, _port, _level):

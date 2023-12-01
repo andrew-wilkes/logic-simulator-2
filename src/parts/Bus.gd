@@ -7,5 +7,6 @@ func _init():
 	order = 72
 
 
-func reset():
-	pins = { [RIGHT, OUT]: 0 }
+func apply_power():
+	if not pins.has([RIGHT, OUT]):
+		update_output_value(RIGHT, OUT, 0)

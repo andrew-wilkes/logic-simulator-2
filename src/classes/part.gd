@@ -15,7 +15,7 @@ enum { A,B,C,D }
 # Using a high threshold should be faster than introducing delays in the part
 # outputs.
 const RACE_COUNT_THRESHOLD = 128
-const DEBUG = false
+const DEBUG = true
 const FLIP_SIDES = [RIGHT, LEFT]
 const IN = 0
 const OUT = 0
@@ -153,6 +153,7 @@ func _on_tag_text_changed(_new_text):
 
 # Override this function to apply a reset to a part that has volatile memory
 func reset():
+	prints(name, "was reset")
 	pins = {}
 	call_deferred("apply_power")
 

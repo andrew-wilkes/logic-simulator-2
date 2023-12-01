@@ -27,5 +27,5 @@ func propagate_value():
 		update_output_value(RIGHT, OUT, -INF)
 
 
-func reset():
+func apply_power():
 	pins = { [RIGHT, OUT]: -INF }

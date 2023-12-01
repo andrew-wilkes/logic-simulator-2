@@ -10,6 +10,8 @@ func _init():
 func _ready():
 	super()
 	set_color()
+	apply_power()
+	#pins = { [RIGHT, ]: true }
 
 
 func apply_power():

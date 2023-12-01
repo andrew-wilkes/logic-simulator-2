@@ -7,6 +7,7 @@ func _init():
 	order = 74
 
 
-func reset():
-	# Set the output pin so that the tester will read it
-	update_output_level_with_color(RIGHT, OUT, false)
+func apply_power():
+	# Set the output pin if it is null so that the tester will read it
+	if not pins.has([RIGHT, OUT]):
+		update_output_level_with_color(RIGHT, OUT, false)

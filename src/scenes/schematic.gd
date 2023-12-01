@@ -189,12 +189,12 @@ func add_part_by_name(part_name):
 
 
 func add_part(part):
+	part.controller = self
 	add_child(part)
 	part.part_type = part.name
 	part.position_offset = PART_INITIAL_OFFSET + scroll_offset / zoom \
 		+ part_initial_offset_delta
 	update_part_initial_offset_delta()
-	part.controller = self
 	
 	# We want precise control of node names to keep circuit data robust
 	# Godot can sneak in @ marks to the node name, so we assign the name after

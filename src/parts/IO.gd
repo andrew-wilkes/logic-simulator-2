@@ -152,8 +152,12 @@ func test_set_pins():
 
 
 func reset():
+	super()
 	if show_display:
 		_on_text_submitted("0")
+
+
+func apply_power():
 	pins = { [RIGHT, OUT]: 0 }
 	for n in data.num_wires:
 		pins[[RIGHT, n + 1]] = false
