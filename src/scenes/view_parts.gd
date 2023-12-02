@@ -1,6 +1,8 @@
 extends GraphEdit
 
-# This tool facilitates adding and removing control nodes to/from multiple parts
+# This script facilitates adding and removing control nodes to/from multiple parts.
+# So the GraphNode slots need to be reconfigured to align with the ports.
+# Then the code may be used in a EditorScript
 
 const GAP = 20
 const EXCLUDE = ["V+", "Gnd", "Nand", "Wire", "Bus", "WireColor", "BusColor", "Screen"]
@@ -12,7 +14,15 @@ func _ready():
 
 func go():
 	add_parts_to_graph()
+	await get_tree().create_timer(1.0).timeout
+	# Hide a popup
+	get_node("TextView/FileDialog").hide()
+
+
+func modify():
+	await get_tree().create_timer(1.0).timeout
 	remove_spacer()
+	await get_tree().create_timer(1.0).timeout
 	move_ports()
 	# Shrink height
 	await get_tree().create_timer(0.5).timeout
@@ -43,6 +53,7 @@ func move_ports():
 				part.set_slot_enabled_right(slot, false)
 
 
+# The Godot 4.1 version needed a spacer Control node which is no longer needed
 func remove_spacer():
 	for node in get_children():
 		if node is Part and node.name not in EXCLUDE:
@@ -59,6 +70,7 @@ func add_parts_to_graph():
 		var part: GraphNode = Parts.scenes[part_name].instantiate()
 		part.position_offset = Vector2(x, y)
 		part.controller = self
+		part.size.y = 0
 		add_child(part)
 		x += part.size.x + GAP
 		row_height = max(row_height, part.size.y)
@@ -66,6 +78,7 @@ func add_parts_to_graph():
 			x = GAP
 			y += row_height + GAP
 
+# Mock functions to allow the parts to be added to the scene:
 
 func output_level_changed_handler(_part, _side, _port, _level):
 	pass

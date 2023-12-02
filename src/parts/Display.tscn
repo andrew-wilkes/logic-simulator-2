@@ -1,7 +1,5 @@
-[gd_scene load_steps=7 format=3 uid="uid://dq0tfws21flw8"]
+[gd_scene load_steps=5 format=3 uid="uid://dq0tfws21flw8"]
 
-[ext_resource type="StyleBox" uid="uid://6ey1ulrt3occ" path="res://assets/parts/frame.stylebox" id="1_1wcum"]
-[ext_resource type="StyleBox" uid="uid://b51cf2x3pfpfk" path="res://assets/parts/selected-frame.stylebox" id="2_jf40v"]
 [ext_resource type="Script" path="res://parts/Display.gd" id="3_i0ylb"]
 [ext_resource type="Texture2D" uid="uid://nebjnvr6aqnq" path="res://assets/parts/down.png" id="5_0x123"]
 
@@ -82,16 +80,13 @@ shader_parameter/bg_color = Color(0, 0, 0, 1)
 [node name="Display" type="GraphNode"]
 offset_left = 19.0
 offset_top = 16.0
-offset_right = 90.0
-offset_bottom = 306.0
+offset_right = 122.0
+offset_bottom = 302.0
 mouse_filter = 1
-theme_override_constants/port_offset = -4
-theme_override_styles/frame = ExtResource("1_1wcum")
-theme_override_styles/selected_frame = ExtResource("2_jf40v")
 title = "Display"
-slot/0/left_enabled = false
-slot/0/left_type = 1
-slot/0/left_color = Color(0, 0, 1, 1)
+slot/0/left_enabled = true
+slot/0/left_type = 0
+slot/0/left_color = Color(1, 1, 1, 1)
 slot/0/left_icon = null
 slot/0/right_enabled = false
 slot/0/right_type = 1
@@ -161,7 +156,7 @@ slot/7/right_type = 0
 slot/7/right_color = Color(1, 1, 1, 1)
 slot/7/right_icon = null
 slot/7/draw_stylebox = true
-slot/8/left_enabled = true
+slot/8/left_enabled = false
 slot/8/left_type = 0
 slot/8/left_color = Color(1, 1, 1, 1)
 slot/8/left_icon = null
@@ -170,20 +165,7 @@ slot/8/right_type = 0
 slot/8/right_color = Color(1, 1, 1, 1)
 slot/8/right_icon = null
 slot/8/draw_stylebox = true
-slot/9/left_enabled = false
-slot/9/left_type = 0
-slot/9/left_color = Color(1, 1, 1, 1)
-slot/9/left_icon = null
-slot/9/right_enabled = false
-slot/9/right_type = 0
-slot/9/right_color = Color(1, 1, 1, 1)
-slot/9/right_icon = null
-slot/9/draw_stylebox = true
 script = ExtResource("3_i0ylb")
-
-[node name="Sp" type="Control" parent="."]
-custom_minimum_size = Vector2(0, 27)
-layout_mode = 2
 
 [node name="L1" type="Label" parent="."]
 layout_mode = 2

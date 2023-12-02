@@ -4,10 +4,10 @@
 [ext_resource type="Texture2D" uid="uid://tk01jetwsc1c" path="res://assets/parts/nand.png" id="4_lmwv6"]
 
 [node name="Nand" type="GraphNode"]
-offset_left = 29.0
-offset_top = 24.0
-offset_right = 132.0
-offset_bottom = 148.0
+offset_left = 20.0
+offset_top = 25.0
+offset_right = 123.0
+offset_bottom = 170.0
 mouse_filter = 1
 title = " Nand"
 slot/0/left_enabled = true
@@ -52,14 +52,18 @@ size_flags_horizontal = 3
 text = "out"
 horizontal_alignment = 2
 
-[node name="L" type="Label" parent="."]
+[node name="HB2" type="HBoxContainer" parent="."]
 layout_mode = 2
+
+[node name="L1" type="Label" parent="HB2"]
+layout_mode = 2
+size_flags_horizontal = 3
 text = "b"
+
+[node name="Symbol" type="TextureRect" parent="HB2"]
+layout_mode = 2
+texture = ExtResource("4_lmwv6")
 
 [node name="Tag" type="LineEdit" parent="."]
 layout_mode = 2
 expand_to_text_length = true
-
-[node name="Symbol" type="Sprite2D" parent="."]
-position = Vector2(58, 64)
-texture = ExtResource("4_lmwv6")

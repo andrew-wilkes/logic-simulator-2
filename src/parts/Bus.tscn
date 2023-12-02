@@ -1,40 +1,23 @@
-[gd_scene load_steps=4 format=3 uid="uid://dtocqfe1v0ws5"]
+[gd_scene load_steps=2 format=3 uid="uid://dtocqfe1v0ws5"]
 
-[ext_resource type="StyleBox" uid="uid://6ey1ulrt3occ" path="res://assets/parts/frame.stylebox" id="1_4iwwa"]
-[ext_resource type="StyleBox" uid="uid://b51cf2x3pfpfk" path="res://assets/parts/selected-frame.stylebox" id="2_fdbfs"]
 [ext_resource type="Script" path="res://parts/Bus.gd" id="3_gxedj"]
 
 [node name="Bus" type="GraphNode"]
 offset_left = 29.0
 offset_top = 9.0
-offset_right = 100.0
-offset_bottom = 50.0
+offset_right = 132.0
+offset_bottom = 65.0
 mouse_filter = 1
-theme_override_constants/port_offset = -4
-theme_override_styles/frame = ExtResource("1_4iwwa")
-theme_override_styles/selected_frame = ExtResource("2_fdbfs")
-slot/0/left_enabled = false
+slot/0/left_enabled = true
 slot/0/left_type = 1
-slot/0/left_color = Color(0, 0, 1, 1)
+slot/0/left_color = Color(1, 1, 0, 1)
 slot/0/left_icon = null
-slot/0/right_enabled = false
+slot/0/right_enabled = true
 slot/0/right_type = 1
-slot/0/right_color = Color(0, 0, 1, 1)
+slot/0/right_color = Color(1, 1, 0, 1)
 slot/0/right_icon = null
 slot/0/draw_stylebox = true
-slot/1/left_enabled = true
-slot/1/left_type = 1
-slot/1/left_color = Color(1, 1, 0, 1)
-slot/1/left_icon = null
-slot/1/right_enabled = true
-slot/1/right_type = 1
-slot/1/right_color = Color(1, 1, 0, 1)
-slot/1/right_icon = null
-slot/1/draw_stylebox = true
 script = ExtResource("3_gxedj")
-
-[node name="Sp" type="Control" parent="."]
-layout_mode = 2
 
 [node name="Tag" type="LineEdit" parent="."]
 layout_mode = 2
