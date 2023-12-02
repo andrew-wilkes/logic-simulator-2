@@ -19,8 +19,8 @@ config/icon="res://assets/ui/icon.png"
 
 [autoload]
 
-Parts="*res://parts.gd"
-G="*res://global.gd"
+Parts="*res://autoloads/parts.gd"
+G="*res://autoloads/global.gd"
 
 [gdunit4]
 

@@ -1,6 +1,6 @@
 class_name TestCircuit
 
-# This class is used to test cicuits
+# This class is used to test cicuits by the user when running the software
 # Tests are described in .tst files in the www.nand2tetris.org format
 
 extends Node

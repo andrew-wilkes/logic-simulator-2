@@ -157,7 +157,6 @@ func duplicate_selected_parts():
 		new_part.data = part.data.duplicate()
 		new_part.part_type = part.part_type
 		new_part.setup()
-		new_part.size.y = 0
 		new_part.controller = self
 		add_child(new_part)
 		new_part.name = part.part_type + circuit.get_next_id()
