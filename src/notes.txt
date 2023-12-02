@@ -3,8 +3,6 @@ Maybe use a color pallete for setting wire colors? - Enable recent colors in Col
 --- Bugs ---
 Duplicate of expanded IO part results in extra LineEdit child node being added to the part. But a work-around has been added.
 
-Duplicating WireColor or BusColor part after setting the color fails to duplicate the node.
-
 There is a wild right-click menu popup on the Part Tag text label to consider.
 
 When quitting the App, the quit process cannot be intercepted (unless via ESC) and halted. Need to make sure that new settings are saved.

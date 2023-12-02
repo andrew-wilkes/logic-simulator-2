@@ -1,11 +1,13 @@
-[gd_scene load_steps=3 format=3 uid="uid://q5ak32mxsxfd"]
+[gd_scene load_steps=4 format=3 uid="uid://q5ak32mxsxfd"]
 
+[ext_resource type="Theme" uid="uid://deqbs7na0dine" path="res://assets/ui/schematic.theme" id="1_hvc3v"]
 [ext_resource type="Script" path="res://parts/WireColor.gd" id="3_42xq1"]
 [ext_resource type="PackedScene" uid="uid://cebba5vujpuxs" path="res://scenes/color_picker.tscn" id="4_7a7ti"]
 
 [node name="WireColor" type="GraphNode"]
 offset_right = 20.0
-offset_bottom = 20.0
+offset_bottom = 36.0
+theme = ExtResource("1_hvc3v")
 slot/0/left_enabled = true
 slot/0/left_type = 0
 slot/0/left_color = Color(1, 1, 1, 1)

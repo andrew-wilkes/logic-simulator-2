@@ -46,7 +46,7 @@ func get_dict():
 
 func _ready():
 	connect("gui_input", _on_gui_input)
-	if $Tag.visible:
+	if $Tag and $Tag.visible:
 		$Tag.connect("text_changed", _on_tag_text_changed)
 	change_notification_timer = Timer.new()
 	get_child(0).add_child(change_notification_timer)
@@ -56,6 +56,13 @@ func _ready():
 	set("theme_override_constants/port_offset", -6)
 	set("mouse_default_cursor_shape", CURSOR_DRAG)
 	setup_instance()
+	call_deferred("shrink_height")
+
+
+# Some parts such as BusColor have extra height for some reason when added to the scene
+# So this can be call_deffered to correct it
+func shrink_height():
+	size.y = 0
 
 
 # This function is used to set up vars that are needed by an instance of the class
