@@ -59,14 +59,14 @@ func connect_wire(from_part, from_pin, to_part, to_pin):
 	if from:
 		for node in get_children():
 			if node.name == to_part:
-				var slot = from.get_port_output_slot(from_pin)
+				var slot = from.get_output_port_slot(from_pin)
 				var con_type = from.get_slot_type_right(slot)
 				if con_type == 0:
 					var level = from.pins.get([RIGHT, from_pin], false)
 					node.update_input_level(LEFT, to_pin, level)
 					node.update_output_level_with_color(LEFT, to_pin, level)
 				else:
-					node.update_input_value(LEFT, to_pin, from.pins.get([RIGHT, from_pin], 0))
+					node.update_bus_input_value(LEFT, to_pin, from.pins.get([RIGHT, from_pin], 0))
 				break
 	circuit_changed()
 
@@ -281,8 +281,24 @@ func add_parts():
 
 
 func add_connections():
+	var bad_blocks = []
+	for node in get_children():
+		if node is Block:
+			if node.has_bad_hash():
+				bad_blocks.append(node.name)
+				G.warn_user(get_part_id(node) + " has changed internally, so disconnected." +\
+					"\n Circuit file: " + node.data.circuit_file)
 	for con in circuit.data.connections:
+		if con.from_node in bad_blocks or con.to_node in bad_blocks:
+			continue
 		connect_node(con.from_node, con.from_port, con.to_node, con.to_port)
+
+
+func get_part_id(part):
+	if part.get_node("Tag").text.is_empty():
+		return part.name
+	else:
+		return part.get_node("Tag").text
 
 
 # This is called to remove the effect of level indications

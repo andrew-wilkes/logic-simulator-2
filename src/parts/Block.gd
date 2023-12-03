@@ -25,7 +25,7 @@ var wire_color = Color.WHITE
 var bus_color = Color.YELLOW
 
 func _init():
-	data["circuit_file"] = ""
+	data = { "circuit_file": "", "wiring_hash": 0 }
 
 
 func _ready():
@@ -34,6 +34,14 @@ func _ready():
 	set_slots(max(input_pin_count, output_pin_count) - 1)
 	configure_pins()
 	reset()
+
+
+func has_bad_hash():
+	var current_hash = circuit.data.connections.hash()
+	if current_hash != data.wiring_hash:
+		data.wiring_hash = current_hash
+		return true
+	return false
 
 
 func block_setup(_file_chain = []):
@@ -47,6 +55,8 @@ func block_setup(_file_chain = []):
 	if load_result != OK:
 		G.warning.open("The circuit block data from %s was invalid!" % [data.circuit_file.get_file()])
 		return
+	if data.wiring_hash == 0: # Set this for new blocks
+		data.wiring_hash = circuit.data.connections.hash()
 	# Every circuit opened as a block is added to the available parts list
 	var cname = circuit.data.title
 	if cname.is_empty():
