@@ -32,7 +32,7 @@ func _ready():
 		test_set_pins() # Done visually when running the scene.
 	if show_display:
 		$Value.connect("text_submitted", _on_text_submitted)
-	bug_fix() # Godot 4.1.stable
+	#bug_fix() # Godot 4.1.stable
 
 
 func bug_fix():

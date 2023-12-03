@@ -170,7 +170,7 @@ func update_value():
 
 
 func set_display_value():
-	%Value.text = part.format % [part.current_value]
+	%Value.text = part.get_formatted_hex_string(part.current_value)
 	%Value.caret_column = %Value.text.length()
 
 
@@ -186,7 +186,7 @@ func set_slider_value():
 
 
 func set_range(value):
-	%Range.text = part.format % [value]
+	%Range.text = part.get_formatted_hex_string(value)
 	%Range.caret_column = %Range.text.length()
 
 

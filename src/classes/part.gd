@@ -160,7 +160,6 @@ func _on_tag_text_changed(_new_text):
 
 # Override this function to apply a reset to a part that has volatile memory
 func reset():
-	prints(name, "was reset")
 	pins = {}
 	call_deferred("apply_power")
 
@@ -202,3 +201,11 @@ func get_value_from_text(new_text):
 	if new_text.is_valid_hex_number(true):
 		value = new_text.hex_to_int()
 	return value
+
+
+func get_formatted_hex_string(x):
+	if x < 0:
+		return str(x)
+	if x < 0x100:
+		return "0x%02X" % x
+	return "0x%04X" % x
