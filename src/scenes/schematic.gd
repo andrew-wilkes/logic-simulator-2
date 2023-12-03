@@ -143,7 +143,7 @@ func duplicate_selected_parts():
 			var part_offset = part.position_offset - scroll_offset
 			# Can only seem to approximate the position when zoomed.
 			# Ideally, the first selected part copy would position itself
-			# exacly where the mouse cursor is.
+			# exactly where the mouse cursor is.
 			if zoom > 1.1 or zoom < 0.9:
 				part_offset *= 0.8 / zoom
 			offset = Vector2(offset.x / part.position.x * part_offset.x, \
@@ -284,11 +284,10 @@ func add_parts():
 func add_connections():
 	var bad_blocks = []
 	for node in get_children():
-		if node is Block:
-			if node.has_bad_hash():
-				bad_blocks.append(node.name)
-				G.warn_user(get_part_id(node) + " has changed internally, so disconnected." +\
-					"\n Circuit file: " + node.data.circuit_file)
+		if node is Block and node.has_bad_hash():
+			bad_blocks.append(node.name)
+			G.warn_user(get_part_id(node) + " has changed internally, so disconnected." +\
+				"\n Circuit file: " + node.data.circuit_file)
 	for con in circuit.data.connections:
 		if con.from_node in bad_blocks or con.to_node in bad_blocks:
 			continue
@@ -493,41 +492,6 @@ func set_circuit_title(text):
 	emit_signal("changed")
 
 
-func test_circuit():
-	if circuit.data.title.is_empty():
-		G.warn_user("No circuit title has been set.")
-	else:
-		var test_file = circuit.data.title + ".tst"
-		# Find dir containing these files
-		var result = G.find_file(G.settings.test_dir, test_file)
-		if result.error:
-			G.warn_user("File not found: " + test_file)
-		else:
-			var compare_file = result.path + "/" + circuit.data.title + ".cmp"
-			if FileAccess.file_exists(compare_file):
-				compare_file = FileAccess.open(compare_file, FileAccess.READ)
-				if compare_file:
-					compare_lines = compare_file.get_as_text().replace("\r", "").split("\n", false)
-				tester = TestCircuit.new()
-			var io_nodes = tester.get_io_nodes(get_children(), get_connection_list())
-			var file = FileAccess.open(result.path + "/" + test_file, FileAccess.READ)
-			if file:
-					var test_spec = file.get_as_text()
-					test_runner.set_title(test_file)
-					tester.init_tests(test_spec, io_nodes)
-					reset_test_environment()
-					# Make panel fit the width of the test output
-					for task in tester.tasks:
-						if task[0] == "output-list":
-							var width = task[1].length() * 8.2
-							if test_runner.size.x < width:
-								test_runner.size.x = width
-					test_runner.open()
-			else:
-				G.warn_user("Error opening file: " + test_file)
-				tester.free()
-
-
 func add_bus_io(label, pos):
 	var part = Parts.scenes["Bus"].instantiate()
 	part.get_node("Tag").text = label
@@ -585,6 +549,69 @@ func create_circuit_from_hdl(file_path):
 		add_wire_io(output_wire, Vector2(600, 40 + 80 * count))
 		count += 1
 	grab_focus()
+
+func _on_scroll_offset_changed(offset):
+	if last_scroll_offset != offset and watch_for_scroll_offset_change:
+		emit_signal("changed")
+	last_scroll_offset = offset
+	watch_for_scroll_offset_change = true
+
+
+func circuit_changed(emit = true):
+	if emit:
+		emit_signal("changed")
+	# Update MemoryProbe links
+	var probes = {}
+	var memories = {}
+	for node in get_children():
+		if node is MemoryProbe:
+			node.memory = null
+			probes[node.name] = node
+		if node is BaseMemory:
+			node.probes.clear()
+			memories[node.name] = node
+	for con in get_connection_list():
+		if memories.has(con.from_node) and probes.has(con.to_node):
+			memories[con.from_node].probes.append(probes[con.to_node])
+			probes[con.to_node].memory = memories[con.from_node]
+	for pname in probes:
+		probes[pname].update_data()
+
+
+# START OF TESTER CODE
+
+func test_circuit():
+	if circuit.data.title.is_empty():
+		G.warn_user("No circuit title has been set.")
+	else:
+		var test_file = circuit.data.title + ".tst"
+		# Find dir containing these files
+		var result = G.find_file(G.settings.test_dir, test_file)
+		if result.error:
+			G.warn_user("File not found: " + test_file)
+		else:
+			var compare_file = result.path + "/" + circuit.data.title + ".cmp"
+			if FileAccess.file_exists(compare_file):
+				compare_file = FileAccess.open(compare_file, FileAccess.READ)
+				if compare_file:
+					compare_lines = compare_file.get_as_text().replace("\r", "").split("\n", false)
+				tester = TestCircuit.new()
+			var io_nodes = tester.get_io_nodes(get_children(), get_connection_list())
+			var file = FileAccess.open(result.path + "/" + test_file, FileAccess.READ)
+			if file:
+					var test_spec = file.get_as_text()
+					test_runner.set_title(test_file)
+					tester.init_tests(test_spec, io_nodes)
+					reset_test_environment()
+					# Make panel fit the width of the test output
+					for task in tester.tasks:
+						if task[0] == "output-list":
+							var width = task[1].length() * 8.2
+							if test_runner.size.x < width:
+								test_runner.size.x = width
+					test_runner.open()
+			else:
+				G.warn_user("Error opening file: " + test_file)
 
 
 func _on_test_runner_reset():
@@ -711,30 +738,4 @@ func add_compared_string(out, comp, text_area: RichTextLabel):
 		text_area.pop()
 	text_area.add_text("\n")
 
-
-func _on_scroll_offset_changed(offset):
-	if last_scroll_offset != offset and watch_for_scroll_offset_change:
-		emit_signal("changed")
-	last_scroll_offset = offset
-	watch_for_scroll_offset_change = true
-
-
-func circuit_changed(emit = true):
-	if emit:
-		emit_signal("changed")
-	# Update MemoryProbe links
-	var probes = {}
-	var memories = {}
-	for node in get_children():
-		if node is MemoryProbe:
-			node.memory = null
-			probes[node.name] = node
-		if node is BaseMemory:
-			node.probes.clear()
-			memories[node.name] = node
-	for con in get_connection_list():
-		if memories.has(con.from_node) and probes.has(con.to_node):
-			memories[con.from_node].probes.append(probes[con.to_node])
-			probes[con.to_node].memory = memories[con.from_node]
-	for pname in probes:
-		probes[pname].update_data()
+# END OF TESTER CODE

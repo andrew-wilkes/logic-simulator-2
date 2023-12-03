@@ -6,8 +6,8 @@
 [node name="Not" type="GraphNode"]
 offset_left = 32.0
 offset_top = 22.0
-offset_right = 170.0
-offset_bottom = 143.0
+offset_right = 146.0
+offset_bottom = 113.0
 mouse_filter = 1
 theme_override_constants/separation = 5
 title = " Not"
