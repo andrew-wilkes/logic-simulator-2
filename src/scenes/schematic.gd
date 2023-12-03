@@ -156,9 +156,9 @@ func duplicate_selected_parts():
 		new_part.position_offset += offset
 		new_part.data = part.data.duplicate()
 		new_part.part_type = part.part_type
-		new_part.setup()
 		new_part.controller = self
 		add_child(new_part)
+		new_part.setup()
 		new_part.name = part.part_type + circuit.get_next_id()
 		part_map[part.name] = new_part.name
 	# Duplicate connections between duplicated parts
@@ -191,6 +191,7 @@ func add_part_by_name(part_name):
 func add_part(part):
 	part.controller = self
 	add_child(part)
+	part.setup()
 	part.part_type = part.name
 	part.position_offset = PART_INITIAL_OFFSET + scroll_offset / zoom \
 		+ part_initial_offset_delta
@@ -253,6 +254,7 @@ func load_circuit(file_name):
 	if load_result == OK:
 		setup_graph()
 		add_parts()
+		await get_tree().process_frame
 		add_connections()
 		set_all_io_connection_colors()
 		colorize_pins()

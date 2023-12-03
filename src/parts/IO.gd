@@ -48,13 +48,12 @@ func setup():
 
 func set_pins():
 	# num_wires == number of bits, the bus is seperate
-	var num_wires = get_child_count() - 4
+	var num_wires = get_input_port_count() - 1
 	var to_add = data.num_wires - num_wires
 	if to_add > 0:
 		for n in to_add:
 			var wire = $Wire1.duplicate()
 			add_child(wire)
-			wire.name = "Wire" + str(n + 2)
 		# Move Tag to the end
 		var tag_node = $Tag
 		remove_child(tag_node)
@@ -64,6 +63,7 @@ func set_pins():
 			controller.removing_slot(self, num_wires - n)
 			get_child(-2).queue_free()
 			remove_child(get_child(-2))
+	await get_tree().process_frame
 	set_pin_colors()
 	set_labels()
 	# Shrinking leaves a gap at the bottom
@@ -74,23 +74,27 @@ func set_labels():
 	for n in data.labels.size():
 		if n > data.num_wires:
 			break
-		get_child(2 + n).text = data.labels[n]
+		get_child(n - data.num_wires - 2).text = data.labels[n]
 
 
 func set_pin_colors():
-	for idx in range(2, data.num_wires + 3):
-		set_slot_enabled_left(idx, true)
-		set_slot_enabled_right(idx, true)
-		if idx > 2:
-			set_slot_color_left(idx, data.wire_color)
-			set_slot_color_right(idx, data.wire_color)
-		else:
-			set_slot_color_left(idx, data.bus_color)
-			set_slot_color_right(idx, data.bus_color)
-	# Ensure that the Tag doesn't have pins
-	# !!! Check if this is related to the extra Tag bug !!!
-	set_slot_enabled_left(data.num_wires + 3, false)
-	set_slot_enabled_right(data.num_wires + 3, false)
+	var is_wire = false
+	var idx = 0
+	for node in get_children():
+		if node is Label:
+			set_slot_enabled_left(idx, true)
+			set_slot_enabled_right(idx, true)
+			if is_wire:
+				set_slot_color_left(idx, data.wire_color)
+				set_slot_color_right(idx, data.wire_color)
+			else:
+				set_slot_color_left(idx, data.bus_color)
+				set_slot_color_right(idx, data.bus_color)
+				is_wire = true
+		if node.name == "Tag":
+			set_slot_enabled_left(idx, false)
+			set_slot_enabled_right(idx, false)
+		idx += 1
 
 
 func _on_text_submitted(new_text):
