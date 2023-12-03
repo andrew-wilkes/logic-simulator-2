@@ -1,6 +1,6 @@
 class_name Circuit
 
-extends Object
+extends RefCounted
 
 var data = {
 	title = "",

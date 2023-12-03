@@ -9,6 +9,7 @@ signal title_changed(text)
 const PART_INITIAL_OFFSET = Vector2(50, 50)
 
 enum { LEFT, RIGHT }
+enum TEST { STEPPABLE, PLAYING, DONE }
 
 var circuit: Circuit
 var selected_parts = []
@@ -19,7 +20,7 @@ var tester
 var test_step = 0
 var test_output_line = 0
 var compare_lines = []
-var test_playing = false
+var test_state = TEST.STEPPABLE
 var last_scroll_offset = Vector2.ZERO
 var watch_for_scroll_offset_change = true
 var start_time = 0.0
@@ -598,6 +599,7 @@ func reset_test_environment():
 	test_runner.set_text("")
 	test_runner.text_area.clear() # Clear bbcode tags
 	tester.reset()
+	test_state = TEST.STEPPABLE
 
 
 func reset_parts():
@@ -607,6 +609,24 @@ func reset_parts():
 
 
 func _on_test_runner_step():
+	if test_state == TEST.STEPPABLE:
+		run_test()
+
+
+func _on_test_runner_play():
+	if test_state != TEST.DONE:
+		test_state = TEST.PLAYING
+		start_time = Time.get_ticks_msec()
+		set_process(true)
+
+
+func _on_test_runner_stop():
+	if test_state != TEST.DONE:
+		test_state = TEST.STEPPABLE
+		set_process(false)
+
+
+func run_test():
 	busy = true
 	while test_step < tester.tasks.size():
 		reset_race_counters()
@@ -649,24 +669,14 @@ func _on_test_runner_step():
 		if OS.is_debug_build():
 			print("Run time: %dms" % [Time.get_ticks_msec() - start_time])
 		test_runner.text_area.add_text("DONE")
-		test_playing = false
+		test_state = TEST.DONE
 		set_process(false)
-
-
-func _on_test_runner_play():
-	start_time = Time.get_ticks_msec()
-	test_playing = true
-	set_process(true)
-
-
-func _on_test_runner_stop():
-	test_playing = false
 
 
 func _process(delta):
 	frame_count -= 1
-	if frame_count < 0 and test_playing and not busy:
-		_on_test_runner_step()
+	if frame_count < 0 and test_state == TEST.PLAYING and not busy:
+		run_test()
 		frame_count = G.settings.tester_speed / delta / 60.0
 
 
@@ -700,11 +710,6 @@ func add_compared_string(out, comp, text_area: RichTextLabel):
 	if red or green:
 		text_area.pop()
 	text_area.add_text("\n")
-
-
-func _on_test_runner_hidden():
-	if tester:
-		tester.free()
 
 
 func _on_scroll_offset_changed(offset):

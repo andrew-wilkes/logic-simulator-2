@@ -3,7 +3,7 @@ class_name TestCircuit
 # This class is used to test cicuits by the user when running the software
 # Tests are described in .tst files in the www.nand2tetris.org format
 
-extends Node
+extends RefCounted
 
 const CLOCK_PIN = "clk"
 const LOOP_TIME_LIMIT = 10000 # ms

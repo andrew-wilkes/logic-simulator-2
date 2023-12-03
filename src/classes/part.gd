@@ -15,7 +15,7 @@ enum { A,B,C,D }
 # Using a high threshold should be faster than introducing delays in the part
 # outputs.
 const RACE_COUNT_THRESHOLD = 128
-const DEBUG = true
+const DEBUG = false
 const FLIP_SIDES = [RIGHT, LEFT]
 const IN = 0
 const OUT = 0
