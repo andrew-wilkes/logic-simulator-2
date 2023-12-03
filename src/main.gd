@@ -42,8 +42,8 @@ func tool_action(idx):
 				$LoadHDL.current_dir = G.settings.test_dir
 			$LoadHDL.popup_centered()
 
-#### FILE CODE ####
 
+#region File Code
 func _on_save_button_pressed():
 	do_action(SAVE)
 
@@ -123,11 +123,10 @@ func _on_save_dialog_canceled():
 
 func _on_load_dialog_canceled():
 	unfocus()
+#endregion
 
-#### /FILE CODE ####
 
-#### HOT KEY CODE ####
-
+#region Hot Key Code
 func _unhandled_key_input(event: InputEvent):
 	if event.pressed:
 		match event.keycode:
@@ -185,8 +184,7 @@ func _on_confirm_confirmed():
 
 func quit():
 	get_tree().quit()
-
-#### /QUIT CODE ####
+#endregion
 
 
 func _on_tools_button_pressed():

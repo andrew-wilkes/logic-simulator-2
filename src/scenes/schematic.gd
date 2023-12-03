@@ -578,8 +578,7 @@ func circuit_changed(emit = true):
 		probes[pname].update_data()
 
 
-# START OF TESTER CODE
-
+#region Tester Code
 func test_circuit():
 	if circuit.data.title.is_empty():
 		G.warn_user("No circuit title has been set.")
@@ -737,5 +736,4 @@ func add_compared_string(out, comp, text_area: RichTextLabel):
 	if red or green:
 		text_area.pop()
 	text_area.add_text("\n")
-
-# END OF TESTER CODE
+#endregion
