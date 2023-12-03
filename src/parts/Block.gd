@@ -28,6 +28,14 @@ func _init():
 	data["circuit_file"] = ""
 
 
+func _ready():
+	super() # It's easy to forget to call the parent _ready code to add the Tag etc.
+	block_setup()
+	set_slots(max(input_pin_count, output_pin_count) - 1)
+	configure_pins()
+	reset()
+
+
 func block_setup(_file_chain = []):
 	file_chain = _file_chain
 	circuit = Circuit.new()
@@ -82,17 +90,30 @@ func block_setup(_file_chain = []):
 	add_parts()
 
 
-func _ready():
-	super() # It's easy to forget to call the parent _ready code to add the Tag etc.
-	block_setup()
-	set_slots(max(input_pin_count, output_pin_count))
-	configure_pins()
-	reset()
+func set_slots(to_add):
+	# Text is added later if there is a pin
+	$Slot1.get_child(0).text = ""
+	$Slot1.get_child(1).text = ""
+	if to_add > 0:
+		for n in to_add:
+			var slot = $Slot1.duplicate()
+			slot.name = "Slot" + str(n + 2)
+			add_child(slot)
+		# Move Tag to the end
+		var tag_node = $Tag
+		remove_child(tag_node)
+		add_child(tag_node)
 
 
 func configure_pins():
 	clear_all_slots()
-	var slot_idx = 1
+	var slot1 = 0
+	# Find Slot1
+	for  node in get_children():
+		if node.name == "Slot1":
+			break
+		slot1 += 1
+	var slot_idx = slot1
 	for input in inputs:
 		var label_idx = 0
 		set_slot_enabled_left(slot_idx, true)
@@ -110,7 +131,7 @@ func configure_pins():
 				set_slot_type_left(slot_idx, WIRE_TYPE)
 				set_slot_color_left(slot_idx, wire_color)
 		slot_idx += 1
-	slot_idx = 1
+	slot_idx = slot1
 	for output in outputs:
 		var label_idx = 0
 		set_slot_enabled_right(slot_idx, true)
@@ -144,30 +165,6 @@ func is_output(part):
 		if con.from_node == part.node_name:
 			return false
 	return true
-
-
-func set_slots(num_slots):
-	var num_pins = get_child_count() - 2
-	var to_add = num_slots - num_pins
-	# Text is added later if there is a pin
-	$Slot1.get_child(0).text = ""
-	$Slot1.get_child(1).text = ""
-	if to_add > 0:
-		for n in to_add:
-			var slot = $Slot1.duplicate()
-			slot.name = "Slot" + str(n + 2)
-			add_child(slot)
-		# Move Tag to the end
-		var tag_node = $Tag
-		remove_child(tag_node)
-		add_child(tag_node)
-	if to_add < 0:
-		for n in -to_add:
-			var node_to_remove = get_child(-2 - n)
-			remove_child(node_to_remove)
-			node_to_remove.queue_free()
-	# Shrinking leaves a gap at the bottom, so fix it with:
-	size = Vector2.ZERO # Fit to the new size automatically
 
 
 func add_parts():

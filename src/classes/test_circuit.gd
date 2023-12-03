@@ -63,7 +63,10 @@ func get_label_text(part, side, port):
 		part.get_output_port_slot(port)
 	var node = part.get_child(slot) # There may be a label or a container of nodes
 	if node is Container:
-		node = node.get_child(side if side == 0 else -1) # Get the left-most or right-most child that should be a label
+		if side == 0:
+			node = node.get_child(0)
+		else:
+			node = node.get_child(-1)
 	return node.text
 
 

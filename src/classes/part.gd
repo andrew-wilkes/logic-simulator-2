@@ -49,7 +49,7 @@ func _ready():
 	if $Tag and $Tag.visible:
 		$Tag.connect("text_changed", _on_tag_text_changed)
 	change_notification_timer = Timer.new()
-	get_child(0).add_child(change_notification_timer)
+	get_child(-1).add_child(change_notification_timer)
 	change_notification_timer.one_shot = true
 	change_notification_timer.connect("timeout", _on_change_notification_timer_timeout)
 	set("theme_override_constants/separation", 10)
