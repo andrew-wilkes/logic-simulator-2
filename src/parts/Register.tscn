@@ -57,6 +57,7 @@ slot/4/draw_stylebox = true
 script = ExtResource("3_e4ec3")
 
 [node name="Value" type="Label" parent="."]
+modulate = Color(0, 1, 0, 1)
 layout_mode = 2
 text = "0x00"
 horizontal_alignment = 1

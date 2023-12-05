@@ -34,6 +34,7 @@ func _on_address_text_submitted(new_text):
 	data.address = get_value_from_text(new_text)
 	display_address(data.address)
 	update_data()
+	controller.emit_signal("changed")
 
 
 func display_address(value):

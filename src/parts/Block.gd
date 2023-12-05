@@ -55,7 +55,7 @@ func block_setup(_file_chain = []):
 	if load_result != OK:
 		G.warning.open("The circuit block data from %s was invalid!" % [data.circuit_file.get_file()])
 		return
-	if data.wiring_hash == 0: # Set this for new blocks
+	if data.get("wiring_hash", 0) == 0: # Set this for new blocks
 		data.wiring_hash = circuit.data.connections.hash()
 	# Every circuit opened as a block is added to the available parts list
 	var cname = circuit.data.title

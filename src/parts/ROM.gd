@@ -66,7 +66,7 @@ func evaluate_bus_output_value(side, port, _value):
 
 
 func set_output_data():
-	var address = pins[[LEFT, 0]] % mem_size
+	var address = pins.get([LEFT, 0], 0) % mem_size
 	if show_display:
 		%Address.text = get_display_hex_value(address)
 		%Data.text = get_display_hex_value(values[address])
@@ -110,4 +110,5 @@ func load_data(file_path):
 			values[idx / 2] = bytes[idx] + 256 * bytes[idx + 1]
 			num_words += 1
 	G.notify_user(str(num_words) + " words of data was loaded.")
+	set_output_data()
 	update_probes()

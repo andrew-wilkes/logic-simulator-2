@@ -63,6 +63,7 @@ text = "Data:"
 
 [node name="Data" type="Label" parent="HB2"]
 unique_name_in_owner = true
+modulate = Color(0, 1, 0, 1)
 layout_mode = 2
 size_flags_horizontal = 3
 text = "0x0000"

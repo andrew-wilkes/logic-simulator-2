@@ -42,6 +42,14 @@ visible = false
 offset_top = 0.0
 offset_bottom = 369.0
 
+[node name="C2" type="CanvasLayer" parent="."]
+
+[node name="Check" type="CheckButton" parent="C2"]
+offset_left = 1043.0
+offset_top = 49.0
+offset_right = 1087.0
+offset_bottom = 73.0
+
 [connection signal="scroll_offset_changed" from="." to="." method="_on_scroll_offset_changed"]
 [connection signal="play" from="C/TestRunner" to="." method="_on_test_runner_play"]
 [connection signal="reset" from="C/TestRunner" to="." method="_on_test_runner_reset"]

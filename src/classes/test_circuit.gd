@@ -3,7 +3,7 @@ class_name TestCircuit
 # This class is used to test cicuits by the user when running the software
 # Tests are described in .tst files in the www.nand2tetris.org format
 
-extends RefCounted
+extends Node
 
 const CLOCK_PIN = "clk"
 const LOOP_TIME_LIMIT = 10000 # ms
@@ -18,11 +18,11 @@ var outputs
 var repetitive_tasks = []
 var repeat_counter = 0
 var repeat_decrement = 1
-var repetitive_task_idx = 0
+var repetitive_task_idx = -1
 var time = 0
 var tick = false
-var while_task
 var loop_start_time = 0
+var test_step = 0
 
 func get_io_nodes(parts, connections):
 	# Inputs are unconnected pins on the left side of parts
@@ -57,7 +57,7 @@ func get_io_nodes(parts, connections):
 
 func get_label_text(part, side, port):
 	# If the part is Bus, Wire, or TriState then get the part.tag value
-	if part.part_type in ["Bus", "Wire", "TriState"]:
+	if part.part_type in ["Bus", "Wire", "TriState", "MemoryProbe"]:
 		return part.get_node("Tag").text
 	var slot = part.get_input_port_slot(port) if side == 0 else \
 		part.get_output_port_slot(port)
@@ -107,6 +107,7 @@ func process_task(task):
 		"eval":
 			get_output_values()
 		"output":
+			get_output_values()
 			set_output_result()
 		"tick", "tock":
 			tick = true if task[0] == "tick" else false
@@ -117,14 +118,21 @@ func process_task(task):
 				target[0].update_input_level(0, target[1], tick)
 			get_output_values()
 		"repeat":
-			repeat_counter = task[1]
-			repetitive_tasks = parse_spec(task[2])
-			repeat_decrement = 0
-			repetitive_task_idx = 0
 			if repeat_counter > 0:
-				repeat_decrement = 1
+				# Check if repeat should end
+				repeat_counter -= 1
+				if repeat_counter == 0:
+					repetitive_tasks.clear()
+				else:
+					# Repeat the tasks
+					test_step -= 1
+					repetitive_task_idx = 0
 			else:
-				repeat_counter = 1
+				# New repeat
+				repetitive_task_idx = 0
+				test_step -= 1
+				repeat_counter = task[1]
+				repetitive_tasks = parse_spec(task[2])
 		"while":
 			if loop_start_time == 0:
 				loop_start_time = Time.get_ticks_msec()
@@ -151,17 +159,12 @@ func process_task(task):
 					loop_start_time = 0
 					is_true = false
 			if is_true:
-				repetitive_task_idx = -1 #This is incremented after processing the current task,
-					# So we want to start from repetitive_tasks[0] on the next pass
+				repetitive_task_idx = 0
+				test_step -= 1
 				if repetitive_tasks.size() == 0:
-					while_task = task
-					repeat_counter = 1 
 					repetitive_tasks = parse_spec(task[4])
-					repeat_decrement = 0
 			else:
-				repeat_counter = 0
 				repetitive_tasks.clear()
-				while_task = null
 		"echo":
 			G.notify_user(task[1])
 
@@ -331,6 +334,7 @@ func clean_src(spec):
 
 
 func set_output_header():
+	var missing_pins = []
 	var output_formats = output_format.split(" ")
 	# Form the top line like: |   a   |   b   | out |
 	output = "|"
@@ -341,6 +345,9 @@ func set_output_header():
 		# Center align the pin name
 		var length = int(widths[0]) + int(widths[1]) + int(widths[2])
 		var pin_name = pnf[0]
+		if not inputs.has(pin_name) and not outputs.has(pin_name):
+			if pin_name not in ["time"]: # List of non-pins
+				missing_pins.append(pin_name)
 		var padsize = length - pin_name.length()
 		if padsize < 0:
 			# Trim
@@ -352,6 +359,8 @@ func set_output_header():
 			pin_name = " ".repeat(lpad) + pin_name + " ".repeat(padsize - lpad)
 		output += pin_name + "|"
 	output += "\n"
+	if missing_pins.size() > 0:
+		G.warn_user("Missing pins:\n" + "\n".join(missing_pins))
 
 
 func get_pin_list():
@@ -381,9 +390,7 @@ func set_output_result():
 		if pnf[0] == "time":
 			value = get_tick_tock_str()
 		else:
-			if not pin_states.has(pnf[0]):
-				G.warn_user("Missing pin: " + pnf[0])
-			value =  pin_states.get(pnf[0], 0)
+			value = pin_states.get(pnf[0], 0)
 			# The case for high Z
 			if value < - 0x10000:
 				output += "*".repeat(widths[0] + widths[1] + widths[2]) + "|"

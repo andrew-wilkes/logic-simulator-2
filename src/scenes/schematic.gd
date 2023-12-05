@@ -17,7 +17,6 @@ var part_initial_offset_delta = Vector2.ZERO
 var parent_file = ""
 var indicate_logic_levels = true
 var tester
-var test_step = 0
 var test_output_line = 0
 var compare_lines = []
 var test_state = TEST.STEPPABLE
@@ -29,6 +28,7 @@ var frame_count = 0
 @onready var test_runner = $C/TestRunner
 
 func _ready():
+	set_process(false)
 	circuit = Circuit.new()
 	node_deselected.connect(deselect_part)
 	node_selected.connect(select_part)
@@ -348,6 +348,7 @@ func setup_graph():
 	zoom = circuit.data.zoom
 	var off = circuit.data.scroll_offset
 	scroll_offset = Vector2(off[0], off[1])
+	print(scroll_offset)
 	minimap_enabled = circuit.data.minimap_enabled
 
 
@@ -620,7 +621,7 @@ func _on_test_runner_reset():
 func reset_test_environment():
 	reset_parts()
 	set_all_connection_colors()
-	test_step = 0
+	tester.test_step = 0
 	test_output_line = 0
 	test_runner.set_text("")
 	test_runner.text_area.clear() # Clear bbcode tags
@@ -653,50 +654,40 @@ func _on_test_runner_stop():
 
 
 func run_test():
+	$C2/Check.button_pressed = not $C2/Check.button_pressed
 	busy = true
-	while test_step < tester.tasks.size():
+	while true:
+		if tester.test_step == tester.tasks.size():
+			if OS.is_debug_build():
+				print("Run time: %dms" % [Time.get_ticks_msec() - start_time])
+			test_runner.text_area.add_text("DONE")
+			test_state = TEST.DONE
+			set_process(false)
+			break
 		reset_race_counters()
 		var task
-		if tester.repeat_counter > 0:
-			if tester.repetitive_task_idx == tester.repetitive_tasks.size():
-				tester.repetitive_task_idx = 0
-				if tester.while_task:
-					# Repeat the while task and break out of the outer while loop
-					tester.process_task(tester.while_task)
-					break
+		if tester.repetitive_task_idx >= 0:
 			task = tester.repetitive_tasks[tester.repetitive_task_idx]
-		else:
-			task = tester.tasks[test_step]
-		tester.process_task(task)
-		if task[0] == "output-list":
-			test_runner.text_area.add_text(tester.output)
-			test_output_line += 1
-		elif task[0] == "output":
-			if test_output_line < compare_lines.size():
-				add_compared_string(tester.output, compare_lines[test_output_line], test_runner.text_area)
-				test_output_line += 1
-			else:
-				test_runner.text_area.add_text(tester.output)
-			break
-		if tester.repeat_counter > 0:
-			tester.repeat_counter -= tester.repeat_decrement
 			tester.repetitive_task_idx += 1
+			if tester.repetitive_task_idx == tester.repetitive_tasks.size():
+				tester.repetitive_task_idx = -1
+				break
 		else:
-			test_step += 1
-	if tester.repeat_counter > 0:
-		tester.repeat_counter -= tester.repeat_decrement
-		tester.repetitive_task_idx += 1
-		if tester.repeat_counter == 0:
-			tester.repetitive_tasks.clear()
-	else:
-		test_step += 1
+			task = tester.tasks[tester.test_step]
+			tester.test_step += 1
+		tester.process_task(task)
+		match task[0]:
+			"output-list":
+				test_runner.text_area.add_text(tester.output)
+				test_output_line += 1
+			"output":
+				if test_output_line < compare_lines.size():
+					add_compared_string(tester.output, compare_lines[test_output_line], test_runner.text_area)
+					test_output_line += 1
+				else:
+					test_runner.text_area.add_text(tester.output)
+				break
 	busy = false
-	if test_step == tester.tasks.size():
-		if OS.is_debug_build():
-			print("Run time: %dms" % [Time.get_ticks_msec() - start_time])
-		test_runner.text_area.add_text("DONE")
-		test_state = TEST.DONE
-		set_process(false)
 
 
 func _process(delta):
