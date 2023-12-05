@@ -23,6 +23,7 @@ func _on_chars_text_changed(new_text):
 		if DEBUG:
 			print(char_code)
 		update_output_value(RIGHT, OUT, char_code)
+		clear_message()
 	last_text_length = length
 
 
@@ -35,6 +36,10 @@ func _unhandled_key_input(event):
 func show_message(msg):
 	$Message.text = msg
 	await get_tree().create_timer(5.0).timeout
+	clear_message()
+
+
+func clear_message():
 	$Message.text = ""
 	size.x = 0
 
