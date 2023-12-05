@@ -44,13 +44,23 @@ layout_mode = 2
 [node name="Chars" type="LineEdit" parent="HB"]
 layout_mode = 2
 size_flags_horizontal = 3
-placeholder_text = ">"
+context_menu_enabled = false
+virtual_keyboard_enabled = false
+shortcut_keys_enabled = false
+middle_mouse_paste_enabled = false
+selecting_enabled = false
+deselect_on_focus_loss_enabled = false
+drag_and_drop_selection_enabled = false
 
 [node name="L2" type="Label" parent="HB"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "out"
 horizontal_alignment = 2
+
+[node name="BlinkTimer" type="Timer" parent="HB"]
+wait_time = 0.65
+autostart = true
 
 [node name="Message" type="Label" parent="."]
 modulate = Color(0, 1, 0, 1)
@@ -63,3 +73,4 @@ expand_to_text_length = true
 
 [connection signal="tree_exiting" from="." to="." method="_on_tree_exiting"]
 [connection signal="text_changed" from="HB/Chars" to="." method="_on_chars_text_changed"]
+[connection signal="timeout" from="HB/BlinkTimer" to="." method="_on_blink_timer_timeout"]

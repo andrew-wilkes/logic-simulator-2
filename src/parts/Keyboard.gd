@@ -3,6 +3,7 @@ class_name Keyboard
 extends Part
 
 var last_text_length = 0
+var show_placeholder = false
 
 func _init():
 	order = 0
@@ -46,3 +47,11 @@ func clear_message():
 
 func _on_tree_exiting():
 	G.message_panel = null
+
+
+func _on_blink_timer_timeout():
+	show_placeholder = !show_placeholder
+	if show_placeholder and not $HB/Chars.has_focus():
+		$HB/Chars.placeholder_text = ">"
+	else:
+		$HB/Chars.placeholder_text = ""
