@@ -66,7 +66,6 @@ func add_parts_to_graph():
 	var y = GAP
 	var row_height = 0
 	for part_name in Parts.names:
-		prints("Added:", part_name)
 		var part: GraphNode = Parts.scenes[part_name].instantiate()
 		part.position_offset = Vector2(x, y)
 		part.controller = self

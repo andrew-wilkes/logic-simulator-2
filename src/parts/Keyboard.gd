@@ -9,6 +9,12 @@ func _init():
 	category = UTILITY
 
 
+func _ready():
+	super()
+	# This node will display echo messages from tester
+	G.message_panel = self
+
+
 func _on_chars_text_changed(new_text):
 	var length = new_text.length()
 	if length > last_text_length:
@@ -24,3 +30,14 @@ func _on_chars_text_changed(new_text):
 func _unhandled_key_input(event):
 	if not event.pressed:
 		update_output_value(RIGHT, OUT, 0)
+
+
+func show_message(msg):
+	$Message.text = msg
+	await get_tree().create_timer(5.0).timeout
+	$Message.text = ""
+	size.x = 0
+
+
+func _on_tree_exiting():
+	G.message_panel = null

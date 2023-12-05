@@ -85,9 +85,6 @@ value = 10.0
 layout_mode = 2
 text = "Close"
 
-[node name="LineEdit" type="LineEdit" parent="M/VB/HB"]
-layout_mode = 2
-
 [connection signal="gui_input" from="M" to="." method="_on_margin_container_gui_input"]
 [connection signal="mouse_entered" from="M" to="." method="_on_margin_container_mouse_entered"]
 [connection signal="mouse_exited" from="M" to="." method="_on_margin_container_mouse_exited"]

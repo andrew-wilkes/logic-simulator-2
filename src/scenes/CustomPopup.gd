@@ -35,10 +35,10 @@ func _on_margin_container_mouse_entered():
 	sizing_x = false
 	sizing_y = false
 	if get_local_mouse_position().x > size.x - $M.get("theme_override_constants/margin_right"):
-		mouse_default_cursor_shape = Control.CURSOR_HSIZE
+		mouse_default_cursor_shape = CURSOR_HSIZE
 		sizing_x = true
 	elif get_local_mouse_position().y > size.y - $M.get("theme_override_constants/margin_bottom"):
-		mouse_default_cursor_shape = Control.CURSOR_VSIZE
+		mouse_default_cursor_shape = CURSOR_VSIZE
 		sizing_y = true
 
 
@@ -55,11 +55,12 @@ func _on_margin_container_gui_input(event):
 
 
 func _on_title_mouse_entered():
-	mouse_default_cursor_shape = Control.CURSOR_CROSS
+	mouse_default_cursor_shape = CURSOR_CROSS
 
 
 func _on_title_mouse_exited():
-	mouse_default_cursor_shape = CURSOR_ARROW
+	# This causes crashes if placed here:
+	# mouse_default_cursor_shape = CURSOR_ARROW
 	initial_mouse_position = Vector2.ZERO
 
 

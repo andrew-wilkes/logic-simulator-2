@@ -4,6 +4,7 @@ extends Node
 
 var settings
 var warning
+var message_panel
 
 func _init():
 	settings = Settings.new()

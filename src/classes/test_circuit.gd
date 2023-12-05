@@ -166,7 +166,8 @@ func process_task(task):
 			else:
 				repetitive_tasks.clear()
 		"echo":
-			G.notify_user(task[1])
+			if G.message_panel:
+				G.message_panel.show_message(task[1])
 
 
 func get_pin_value(pin: String):

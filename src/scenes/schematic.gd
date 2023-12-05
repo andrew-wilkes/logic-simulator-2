@@ -654,7 +654,6 @@ func _on_test_runner_stop():
 
 
 func run_test():
-	$C2/Check.button_pressed = not $C2/Check.button_pressed
 	busy = true
 	while true:
 		if tester.test_step == tester.tasks.size():
