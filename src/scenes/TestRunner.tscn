@@ -45,18 +45,22 @@ layout_mode = 2
 theme_override_constants/separation = 10
 
 [node name="Step" type="Button" parent="M/VB/HB"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Step"
 
 [node name="Play" type="Button" parent="M/VB/HB"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Play"
 
 [node name="Stop" type="Button" parent="M/VB/HB"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Stop"
 
 [node name="Reset" type="Button" parent="M/VB/HB"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Reset"
 

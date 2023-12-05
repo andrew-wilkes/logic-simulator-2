@@ -5,6 +5,8 @@ signal stop()
 signal play()
 signal reset()
 
+enum TEST { STEPPABLE, PLAYING, DONE }
+
 func _ready():
 	%Alpha.value = G.settings.tester_alpha * 100.0
 	%Speed.value = G.settings.tester_speed
@@ -34,3 +36,22 @@ func _on_alpha_value_changed(value):
 
 func _on_speed_value_changed(value):
 	G.settings.tester_speed = value
+
+
+func set_button_status(state):
+	match state:
+		G.TEST_STATUS.STEPPABLE:
+			%Step.disabled = false
+			%Play.disabled = false
+			%Stop.disabled = true
+			%Reset.disabled = false
+		G.TEST_STATUS.PLAYING:
+			%Step.disabled = true
+			%Play.disabled = true
+			%Stop.disabled = false
+			%Reset.disabled = false
+		G.TEST_STATUS.DONE:
+			%Step.disabled = true
+			%Play.disabled = true
+			%Stop.disabled = true
+			%Reset.disabled = false

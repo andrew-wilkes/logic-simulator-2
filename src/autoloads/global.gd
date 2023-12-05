@@ -2,6 +2,8 @@ extends Node
 
 # Autoload with class name G
 
+enum TEST_STATUS { STEPPABLE, PLAYING, DONE }
+
 var settings
 var warning
 var message_panel

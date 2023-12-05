@@ -9,7 +9,6 @@ signal title_changed(text)
 const PART_INITIAL_OFFSET = Vector2(50, 50)
 
 enum { LEFT, RIGHT }
-enum TEST { STEPPABLE, PLAYING, DONE }
 
 var circuit: Circuit
 var selected_parts = []
@@ -19,7 +18,7 @@ var indicate_logic_levels = true
 var tester
 var test_output_line = 0
 var compare_lines = []
-var test_state = TEST.STEPPABLE
+var test_state = G.TEST_STATUS.STEPPABLE
 var last_scroll_offset = Vector2.ZERO
 var watch_for_scroll_offset_change = true
 var start_time = 0.0
@@ -627,7 +626,8 @@ func reset_test_environment():
 	test_runner.set_text("")
 	test_runner.text_area.clear() # Clear bbcode tags
 	tester.reset()
-	test_state = TEST.STEPPABLE
+	test_state = G.TEST_STATUS.STEPPABLE
+	test_runner.set_button_status(test_state)
 
 
 func reset_parts():
@@ -637,20 +637,23 @@ func reset_parts():
 
 
 func _on_test_runner_step():
-	if test_state == TEST.STEPPABLE:
+	if test_state == G.TEST_STATUS.STEPPABLE:
+		test_runner.set_button_status(test_state)
 		run_test()
 
 
 func _on_test_runner_play():
-	if test_state != TEST.DONE:
-		test_state = TEST.PLAYING
+	if test_state != G.TEST_STATUS.DONE:
+		test_state = G.TEST_STATUS.PLAYING
+		test_runner.set_button_status(test_state)
 		start_time = Time.get_ticks_msec()
 		set_process(true)
 
 
 func _on_test_runner_stop():
-	if test_state != TEST.DONE:
-		test_state = TEST.STEPPABLE
+	if test_state != G.TEST_STATUS.DONE:
+		test_state = G.TEST_STATUS.STEPPABLE
+		test_runner.set_button_status(test_state)
 		set_process(false)
 
 
@@ -662,7 +665,8 @@ func run_test():
 			if OS.is_debug_build():
 				print("Run time: %dms" % [Time.get_ticks_msec() - start_time])
 			test_runner.text_area.add_text("DONE")
-			test_state = TEST.DONE
+			test_state = G.TEST_STATUS.DONE
+			test_runner.set_button_status(test_state)
 			set_process(false)
 			break
 		reset_race_counters()
@@ -697,7 +701,7 @@ func run_test():
 
 func _process(delta):
 	frame_count -= 1
-	if frame_count < 0 and test_state == TEST.PLAYING and not busy:
+	if frame_count < 0 and test_state == G.TEST_STATUS.PLAYING and not busy:
 		run_test()
 		frame_count = G.settings.tester_speed / delta / 60.0
 
