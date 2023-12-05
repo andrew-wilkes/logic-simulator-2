@@ -88,6 +88,7 @@ func reset():
 
 
 func process_task(task):
+	print(task[0])
 	match task[0]:
 		"output-list":
 			output_format = task[1]

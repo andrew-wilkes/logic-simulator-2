@@ -347,8 +347,9 @@ func setup_graph():
 	snapping_enabled = circuit.data.snapping_enabled
 	zoom = circuit.data.zoom
 	var off = circuit.data.scroll_offset
+	# Can't seem to set the scroll_offset exactly
 	scroll_offset = Vector2(off[0], off[1])
-	print(scroll_offset)
+	#prints(scroll_offset, off, zoom, circuit.data.zoom)
 	minimap_enabled = circuit.data.minimap_enabled
 
 
@@ -655,6 +656,7 @@ func _on_test_runner_stop():
 
 func run_test():
 	busy = true
+	var break_out = false
 	while true:
 		if tester.test_step == tester.tasks.size():
 			if OS.is_debug_build():
@@ -670,7 +672,9 @@ func run_test():
 			tester.repetitive_task_idx += 1
 			if tester.repetitive_task_idx == tester.repetitive_tasks.size():
 				tester.repetitive_task_idx = -1
-				break
+				# Break out after completing the pending task to cause
+				# the next task to be the while or repeat task
+				break_out = true
 		else:
 			task = tester.tasks[tester.test_step]
 			tester.test_step += 1
@@ -686,6 +690,8 @@ func run_test():
 				else:
 					test_runner.text_area.add_text(tester.output)
 				break
+		if break_out:
+			break
 	busy = false
 
 
