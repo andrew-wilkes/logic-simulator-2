@@ -112,3 +112,4 @@ func load_data(file_path):
 	G.notify_user(str(num_words) + " words of data was loaded.")
 	set_output_data()
 	update_probes()
+	controller.emit_signal("changed")

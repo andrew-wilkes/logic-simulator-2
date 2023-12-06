@@ -97,7 +97,7 @@ func process_task(task):
 			# Apply input levels and values to the parts
 			var pin_name = task[1]
 			var value = get_int_from_string(task[2], false)
-			pin_states[pin_name] = "-"
+			pin_states[pin_name] = 0
 			if inputs.has(pin_name):
 				pin_states[pin_name] = value
 				var target = inputs[pin_name] # [part, port, port_type]

@@ -10,6 +10,11 @@ func _init():
 	data["address"] = 0
 
 
+func _ready():
+	super()
+	display_address(data.address)
+
+
 func _on_address_text_submitted(new_text):
 	data.address = get_value_from_text(new_text)
 	display_address(data.address)
