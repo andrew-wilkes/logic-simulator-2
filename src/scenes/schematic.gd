@@ -3,7 +3,7 @@ class_name Schematic
 extends GraphEdit
 
 signal invalid_instance(ob, note)
-signal changed
+signal changed # Something changed that needs to be part of a save in order to be re-created on load
 signal title_changed(text)
 
 const PART_INITIAL_OFFSET = Vector2(50, 50)
@@ -14,7 +14,6 @@ var circuit: Circuit
 var selected_parts = []
 var part_initial_offset_delta = Vector2.ZERO
 var parent_file = ""
-var indicate_logic_levels = true
 var tester
 var test_output_line = 0
 var compare_lines = []
@@ -24,6 +23,7 @@ var watch_for_scroll_offset_change = true
 var start_time = 0.0
 var busy = false
 var frame_count = 0
+
 @onready var test_runner = $C/TestRunner
 
 func _ready():
@@ -107,7 +107,7 @@ func deselect_part(part):
 
 func delete_selected_parts(_arr):
 	var flag_changed = false
-	# _arr only lists parts that have a close button
+	# _arr only lists parts that have a close button but none of our parts use the close button
 	for part in selected_parts:
 		if not is_object_instance_invalid(part, "delete_selected_parts"):
 			delete_selected_part(part)
@@ -208,7 +208,7 @@ func add_part(part):
 
 func add_block(file_name):
 	if file_name == parent_file:
-		G.warn_user("cannot open parent circuit as block.")
+		G.warn_user("Cannot open parent circuit as block.")
 	else:
 		var block = Parts.scenes["Block"].instantiate()
 		block.data.circuit_file = file_name
@@ -561,13 +561,16 @@ func _on_scroll_offset_changed(offset):
 func circuit_changed(emit = true):
 	if emit:
 		emit_signal("changed")
-	# Update MemoryProbe links
+	# Update Memory links
 	var probes = {}
 	var memories = {}
+	var injectors = {}
 	for node in get_children():
 		if node is MemoryProbe:
 			node.memory = null
 			probes[node.name] = node
+		if node is MemoryInjector:
+			injectors[node.name] = node
 		if node is BaseMemory:
 			node.probes.clear()
 			memories[node.name] = node
@@ -575,6 +578,8 @@ func circuit_changed(emit = true):
 		if memories.has(con.from_node) and probes.has(con.to_node):
 			memories[con.from_node].probes.append(probes[con.to_node])
 			probes[con.to_node].memory = memories[con.from_node]
+		if memories.has(con.from_node) and injectors.has(con.to_node):
+			injectors[con.to_node].memory = memories[con.from_node]
 	for pname in probes:
 		probes[pname].update_data()
 

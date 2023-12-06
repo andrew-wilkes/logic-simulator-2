@@ -59,7 +59,8 @@ func _on_title_mouse_entered():
 
 
 func _on_title_mouse_exited():
-	# This causes crashes if placed here:
+	# The following line of code will cause the program
+	# to crash when moving the mouse vertically out of the title area:
 	# mouse_default_cursor_shape = CURSOR_ARROW
 	initial_mouse_position = Vector2.ZERO
 

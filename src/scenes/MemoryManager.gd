@@ -107,6 +107,7 @@ func _on_text_submitted(new_text, node, row, col):
 		ram.values[base_addr + row * 8 + col] = value
 	update_grid()
 	node.caret_column = node.text.length()
+	ram.set_output_data()
 
 
 func int2bin(x: int) -> String:
@@ -149,6 +150,7 @@ func _on_save_button_pressed():
 
 func _on_erase_button_pressed():
 	ram.values.fill(0)
+	ram.set_output_data()
 	update_grid()
 
 

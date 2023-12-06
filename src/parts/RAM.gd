@@ -79,12 +79,15 @@ func evaluate_bus_output_value(side, port, _value):
 		set_output_data()
 
 
-func set_output_data():
-	var address = clampi(pins.get([LEFT, 1], 0), 0, max_address)
+func set_output_data(address = -1):
+	if address < 0:
+		address = clampi(pins.get([LEFT, 1], 0), 0, max_address)
 	if show_display:
 		%Address.text = get_display_hex_value(address)
 		%Data.text = get_display_hex_value(values[address])
 	update_output_value(RIGHT, OUT, values[address])
+	for probe in probes:
+		probe.update_data()
 
 
 func resize_memory(num_bytes):
