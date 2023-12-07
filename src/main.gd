@@ -11,6 +11,7 @@ func _ready():
 	%ToolsButton.get_popup().add_item("Number parts")
 	%ToolsButton.get_popup().add_item("Test circuit")
 	%ToolsButton.get_popup().add_item("Load HDL circuit")
+	%ToolsButton.get_popup().add_item("Disassembler")
 	%ToolsButton.get_popup().index_pressed.connect(tool_action)
 	schematic.changed.connect(set_current_file_color)
 	schematic.title_changed.connect(%Title.set_text)
@@ -41,7 +42,12 @@ func tool_action(idx):
 			else:
 				$LoadHDL.current_dir = G.settings.test_dir
 			$LoadHDL.popup_centered()
-
+		3:
+			if G.settings.test_dir.is_empty():
+				$LoadHack.current_dir = G.settings.last_dir
+			else:
+				$LoadHack.current_dir = G.settings.test_dir
+			$LoadHack.popup_centered()
 
 #region File Code
 func _on_save_button_pressed():
@@ -232,3 +238,11 @@ func _on_nand_text_meta_clicked(_meta):
 func _on_load_hdl_file_selected(path):
 	set_current_file("")
 	schematic.create_circuit_from_hdl(path)
+
+
+func _on_load_hack_file_selected(path):
+	var file = FileAccess.open(path, FileAccess.READ)
+	if not file:
+		G.warn_user("Error opening file: " + path)
+	else:
+		var _code = file.get_as_text()

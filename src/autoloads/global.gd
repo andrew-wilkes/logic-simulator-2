@@ -50,13 +50,22 @@ func hack_to_array_of_int(hack: String):
 	var words = []
 	var lines = hack.replace("\r", "\n").split("\n", false)
 	for num in lines:
-		var x = 0
-		if num.is_valid_int():
-			for idx in num.length():
-				x *= 2
-				x += int(num[idx])
+		var x = binary_to_int(num)
 		words.append(x)
 	return words
+
+
+func binary_to_int(num: String, negate = false):
+	var x = 0
+	if num.is_valid_int():
+		for idx in num.length():
+			x *= 2
+			x += int(num[idx])
+	if negate and x > 0x7fff: # negative?
+		x = ~x + 1
+		x &= 0xffff
+		x = -x
+	return x
 
 
 func notify_user(msg):

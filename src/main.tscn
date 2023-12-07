@@ -145,6 +145,14 @@ file_mode = 0
 access = 2
 filters = PackedStringArray("*.hdl ; HDL files")
 
+[node name="LoadHack" type="FileDialog" parent="."]
+title = "Open a File"
+size = Vector2i(900, 500)
+ok_button_text = "Open"
+file_mode = 0
+access = 2
+filters = PackedStringArray("*.hack ; Hack files")
+
 [node name="SaveDialog" type="FileDialog" parent="."]
 title = "Save Circuit"
 size = Vector2i(900, 500)
@@ -203,6 +211,7 @@ offset_bottom = 496.0
 
 [node name="AboutPanel" type="PopupPanel" parent="."]
 title = "About"
+position = Vector2i(0, 36)
 size = Vector2i(700, 500)
 visible = true
 unresizable = false
@@ -229,5 +238,7 @@ offset_bottom = 496.0
 [connection signal="file_selected" from="LoadDialog" to="." method="_on_file_dialog_file_selected"]
 [connection signal="canceled" from="LoadHDL" to="." method="_on_load_dialog_canceled"]
 [connection signal="file_selected" from="LoadHDL" to="." method="_on_load_hdl_file_selected"]
+[connection signal="canceled" from="LoadHack" to="." method="_on_load_dialog_canceled"]
+[connection signal="file_selected" from="LoadHack" to="." method="_on_load_hack_file_selected"]
 [connection signal="canceled" from="SaveDialog" to="." method="_on_save_dialog_canceled"]
 [connection signal="file_selected" from="SaveDialog" to="." method="_on_file_dialog_file_selected"]

@@ -96,7 +96,7 @@ func process_task(task):
 		"set":
 			# Apply input levels and values to the parts
 			var pin_name = task[1]
-			var value = get_int_from_string(task[2], false)
+			var value = get_int_from_string(task[2])
 			pin_states[pin_name] = 0
 			if inputs.has(pin_name):
 				pin_states[pin_name] = value
@@ -448,21 +448,14 @@ func format_value(value, format, width):
 	return value
 
 
-func get_int_from_string(s, negate = true):
+func get_int_from_string(s):
 	var x = 0
 	if s[0] == "%":
 		if s.length() > 2:
 			var num = s.right(-2)
 			match s[1]:
 				"B":
-					if num.is_valid_int():
-						for idx in num.length():
-							x *= 2
-							x += int(num[idx])
-					if negate and x > 0x7fff: # negative?
-						x = ~x + 1
-						x &= 0xffff
-						x = -x
+					x = G.binary_to_int(num, true)
 				"X":
 					if num.is_valid_hex_number():
 						x = num.hex_to_int()
