@@ -45,13 +45,13 @@ func get_dict():
 
 
 func _ready():
-	connect("gui_input", _on_gui_input)
+	gui_input.connect(_on_gui_input)
 	if $Tag and $Tag.visible:
-		$Tag.connect("text_changed", _on_tag_text_changed)
+		$Tag.text_changed.connect(_on_tag_text_changed)
 	change_notification_timer = Timer.new()
 	get_child(-1).add_child(change_notification_timer)
 	change_notification_timer.one_shot = true
-	change_notification_timer.connect("timeout", _on_change_notification_timer_timeout)
+	change_notification_timer.timeout.connect(_on_change_notification_timer_timeout)
 	set("theme_override_constants/separation", 10)
 	set("theme_override_constants/port_offset", -6)
 	set("mouse_default_cursor_shape", CURSOR_DRAG)

@@ -31,7 +31,7 @@ func _ready():
 	if get_parent().name == "root":
 		test_set_pins() # Done visually when running the scene.
 	if show_display:
-		$Value.connect("text_submitted", _on_text_submitted)
+		$Value.text_submitted.connect(_on_text_submitted)
 	#bug_fix() # Godot 4.1.stable
 
 
