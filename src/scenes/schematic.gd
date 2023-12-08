@@ -256,11 +256,11 @@ func load_circuit(file_name):
 		add_parts()
 		await get_tree().process_frame
 		add_connections()
-		set_all_io_connection_colors()
-		colorize_pins()
 		emit_signal("title_changed", circuit.data.title)
 		circuit_changed(false)
 		reset_parts()
+		set_all_io_connection_colors()
+		colorize_pins()
 	else:
 		G.warn_user("The circuit data was invalid!")
 
@@ -318,7 +318,7 @@ func set_all_connection_colors():
 
 func colorize_pins():
 	for node in get_children():
-		if node in [WireColor, BusColor, Vcc, Gnd]:
+		if node is Part and node.part_type in ["WireColor", "BusColor", "Vcc", "Gnd", "WireColorTag", "BusColorTag"]:
 			set_pin_colors(node.name, node.data.color)
 
 
@@ -428,8 +428,8 @@ func set_pin_colors(to_part, color):
 			var from_node = get_node(NodePath(con.from_node))
 			from_node.set_slot_color_right(from_node.get_output_port_slot(con.from_port), color)
 			for con2 in get_connection_list():
-				if con2.from == con.from_node and con2.from_port == con.from_port:
-					var to_node = get_node(NodePath(con2.to))
+				if con2.from_node == con.from_node and con2.from_port == con.from_port:
+					var to_node = get_node(NodePath(con2.to_node))
 					var slot = to_node.get_input_port_slot(con2.to_port)
 					to_node.set_slot_color_left(slot, color)
 

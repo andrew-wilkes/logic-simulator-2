@@ -15,7 +15,7 @@ func _ready():
 
 
 func _on_color_picker_changed_color(color):
-	data.color = color.to_rgba32()
+	data.color = color
 	set_slot_color_left(0, color)
 	controller.set_pin_colors(name, color)
 	$ColorRect.color = color
