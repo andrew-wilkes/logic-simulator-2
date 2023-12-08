@@ -245,4 +245,8 @@ func _on_load_hack_file_selected(path):
 	if not file:
 		G.warn_user("Error opening file: " + path)
 	else:
-		var _code = file.get_as_text()
+		# The file popup needs to close before opening the new popup
+		await get_tree().process_frame
+		var code = file.get_as_text()
+		$DisassemblerPanel/Disassembler.load_data(code)
+		$DisassemblerPanel.popup_centered()

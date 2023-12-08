@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://dmdfonpbxn18g"]
+[gd_scene load_steps=3 format=3 uid="uid://dmdfonpbxn18g"]
 
 [ext_resource type="Script" path="res://scenes/disassembler.gd" id="1_0r4nm"]
+[ext_resource type="FontFile" path="res://assets/fonts/mono-font.tres" id="2_aboux"]
 
 [node name="Disassembler" type="MarginContainer"]
 anchors_preset = 15
@@ -14,8 +15,12 @@ theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 script = ExtResource("1_0r4nm")
 
-[node name="SC" type="ScrollContainer" parent="."]
+[node name="Code" type="RichTextLabel" parent="."]
 layout_mode = 2
-
-[node name="Code" type="Label" parent="SC"]
-layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+focus_mode = 2
+theme_override_colors/default_color = Color(0.101961, 0.890196, 0, 1)
+theme_override_fonts/normal_font = ExtResource("2_aboux")
+selection_enabled = true
+drag_and_drop_selection_enabled = false

@@ -1,15 +1,20 @@
-[gd_scene load_steps=11 format=3 uid="uid://eohxndqnij0x"]
+[gd_scene load_steps=13 format=3 uid="uid://eohxndqnij0x"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_7i1tr"]
 [ext_resource type="PackedScene" uid="uid://cq3v3io0y1kms" path="res://scenes/schematic.tscn" id="2_qticl"]
 [ext_resource type="StyleBox" uid="uid://d2pelybf770tb" path="res://assets/ui/warning-panel.stylebox" id="3_3bxnd"]
 [ext_resource type="Script" path="res://scenes/WarningPanel.gd" id="4_u4i6y"]
 [ext_resource type="PackedScene" uid="uid://cbivksj5j1nmb" path="res://scenes/part_list.tscn" id="5_3p0gq"]
+[ext_resource type="PackedScene" uid="uid://dmdfonpbxn18g" path="res://scenes/disassembler.tscn" id="5_ihm75"]
 [ext_resource type="StyleBox" uid="uid://b4ts0xs184cax" path="res://assets/ui/popup-panel.stylebox" id="5_lbacc"]
 [ext_resource type="PackedScene" uid="uid://0xeyeylg8w8k" path="res://scenes/settings_panel.tscn" id="6_t623a"]
 [ext_resource type="PackedScene" uid="uid://b1a77l6rte3i" path="res://scenes/help_tabs.tscn" id="7_qqehi"]
 [ext_resource type="PackedScene" uid="uid://cvfhme8tmg2c5" path="res://scenes/about_tabs.tscn" id="8_2rex3"]
 [ext_resource type="PackedScene" uid="uid://k4j50g4q56tt" path="res://scenes/LearnTabs.tscn" id="8_41uro"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_605jm"]
+bg_color = Color(0.14902, 0.14902, 0.14902, 1)
+border_color = Color(0, 0, 0, 1)
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -160,6 +165,14 @@ ok_button_text = "Save"
 access = 2
 filters = PackedStringArray("*.circ ; Circuit files")
 
+[node name="DisassemblerPanel" type="PopupPanel" parent="."]
+size = Vector2i(400, 500)
+unresizable = false
+borderless = false
+theme_override_styles/panel = SubResource("StyleBoxFlat_605jm")
+
+[node name="Disassembler" parent="DisassemblerPanel" instance=ExtResource("5_ihm75")]
+
 [node name="PartListPanel" type="PopupPanel" parent="."]
 title = "Part Menu"
 position = Vector2i(0, 36)
@@ -170,8 +183,8 @@ borderless = false
 [node name="PartList" parent="PartListPanel" instance=ExtResource("5_3p0gq")]
 offset_left = 4.0
 offset_top = 4.0
-offset_right = 796.0
-offset_bottom = 596.0
+offset_right = -4.0
+offset_bottom = -4.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -194,8 +207,8 @@ borderless = false
 [node name="HelpTabs" parent="HelpPanel" instance=ExtResource("7_qqehi")]
 offset_left = 4.0
 offset_top = 4.0
-offset_right = 796.0
-offset_bottom = 496.0
+offset_right = -4.0
+offset_bottom = -4.0
 
 [node name="LearnPanel" type="PopupPanel" parent="."]
 title = "Learn"
@@ -206,14 +219,13 @@ borderless = false
 [node name="Learn" parent="LearnPanel" instance=ExtResource("8_41uro")]
 offset_left = 4.0
 offset_top = 4.0
-offset_right = 796.0
-offset_bottom = 496.0
+offset_right = -4.0
+offset_bottom = -4.0
 
 [node name="AboutPanel" type="PopupPanel" parent="."]
 title = "About"
 position = Vector2i(0, 36)
 size = Vector2i(700, 500)
-visible = true
 unresizable = false
 borderless = false
 
