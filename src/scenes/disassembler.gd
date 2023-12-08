@@ -47,7 +47,7 @@ func disassemble(hack):
 					elif a_value == 0x6000:
 						instructions.append("@KBD // 0x%04x" % [a_value])
 					else:
-						instructions.append("@%d // 0x%04x %s" % [a_value, a_value, char(next_var_symbol)])
+						instructions.append("@%d // 0x%04x var = %s" % [a_value, a_value, char(next_var_symbol)])
 						next_var_symbol += 1
 			var cinst = [ "", "M", "D", "MD", "A", "AM", "AD", "AMD" ][dest]
 			if dest > 0:
@@ -60,6 +60,7 @@ func disassemble(hack):
 	var lines = PackedStringArray()
 	address = 0
 	var format = "%-" + str(INDENT_WIDTH) + "d%s"
+	lines.append("Address Instruction") # Improve this later
 	for instr in instructions:
 		if labels.has(address):
 			lines.append(labels[address])
