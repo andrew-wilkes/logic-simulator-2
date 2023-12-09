@@ -1,5 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://bswu3v1qdhsxb"]
+[gd_scene load_steps=3 format=3 uid="uid://bswu3v1qdhsxb"]
 
+[ext_resource type="PackedScene" uid="uid://dpighqrkisujs" path="res://scenes/highlighted_text_entry.tscn" id="2_qcphq"]
 [ext_resource type="Script" path="res://parts/IO.gd" id="3_h3ig0"]
 
 [node name="IO" type="GraphNode"]
@@ -46,10 +47,9 @@ slot/3/right_icon = null
 slot/3/draw_stylebox = true
 script = ExtResource("3_h3ig0")
 
-[node name="Value" type="LineEdit" parent="."]
+[node name="Value" parent="." instance=ExtResource("2_qcphq")]
 layout_mode = 2
-text = "0x0000"
-expand_to_text_length = true
+default_color = Color(0, 1, 0, 1)
 
 [node name="Bus" type="Label" parent="."]
 layout_mode = 2

@@ -48,7 +48,9 @@ func evaluate_bus_output_value(side, port, value):
 			if address < SCREEN_START_ADDRESS: # Output 16K RAM value
 				update_output_value(RIGHT, RAM_OUT, values[value])
 			elif address >= SCREEN_START_ADDRESS and address < KEYBOARD_ADDRESS: # Pass on screen address value
+				prints()
 				update_output_value(RIGHT, RAM_SCREEN_ADDRESS, address - SCREEN_START_ADDRESS)
+				prints("Memory", address - SCREEN_START_ADDRESS, value)
 				update_output_value(RIGHT, RAM_OUT, pins.get([side, RAM_SCREEN], 0))
 			elif address == KEYBOARD_ADDRESS:
 				update_output_value(RIGHT, RAM_OUT, pins.get([side, RAM_KEYBOARD], 0))

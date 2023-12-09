@@ -37,6 +37,7 @@ func test():
 
 
 func update_value(new_val, address):
+	prints(new_val, address)
 	var old_val = values[address]
 	values[address] = new_val
 	# Convert negative integers

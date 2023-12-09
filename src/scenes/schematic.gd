@@ -381,7 +381,7 @@ func right_click_on_part(part):
 			$IOManagerPanel.popup_centered()
 		"ROM":
 			part.open_file()
-		"RAM", "Memory":
+		"RAM", "Memory", "Screen":
 			$MemoryManagerPanel/MemoryManager.open(part)
 			$MemoryManagerPanel.popup_centered()
 
