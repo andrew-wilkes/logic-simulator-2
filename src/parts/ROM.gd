@@ -25,7 +25,7 @@ func setup_instance():
 	mem_size = get_mem_size(data.size)
 	resize_memory(mem_size)
 	if not data.file.is_empty():
-		load_data(data.file)
+		load_data(data.file, false)
 
 
 func _on_size_text_submitted(new_text):
@@ -94,7 +94,7 @@ func _on_file_dialog_file_selected(file_path: String):
 	data.file = file_path
 
 
-func load_data(file_path):
+func load_data(file_path, signal_changed = true):
 	values.fill(0)
 	var num_words = 0
 	if file_path.get_extension() == "hack":
@@ -112,4 +112,5 @@ func load_data(file_path):
 	G.notify_user(str(num_words) + " words of data was loaded.")
 	set_output_data()
 	update_probes()
-	controller.emit_signal("changed")
+	if signal_changed:
+		controller.emit_signal("changed")

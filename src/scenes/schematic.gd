@@ -318,14 +318,12 @@ func set_all_connection_colors():
 
 func colorize_pins():
 	for node in get_children():
-		if node is Part and node.part_type in ["WireColor", "BusColor", "Vcc", "Gnd", "WireColorTag", "BusColorTag"]:
-			set_pin_colors(node.name, node.data.color)
-
-
-func set_all_io_connection_colors():
-	for node in get_children():
-		if node is IO:
-			set_io_connection_colors(node)
+		if node is Part:
+			match node.part_type:
+				"WireColor", "BusColor", "WireColorTag", "BusColorTag":
+					set_pin_colors(node.name, node.data.color)
+				"Vcc", "Gnd":
+					set_pin_colors(node.name, node.set_color())
 
 
 func set_low_color():
@@ -338,6 +336,12 @@ func set_high_color():
 	for node in get_children():
 		if node is Vcc:
 			node.set_color()
+
+
+func set_all_io_connection_colors():
+	for node in get_children():
+		if node is IO:
+			set_io_connection_colors(node)
 
 
 func setup_graph():

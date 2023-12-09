@@ -39,4 +39,4 @@ func update_outputs():
 	result &= 0xffff
 	update_output_value(RIGHT, 0, result)
 	update_output_level(RIGHT, 1, result == 0)
-	update_output_level(RIGHT, 2, result > 0x0fff)
+	update_output_level(RIGHT, 2, result > 0x7fff)
