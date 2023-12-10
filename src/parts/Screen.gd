@@ -37,9 +37,9 @@ func test():
 
 
 func update_value(new_val, address):
-	prints(new_val, address)
+	address = address % mem_size
 	var old_val = values[address]
-	values[address] = new_val
+	values[address % mem_size] = new_val
 	# Convert negative integers
 	if new_val < 0:
 		new_val = 0x10000 + new_val

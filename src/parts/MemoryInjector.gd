@@ -12,7 +12,9 @@ func _init():
 
 func _ready():
 	super()
-	display_address(data.address)
+	if show_display:
+		%Address.text_submitted.connect(_on_address_text_submitted)
+		display_address(data.address)
 
 
 func _on_address_text_submitted(new_text):

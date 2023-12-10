@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://1ugdcg3f5q1w"]
+[gd_scene load_steps=5 format=3 uid="uid://1ugdcg3f5q1w"]
 
 [ext_resource type="Script" path="res://scenes/IOManager.gd" id="1_ecwra"]
 [ext_resource type="Texture2D" uid="uid://dy1sd78ikc231" path="res://assets/parts/up.png" id="1_g0hwp"]
+[ext_resource type="PackedScene" uid="uid://dpighqrkisujs" path="res://scenes/highlighted_text_entry.tscn" id="2_jml11"]
 [ext_resource type="Texture2D" uid="uid://nebjnvr6aqnq" path="res://assets/parts/down.png" id="2_tow2c"]
 
 [node name="IOManager" type="MarginContainer"]
@@ -26,10 +27,8 @@ layout_mode = 2
 text = "Value"
 horizontal_alignment = 1
 
-[node name="Value" type="LineEdit" parent="HB/VB"]
-unique_name_in_owner = true
+[node name="Value" parent="HB/VB" instance=ExtResource("2_jml11")]
 layout_mode = 2
-text = "0x00"
 alignment = 1
 
 [node name="HB" type="HBoxContainer" parent="HB/VB"]
@@ -82,10 +81,9 @@ layout_mode = 2
 layout_mode = 2
 text = "Range:"
 
-[node name="Range" type="LineEdit" parent="HB/VB/RB"]
+[node name="Range" parent="HB/VB/RB" instance=ExtResource("2_jml11")]
 unique_name_in_owner = true
 layout_mode = 2
-text = "0xff"
 
 [node name="Label" type="Label" parent="HB/VB"]
 layout_mode = 2

@@ -1,5 +1,11 @@
 class_name Memory
 
+# This is a specialized memory-mapper device called Memory in Nand2Tetris.
+# It provides 16K of RAM from 0x0000 to 0x3fff and maps the display words from
+# 0x4000 to 0x5fff (8K) and the Keyword data value maps to 0x6000
+# It features an interface to the Screen which displays 256 rows and 512 columns
+# of pixels.
+
 extends RAM
 
 # Map the pins
@@ -42,6 +48,7 @@ func update_value(value, address):
 func evaluate_bus_output_value(side, port, value):
 	if side == LEFT:
 		var address = pins.get([side, RAM_ADDRESS], 0)
+		# set_output_data(value)
 		if port == RAM_IN:
 			update_output_value(RIGHT, RAM_SCREEN_DATA, value)
 		elif port == RAM_ADDRESS:

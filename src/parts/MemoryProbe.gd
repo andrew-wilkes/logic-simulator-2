@@ -13,7 +13,9 @@ func _init():
 
 func _ready():
 	super()
-	display_address(data.address)
+	if show_display:
+		%Address.text_submitted.connect(_on_address_text_submitted)
+		display_address(data.address)
 
 
 # Need to block updates from bus input from changing the output
@@ -31,7 +33,8 @@ func fetch_data():
 # Called from Memory part when the values change
 func update_data():
 	var value = fetch_data()
-	display_data(value)
+	if show_display:
+		display_data(value)
 	update_output_value(RIGHT, OUT, value)
 
 
