@@ -103,7 +103,7 @@ func process_task(task):
 				if target[2] == 0: # Wire
 					target[0].update_input_level(0, target[1], value == 1)
 				else: #Bus
-					target[0].update_bus_input_value(0, target[1], value)
+					target[0].update_bus_input_value(0, target[1], int(value))
 		"eval":
 			get_output_values()
 		"output":

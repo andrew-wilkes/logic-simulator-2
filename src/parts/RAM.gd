@@ -70,7 +70,7 @@ func evaluate_output_level(side, port, _level):
 			set_output_data(address)
 
 
-func update_value(value, address):
+func update_value(value: int, address: int):
 	values[address % mem_size] = value
 
 
@@ -80,7 +80,7 @@ func evaluate_bus_output_value(side, port, value):
 		set_output_data(value)
 
 
-func set_output_data(address):
+func set_output_data(address: int):
 	if show_display:
 		%Address.text = get_display_hex_value(address % mem_size)
 		%Data.text = get_display_hex_value(values[address % mem_size])

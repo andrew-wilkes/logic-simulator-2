@@ -32,7 +32,7 @@ func evaluate_output_level(side, port, level):
 			update_output_level(RIGHT, RAM_SCREEN_LOAD, level)
 		if port == RAM_CLK:
 			# Direct the clock to the 16K RAM or the Screen
-			var address = pins.get([side, RAM_ADDRESS], 0)
+			var address = pins.get([LEFT, RAM_ADDRESS], 0)
 			if address >= SCREEN_START_ADDRESS and address < KEYBOARD_ADDRESS:
 				update_output_level(RIGHT, RAM_CLK_OUT, level)
 			else:
@@ -42,20 +42,21 @@ func evaluate_output_level(side, port, level):
 func update_value(value, address):
 	if address < SCREEN_START_ADDRESS: # Write to 16K RAM
 		values[address] = value
-		update_probes()
+		# If updating current address
+		if address == pins.get([LEFT, RAM_ADDRESS], 0):
+			update_output_value(RIGHT, RAM_OUT, value)
 
 
 func evaluate_bus_output_value(side, port, value):
 	if side == LEFT:
 		var address = pins.get([side, RAM_ADDRESS], 0)
-		# set_output_data(value)
+		set_output_data(address)
 		if port == RAM_IN:
 			update_output_value(RIGHT, RAM_SCREEN_DATA, value)
 		elif port == RAM_ADDRESS:
 			if address < SCREEN_START_ADDRESS: # Output 16K RAM value
 				update_output_value(RIGHT, RAM_OUT, values[value])
 			elif address >= SCREEN_START_ADDRESS and address < KEYBOARD_ADDRESS: # Pass on screen address value
-				prints()
 				update_output_value(RIGHT, RAM_SCREEN_ADDRESS, address - SCREEN_START_ADDRESS)
 				prints("Memory", address - SCREEN_START_ADDRESS, value)
 				update_output_value(RIGHT, RAM_OUT, pins.get([side, RAM_SCREEN], 0))
