@@ -5,7 +5,7 @@
 [ext_resource type="FontFile" uid="uid://ck2sp0iypcks" path="res://assets/fonts/RobotoMono-Regular.ttf" id="3_p35dm"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j4q56"]
-bg_color = Color(0.290196, 0.290196, 0.290196, 1)
+bg_color = Color(0.0862745, 0.113725, 0.666667, 1)
 
 [node name="TestRunner" type="PanelContainer"]
 offset_top = 3.0
