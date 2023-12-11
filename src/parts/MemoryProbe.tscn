@@ -51,6 +51,7 @@ text = "Address:"
 [node name="Address" parent="HB" instance=ExtResource("2_ya57n")]
 unique_name_in_owner = true
 layout_mode = 2
+expand_to_text_length = true
 
 [node name="HB2" type="HBoxContainer" parent="."]
 layout_mode = 2

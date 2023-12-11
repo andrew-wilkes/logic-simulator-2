@@ -58,14 +58,6 @@ func update_value(new_val: int, address: int):
 	update_probes()
 
 
-func get_word_from_number(n):
-	if n < 0:
-		return 0x10000 + n
-	if n > 0x7fff:
-		return 1 + ~n & 0xffff
-	return n
-
-
 func reset():
 	super()
 	if show_display:

@@ -68,7 +68,6 @@ func evaluate_output_level(side, port, _level):
 		var clk = pins.get([LEFT, 3], false)
 		if clk and ld:
 			var value = pins.get([LEFT, 0], 0)
-			print(pins[[LEFT, 0]])
 			update_value(value, address)
 			update_probes()
 		if port == 3 and not clk:
