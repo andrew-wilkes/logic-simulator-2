@@ -30,39 +30,39 @@ func evaluate_output_level(side, port, level):
 	if side == LEFT:
 		if port == RAM_LOAD:
 			update_output_level(RIGHT, RAM_SCREEN_LOAD, level)
-		if port == RAM_CLK:
+		elif port == RAM_CLK:
 			# Direct the clock to the 16K RAM or the Screen
 			var address = pins.get([LEFT, RAM_ADDRESS], 0)
-			if address >= SCREEN_START_ADDRESS and address < KEYBOARD_ADDRESS:
-				update_output_level(RIGHT, RAM_CLK_OUT, level)
-			else:
+			if address < SCREEN_START_ADDRESS:
 				super(side, port, level)
-
-
-func update_value(value, address):
-	if address < SCREEN_START_ADDRESS: # Write to 16K RAM
-		values[address] = value
-		# If updating current address
-		if address == pins.get([LEFT, RAM_ADDRESS], 0):
-			update_output_value(RIGHT, RAM_OUT, value)
+			elif address < KEYBOARD_ADDRESS:
+				update_output_level(RIGHT, RAM_CLK_OUT, level)
 
 
 func evaluate_bus_output_value(side, port, value):
 	if side == LEFT:
-		var address = pins.get([side, RAM_ADDRESS], 0)
-		set_output_data(address)
+		var address = pins.get([LEFT, RAM_ADDRESS], 0)
 		if port == RAM_IN:
+			# Pass changed data value to screen data bus
 			update_output_value(RIGHT, RAM_SCREEN_DATA, value)
 		elif port == RAM_ADDRESS:
+			# Change of address
+			show_address(address)
 			if address < SCREEN_START_ADDRESS: # Output 16K RAM value
 				update_output_value(RIGHT, RAM_OUT, values[value])
-			elif address >= SCREEN_START_ADDRESS and address < KEYBOARD_ADDRESS: # Pass on screen address value
+				show_data(values[value])
+			elif address < KEYBOARD_ADDRESS: # Pass on screen address value
 				update_output_value(RIGHT, RAM_SCREEN_ADDRESS, address - SCREEN_START_ADDRESS)
 				prints("Memory", address - SCREEN_START_ADDRESS, value)
-				update_output_value(RIGHT, RAM_OUT, pins.get([side, RAM_SCREEN], 0))
 			elif address == KEYBOARD_ADDRESS:
-				update_output_value(RIGHT, RAM_OUT, pins.get([side, RAM_KEYBOARD], 0))
+				value = pins.get([side, RAM_KEYBOARD], 0)
+				update_output_value(RIGHT, RAM_OUT, value)
+				show_data(value)
 		elif port == RAM_KEYBOARD and address == KEYBOARD_ADDRESS:
-			update_output_value(RIGHT, RAM_OUT, pins.get([side, RAM_KEYBOARD], 0))
+			# Keyboard input value changed
+			value = pins.get([side, RAM_KEYBOARD], 0)
+			update_output_value(RIGHT, RAM_OUT, value)
+			show_data(value)
 		elif port == RAM_SCREEN and address >= SCREEN_START_ADDRESS and address < KEYBOARD_ADDRESS:
 			update_output_value(RIGHT, RAM_OUT, value)
+			show_data(value)

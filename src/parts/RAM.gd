@@ -59,33 +59,42 @@ func get_mem_size(dsize: String) -> int:
 
 func evaluate_output_level(side, port, _level):
 	if side == LEFT:
-		var address = pins.get([LEFT, 1], 0) % mem_size
+		var address = get_address()
 		var ld = pins.get([LEFT, 2], false)
 		var clk = pins.get([LEFT, 3], false)
 		if clk and ld:
-			var value = clampi(pins.get([LEFT, 0], 0), -max_value - 1, max_value)
+			var value = pins.get([LEFT, 0], 0)
+			print(pins[[LEFT, 0]])
 			update_value(value, address)
 			update_probes()
 		if port == 3 and not clk:
-			set_output_data(address)
+			show_data(values[address])
+			update_output_value(RIGHT, OUT, values[address])
+
+
+func get_address():
+	return pins.get([LEFT, 1], 0) % mem_size
 
 
 func update_value(value: int, address: int):
 	values[address % mem_size] = value
 
 
-func evaluate_bus_output_value(side, port, value):
+func evaluate_bus_output_value(side, port, value: int):
 	if side == LEFT and port == 1: # Change of address
+		show_address(value)
+		show_data(values[value % mem_size])
 		update_output_value(RIGHT, OUT, values[value % mem_size])
-		set_output_data(value)
 
 
-func set_output_data(address: int):
+func show_data(value):
 	if show_display:
-		%Address.text = get_display_hex_value(address % mem_size)
-		%Data.text = get_display_hex_value(values[address % mem_size])
-	for probe in probes:
-		probe.update_data()
+		%Data.text = get_display_hex_value(value)
+
+
+func show_address(address: int):
+	if show_display:
+		%Address.text = get_display_hex_value(address)
 
 
 func resize_memory(num_bytes):
@@ -96,3 +105,18 @@ func resize_memory(num_bytes):
 func reset():
 	super()
 	values.fill(0)
+
+
+func erase():
+	values.fill(0)
+	show_data(0)
+	update_output_value(RIGHT, OUT, 0)
+	update_probes()
+
+
+func set_value(address, value):
+	values[address] = value
+	if address == get_address():
+		update_output_value(RIGHT, OUT, value)
+		show_address(address)
+		show_data(value)

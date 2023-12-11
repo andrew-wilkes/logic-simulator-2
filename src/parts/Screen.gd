@@ -38,7 +38,7 @@ func test():
 
 func update_value(new_val: int, address: int):
 	address = address % mem_size
-	var old_val = values[address]
+	var old_val = int(values[address])
 	values[address % mem_size] = new_val
 	# Convert negative integers
 	if new_val < 0:
@@ -56,6 +56,14 @@ func update_value(new_val: int, address: int):
 		new_val /= 2
 	texture.update(pixels)
 	update_probes()
+
+
+func get_word_from_number(n):
+	if n < 0:
+		return 0x10000 + n
+	if n > 0x7fff:
+		return 1 + ~n & 0xffff
+	return n
 
 
 func reset():

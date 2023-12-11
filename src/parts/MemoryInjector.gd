@@ -32,4 +32,4 @@ func display_address(value):
 func evaluate_bus_output_value(_side, port, value):
 	if port == 1 and memory:
 		memory.update_value(value, data.address)
-		memory.set_output_data(data.address)
+		memory.update_probes()

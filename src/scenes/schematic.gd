@@ -555,6 +555,7 @@ func create_circuit_from_hdl(file_path):
 		count += 1
 	grab_focus()
 
+
 func _on_scroll_offset_changed(offset):
 	if last_scroll_offset != offset and watch_for_scroll_offset_change:
 		emit_signal("changed")

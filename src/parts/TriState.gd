@@ -24,7 +24,7 @@ func propagate_value():
 	if pins.get([LEFT, 1], false):
 		update_output_value(RIGHT, OUT, value)
 	else:
-		update_output_value(RIGHT, OUT, -INF)
+		pins[[RIGHT, OUT]] = -INF
 
 
 func apply_power():

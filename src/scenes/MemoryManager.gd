@@ -26,9 +26,9 @@ func open(_ram: RAM):
 		ram = _ram
 		init_grid()
 		set_word_visibility(ram.data.bits == 8)
-		update_grid()
 		%SizeLabel.text = ram.data.size
 		set_width_text(ram.data.bits)
+	update_grid()
 
 
 func init_grid():
@@ -102,12 +102,11 @@ func _on_text_submitted(new_text, node, row, col):
 				if new_text[idx] == "1":
 					value += 1
 	if ram.data.bits == 8:
-		ram.values[base_addr + row * 16 + col] = value
+		ram.set_value(base_addr + row * 16 + col, value)
 	else:
-		ram.values[base_addr + row * 8 + col] = value
+		ram.set_value(base_addr + row * 8 + col, value)
 	update_grid()
 	node.caret_column = node.text.length()
-	ram.set_output_data()
 
 
 func int2bin(x: int) -> String:
@@ -149,8 +148,7 @@ func _on_save_button_pressed():
 
 
 func _on_erase_button_pressed():
-	ram.values.fill(0)
-	ram.set_output_data()
+	ram.erase()
 	update_grid()
 
 
