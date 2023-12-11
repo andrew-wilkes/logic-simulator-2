@@ -15,6 +15,10 @@ func _init():
 func _ready():
 	super()
 	set_max_value()
+	update()
+
+
+func update():
 	mem_size = get_mem_size(data.size)
 	resize_memory(mem_size)
 	show_bits()

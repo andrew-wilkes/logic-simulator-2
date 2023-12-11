@@ -1,9 +1,17 @@
 extends Container
 
-var base_addr = 0
-var ram
+var ram: RAM
 var list
 var not_opened_yet = true
+var base_addresses = {}
+var base_addr:
+	get:
+		if not base_addresses.has(ram):
+			base_addresses[ram] = 0
+		return base_addresses[ram]
+	set(value):
+		base_addresses[ram] = value
+
 
 func _ready():
 	list = %SizeList.get_popup()
@@ -23,11 +31,11 @@ func list_item_selected(idx):
 func open(_ram: RAM):
 	if not_opened_yet:
 		not_opened_yet = false
-		ram = _ram
 		init_grid()
-		set_word_visibility(ram.data.bits == 8)
-		%SizeLabel.text = ram.data.size
-		set_width_text(ram.data.bits)
+	ram = _ram
+	set_word_visibility(ram.data.bits == 8)
+	%SizeLabel.text = ram.data.size
+	set_width_text(ram.data.bits)
 	update_grid()
 
 
@@ -119,14 +127,18 @@ func int2bin(x: int) -> String:
 
 func _on_up_button_pressed():
 	var step = 0x80 if ram.data.bits == 16 else 0x100
-	base_addr = maxi(base_addr - step, 0)
+	base_addr = base_addr - step
+	if base_addr < 0:
+		base_addr = ram.mem_size - step
 	update_grid()
 
 
 func _on_down_button_pressed():
 	var step = 0x80 if ram.data.bits == 16 else 0x100
-	if base_addr + step <= ram.max_address:
+	if base_addr + step < ram.mem_size:
 		base_addr = base_addr + step
+	else:
+		base_addr = 0
 	update_grid()
 
 
