@@ -34,7 +34,7 @@ func test_evaluate_output_level() -> void:
 	part.controller = self
 	part.data.num_wires = 4
 	part.show_display = false
-	part.update_input_level(0, 3, true)
+	part.update_input_level(0, 3, true, ClockState.new())
 	assert_object(part.data.bus).is_equal([1 ,0, 0x04])
 	part.free()
 

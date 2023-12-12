@@ -9,6 +9,7 @@ func _init():
 	order = 80
 	category = SYNC
 	data["bits"] = 16
+	clock_port = 4
 
 
 func _ready():
@@ -16,6 +17,11 @@ func _ready():
 	if show_display:
 		%Bits.text = str(data.bits)
 	reset()
+
+
+func update_input_level(side, port, level, clock):
+	prints("P", port, level, clock)
+	super(side, port, level, clock)
 
 
 func evaluate_output_level(side, port, level):

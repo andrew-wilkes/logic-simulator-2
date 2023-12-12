@@ -51,15 +51,15 @@ func bus_value_changed_handler(part, side, port, value):
 func test_update_input_level() -> void:
 	var part = Part.new()
 	part.controller = self
-	part.update_input_level(1, 2, true)
+	part.update_input_level(1, 2, true, ClockState.new())
 	assert_object(part.data.result).is_equal([0 ,2, true])
 	assert_dict(part.pins).has_size(2)
 	assert_bool(part.pins[[1,2]]).is_equal(true)
 	assert_int(part.race_counter[[1,2]]).is_equal(1)
 	part.data["result"] = null
-	part.update_input_level(1, 2, true)
+	part.update_input_level(1, 2, true, ClockState.new())
 	assert_object(part.data.result).is_equal(null)
-	part.update_input_level(1, 2, false)
+	part.update_input_level(1, 2, false, ClockState.new())
 	assert_object(part.data.result).is_equal([0 ,2, false])
 	part.free()
 

@@ -31,6 +31,7 @@ var controller # The schematic or a parent block
 var race_counter = {} # [side, port]: count
 var connections = {} # Used with parts in blocks
 var pins = {} # [side, port]: level / value
+var clock_port = -1
 var change_notification_timer: Timer
 
 func get_dict():
@@ -70,9 +71,10 @@ func setup_instance():
 	pass
 
 
-func update_input_level(side, port, level):
+func update_input_level(side, port, level, clock):
 	if DEBUG:
 		prints("part update_input_level", self.name, side, port, level)
+	var eval = false
 	var key = set_pin_value(side, port, level)
 	if key != null:
 		if race_counter.has(key):
@@ -82,6 +84,11 @@ func update_input_level(side, port, level):
 				return
 		else:
 			race_counter[key] = 1
+		if port == clock_port:
+			clock.source = true
+		else:
+			eval = true
+	if eval or clock.eval:
 		evaluate_output_level(side, port, level)
 
 
