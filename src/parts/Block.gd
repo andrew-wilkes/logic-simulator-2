@@ -193,12 +193,12 @@ func add_parts():
 			part.block_setup(file_chain)
 		parts[part.name] = part
 		# Assign clock port if found
-		if part.clock_port >= 0:
+		for clock_port in part.clock_ports:
 			for con in circuit.data.connections:
-				if con.to_node == part.name and con.to_port == part.clock_port:
+				if con.to_node == part.name and con.to_port == clock_port:
 					for idx in input_map.size():
 						if input_map[idx] == [con.from_node, int(con.from_port)]:
-							clock_port = idx
+							clock_ports.append(idx)
 							break
 
 

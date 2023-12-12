@@ -20,7 +20,7 @@ func _init():
 	order = 0
 	category = SYNC
 	data["size"] = "16K"
-	clock_port = 3
+	clock_ports = [3]
 
 
 func show_bits():

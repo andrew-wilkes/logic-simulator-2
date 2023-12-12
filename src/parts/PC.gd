@@ -9,7 +9,7 @@ func _init():
 	order = 80
 	category = SYNC
 	data["bits"] = 16
-	clock_port = 4
+	clock_ports = [4]
 
 
 func _ready():
