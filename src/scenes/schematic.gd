@@ -91,6 +91,7 @@ func clear():
 	emit_signal("title_changed", "")
 	parent_file = ""
 	clear_connections()
+	test_runner.hide()
 	for node in get_children():
 		if node is Part:
 			remove_child(node)

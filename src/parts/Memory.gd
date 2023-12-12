@@ -27,11 +27,6 @@ func show_bits():
 	pass # Mask off this RAM feature
 
 
-func update_input_level(side, port, level, clock):
-	prints("M", port, level, clock)
-	super(side, port, level, clock)
-
-
 func evaluate_output_level(side, port, level):
 	if side == LEFT:
 		# Direct the signals to the 16K RAM or the Screen

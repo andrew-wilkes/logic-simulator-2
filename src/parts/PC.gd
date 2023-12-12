@@ -19,11 +19,6 @@ func _ready():
 	reset()
 
 
-func update_input_level(side, port, level, clock):
-	prints("P", port, level, clock)
-	super(side, port, level, clock)
-
-
 func evaluate_output_level(side, port, level):
 	if side == LEFT and port == 4: # clk edge
 		if level:
