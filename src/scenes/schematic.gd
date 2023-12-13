@@ -23,6 +23,7 @@ var watch_for_scroll_offset_change = true
 var start_time = 0.0
 var busy = false
 var frame_count = 0
+var a_part_was_deleted = false
 
 @onready var test_runner = $C/TestRunner
 
@@ -96,6 +97,7 @@ func clear():
 		if node is Part:
 			remove_child(node)
 			node.queue_free() # This is delayed
+			a_part_was_deleted = true
 
 
 func select_part(part):
@@ -124,6 +126,7 @@ func delete_selected_part(part):
 			disconnect_node(con.from_node, con.from_port, con.to_node, con.to_port)
 	remove_child(part)
 	part.queue_free()
+	a_part_was_deleted = true
 
 
 func duplicate_selected_parts():
@@ -649,6 +652,7 @@ func reset_test_environment():
 	tester.reset()
 	test_state = G.TEST_STATUS.STEPPABLE
 	test_runner.set_button_status(test_state)
+	a_part_was_deleted = false
 
 
 func reset_parts():
@@ -682,6 +686,12 @@ func run_test():
 	busy = true
 	var break_out = false
 	while true:
+		if a_part_was_deleted:
+			# A deleted part will cause a crash so abort the tests
+			test_state = G.TEST_STATUS.DONE
+			set_process(false)
+			test_runner.hide()
+			break
 		if tester.test_step == tester.tasks.size():
 			if OS.is_debug_build():
 				print("Run time: %dms" % [Time.get_ticks_msec() - start_time])

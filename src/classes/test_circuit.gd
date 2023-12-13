@@ -100,6 +100,7 @@ func process_task(task):
 			if inputs.has(pin_name):
 				pin_states[pin_name] = value
 				var target = inputs[pin_name] # [part, port, port_type]
+				target[0].clock_ports = []
 				if target[2] == 0: # Wire
 					target[0].update_input_level(0, target[1], value == 1, ClockState.new())
 				else: #Bus

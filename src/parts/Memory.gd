@@ -30,7 +30,7 @@ func show_bits():
 func evaluate_output_level(side, port, level):
 	if side == LEFT:
 		# Direct the signals to the 16K RAM or the Screen
-		var address = pins.get([LEFT, RAM_ADDRESS], 0)
+		var address = get_address()
 		if address < SCREEN_START_ADDRESS:
 			super(side, port, level)
 		elif address < KEYBOARD_ADDRESS:
