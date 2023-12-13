@@ -13,8 +13,9 @@ const INDENT_WIDTH = 8
 
 func disassemble(hack):
 	var labels = {}
-	var next_var_symbol = 105 # i
-	var next_label_symbol = 65 # A
+	var vars = {}
+	var next_var_code = 105 # i
+	var next_label_code = 65 # A
 	var address = 0
 	var last_instruction_was_A = false
 	var a_value = 0
@@ -34,21 +35,29 @@ func disassemble(hack):
 				# Format the value
 				last_instruction_was_A = false
 				if jump > 0:
-					instructions.append("@%s // 0x%04x" % [char(next_label_symbol).repeat(4), a_value])
-					labels[a_value] = "(%s)" % [char(next_label_symbol).repeat(4)]
-					next_label_symbol += 1
+					if not labels.has(a_value):
+						labels[a_value] = char(next_label_code).repeat(4)
+						next_label_code += 1
+					instructions.append("@" + labels[a_value])
 				else:
-					# RAM access
-					if a_value < 0x10:
-						# Virtual register
-						instructions.append("@R%d // %d" % [a_value, a_value])
-					elif a_value == 0x4000:
+					if a_value == 0x4000:
 						instructions.append("@SCREEN // 0x%04x" % [a_value])
 					elif a_value == 0x6000:
 						instructions.append("@KBD // 0x%04x" % [a_value])
+					elif comp < 64 and dest & 1 == 0:
+						# A reg
+						instructions.append("@" + str(a_value))
 					else:
-						instructions.append("@%d // 0x%04x var = %s" % [a_value, a_value, char(next_var_symbol)])
-						next_var_symbol += 1
+						# RAM access
+						if a_value < 0x10:
+							# Virtual register
+							instructions.append("@R" + str(a_value))
+						else:
+							# Variable
+							if not vars.has(a_value):
+								vars[a_value] = char(next_var_code)
+								next_var_code += 1
+							instructions.append("@" + vars[a_value])
 			var cinst = [ "", "M", "D", "MD", "A", "AM", "AD", "AMD" ][dest]
 			if dest > 0:
 				cinst += "="
@@ -63,7 +72,7 @@ func disassemble(hack):
 	lines.append("Address Instruction") # Improve this later
 	for instr in instructions:
 		if labels.has(address):
-			lines.append(labels[address])
+			lines.append("(" + labels[address] + ")")
 		lines.append(format % [address, instr])
 		address += 1
 	return lines

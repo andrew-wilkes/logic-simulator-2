@@ -1,5 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://8q5d5fy826xh"]
+[gd_scene load_steps=3 format=3 uid="uid://8q5d5fy826xh"]
 
+[ext_resource type="PackedScene" uid="uid://dpighqrkisujs" path="res://scenes/highlighted_text_entry.tscn" id="2_ya57n"]
 [ext_resource type="Script" path="res://parts/MemoryProbe.gd" id="3_6ca0k"]
 
 [node name="MemoryProbe" type="GraphNode"]
@@ -47,10 +48,9 @@ theme_override_constants/separation = 5
 layout_mode = 2
 text = "Address:"
 
-[node name="Address" type="LineEdit" parent="HB"]
+[node name="Address" parent="HB" instance=ExtResource("2_ya57n")]
 unique_name_in_owner = true
 layout_mode = 2
-text = "0x0000"
 expand_to_text_length = true
 
 [node name="HB2" type="HBoxContainer" parent="."]
@@ -73,5 +73,3 @@ horizontal_alignment = 2
 layout_mode = 2
 alignment = 1
 expand_to_text_length = true
-
-[connection signal="text_submitted" from="HB/Address" to="." method="_on_address_text_submitted"]

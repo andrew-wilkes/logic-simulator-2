@@ -88,7 +88,6 @@ func reset():
 
 
 func process_task(task):
-	print(task[0])
 	match task[0]:
 		"output-list":
 			output_format = task[1]
@@ -102,9 +101,9 @@ func process_task(task):
 				pin_states[pin_name] = value
 				var target = inputs[pin_name] # [part, port, port_type]
 				if target[2] == 0: # Wire
-					target[0].update_input_level(0, target[1], value == 1)
+					target[0].update_input_level(0, target[1], value == 1, ClockState.new())
 				else: #Bus
-					target[0].update_bus_input_value(0, target[1], value)
+					target[0].update_bus_input_value(0, target[1], int(value))
 		"eval":
 			get_output_values()
 		"output":
@@ -116,7 +115,7 @@ func process_task(task):
 				time += 1 # tock
 			if inputs.has(CLOCK_PIN):
 				var target = inputs[CLOCK_PIN] # [part, port, port_type]
-				target[0].update_input_level(0, target[1], tick)
+				target[0].update_input_level(0, target[1], tick, ClockState.new())
 			get_output_values()
 		"repeat":
 			if repeat_counter > 0:

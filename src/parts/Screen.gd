@@ -36,15 +36,17 @@ func test():
 		print(Time.get_ticks_msec() - start_time)
 
 
-func update_value(new_val, address):
-	var old_val = values[address]
-	values[address] = new_val
+func update_value(new_val: int, address: int):
+	address = address % mem_size
+	var old_val = int(values[address])
+	values[address % mem_size] = new_val
 	# Convert negative integers
 	if new_val < 0:
 		new_val = 0x10000 + new_val
 	if old_val < 0:
 		old_val = 0x10000 + old_val
 	var x = address % 32 * 16
+	@warning_ignore("integer_division")
 	var y = address / 32
 	for n in 16:
 		if old_val & 1 != new_val & 1:

@@ -12,7 +12,9 @@ func _init():
 
 func _ready():
 	super()
-	display_address(data.address)
+	if show_display:
+		%Address.text_submitted.connect(_on_address_text_submitted)
+		display_address(data.address)
 
 
 func _on_address_text_submitted(new_text):
@@ -30,4 +32,4 @@ func display_address(value):
 func evaluate_bus_output_value(_side, port, value):
 	if port == 1 and memory:
 		memory.update_value(value, data.address)
-		memory.set_output_data(data.address)
+		memory.update_probes()

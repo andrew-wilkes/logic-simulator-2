@@ -23,5 +23,7 @@ func apply_power():
 
 
 func set_color():
-	$ColorRect.color = G.settings.logic_low_color
-	set_slot_color_right(1, G.settings.logic_low_color)
+	var color = G.settings.logic_low_color
+	$ColorRect.color = color
+	set_slot_color_right(1, color)
+	return color

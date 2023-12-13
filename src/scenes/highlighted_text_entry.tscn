@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3 uid="uid://dpighqrkisujs"]
+
+[ext_resource type="Script" path="res://scenes/highlighted_text_entry.gd" id="1_e5kwn"]
+
+[node name="HighlightedTextEntry" type="LineEdit"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "0x0000"
+caret_blink = true
+caret_blink_interval = 0.5
+script = ExtResource("1_e5kwn")
+
+[connection signal="text_changed" from="." to="." method="_on_text_changed"]
+[connection signal="text_submitted" from="." to="." method="_on_text_submitted"]

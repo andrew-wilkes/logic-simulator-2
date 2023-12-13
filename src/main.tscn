@@ -166,6 +166,7 @@ access = 2
 filters = PackedStringArray("*.circ ; Circuit files")
 
 [node name="DisassemblerPanel" type="PopupPanel" parent="."]
+title = "Disassembler"
 size = Vector2i(400, 500)
 unresizable = false
 borderless = false

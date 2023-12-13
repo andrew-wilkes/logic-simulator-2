@@ -63,7 +63,7 @@ func connect_wire(from_part, from_pin, to_part, to_pin):
 				var con_type = from.get_slot_type_right(slot)
 				if con_type == 0:
 					var level = from.pins.get([RIGHT, from_pin], false)
-					node.update_input_level(LEFT, to_pin, level)
+					node.update_input_level(LEFT, to_pin, level, ClockState.new())
 					node.update_output_level_with_color(LEFT, to_pin, level)
 				else:
 					node.update_bus_input_value(LEFT, to_pin, from.pins.get([RIGHT, from_pin], 0))
@@ -91,6 +91,7 @@ func clear():
 	emit_signal("title_changed", "")
 	parent_file = ""
 	clear_connections()
+	test_runner.hide()
 	for node in get_children():
 		if node is Part:
 			remove_child(node)
@@ -318,14 +319,12 @@ func set_all_connection_colors():
 
 func colorize_pins():
 	for node in get_children():
-		if node is Part and node.part_type in ["WireColor", "BusColor", "Vcc", "Gnd", "WireColorTag", "BusColorTag"]:
-			set_pin_colors(node.name, node.data.color)
-
-
-func set_all_io_connection_colors():
-	for node in get_children():
-		if node is IO:
-			set_io_connection_colors(node)
+		if node is Part:
+			match node.part_type:
+				"WireColor", "BusColor", "WireColorTag", "BusColorTag":
+					set_pin_colors(node.name, node.data.color)
+				"Vcc", "Gnd":
+					set_pin_colors(node.name, node.set_color())
 
 
 func set_low_color():
@@ -338,6 +337,12 @@ func set_high_color():
 	for node in get_children():
 		if node is Vcc:
 			node.set_color()
+
+
+func set_all_io_connection_colors():
+	for node in get_children():
+		if node is IO:
+			set_io_connection_colors(node)
 
 
 func setup_graph():
@@ -377,27 +382,37 @@ func right_click_on_part(part):
 			$IOManagerPanel.popup_centered()
 		"ROM":
 			part.open_file()
-		"RAM", "Memory":
+		"RAM", "Memory", "Screen":
 			$MemoryManagerPanel/MemoryManager.open(part)
 			$MemoryManagerPanel.popup_centered()
 
 
 func output_level_changed_handler(part, side, port, level):
-	for con in get_connection_list():
-		if side == RIGHT:
-			if con.from_node == part.name and con.from_port == port:
-				var node = get_node(NodePath(con.to_node))
-				node.update_input_level(LEFT, con.to_port, level)
-				if G.settings.indicate_to_levels:
-					node.indicate_level(LEFT, con.to_port, level)
-		else:
-			if con.to_node == part.name and con.to_port == port:
-				var node = get_node(NodePath(con.from_node))
-				node.update_input_level(RIGHT, con.from_port, level)
-				if G.settings.indicate_to_levels:
-					node.indicate_level(RIGHT, con.from_port, level)
-		if G.settings.indicate_from_levels:
-			part.indicate_level(side, port, level)
+	# Clock destinations must all be set before their effects are propagated.
+	# PC counter may cause ROM to send new data to a clocked part for example.
+	# So the clocked part must have its clock input at the correct state before this data arrives.
+	var clock = ClockState.new()
+	for n in 2:
+		if n > 0:
+			if clock.source:
+				clock.eval = true
+			else:
+				break
+		for con in get_connection_list():
+			if side == RIGHT:
+				if con.from_node == part.name and con.from_port == port:
+					var node = get_node(NodePath(con.to_node))
+					node.update_input_level(LEFT, con.to_port, level, clock)
+					if G.settings.indicate_to_levels:
+						node.indicate_level(LEFT, con.to_port, level)
+			else:
+				if con.to_node == part.name and con.to_port == port:
+					var node = get_node(NodePath(con.from_node))
+					node.update_input_level(RIGHT, con.from_port, level, clock)
+					if G.settings.indicate_to_levels:
+						node.indicate_level(RIGHT, con.from_port, level)
+			if G.settings.indicate_from_levels:
+				part.indicate_level(side, port, level)
 
 
 func bus_value_changed_handler(part, side, port, value):
@@ -550,6 +565,7 @@ func create_circuit_from_hdl(file_path):
 		add_wire_io(output_wire, Vector2(600, 40 + 80 * count))
 		count += 1
 	grab_focus()
+
 
 func _on_scroll_offset_changed(offset):
 	if last_scroll_offset != offset and watch_for_scroll_offset_change:

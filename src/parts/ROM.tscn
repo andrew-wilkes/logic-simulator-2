@@ -1,5 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://do2067p4805xw"]
+[gd_scene load_steps=3 format=3 uid="uid://do2067p4805xw"]
 
+[ext_resource type="PackedScene" uid="uid://dpighqrkisujs" path="res://scenes/highlighted_text_entry.tscn" id="2_lhfm5"]
 [ext_resource type="Script" path="res://parts/ROM.gd" id="3_nj2eq"]
 
 [node name="ROM" type="GraphNode"]
@@ -96,20 +97,18 @@ horizontal_alignment = 2
 layout_mode = 2
 tooltip_text = "Address"
 
-[node name="Bits" type="LineEdit" parent="HB2"]
+[node name="Bits" parent="HB2" instance=ExtResource("2_lhfm5")]
 unique_name_in_owner = true
 layout_mode = 2
-tooltip_text = "Num bits"
-text = "16"
-placeholder_text = "Num bits"
 
 [node name="L1" type="Label" parent="HB2"]
 layout_mode = 2
 text = "bits"
 
-[node name="Size" type="LineEdit" parent="."]
+[node name="Size" parent="." instance=ExtResource("2_lhfm5")]
 layout_mode = 2
-text = "8K"
+text = "16K"
+placeholder_text = "Size"
 
 [node name="Tag" type="LineEdit" parent="."]
 layout_mode = 2

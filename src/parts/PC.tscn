@@ -1,5 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://si7kflponyna"]
+[gd_scene load_steps=3 format=3 uid="uid://si7kflponyna"]
 
+[ext_resource type="PackedScene" uid="uid://dpighqrkisujs" path="res://scenes/highlighted_text_entry.tscn" id="2_r70m2"]
 [ext_resource type="Script" path="res://parts/PC.gd" id="3_yerbq"]
 
 [node name="PC" type="GraphNode"]
@@ -121,12 +122,9 @@ text = "clk"
 [node name="HB2" type="HBoxContainer" parent="."]
 layout_mode = 2
 
-[node name="Bits" type="LineEdit" parent="HB2"]
+[node name="Bits" parent="HB2" instance=ExtResource("2_r70m2")]
 unique_name_in_owner = true
 layout_mode = 2
-tooltip_text = "Num bits"
-text = "16"
-placeholder_text = "Num bits"
 
 [node name="L1" type="Label" parent="HB2"]
 layout_mode = 2

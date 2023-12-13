@@ -1,9 +1,17 @@
 extends Container
 
-var base_addr = 0
-var ram
+var ram: RAM
 var list
 var not_opened_yet = true
+var base_addresses = {}
+var base_addr:
+	get:
+		if not base_addresses.has(ram):
+			base_addresses[ram] = 0
+		return base_addresses[ram]
+	set(value):
+		base_addresses[ram] = value
+
 
 func _ready():
 	list = %SizeList.get_popup()
@@ -23,12 +31,12 @@ func list_item_selected(idx):
 func open(_ram: RAM):
 	if not_opened_yet:
 		not_opened_yet = false
-		ram = _ram
 		init_grid()
-		set_word_visibility(ram.data.bits == 8)
-		update_grid()
-		%SizeLabel.text = ram.data.size
-		set_width_text(ram.data.bits)
+	ram = _ram
+	set_word_visibility(ram.data.bits == 8)
+	%SizeLabel.text = ram.data.size
+	set_width_text(ram.data.bits)
+	update_grid()
 
 
 func init_grid():
@@ -102,12 +110,11 @@ func _on_text_submitted(new_text, node, row, col):
 				if new_text[idx] == "1":
 					value += 1
 	if ram.data.bits == 8:
-		ram.values[base_addr + row * 16 + col] = value
+		ram.set_value(base_addr + row * 16 + col, value)
 	else:
-		ram.values[base_addr + row * 8 + col] = value
+		ram.set_value(base_addr + row * 8 + col, value)
 	update_grid()
 	node.caret_column = node.text.length()
-	ram.set_output_data()
 
 
 func int2bin(x: int) -> String:
@@ -120,14 +127,18 @@ func int2bin(x: int) -> String:
 
 func _on_up_button_pressed():
 	var step = 0x80 if ram.data.bits == 16 else 0x100
-	base_addr = maxi(base_addr - step, 0)
+	base_addr = base_addr - step
+	if base_addr < 0:
+		base_addr = ram.mem_size - step
 	update_grid()
 
 
 func _on_down_button_pressed():
 	var step = 0x80 if ram.data.bits == 16 else 0x100
-	if base_addr + step <= ram.max_address:
+	if base_addr + step < ram.mem_size:
 		base_addr = base_addr + step
+	else:
+		base_addr = 0
 	update_grid()
 
 
@@ -149,8 +160,7 @@ func _on_save_button_pressed():
 
 
 func _on_erase_button_pressed():
-	ram.values.fill(0)
-	ram.set_output_data()
+	ram.erase()
 	update_grid()
 
 
