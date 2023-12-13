@@ -172,6 +172,8 @@ borderless = false
 theme_override_styles/panel = SubResource("StyleBoxFlat_605jm")
 
 [node name="Disassembler" parent="DisassemblerPanel" instance=ExtResource("5_ihm75")]
+offset_right = 400.0
+offset_bottom = 500.0
 
 [node name="PartListPanel" type="PopupPanel" parent="."]
 title = "Part Menu"
@@ -183,8 +185,8 @@ borderless = false
 [node name="PartList" parent="PartListPanel" instance=ExtResource("5_3p0gq")]
 offset_left = 4.0
 offset_top = 4.0
-offset_right = -4.0
-offset_bottom = -4.0
+offset_right = 796.0
+offset_bottom = 596.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -207,8 +209,8 @@ borderless = false
 [node name="HelpTabs" parent="HelpPanel" instance=ExtResource("7_qqehi")]
 offset_left = 4.0
 offset_top = 4.0
-offset_right = -4.0
-offset_bottom = -4.0
+offset_right = 796.0
+offset_bottom = 496.0
 
 [node name="LearnPanel" type="PopupPanel" parent="."]
 title = "Learn"
@@ -219,8 +221,8 @@ borderless = false
 [node name="Learn" parent="LearnPanel" instance=ExtResource("8_41uro")]
 offset_left = 4.0
 offset_top = 4.0
-offset_right = -4.0
-offset_bottom = -4.0
+offset_right = 796.0
+offset_bottom = 496.0
 
 [node name="AboutPanel" type="PopupPanel" parent="."]
 title = "About"
