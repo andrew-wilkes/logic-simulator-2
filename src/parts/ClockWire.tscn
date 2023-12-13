@@ -8,6 +8,7 @@ offset_top = 9.0
 offset_right = 132.0
 offset_bottom = 95.0
 mouse_filter = 1
+title = "ClockWire"
 slot/0/left_enabled = true
 slot/0/left_type = 0
 slot/0/left_color = Color(0.980392, 1, 1, 1)

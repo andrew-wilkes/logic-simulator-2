@@ -5,8 +5,8 @@
 [node name="ToggleSwitch" type="GraphNode"]
 offset_left = 32.0
 offset_top = 22.0
-offset_right = 195.0
-offset_bottom = 159.0
+offset_right = 149.0
+offset_bottom = 152.0
 mouse_filter = 1
 theme_override_constants/separation = 20
 title = "ToggleSwitch"
@@ -34,11 +34,10 @@ script = ExtResource("3_i82n2")
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="Button" type="Button" parent="HB"]
+[node name="Button" type="CheckButton" parent="HB"]
 layout_mode = 2
+size_flags_horizontal = 3
 focus_mode = 0
-toggle_mode = true
-text = "High / Low"
 
 [node name="Label" type="Label" parent="HB"]
 layout_mode = 2

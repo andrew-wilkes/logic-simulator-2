@@ -72,7 +72,7 @@ func block_setup(_file_chain = []):
 			if is_output(part):
 				outputs.append(part)
 				output_pin_count += part.data.num_wires + 1
-		if part.part_type in ["Bus", "Wire", "TriState"]:
+		if part.part_type in ["Bus", "Wire", "TriState", "ClockWire"]:
 			if is_input(part):
 				inputs.append(part)
 				input_pin_count += 1
