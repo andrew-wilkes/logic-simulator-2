@@ -7,6 +7,7 @@ enum TEST_STATUS { STEPPABLE, PLAYING, DONE }
 var settings
 var warning
 var message_panel
+var test_runner
 
 func _init():
 	settings = Settings.new()

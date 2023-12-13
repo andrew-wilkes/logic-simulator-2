@@ -25,8 +25,6 @@ var busy = false
 var frame_count = 0
 var a_part_was_deleted = false
 
-@onready var test_runner = $C/TestRunner
-
 func _ready():
 	set_process(false)
 	circuit = Circuit.new()
@@ -36,6 +34,7 @@ func _ready():
 	connection_request.connect(connect_wire)
 	disconnection_request.connect(disconnect_wire)
 	duplicate_nodes_request.connect(duplicate_selected_parts)
+	G.test_runner = $C/TestRunner
 
 
 func _unhandled_key_input(event):
@@ -92,7 +91,7 @@ func clear():
 	emit_signal("title_changed", "")
 	parent_file = ""
 	clear_connections()
-	test_runner.hide()
+	G.test_runner.hide()
 	for node in get_children():
 		if node is Part:
 			remove_child(node)
@@ -624,16 +623,16 @@ func test_circuit():
 			var file = FileAccess.open(result.path + "/" + test_file, FileAccess.READ)
 			if file:
 					var test_spec = file.get_as_text()
-					test_runner.set_title(test_file)
+					G.test_runner.set_title(test_file)
 					tester.init_tests(test_spec, io_nodes)
 					reset_test_environment()
 					# Make panel fit the width of the test output
 					for task in tester.tasks:
 						if task[0] == "output-list":
 							var width = task[1].length() * 8.2
-							if test_runner.size.x < width:
-								test_runner.size.x = width
-					test_runner.open()
+							if G.test_runner.size.x < width:
+								G.test_runner.size.x = width
+					G.test_runner.open()
 			else:
 				G.warn_user("Error opening file: " + test_file)
 
@@ -647,11 +646,11 @@ func reset_test_environment():
 	set_all_connection_colors()
 	tester.test_step = 0
 	test_output_line = 0
-	test_runner.set_text("")
-	test_runner.text_area.clear() # Clear bbcode tags
+	G.test_runner.set_text("")
+	G.test_runner.text_area.clear() # Clear bbcode tags
 	tester.reset()
 	test_state = G.TEST_STATUS.STEPPABLE
-	test_runner.set_button_status(test_state)
+	G.test_runner.set_button_status(test_state)
 	a_part_was_deleted = false
 
 
@@ -663,14 +662,14 @@ func reset_parts():
 
 func _on_test_runner_step():
 	if test_state == G.TEST_STATUS.STEPPABLE:
-		test_runner.set_button_status(test_state)
+		G.test_runner.set_button_status(test_state)
 		run_test()
 
 
 func _on_test_runner_play():
 	if test_state != G.TEST_STATUS.DONE:
 		test_state = G.TEST_STATUS.PLAYING
-		test_runner.set_button_status(test_state)
+		G.test_runner.set_button_status(test_state)
 		start_time = Time.get_ticks_msec()
 		set_process(true)
 
@@ -678,7 +677,7 @@ func _on_test_runner_play():
 func _on_test_runner_stop():
 	if test_state != G.TEST_STATUS.DONE:
 		test_state = G.TEST_STATUS.STEPPABLE
-		test_runner.set_button_status(test_state)
+		G.test_runner.set_button_status(test_state)
 		set_process(false)
 
 
@@ -690,14 +689,14 @@ func run_test():
 			# A deleted part will cause a crash so abort the tests
 			test_state = G.TEST_STATUS.DONE
 			set_process(false)
-			test_runner.hide()
+			G.test_runner.hide()
 			break
 		if tester.test_step == tester.tasks.size():
 			if OS.is_debug_build():
 				print("Run time: %dms" % [Time.get_ticks_msec() - start_time])
-			test_runner.text_area.add_text("DONE")
+			G.test_runner.text_area.add_text("DONE")
 			test_state = G.TEST_STATUS.DONE
-			test_runner.set_button_status(test_state)
+			G.test_runner.set_button_status(test_state)
 			set_process(false)
 			break
 		reset_race_counters()
@@ -716,14 +715,14 @@ func run_test():
 		tester.process_task(task)
 		match task[0]:
 			"output-list":
-				test_runner.text_area.add_text(tester.output)
+				G.test_runner.text_area.add_text(tester.output)
 				test_output_line += 1
 			"output":
 				if test_output_line < compare_lines.size():
-					add_compared_string(tester.output, compare_lines[test_output_line], test_runner.text_area)
+					add_compared_string(tester.output, compare_lines[test_output_line], G.test_runner.text_area)
 					test_output_line += 1
 				else:
-					test_runner.text_area.add_text(tester.output)
+					G.test_runner.text_area.add_text(tester.output)
 				break
 		if break_out:
 			break

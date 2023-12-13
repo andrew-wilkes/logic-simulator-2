@@ -40,6 +40,19 @@ bbcode_enabled = true
 text = "[b]Lorem Ipsum[/b] is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
 scroll_following = true
 
+[node name="Notification" type="Label" parent="M/VB"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(100, 23)
+layout_mode = 2
+autowrap_mode = 2
+
+[node name="ProgressBar" type="ProgressBar" parent="M/VB"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 5)
+layout_mode = 2
+value = 60.0
+show_percentage = false
+
 [node name="HB" type="HBoxContainer" parent="M/VB"]
 layout_mode = 2
 theme_override_constants/separation = 10

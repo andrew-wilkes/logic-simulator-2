@@ -137,6 +137,7 @@ func process_task(task):
 		"while":
 			if loop_start_time == 0:
 				loop_start_time = Time.get_ticks_msec()
+				G.test_runner.update_bar(LOOP_TIME_LIMIT / 1000.0)
 			# while x op y { tasks to repeat }
 			var x = get_pin_value(task[1])
 			var op = task[2]
@@ -156,7 +157,8 @@ func process_task(task):
 				"=":
 					is_true = x == y
 			if loop_start_time > 0:
-				if Time.get_ticks_msec() - loop_start_time > LOOP_TIME_LIMIT:
+				var duration = Time.get_ticks_msec() - loop_start_time
+				if duration > LOOP_TIME_LIMIT:
 					loop_start_time = 0
 					is_true = false
 			if is_true:
@@ -167,8 +169,8 @@ func process_task(task):
 			else:
 				repetitive_tasks.clear()
 		"echo":
-			if G.message_panel:
-				G.message_panel.show_message(task[1])
+			if G.test_runner:
+				G.test_runner.notify(task[1])
 
 
 func get_pin_value(pin: String):

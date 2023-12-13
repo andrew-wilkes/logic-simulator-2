@@ -10,6 +10,8 @@ enum TEST { STEPPABLE, PLAYING, DONE }
 func _ready():
 	%Alpha.value = G.settings.tester_alpha * 100.0
 	%Speed.value = G.settings.tester_speed
+	%Notification.hide()
+	%ProgressBar.hide()
 
 
 func _on_step_pressed():
@@ -55,3 +57,20 @@ func set_button_status(state):
 			%Play.disabled = true
 			%Stop.disabled = true
 			%Reset.disabled = false
+
+
+func notify(text, display_time = 5.0):
+	%Notification.text = text
+	%Notification.show()
+	await get_tree().create_timer(display_time).timeout
+	%Notification.text = ""
+	%Notification.hide()
+
+
+func update_bar(duration):
+	%ProgressBar.show()
+	%ProgressBar.value = 100.0
+	var tween = get_tree().create_tween()
+	tween.tween_property(%ProgressBar, "value", 0, duration)
+	await tween.finished
+	%ProgressBar.hide()

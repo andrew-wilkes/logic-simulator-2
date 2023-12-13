@@ -6,7 +6,7 @@
 offset_left = 32.0
 offset_top = 22.0
 offset_right = 166.0
-offset_bottom = 133.0
+offset_bottom = 108.0
 mouse_filter = 1
 title = "Keyboard"
 slot/0/left_enabled = false
@@ -27,15 +27,6 @@ slot/1/right_type = 1
 slot/1/right_color = Color(1, 1, 0, 1)
 slot/1/right_icon = null
 slot/1/draw_stylebox = true
-slot/2/left_enabled = false
-slot/2/left_type = 0
-slot/2/left_color = Color(1, 1, 1, 1)
-slot/2/left_icon = null
-slot/2/right_enabled = false
-slot/2/right_type = 0
-slot/2/right_color = Color(1, 1, 1, 1)
-slot/2/right_icon = null
-slot/2/draw_stylebox = true
 script = ExtResource("3_78smo")
 
 [node name="HB" type="HBoxContainer" parent="."]
@@ -62,15 +53,10 @@ horizontal_alignment = 2
 wait_time = 0.65
 autostart = true
 
-[node name="Message" type="Label" parent="."]
-modulate = Color(0, 1, 0, 1)
-layout_mode = 2
-
 [node name="Tag" type="LineEdit" parent="."]
 visible = false
 layout_mode = 2
 expand_to_text_length = true
 
-[connection signal="tree_exiting" from="." to="." method="_on_tree_exiting"]
 [connection signal="text_changed" from="HB/Chars" to="." method="_on_chars_text_changed"]
 [connection signal="timeout" from="HB/BlinkTimer" to="." method="_on_blink_timer_timeout"]
