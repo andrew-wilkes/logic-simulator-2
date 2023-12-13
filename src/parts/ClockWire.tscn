@@ -1,0 +1,25 @@
+[gd_scene load_steps=2 format=3 uid="uid://bokwncymvf4qv"]
+
+[ext_resource type="Script" path="res://parts/ClockWire.gd" id="1_6w481"]
+
+[node name="ClockWire" type="GraphNode"]
+offset_left = 29.0
+offset_top = 9.0
+offset_right = 132.0
+offset_bottom = 95.0
+mouse_filter = 1
+slot/0/left_enabled = true
+slot/0/left_type = 0
+slot/0/left_color = Color(0.980392, 1, 1, 1)
+slot/0/left_icon = null
+slot/0/right_enabled = true
+slot/0/right_type = 0
+slot/0/right_color = Color(0.980392, 1, 1, 1)
+slot/0/right_icon = null
+slot/0/draw_stylebox = true
+script = ExtResource("1_6w481")
+
+[node name="Tag" type="LineEdit" parent="."]
+layout_mode = 2
+alignment = 1
+expand_to_text_length = true
