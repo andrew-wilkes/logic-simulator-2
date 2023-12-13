@@ -21,3 +21,5 @@ src/*.tres
 # Related to line counting
 out/
 .VSCodeCounter/
+
+build/
