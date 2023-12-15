@@ -51,6 +51,7 @@ filters = PackedStringArray("*.txt ,*.hdl,*.tst,*.cmp; Text files")
 [node name="C" type="CanvasLayer" parent="."]
 
 [node name="Panel" parent="C" instance=ExtResource("4_d40v0")]
+visible = false
 offset_right = 470.0
 offset_bottom = 503.0
 

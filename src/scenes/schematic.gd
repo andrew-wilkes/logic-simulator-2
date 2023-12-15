@@ -198,6 +198,7 @@ func add_part(part):
 	part.part_type = part.name
 	part.position_offset = PART_INITIAL_OFFSET + scroll_offset / zoom \
 		+ part_initial_offset_delta
+	part.size.x = 0 # Shrink width
 	update_part_initial_offset_delta()
 	
 	# We want precise control of node names to keep circuit data robust
