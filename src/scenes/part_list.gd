@@ -49,3 +49,9 @@ func _on_list_item_clicked(index, _at_position, mouse_button_index, column_index
 			# Delete block entry
 			G.settings.blocks.erase(list.get_item_text(index))
 			list.remove_item(index)
+
+
+func _on_item_list_gui_input(event):
+	# Prevent scroll wheel of mouse from causing window to close
+	if event is InputEventMouseButton and event.button_index > 1:
+		get_viewport().set_input_as_handled()
