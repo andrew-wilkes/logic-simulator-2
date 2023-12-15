@@ -58,6 +58,10 @@ func _ready():
 	set("mouse_default_cursor_shape", CURSOR_DRAG)
 	setup_instance()
 	call_deferred("shrink_height")
+	if get_parent().name == "root":
+		controller = Controller.new()
+		var free_ob = Callable(controller, "free")
+		tree_exiting.connect(free_ob)
 
 
 # Some parts such as BusColor have extra height for some reason when added to the scene
@@ -155,6 +159,7 @@ func _on_gui_input(event):
 
 func changed():
 	change_notification_timer.start()
+	size.x = 0 # To shrink the width after reducing the Tag text length
 
 
 func _on_change_notification_timer_timeout():
