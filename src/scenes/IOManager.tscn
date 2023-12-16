@@ -28,6 +28,7 @@ text = "Value"
 horizontal_alignment = 1
 
 [node name="Value" parent="HB/VB" instance=ExtResource("2_jml11")]
+unique_name_in_owner = true
 layout_mode = 2
 alignment = 1
 

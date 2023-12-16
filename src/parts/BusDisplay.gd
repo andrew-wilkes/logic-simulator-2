@@ -7,7 +7,7 @@ enum { HEX, DEC, BIN, MAP }
 func _init():
 	super()
 	data["num_digits"] = 2
-	data["mode"] = 0
+	data["mode"] = HEX
 	data["dp_position"] = 0
 
 
@@ -197,7 +197,7 @@ func get_code(n):
 		0x00, # (del)
 	]
 	
-	if data.mode > 2:
+	if data.mode == MAP: # Get ASCII code
 		if n < 32 or n > 95:
 			return codes[0]
 		else:

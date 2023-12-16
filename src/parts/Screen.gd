@@ -58,6 +58,10 @@ func update_value(new_val: int, address: int):
 	update_probes()
 
 
+func set_value(address, value):
+	update_value(value, address)
+
+
 func reset():
 	super()
 	if show_display:
