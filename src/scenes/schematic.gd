@@ -162,6 +162,7 @@ func duplicate_selected_parts():
 		new_part.controller = self
 		add_child(new_part)
 		new_part.setup()
+		new_part.size.x = 0 # Shrink width
 		new_part.name = part.part_type + circuit.get_next_id()
 		part_map[part.name] = new_part.name
 	# Duplicate connections between duplicated parts
@@ -282,6 +283,7 @@ func add_parts():
 		part.position_offset = Vector2(node.offset[0], node.offset[1])
 		part.tooltip_text = part.name
 		part.position_offset_changed.connect(part.changed)
+		part.size.x = 0 # Shrink width
 
 
 func add_connections():

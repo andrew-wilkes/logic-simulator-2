@@ -50,7 +50,7 @@ func update_value(value: int, address: int):
 
 func evaluate_bus_output_value(side, port, value: int):
 	if side == LEFT and port == 1: # Change of address
-		show_address(value)
+		show_address(value % mem_size)
 		show_data(values[value % mem_size])
 		update_output_value(RIGHT, OUT, values[value % mem_size])
 
