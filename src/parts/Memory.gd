@@ -27,6 +27,10 @@ func show_bits():
 	pass # Mask off this RAM feature
 
 
+func update_input_level(side, port, level, clock):
+	prints(port, level, clock)
+	super(side, port, level, clock)
+
 func evaluate_output_level(side, port, level):
 	if side == LEFT:
 		# Direct the signals to the 16K RAM or the Screen
@@ -41,8 +45,9 @@ func evaluate_output_level(side, port, level):
 
 
 func evaluate_bus_output_value(side, port, value):
+	prints("Bus", port, value)
 	if side == LEFT:
-		var address = pins.get([LEFT, RAM_ADDRESS], 0)
+		var address = get_address()
 		if port == RAM_IN:
 			# Pass changed data value to screen data bus
 			update_output_value(RIGHT, RAM_SCREEN_DATA, value)
@@ -69,3 +74,7 @@ func evaluate_bus_output_value(side, port, value):
 		elif port == RAM_SCREEN and address >= SCREEN_START_ADDRESS and address < KEYBOARD_ADDRESS:
 			update_output_value(RIGHT, RAM_OUT, value)
 			show_data(value)
+
+
+func get_address():
+	return pins.get([LEFT, RAM_ADDRESS], 0) & 0x6fff

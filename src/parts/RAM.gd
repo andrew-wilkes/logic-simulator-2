@@ -27,16 +27,16 @@ func show_bits():
 		$Size.text = data.size
 
 
-func evaluate_output_level(side, port, _level):
-	if side == LEFT:
+func evaluate_output_level(side, port, level):
+	if side == LEFT and port == 3: # clk edge
 		var address = get_address()
-		var ld = pins.get([LEFT, 2], false)
-		var clk = pins.get([LEFT, 3], false)
-		if clk and ld:
-			var value = pins.get([LEFT, 0], 0)
-			update_value(value, address)
-			update_probes()
-		if port == 3 and not clk:
+		if level:
+			var ld = pins.get([LEFT, 2], false)
+			if ld:
+				var value = pins.get([LEFT, 0], 0)
+				update_value(value, address)
+				update_probes()
+		else:
 			show_data(values[address])
 			update_output_value(RIGHT, OUT, values[address])
 

@@ -10,16 +10,16 @@ func _init():
 	clock_ports = [2]
 
 
-func evaluate_output_level(side, port, _level):
-	if side == LEFT:
-		var ld = pins.get([side, 1], false)
-		var clk = pins.get([side, 2], false)
-		if clk and ld:
-			value = pins.get([side, 0], 0)
-			if show_display:
-				$Value.text = get_display_hex_value(value)
-			update_output_value(RIGHT, 1, value)
-		if port == 2 and not clk:
+func evaluate_output_level(side, port, level):
+	if side == LEFT and port == 2:
+		if level:
+			var ld = pins.get([side, 1], false)
+			if ld:
+				value = pins.get([side, 0], 0)
+				if show_display:
+					$Value.text = get_display_hex_value(value)
+				update_output_value(RIGHT, 1, value)
+		else:
 			update_output_value(RIGHT, OUT, value)
 
 
