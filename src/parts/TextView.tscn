@@ -37,7 +37,6 @@ expand_to_text_length = true
 
 [node name="ViewButton" type="Button" parent="."]
 layout_mode = 2
-disabled = true
 text = "Open"
 
 [node name="FileDialog" type="FileDialog" parent="."]

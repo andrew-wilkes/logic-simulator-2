@@ -24,6 +24,7 @@ func _ready():
 	else:
 		$FileDialog.current_dir = G.settings.test_dir
 	if data.file.is_empty():
+		$ViewButton.disabled = true
 		$FileDialog.popup_centered()
 	else:
 		load_file()
