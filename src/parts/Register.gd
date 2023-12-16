@@ -7,7 +7,6 @@ var value = 0
 func _init():
 	order = 80
 	category = SYNC
-	clock_ports = [2]
 
 
 func evaluate_output_level(side, port, level):

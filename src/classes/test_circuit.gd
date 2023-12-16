@@ -102,7 +102,7 @@ func process_task(task):
 				var target = inputs[pin_name] # [part, port, port_type]
 				target[0].clock_ports = []
 				if target[2] == 0: # Wire
-					target[0].update_input_level(0, target[1], value == 1, ClockState.new())
+					target[0].update_input_level(0, target[1], value == 1)
 				else: #Bus
 					target[0].update_bus_input_value(0, target[1], int(value))
 		"eval":
@@ -116,7 +116,7 @@ func process_task(task):
 				time += 1 # tock
 			if inputs.has(CLOCK_PIN):
 				var target = inputs[CLOCK_PIN] # [part, port, port_type]
-				target[0].update_input_level(0, target[1], tick, ClockState.new())
+				target[0].update_input_level(0, target[1], tick)
 			get_output_values()
 		"repeat":
 			if repeat_counter > 0:

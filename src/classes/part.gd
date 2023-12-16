@@ -75,10 +75,9 @@ func setup_instance():
 	pass
 
 
-func update_input_level(side, port, level, clock):
+func update_input_level(side, port, level):
 	if DEBUG:
 		prints("part update_input_level", self.name, side, port, level)
-	var eval = false
 	var key = set_pin_value(side, port, level)
 	if key != null:
 		if race_counter.has(key):
@@ -88,11 +87,6 @@ func update_input_level(side, port, level, clock):
 				return
 		else:
 			race_counter[key] = 1
-		if clock_ports.has(port):
-			clock.source = true
-		else:
-			eval = true
-	if eval or clock.eval:
 		evaluate_output_level(side, port, level)
 
 

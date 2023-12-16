@@ -63,7 +63,7 @@ func connect_wire(from_part, from_pin, to_part, to_pin):
 				var con_type = from.get_slot_type_right(slot)
 				if con_type == 0:
 					var level = from.pins.get([RIGHT, from_pin], false)
-					node.update_input_level(LEFT, to_pin, level, ClockState.new())
+					node.update_input_level(LEFT, to_pin, level)
 					node.update_output_level_with_color(LEFT, to_pin, level)
 				else:
 					node.update_bus_input_value(LEFT, to_pin, from.pins.get([RIGHT, from_pin], 0))
@@ -391,31 +391,21 @@ func right_click_on_part(part):
 
 
 func output_level_changed_handler(part, side, port, level):
-	# Clock destinations must all be set before their effects are propagated.
-	# PC counter may cause ROM to send new data to a clocked part for example.
-	# So the clocked part must have its clock input at the correct state before this data arrives.
-	var clock = ClockState.new()
-	for n in 2:
-		if n > 0:
-			if clock.source:
-				clock.eval = true
-			else:
-				break
-		for con in get_connection_list():
-			if side == RIGHT:
-				if con.from_node == part.name and con.from_port == port:
-					var node = get_node(NodePath(con.to_node))
-					node.update_input_level(LEFT, con.to_port, level, clock)
-					if G.settings.indicate_to_levels:
-						node.indicate_level(LEFT, con.to_port, level)
-			else:
-				if con.to_node == part.name and con.to_port == port:
-					var node = get_node(NodePath(con.from_node))
-					node.update_input_level(RIGHT, con.from_port, level, clock)
-					if G.settings.indicate_to_levels:
-						node.indicate_level(RIGHT, con.from_port, level)
-			if G.settings.indicate_from_levels:
-				part.indicate_level(side, port, level)
+	for con in get_connection_list():
+		if side == RIGHT:
+			if con.from_node == part.name and con.from_port == port:
+				var node = get_node(NodePath(con.to_node))
+				node.update_input_level(LEFT, con.to_port, level)
+				if G.settings.indicate_to_levels:
+					node.indicate_level(LEFT, con.to_port, level)
+		else:
+			if con.to_node == part.name and con.to_port == port:
+				var node = get_node(NodePath(con.from_node))
+				node.update_input_level(RIGHT, con.from_port, level)
+				if G.settings.indicate_to_levels:
+					node.indicate_level(RIGHT, con.from_port, level)
+		if G.settings.indicate_from_levels:
+			part.indicate_level(side, port, level)
 
 
 func bus_value_changed_handler(part, side, port, value):

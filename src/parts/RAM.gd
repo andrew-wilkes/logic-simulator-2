@@ -7,7 +7,6 @@ func _init():
 	category = SYNC
 	data["bits"] = 16
 	data["size"] = "8K"
-	clock_ports = [3]
 
 
 func _ready():

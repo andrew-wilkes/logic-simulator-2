@@ -20,16 +20,11 @@ func _init():
 	order = 0
 	category = SYNC
 	data["size"] = "16K"
-	clock_ports = [3]
 
 
 func show_bits():
 	pass # Mask off this RAM feature
 
-
-func update_input_level(side, port, level, clock):
-	prints(port, level, clock)
-	super(side, port, level, clock)
 
 func evaluate_output_level(side, port, level):
 	if side == LEFT:
@@ -45,7 +40,6 @@ func evaluate_output_level(side, port, level):
 
 
 func evaluate_bus_output_value(side, port, value):
-	prints("Bus", port, value)
 	if side == LEFT:
 		var address = get_address()
 		if port == RAM_IN:

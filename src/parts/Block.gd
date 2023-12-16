@@ -72,7 +72,7 @@ func block_setup(_file_chain = []):
 			if is_output(part):
 				outputs.append(part)
 				output_pin_count += part.data.num_wires + 1
-		if part.part_type in ["Bus", "Wire", "TriState", "ClockWire"]:
+		if part.part_type in ["Bus", "Wire", "TriState"]:
 			if is_input(part):
 				inputs.append(part)
 				input_pin_count += 1
@@ -192,14 +192,6 @@ func add_parts():
 		if part.part_type == "Block":
 			part.block_setup(file_chain)
 		parts[part.name] = part
-		# Assign clock port if found
-		for clock_port in part.clock_ports:
-			for con in circuit.data.connections:
-				if con.to_node == part.name and con.to_port == clock_port:
-					for idx in input_map.size():
-						if input_map[idx] == [con.from_node, int(con.from_port)]:
-							clock_ports.append(idx)
-							break
 
 
 func get_map(side: int, port: int):
@@ -255,15 +247,8 @@ func update_internal_input_level(part, side: int, port: int, level):
 		prints("block update_internal_input_level", part.name, side, port, level)
 	var cons = part.connections.get([side, port])
 	if cons:
-		var clock = ClockState.new()
-		for n in 2:
-			if n > 0:
-				if clock.source:
-					clock.eval = true
-				else:
-					break
-			for connection in cons:
-				parts[connection[0]].update_input_level(int(side == 0), connection[1], level, clock)
+		for connection in cons:
+			parts[connection[0]].update_input_level(int(side == 0), connection[1], level)
 
 
 func add_connections_to_part(part):
