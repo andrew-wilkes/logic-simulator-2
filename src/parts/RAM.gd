@@ -15,10 +15,15 @@ func _ready():
 	update()
 
 
+func setup_instance():
+	update()
+
+
 func update():
 	mem_size = get_mem_size(data.size)
 	resize_memory(mem_size)
-	show_bits()
+	if show_display:
+		show_bits()
 
 
 func show_bits():

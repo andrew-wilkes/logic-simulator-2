@@ -3,7 +3,7 @@ class_name MemoryProbe
 extends Part
 
 # This needs to be set when connecting to this part
-var memory: BaseMemory
+var memory: Part
 
 func _init():
 	category = UTILITY

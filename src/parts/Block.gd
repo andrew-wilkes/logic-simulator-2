@@ -23,6 +23,7 @@ var outputs = []
 var file_chain = []
 var wire_color = Color.WHITE
 var bus_color = Color.YELLOW
+var memory
 
 func _init():
 	data = { "circuit_file": "", "wiring_hash": 0 }
@@ -183,6 +184,8 @@ func add_parts():
 		part.tag = node.tag
 		part.part_type = node.part_type
 		part.data = node.data
+		if part.part_type == "RAM":
+			memory = part
 		# Part instances have a name but circuit.data.parts store the name as node_name
 		part.name = node.node_name
 		part.show_display = false

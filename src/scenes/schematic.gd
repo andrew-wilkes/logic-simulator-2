@@ -585,12 +585,17 @@ func circuit_changed(emit = true):
 		if node is BaseMemory:
 			node.probes.clear()
 			memories[node.name] = node
+		if node is Block:
+			if node.memory:
+				node.memory.probes.clear()
+				memories[node.name] = node.memory
 	for con in get_connection_list():
-		if memories.has(con.from_node) and probes.has(con.to_node):
-			memories[con.from_node].probes.append(probes[con.to_node])
-			probes[con.to_node].memory = memories[con.from_node]
-		if memories.has(con.from_node) and injectors.has(con.to_node):
-			injectors[con.to_node].memory = memories[con.from_node]
+		if memories.has(con.from_node):
+			if probes.has(con.to_node):
+				memories[con.from_node].probes.append(probes[con.to_node])
+				probes[con.to_node].memory = memories[con.from_node]
+			if injectors.has(con.to_node):
+				injectors[con.to_node].memory = memories[con.from_node]
 	for pname in probes:
 		probes[pname].update_data()
 

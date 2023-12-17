@@ -2,7 +2,7 @@ class_name MemoryInjector
 
 extends Part
 
-var memory: BaseMemory
+var memory: Part
 
 func _init():
 	category = UTILITY
