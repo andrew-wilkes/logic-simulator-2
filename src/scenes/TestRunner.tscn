@@ -102,6 +102,12 @@ value = 10.0
 layout_mode = 2
 text = "Close"
 
+[node name="ProgressTimeout" type="Timer" parent="."]
+one_shot = true
+
+[node name="NotificationTimeout" type="Timer" parent="."]
+one_shot = true
+
 [connection signal="gui_input" from="M" to="." method="_on_margin_container_gui_input"]
 [connection signal="mouse_entered" from="M" to="." method="_on_margin_container_mouse_entered"]
 [connection signal="mouse_exited" from="M" to="." method="_on_margin_container_mouse_exited"]
@@ -115,3 +121,5 @@ text = "Close"
 [connection signal="value_changed" from="M/VB/HB/Speed" to="." method="_on_speed_value_changed"]
 [connection signal="value_changed" from="M/VB/HB/Alpha" to="." method="_on_alpha_value_changed"]
 [connection signal="pressed" from="M/VB/HB/CloseButton" to="." method="_on_close_button_pressed"]
+[connection signal="timeout" from="ProgressTimeout" to="." method="_on_progress_timeout_timeout"]
+[connection signal="timeout" from="NotificationTimeout" to="." method="_on_notification_timeout_timeout"]

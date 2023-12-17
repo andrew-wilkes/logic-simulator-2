@@ -7,6 +7,8 @@ signal reset()
 
 enum TEST { STEPPABLE, PLAYING, DONE }
 
+var tween: Tween
+
 func _ready():
 	%Alpha.value = G.settings.tester_alpha * 100.0
 	%Speed.value = G.settings.tester_speed
@@ -26,7 +28,13 @@ func _on_stop_pressed():
 	emit_signal("stop")
 
 
+func _on_close_button_pressed():
+	emit_signal("stop")
+	hide()
+
+
 func _on_reset_pressed():
+	clear_notifications()
 	emit_signal("reset")
 
 
@@ -62,15 +70,31 @@ func set_button_status(state):
 func notify(text, display_time = 5.0):
 	%Notification.text = text
 	%Notification.show()
-	await get_tree().create_timer(display_time).timeout
-	%Notification.text = ""
-	%Notification.hide()
+	$NotificationTimeout.start(display_time)
 
 
 func update_bar(duration):
 	%ProgressBar.show()
 	%ProgressBar.value = 100.0
-	var tween = get_tree().create_tween()
+	tween = get_tree().create_tween()
 	tween.tween_property(%ProgressBar, "value", 0, duration)
-	await tween.finished
+	$ProgressTimeout.start(duration)
+
+
+func clear_notifications():
+	if tween:
+		tween.kill()
 	%ProgressBar.hide()
+	%Notification.text = ""
+	%Notification.hide()
+	$ProgressTimeout.stop()
+	$NotificationTimeout.stop()
+
+
+func _on_progress_timeout_timeout():
+	%ProgressBar.hide()
+
+
+func _on_notification_timeout_timeout():
+	%Notification.text = ""
+	%Notification.hide()

@@ -8,6 +8,7 @@ var settings
 var warning
 var message_panel
 var test_runner
+var debug_timestamp = 0
 
 func _init():
 	settings = Settings.new()
@@ -75,3 +76,9 @@ func notify_user(msg):
 
 func warn_user(msg):
 	warning.open(msg)
+
+
+func debug(text = ""):
+	var now = Time.get_ticks_msec()
+	prints("DEBUG", text, "T +", str(now - debug_timestamp) + "ms")
+	debug_timestamp = now

@@ -167,9 +167,12 @@ func process_task(task):
 					repetitive_tasks = parse_spec(task[4])
 			else:
 				repetitive_tasks.clear()
+				loop_start_time = 0
 		"echo":
 			if G.test_runner:
 				G.test_runner.notify(task[1])
+		"clear-echo":
+			G.test_runner.clear_notifications()
 
 
 func get_pin_value(pin: String):
@@ -247,7 +250,7 @@ func parse_spec(spec: String):
 				regex.compile("\\s%")
 				_tasks.append([token, regex.sub(spec.substr(idx, pos - idx), "%", true)])
 				idx = pos + 1
-			"output", "eval", "tick", "tock":
+			"output", "eval", "tick", "tock", "clear-echo":
 				_tasks.append([token])
 			"set":
 				# Find a string ending with , or ;
