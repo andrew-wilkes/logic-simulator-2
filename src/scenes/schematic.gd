@@ -421,7 +421,7 @@ func bus_value_changed_handler(part, side, port, value):
 
 
 func unstable_handler(part, side, port):
-	G.warn_user("Unstable input to %s on %s side, port: %d" % [part.name, ["left", "right"][side], port])
+	G.warn_user("Unstable input to %s on %s side, pin: %d" % [part.name, ["left", "right"][side], port])
 
 
 func reset_race_counters():

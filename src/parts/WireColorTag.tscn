@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://cebba5vujpuxs" path="res://scenes/color_picker.tscn" id="3_ua7tg"]
 
 [node name="WireColorTag" type="GraphNode"]
+custom_minimum_size = Vector2(0, 100)
 offset_right = 56.0
 offset_bottom = 76.0
 theme = ExtResource("1_o4x81")
@@ -29,7 +30,7 @@ slot/1/draw_stylebox = true
 script = ExtResource("2_34u4s")
 
 [node name="ColorRect" type="ColorRect" parent="."]
-custom_minimum_size = Vector2(10, 10)
+custom_minimum_size = Vector2(10, 20)
 layout_mode = 2
 
 [node name="ColorPicker" parent="." instance=ExtResource("3_ua7tg")]

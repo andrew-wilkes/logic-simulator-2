@@ -1,13 +1,16 @@
-[gd_scene load_steps=2 format=3 uid="uid://co08lxfcj06uj"]
+[gd_scene load_steps=3 format=3 uid="uid://co08lxfcj06uj"]
 
+[ext_resource type="Theme" uid="uid://deqbs7na0dine" path="res://assets/ui/schematic.theme" id="1_2c4mg"]
 [ext_resource type="Script" path="res://parts/Wire.gd" id="3_pxc1b"]
 
 [node name="Wire" type="GraphNode"]
+custom_minimum_size = Vector2(0, 70)
 offset_left = 29.0
 offset_top = 9.0
 offset_right = 132.0
-offset_bottom = 95.0
+offset_bottom = 65.0
 mouse_filter = 1
+theme = ExtResource("1_2c4mg")
 slot/0/left_enabled = true
 slot/0/left_type = 0
 slot/0/left_color = Color(0.980392, 1, 1, 1)
