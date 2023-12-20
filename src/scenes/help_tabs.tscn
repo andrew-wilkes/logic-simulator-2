@@ -54,7 +54,7 @@ Previously saved circuits may be loaded as blocks. This causes them to appear as
 
 IO parts are required in order to obtain IO pins for block parts. One side of each of these parts should be fully un-connected for it to be deemed an input or output of the circuit when loaded as a block. Inside of a block, the IO Manager panel is no longer available. The internal IO parts of the block have their pins assigned to block pins in relation to their positions in the schematic diagram.
 
-Circuits containing blocks that have been saved may also be loaded as blocks to nest or encapsulate their functionality into ever more complex circuits. This will impact speed since there will be exponential growth in the number of parts to be processed, but blocks do not involve coloring wires and visual elements except for surfaced displays.
+Circuits containing blocks that have been saved may also be loaded as blocks to nest or encapsulate their functionality into ever more complex circuits. This will impact speed since there will be exponential growth in the number of parts to be processed, but blocks do not involve coloring wires and visual elementss.
 
 Displays left in blocks will be shown in the block part unless marked to be hidden.
 
@@ -65,7 +65,7 @@ The IO part may be used to set the bus value and pin levels to stimulate the cir
 
 Right-clicking on the IO part opens a panel that contains controls for entering the value, adjusting the value with a slider, or stepping the value up or down. The step buttons act like on a keyboard with a repeating action if held down. The panel may be moved so as not to obscure parts.
 
-IO parts also, capture and display values that they receive. The bus and wires of the IO part keep in sync as if wired in parallel, but the number of wires limit the range of numbers supported via the wired output pins. So a data input of 0xff may be clipped to 0xf if there were only 4 output wires used to connect the output.
+IO parts also capture and display values that they receive. The bus and wires of the IO part keep in sync as if wired in parallel, but the number of wires limit the range of numbers supported via the wired output pins. So a data input of 0xff may be clipped to 0xf if there were only 4 output wires used to connect the output.
 
 It is best practice to only use the bus input or wire inputs for an IO part to avoid them fighting over what is the input value. When manually entering values with the slider or buttons, the Range setting limits the maximum value.
 
@@ -81,7 +81,7 @@ The circuit has an editable Title label which is saved with the circuit and used
 
 The New button erases the circuit, Save saves to the current file or initiates the SaveAs dialog, and Load is used to open a saved circuit. Load as block inserts a block part into the current circuit. The Tools menu is available for tasks such as numbering parts. Settings are saved and loaded with the software. Circuits are saved with the schematic settings, part settings, connections, and data such as colors.
 
-Quit the App. by pressing the Esc key. This prompts you to save the cicuit if unsaved changes exist. Unsaved changes are indicated by a red color of the file name.
+Quit the App. by pressing the Esc key. sUnsaved changes are indicated by a red color of the file name.
 "
 
 [node name="Shortcuts" type="MarginContainer" parent="."]
@@ -233,7 +233,17 @@ Some parts have functionality that is accessed by right-clicking on the part to 
  ROM - the popup panel allows for choosing a data file (in .hack or .bin format) to load into the memory
  RAM - the popup panel provides a hex viewer/editor for the contents of the memory
  TextView - the popup panel allows for choosing a text file to be associated with this part
+Note - this allows for keeping some notes to save with your circuit
 [/ul]
+
+[b]MemoryInjector[/b]
+This part is used when testing RAM where the test involves setting a value in memory. It is set to an address value and connected to any bus output of the memory chip. Also, it needs a name to correspond with an input pin defined in the test script.
+
+[b]MemoryProbe[/b]
+This part is used by the tester to monitor the value stored at a memory address that is set on the part. The part is attached to any bus output of the memory chip.
+
+[b]Wire[/b] - used for tester input and output pins.
+[b]Bus[/b] -  also used for tester input and output pins.
 
 [b]RAM Memory Inspector[/b]
 Using this pop-up panel of a RAM chip, you are able to step through pages of the memory to view the contents of the words/bytes of data and see any ASCII characters that may be present.
@@ -243,6 +253,19 @@ The data cells are editable. You may enter a decimal, hex (0xff) or binary (b100
 Hovering the mouse over a cell will display the value in binary form.
 
 You may also erase the memory, and reconfigure its size and bit depth.
+
+[b]Keyboard[/b] allows for entering key codes by typing in its' text input box.
+
+[b]BusTap[/b]  allows for splitting out a data bit from a bus to a wire. The bit number is specified on the part.
+
+[b]Display[/b]
+This allows for 1 or more 7 segment displays with an optional decimal point. The color may be set and the display mode.
+The input value is displayed as decimal, hexadecimal, binary, or something approximating the ASCII character for each byte.
+The dp_select input value sets the position of the decimal point for values over zero. Zero means don't show a decimal point.
+
+[b]Clock[/b]
+This has a clock pulse output and a reset output. The reset is toggled high and low with each press of the button.
+The clock may be manually toggled or the slider bar moved to set a constant rate of pulses.s
 
 [b]ALU[/b]
 
