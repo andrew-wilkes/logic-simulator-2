@@ -3,10 +3,11 @@
 [ext_resource type="Script" path="res://parts/Bus.gd" id="3_gxedj"]
 
 [node name="Bus" type="GraphNode"]
+custom_minimum_size = Vector2(0, 70)
 offset_left = 29.0
 offset_top = 9.0
 offset_right = 132.0
-offset_bottom = 65.0
+offset_bottom = 95.0
 mouse_filter = 1
 slot/0/left_enabled = true
 slot/0/left_type = 1

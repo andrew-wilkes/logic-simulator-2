@@ -26,7 +26,7 @@ func _ready():
 	if data.file.is_empty():
 		$ViewButton.disabled = true
 		$FileDialog.popup_centered()
-	else:
+	if file_exists():
 		load_file()
 
 

@@ -31,6 +31,7 @@ func evaluate_bus_output_value(side, _port, value):
 func _on_bit_value_changed(value):
 	data.bit = int(value)
 	set_bit_mask()
+	changed()
 
 
 func set_bit_mask():

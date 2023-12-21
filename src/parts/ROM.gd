@@ -22,7 +22,7 @@ func setup_instance():
 	set_max_value()
 	mem_size = get_mem_size(data.size)
 	resize_memory(mem_size)
-	if not data.file.is_empty():
+	if file_exists():
 		load_data(data.file, false)
 
 
@@ -74,4 +74,4 @@ func load_data(file_path, signal_changed = true):
 	set_output_data()
 	update_probes()
 	if signal_changed:
-		controller.emit_signal("changed")
+		changed()

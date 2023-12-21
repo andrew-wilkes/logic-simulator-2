@@ -40,3 +40,4 @@ func _on_panel_popup_hide():
 
 func _on_text_edit_text_changed():
 	data.text = $C/Panel/TextEdit.text
+	changed()

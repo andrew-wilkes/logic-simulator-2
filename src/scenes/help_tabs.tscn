@@ -267,6 +267,11 @@ The dp_select input value sets the position of the decimal point for values over
 This has a clock pulse output and a reset output. The reset is toggled high and low with each press of the button.
 The clock may be manually toggled or the slider bar moved to set a constant rate of pulses.s
 
+[b]Screen[/b]
+The screen part has a 256 x 512 pixel display and operates in the same way as a 16bit 8K RAM.
+Each row of the physical screen, is represented in the
+Screen memory map by 32 consecutive 16-bit words, starting at the top left corner.
+
 [b]ALU[/b]
 
 This part implements the Nand2Tetris ALU according to the following specification:
