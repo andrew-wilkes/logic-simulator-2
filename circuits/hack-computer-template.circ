@@ -1,0 +1,163 @@
+{
+	"connections": [
+		{
+			"from_node": "Wire41",
+			"from_port": 0,
+			"to_node": "Screen7",
+			"to_port": 3
+		}
+	],
+	"id_num": 45,
+	"minimap_enabled": true,
+	"parts": [
+		{
+			"data": {
+				"bits": 16,
+				"file": "",
+				"size": "32K"
+			},
+			"node_name": "ROM1",
+			"offset": [
+				400,
+				440
+			],
+			"part_type": "ROM",
+			"show_display": true,
+			"tag": ""
+		},
+		{
+			"data": {
+				"address": 0
+			},
+			"node_name": "MemoryProbe33",
+			"offset": [
+				1340,
+				260
+			],
+			"part_type": "MemoryProbe",
+			"show_display": true,
+			"tag": "RAM16K[0]"
+		},
+		{
+			"data": {
+				"address": 1
+			},
+			"node_name": "MemoryProbe34",
+			"offset": [
+				1340,
+				400
+			],
+			"part_type": "MemoryProbe",
+			"show_display": true,
+			"tag": "RAM16K[1]"
+		},
+		{
+			"data": {
+				"address": 2
+			},
+			"node_name": "MemoryProbe35",
+			"offset": [
+				1340,
+				540
+			],
+			"part_type": "MemoryProbe",
+			"show_display": true,
+			"tag": "RAM16K[2]"
+		},
+		{
+			"data": {
+
+			},
+			"node_name": "Bus37",
+			"offset": [
+				1120,
+				480
+			],
+			"part_type": "Bus",
+			"show_display": true,
+			"tag": "PC[]"
+		},
+		{
+			"data": {
+
+			},
+			"node_name": "Wire41",
+			"offset": [
+				580,
+				780
+			],
+			"part_type": "Wire",
+			"show_display": true,
+			"tag": "clk"
+		},
+		{
+			"data": {
+
+			},
+			"node_name": "Keyboard44",
+			"offset": [
+				540,
+				180
+			],
+			"part_type": "Keyboard",
+			"show_display": true,
+			"tag": ""
+		},
+		{
+			"data": {
+				"bits": 16,
+				"pixel_color": "ffffffff",
+				"screen_color": "00008bff",
+				"size": "8K"
+			},
+			"node_name": "Screen7",
+			"offset": [
+				1660,
+				180
+			],
+			"part_type": "Screen",
+			"show_display": true,
+			"tag": ""
+		},
+		{
+			"data": {
+				"address": 0
+			},
+			"node_name": "MemoryInjector38",
+			"offset": [
+				1340,
+				720
+			],
+			"part_type": "MemoryInjector",
+			"show_display": true,
+			"tag": "RAM16K[0]"
+		},
+		{
+			"data": {
+				"file": "",
+				"size": [
+					300,
+					200
+				],
+				"text": "You need to add CPU and Memory\nblocks to complete the computer.\n\nAlso, the ROM needs to be loaded\nwith a program such as Add.hack"
+			},
+			"node_name": "Note45",
+			"offset": [
+				780,
+				420
+			],
+			"part_type": "Note",
+			"show_display": true,
+			"tag": "Missing parts"
+		}
+	],
+	"scroll_offset": [
+		-11.6314086914062,
+		0
+	],
+	"snapping_distance": 20,
+	"snapping_enabled": true,
+	"title": "ComputerAdd",
+	"version": 2,
+	"zoom": 0.826445937156677
+}

@@ -18,9 +18,14 @@ theme_override_constants/margin_bottom = 10
 layout_mode = 2
 theme_override_colors/default_color = Color(0, 0, 0, 1)
 bbcode_enabled = true
-text = "This software was created by Andrew Wilkes (aw2010@gmail.com) in 2023.
+text = "This software was created by Andrew Wilkes in 2023.
 
-[url]Buy me a Coffee[/url]
+[url=coffee]Buy me a Coffee[/url]
+
+The supporting website is here:
+[url=website]https://logicsimx.com[/url]
+
+
 "
 
 [node name="License" type="MarginContainer" parent="."]

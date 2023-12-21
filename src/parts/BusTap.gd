@@ -13,7 +13,8 @@ func _init():
 
 func _ready():
 	super()
-	%Bit.value = data.bit
+	%Bit.set_value_no_signal(data.bit)
+	set_bit_mask()
 
 
 func setup_instance():
@@ -31,6 +32,7 @@ func evaluate_bus_output_value(side, _port, value):
 func _on_bit_value_changed(value):
 	data.bit = int(value)
 	set_bit_mask()
+	changed()
 
 
 func set_bit_mask():

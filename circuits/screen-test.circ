@@ -1,0 +1,131 @@
+{
+	"connections": [
+		{
+			"from_node": "IO3",
+			"from_port": 0,
+			"to_node": "Screen6",
+			"to_port": 0
+		},
+		{
+			"from_node": "IO4",
+			"from_port": 0,
+			"to_node": "Screen6",
+			"to_port": 1
+		},
+		{
+			"from_node": "Clock5",
+			"from_port": 0,
+			"to_node": "Screen6",
+			"to_port": 3
+		},
+		{
+			"from_node": "Clock5",
+			"from_port": 1,
+			"to_node": "Screen6",
+			"to_port": 2
+		},
+		{
+			"from_node": "Screen6",
+			"from_port": 0,
+			"to_node": "MemoryProbe2",
+			"to_port": 0
+		}
+	],
+	"id_num": 7,
+	"minimap_enabled": true,
+	"parts": [
+		{
+			"data": {
+				"address": 1
+			},
+			"node_name": "MemoryProbe2",
+			"offset": [
+				1160,
+				320
+			],
+			"part_type": "MemoryProbe",
+			"show_display": true,
+			"tag": ""
+		},
+		{
+			"data": {
+				"bus_color": "ffff00ff",
+				"labels": [
+					"- Data -",
+					"- D0 -"
+				],
+				"num_wires": 1,
+				"range": 255,
+				"wire_color": "ffffffff"
+			},
+			"node_name": "IO3",
+			"offset": [
+				400,
+				220
+			],
+			"part_type": "IO",
+			"show_display": true,
+			"tag": ""
+		},
+		{
+			"data": {
+				"bus_color": "ffff00ff",
+				"labels": [
+					"- Data -",
+					"- D0 -"
+				],
+				"num_wires": 1,
+				"range": 255,
+				"wire_color": "ffffffff"
+			},
+			"node_name": "IO4",
+			"offset": [
+				360,
+				440
+			],
+			"part_type": "IO",
+			"show_display": true,
+			"tag": ""
+		},
+		{
+			"data": {
+				"bits": 16,
+				"pixel_color": "ffffffff",
+				"screen_color": "00008bff",
+				"size": "8K"
+			},
+			"node_name": "Screen6",
+			"offset": [
+				540,
+				0
+			],
+			"part_type": "Screen",
+			"show_display": true,
+			"tag": ""
+		},
+		{
+			"data": {
+
+			},
+			"node_name": "Clock5",
+			"offset": [
+				340,
+				640
+			],
+			"part_type": "Clock",
+			"show_display": true,
+			"tag": ""
+		}
+	],
+	"scroll_offset": [
+		-52.1962890625,
+		-26.8138885498047
+	],
+	"snap_distance": 20,
+	"snapping_distance": 20,
+	"snapping_enabled": true,
+	"title": "",
+	"use_snap": true,
+	"version": 2,
+	"zoom": 0.62092125415802
+}

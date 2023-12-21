@@ -54,18 +54,16 @@ Previously saved circuits may be loaded as blocks. This causes them to appear as
 
 IO parts are required in order to obtain IO pins for block parts. One side of each of these parts should be fully un-connected for it to be deemed an input or output of the circuit when loaded as a block. Inside of a block, the IO Manager panel is no longer available. The internal IO parts of the block have their pins assigned to block pins in relation to their positions in the schematic diagram.
 
-Circuits containing blocks that have been saved may also be loaded as blocks to nest or encapsulate their functionality into ever more complex circuits. This will impact speed since there will be exponential growth in the number of parts to be processed, but blocks do not involve coloring wires and visual elements except for surfaced displays.
-
-Displays left in blocks will be shown in the block part unless marked to be hidden.
+Circuits containing blocks that have been saved may also be loaded as blocks to nest or encapsulate their functionality into ever more complex circuits. This will impact speed since there will be exponential growth in the number of parts to be processed, but blocks do not involve coloring wires and visual elementss.
 
 Chips encapsulate complex functionality in the most efficient manner since they directly implement their functionality rather than being comprised of basic parts.
 
 [b]IO Parts[/b]
-The IO part may be used to set the bus value and pin levels to stimulate the circuit. The current hex value is displayed on the part. This value may be edited by entering a decimal or hex number (0xff.. style) to set the value. The value is outputed from both sides of the part affecting whatever parts are connected to the IO part and that accept inputs in the direction of the value or level propagation. The value is applied after the enter key is pressed.
+The IO part may be used to set the bus value and pin levels to stimulate the circuit. The current hex value is displayed on the part. This value may be edited by entering a decimal or hex number (0xff.. style) to set the value. The value is outputed from both sides of the part affecting whatever parts are connected to the IO part and that accept inputs in the direction of the value or level propagation. The value is applied after the enter key is pressed and the color of the text changes from orange to green.
 
 Right-clicking on the IO part opens a panel that contains controls for entering the value, adjusting the value with a slider, or stepping the value up or down. The step buttons act like on a keyboard with a repeating action if held down. The panel may be moved so as not to obscure parts.
 
-IO parts also, capture and display values that they receive. The bus and wires of the IO part keep in sync as if wired in parallel, but the number of wires limit the range of numbers supported via the wired output pins. So a data input of 0xff may be clipped to 0xf if there were only 4 output wires used to connect the output.
+IO parts also capture and display values that they receive. The bus and wires of the IO part keep in sync as if wired in parallel, but the number of wires limit the range of numbers supported via the wired output pins. So a data input of 0xff may be clipped to 0xf if there were only 4 output wires used to connect the output.
 
 It is best practice to only use the bus input or wire inputs for an IO part to avoid them fighting over what is the input value. When manually entering values with the slider or buttons, the Range setting limits the maximum value.
 
@@ -81,7 +79,7 @@ The circuit has an editable Title label which is saved with the circuit and used
 
 The New button erases the circuit, Save saves to the current file or initiates the SaveAs dialog, and Load is used to open a saved circuit. Load as block inserts a block part into the current circuit. The Tools menu is available for tasks such as numbering parts. Settings are saved and loaded with the software. Circuits are saved with the schematic settings, part settings, connections, and data such as colors.
 
-Quit the App. by pressing the Esc key. This prompts you to save the cicuit if unsaved changes exist. Unsaved changes are indicated by a red color of the file name.
+Quit the App. by pressing the Esc key. sUnsaved changes are indicated by a red color of the file name.
 "
 
 [node name="Shortcuts" type="MarginContainer" parent="."]
@@ -197,15 +195,17 @@ text = "[b]Nand2Tetris Integration[/b]
 
 This Digital Logic Simulation software is designed to be very flexible, but at the same time it is useful to support widely-adopted standards. One of these is [b]Nand2Tetris[/b] which offers a platform for learning how digital systems work from the ground up (a NAND gate to a working computer).
 
-So an attempt has been made to support the .hdl (hardware description file format), .tst (circuit test specification), and .cmp ( the output result comparison file format) of the Nand2Tetris platform.
+So an attempt has been made to support the .hdl (hardware description file format), .tst (circuit test specification), and .cmp ( the output result comparison file format) of the Nand2Tetris platform. The relevant files are in a [i]tests[/i] directory.
 
-In order to process these files, they need to be downloaded, and a path to their base directory set up in the Settings.
+In order to process these files, the path to their base directory needs to be set in the  [i]Test file directory[/i] setting in [b]Settings[/b].
 
-They are in a [i]projects[/i] directory after downloading and unzipping the [i]Nand2tetris Software Suite[/i] file from the [url=https://www.nand2tetris.org/software]Nand2tetris Software[/url] website page. The path to this [i]projects[/i] directory needs to be set in the [i]Test file directory[/i] setting in [b]Settings[/b].
+These files are also shipped with the [i]Nand2tetris Software Suite[/i] from the [url=nand]Nand2tetris Software[/url] website.
 
 Once this is set up, you should be able to make use of them in the [i]Tools[/i] menu.
 
 A set of IO pins may be automatically produced by loading an HDL file from the Tools menu. Then, you may construct a circuit to fulfill the requirements of the specification in the HDL file which may be displayed by clicking of the TextView part that is produced. Then run the tests on your circuit to see if it passes with the Test runner panel which is opened via the Tools menu.
+
+Remember to set the Title of your circuit to the name of the Part that you will test against.
 
 
 
@@ -233,7 +233,17 @@ Some parts have functionality that is accessed by right-clicking on the part to 
  ROM - the popup panel allows for choosing a data file (in .hack or .bin format) to load into the memory
  RAM - the popup panel provides a hex viewer/editor for the contents of the memory
  TextView - the popup panel allows for choosing a text file to be associated with this part
+Note - this allows for keeping some notes to save with your circuit
 [/ul]
+
+[b]MemoryInjector[/b]
+This part is used when testing RAM where the test involves setting a value in memory. It is set to an address value and connected to any bus output of the memory chip. Also, it needs a name to correspond with an input pin defined in the test script.
+
+[b]MemoryProbe[/b]
+This part is used by the tester to monitor the value stored at a memory address that is set on the part. The part is attached to any bus output of the memory chip.
+
+[b]Wire[/b] - used for tester input and output pins.
+[b]Bus[/b] -  also used for tester input and output pins.
 
 [b]RAM Memory Inspector[/b]
 Using this pop-up panel of a RAM chip, you are able to step through pages of the memory to view the contents of the words/bytes of data and see any ASCII characters that may be present.
@@ -243,6 +253,24 @@ The data cells are editable. You may enter a decimal, hex (0xff) or binary (b100
 Hovering the mouse over a cell will display the value in binary form.
 
 You may also erase the memory, and reconfigure its size and bit depth.
+
+[b]Keyboard[/b] allows for entering key codes by typing in its' text input box.
+
+[b]BusTap[/b]  allows for splitting out a data bit from a bus to a wire. The bit number is specified on the part.
+
+[b]Display[/b]
+This allows for 1 or more 7 segment displays with an optional decimal point. The color may be set and the display mode.
+The input value is displayed as decimal, hexadecimal, binary, or something approximating the ASCII character for each byte.
+The dp_select input value sets the position of the decimal point for values over zero. Zero means don't show a decimal point.
+
+[b]Clock[/b]
+This has a clock pulse output and a reset output. The reset is toggled high and low with each press of the button.
+The clock may be manually toggled or the slider bar moved to set a constant rate of pulses.s
+
+[b]Screen[/b]
+The screen part has a 256 x 512 pixel display and operates in the same way as a 16bit 8K RAM.
+Each row of the physical screen, is represented in the
+Screen memory map by 32 consecutive 16-bit words, starting at the top left corner.
 
 [b]ALU[/b]
 

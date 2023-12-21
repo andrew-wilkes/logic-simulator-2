@@ -227,12 +227,21 @@ func unfocus(_arg = null):
 	schematic.grab_focus()
 
 
-func _on_about_text_meta_clicked(_meta):
-	var _e = OS.shell_open("https://buymeacoffee.com/gdscriptdude")
+func _on_about_text_meta_clicked(meta):
+	open_meta_target(str(meta))
 
 
-func _on_nand_text_meta_clicked(_meta):
-	var _e = OS.shell_open("https://www.nand2tetris.org/software")
+func _on_nand_text_meta_clicked(meta):
+	open_meta_target(str(meta))
+
+
+func open_meta_target(target):
+	var endpoints = {
+		"nand": "https://www.nand2tetris.org/software",
+		"coffee": "https://buymeacoffee.com/gdscriptdude",
+		"website": "https://logicsimx.com"
+	}
+	var _e = OS.shell_open(endpoints[target])
 
 
 func _on_load_hdl_file_selected(path):

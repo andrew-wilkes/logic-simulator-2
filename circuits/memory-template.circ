@@ -1,0 +1,218 @@
+{
+	"connections": [
+		{
+			"from_node": "Bus3",
+			"from_port": 0,
+			"to_node": "BusTap10",
+			"to_port": 0
+		},
+		{
+			"from_node": "Bus3",
+			"from_port": 0,
+			"to_node": "BusTap12",
+			"to_port": 0
+		},
+		{
+			"from_node": "Bus3",
+			"from_port": 0,
+			"to_node": "RAM6",
+			"to_port": 1
+		},
+		{
+			"from_node": "Bus2",
+			"from_port": 0,
+			"to_node": "RAM6",
+			"to_port": 0
+		},
+		{
+			"from_node": "Wire24",
+			"from_port": 0,
+			"to_node": "RAM6",
+			"to_port": 3
+		},
+		{
+			"from_node": "Bus31",
+			"from_port": 0,
+			"to_node": "MuxBus15",
+			"to_port": 1
+		},
+		{
+			"from_node": "Bus32",
+			"from_port": 0,
+			"to_node": "MuxBus15",
+			"to_port": 0
+		}
+	],
+	"id_num": 33,
+	"minimap_enabled": true,
+	"parts": [
+		{
+			"data": {
+
+			},
+			"node_name": "Bus3",
+			"offset": [
+				100,
+				120
+			],
+			"part_type": "Bus",
+			"show_display": true,
+			"tag": "address"
+		},
+		{
+			"data": {
+				"bit": 14
+			},
+			"node_name": "BusTap10",
+			"offset": [
+				320,
+				140
+			],
+			"part_type": "BusTap",
+			"show_display": true,
+			"tag": ""
+		},
+		{
+			"data": {
+				"bits": 16,
+				"size": "16K"
+			},
+			"node_name": "RAM6",
+			"offset": [
+				520,
+				360
+			],
+			"part_type": "RAM",
+			"show_display": true,
+			"tag": ""
+		},
+		{
+			"data": {
+				"bit": 13
+			},
+			"node_name": "BusTap12",
+			"offset": [
+				240,
+				260
+			],
+			"part_type": "BusTap",
+			"show_display": true,
+			"tag": ""
+		},
+		{
+			"data": {
+
+			},
+			"node_name": "MuxBus15",
+			"offset": [
+				720,
+				160
+			],
+			"part_type": "MuxBus",
+			"show_display": true,
+			"tag": ""
+		},
+		{
+			"data": {
+
+			},
+			"node_name": "Bus31",
+			"offset": [
+				560,
+				80
+			],
+			"part_type": "Bus",
+			"show_display": true,
+			"tag": "kbd"
+		},
+		{
+			"data": {
+
+			},
+			"node_name": "Bus32",
+			"offset": [
+				560,
+				20
+			],
+			"part_type": "Bus",
+			"show_display": true,
+			"tag": "screen_data"
+		},
+		{
+			"data": {
+
+			},
+			"node_name": "Bus2",
+			"offset": [
+				140,
+				620
+			],
+			"part_type": "Bus",
+			"show_display": true,
+			"tag": "in"
+		},
+		{
+			"data": {
+
+			},
+			"node_name": "Wire4",
+			"offset": [
+				140,
+				540
+			],
+			"part_type": "Wire",
+			"show_display": true,
+			"tag": "load"
+		},
+		{
+			"data": {
+
+			},
+			"node_name": "Wire24",
+			"offset": [
+				140,
+				740
+			],
+			"part_type": "Wire",
+			"show_display": true,
+			"tag": "clk"
+		},
+		{
+			"data": {
+
+			},
+			"node_name": "Wire33",
+			"offset": [
+				800,
+				620
+			],
+			"part_type": "Wire",
+			"show_display": true,
+			"tag": "ld_screen"
+		},
+		{
+			"data": {
+
+			},
+			"node_name": "Bus19",
+			"offset": [
+				800,
+				500
+			],
+			"part_type": "Bus",
+			"show_display": true,
+			"tag": "out"
+		}
+	],
+	"scroll_offset": [
+		-350.381591796875,
+		2.86068725585938
+	],
+	"snap_distance": 20,
+	"snapping_distance": 20,
+	"snapping_enabled": true,
+	"title": "Memory",
+	"use_snap": true,
+	"version": 2,
+	"zoom": 1
+}

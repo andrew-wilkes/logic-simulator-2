@@ -1,0 +1,8 @@
+License
+
+These files are distributed under a Creative Common Attribution-NonCommercial-ShareAlike 3.0 Unported License.
+https://creativecommons.org/licenses/by-nc-sa/3.0/
+
+They are a subset of the files available from here: https://www.nand2tetris.org/software
+
+Some .tst files were modified to unify the naming of pins between test projects e.g. ARegister[0] rather than ARegister[] in 05/ComputerRect.tst

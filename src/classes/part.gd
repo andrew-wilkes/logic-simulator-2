@@ -214,3 +214,15 @@ func get_formatted_hex_string(x):
 	if x < 0x100:
 		return "0x%02X" % x
 	return "0x%04X" % x
+
+
+func file_exists():
+	if data.file.is_empty():
+		return false
+	if FileAccess.file_exists(data.file):
+		return true
+	G.warn_user("File missing at: " + data.file)
+	if show_display: # Not loaded in a block
+		data.file = ""
+		controller.emit_signal("changed")
+	return false
