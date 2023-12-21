@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="Digital Logic Simulator"
+config/name="LogicSimX - Digital Logic Simulator"
 run/main_scene="res://main.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
 boot_splash/bg_color=Color(0.0431373, 0.0431373, 0.0431373, 1)

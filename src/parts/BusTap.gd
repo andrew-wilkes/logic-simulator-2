@@ -13,7 +13,8 @@ func _init():
 
 func _ready():
 	super()
-	%Bit.value = data.bit
+	%Bit.set_value_no_signal(data.bit)
+	set_bit_mask()
 
 
 func setup_instance():

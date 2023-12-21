@@ -4,11 +4,14 @@ extends GraphEdit
 # So the GraphNode slots need to be reconfigured to align with the ports.
 # Then the code may be used in a EditorScript
 
+signal changed
+
 const GAP = 20
 const EXCLUDE = ["V+", "Gnd", "Nand", "Wire", "Bus", "WireColor", "BusColor", "Screen"]
 
 func _ready():
 	get_window().mode = Window.MODE_MAXIMIZED
+	changed.connect(change_capture)
 	call_deferred("go")
 
 
@@ -76,6 +79,11 @@ func add_parts_to_graph():
 		if x > size.x:
 			x = GAP
 			y += row_height + GAP
+
+
+func change_capture():
+	print("Something changed")
+
 
 # Mock functions to allow the parts to be added to the scene:
 
