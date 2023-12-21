@@ -15,8 +15,6 @@ var data = {
 	use_snap = true,
 	zoom = 1.0,
 	minimap_enabled = true,
-
-	saved_to = "",
 }
 
 func load_data(file_name):
@@ -37,19 +35,13 @@ func load_data(file_name):
 		return ERR_FILE_NOT_FOUND
 
 
-func save_data(file_name, check_if_exists = false):
-	var error = OK
-	if check_if_exists and data.saved_to != file_name and FileAccess.file_exists(file_name):
-		error = ERR_ALREADY_EXISTS
-	else:
-		var save_file = FileAccess.open(file_name, FileAccess.WRITE)
-		if save_file:
-			for part in data.parts:
-				convert_colors_to_rgba_strings(part.data)
-			var json_string = JSON.stringify(data, "\t")
-			save_file.store_line(json_string)
-			data.saved_to = file_name
-	return error
+func save_data(file_name):
+	var save_file = FileAccess.open(file_name, FileAccess.WRITE)
+	if save_file:
+		for part in data.parts:
+			convert_colors_to_rgba_strings(part.data)
+		var json_string = JSON.stringify(data, "\t")
+		save_file.store_line(json_string)
 
 
 func get_next_id():

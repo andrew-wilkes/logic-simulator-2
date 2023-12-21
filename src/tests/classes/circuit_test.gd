@@ -35,14 +35,7 @@ func test_convert_rgba_strings_to_colors() -> void:
 func test_save_data() -> void:
 	var circuit = Circuit.new()
 	circuit.data.title = "Test Circuit"
-	# Should save file that does not yet exist whilst checking for existence of file
-	assert_int(circuit.save_data(temp_file, true)).is_equal(OK)
-	assert_str(circuit.data.saved_to).is_equal(temp_file)
-	circuit.data.saved_to = ""
-	# Should detect existing file
-	assert_int(circuit.save_data(temp_file, true)).is_equal(ERR_ALREADY_EXISTS)
-	# User chooses to overwrite file
-	assert_int(circuit.save_data(temp_file)).is_equal(OK)
+	circuit.save_data(temp_file)
 
 
 func test_load_data() -> void:
