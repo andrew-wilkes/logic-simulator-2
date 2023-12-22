@@ -5,7 +5,7 @@ class_name WireColor
 func _init():
 	data["color"] = "ffffffff"
 	category = UTILITY
-	order = 60
+	order = 30
 
 
 func _ready():

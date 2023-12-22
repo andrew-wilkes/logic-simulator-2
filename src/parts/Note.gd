@@ -6,7 +6,7 @@ var panel: PopupPanel
 
 func _init():
 	category = UTILITY
-	order = 0
+	order = 50
 	data = {
 		"file": "",
 		"size": [300, 200],

@@ -3,7 +3,7 @@ class_name MuxBus
 extends Part
 
 func _init():
-	order = 84
+	order = 58
 	category = ASYNC
 
 

@@ -3,7 +3,7 @@ class_name NotBus
 extends Part
 
 func _init():
-	order = 80
+	order = 60
 	category = ASYNC
 
 

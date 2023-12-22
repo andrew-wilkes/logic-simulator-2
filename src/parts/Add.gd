@@ -5,7 +5,7 @@ extends Part
 var ab = [0, 0]
 
 func _init():
-	order = 80
+	order = 64
 	category = ASYNC
 
 

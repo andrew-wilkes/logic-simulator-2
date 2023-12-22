@@ -6,7 +6,7 @@ var memory: Part
 
 func _init():
 	category = UTILITY
-	order = 72
+	order = 70
 	data["address"] = 0
 
 

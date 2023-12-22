@@ -5,7 +5,7 @@ extends Part
 var max_value = 0
 
 func _init():
-	order = 80
+	order = 66
 	category = ASYNC
 	data["bits"] = 16
 

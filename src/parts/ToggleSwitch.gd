@@ -6,7 +6,7 @@ var race_counter_reset_counter = 0
 
 func _init():
 	category = UTILITY
-	order = 0
+	order = 86
 
 
 func output_clock(level):

@@ -4,7 +4,7 @@ class_name Gnd
 
 func _init():
 	category = UTILITY
-	order = 80
+	order = 90
 
 
 func _ready():

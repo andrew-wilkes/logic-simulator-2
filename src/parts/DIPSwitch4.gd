@@ -7,7 +7,7 @@ var inputs = [] # List of sides that are the input to a switch
 
 func _init():
 	category = UTILITY
-	order = 90
+	order = 84
 
 
 func _ready():

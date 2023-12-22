@@ -7,7 +7,7 @@ var texture
 
 func _init():
 	super()
-	order = 0
+	order = 76
 	category = UTILITY
 	data["pixel_color"] = Color.WHITE
 	data["screen_color"] = Color.DARK_BLUE

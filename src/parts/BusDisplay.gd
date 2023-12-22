@@ -9,6 +9,7 @@ func _init():
 	data["num_digits"] = 2
 	data["mode"] = HEX
 	data["dp_position"] = 0
+	order = 78
 
 
 func _ready():

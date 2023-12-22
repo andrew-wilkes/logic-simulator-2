@@ -3,7 +3,7 @@ class_name OrBus
 extends Part
 
 func _init():
-	order = 80
+	order = 62
 	category = ASYNC
 
 

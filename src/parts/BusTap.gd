@@ -7,7 +7,7 @@ var bit_mask = 0
 
 func _init():
 	category = UTILITY
-	order = 72
+	order = 94
 	data["bit"] = 0
 
 

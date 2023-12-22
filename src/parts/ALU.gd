@@ -3,7 +3,7 @@ class_name ALU
 extends Part
 
 func _init():
-	order = 80
+	order = 0
 	category = ASYNC
 
 

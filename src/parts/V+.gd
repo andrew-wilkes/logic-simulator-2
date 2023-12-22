@@ -4,7 +4,7 @@ class_name Vcc
 
 func _init():
 	category = UTILITY
-	order = 90
+	order = 92
 
 
 func _ready():

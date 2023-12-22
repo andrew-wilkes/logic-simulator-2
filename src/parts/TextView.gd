@@ -6,7 +6,7 @@ var panel
 
 func _init():
 	category = UTILITY
-	order = 0
+	order = 48
 	data = {
 		"file": "",
 		"size": [470, 500]

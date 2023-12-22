@@ -5,7 +5,7 @@ extends Part
 var value = 0
 
 func _init():
-	order = 84
+	order = 68
 	category = UTILITY
 
 

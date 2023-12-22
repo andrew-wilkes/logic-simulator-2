@@ -3,7 +3,7 @@ class_name FullAdder
 extends Part
 
 func _init():
-	order = 80
+	order = 68
 	category = ASYNC
 
 

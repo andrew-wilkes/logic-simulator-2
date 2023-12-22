@@ -4,7 +4,7 @@ extends Part
 
 func _init():
 	category = UTILITY
-	order = 72
+	order = 96
 
 
 func apply_power():

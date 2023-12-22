@@ -3,7 +3,7 @@ class_name Display
 extends Part
 
 func _init():
-	order = 0
+	order = 80
 	category = UTILITY
 	@warning_ignore("integer_division")
 	data = {

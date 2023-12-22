@@ -10,7 +10,7 @@ var last_text_length = 0
 var show_placeholder = false
 
 func _init():
-	order = 0
+	order = 74
 	category = UTILITY
 
 
