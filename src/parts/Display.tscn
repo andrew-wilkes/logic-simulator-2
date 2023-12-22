@@ -78,10 +78,11 @@ shader_parameter/color = Color(0, 1, 0, 1)
 shader_parameter/bg_color = Color(0, 0, 0, 1)
 
 [node name="Display" type="GraphNode"]
+custom_minimum_size = Vector2(80, 0)
 offset_left = 19.0
 offset_top = 16.0
-offset_right = 122.0
-offset_bottom = 302.0
+offset_right = 99.0
+offset_bottom = 328.0
 mouse_filter = 1
 title = "Display"
 slot/0/left_enabled = true

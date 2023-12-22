@@ -1,0 +1,216 @@
+{
+	"connections": [
+		{
+			"from_node": "TriState9",
+			"from_port": 0,
+			"to_node": "Bus5",
+			"to_port": 0
+		},
+		{
+			"from_node": "PC11",
+			"from_port": 0,
+			"to_node": "Bus7",
+			"to_port": 0
+		},
+		{
+			"from_node": "Wire12",
+			"from_port": 0,
+			"to_node": "PC11",
+			"to_port": 4
+		},
+		{
+			"from_node": "V+13",
+			"from_port": 1,
+			"to_node": "PC11",
+			"to_port": 2
+		}
+	],
+	"id_num": 13,
+	"minimap_enabled": true,
+	"parts": [
+		{
+			"data": {
+				"file": "/mnt/sda2/dev/godot/git/andrew-wilkes/logic-simulator-2/tests/05/CPU.hdl",
+				"size": [
+					470,
+					500
+				]
+			},
+			"node_name": "TextView1",
+			"offset": [
+				960,
+				40
+			],
+			"part_type": "TextView",
+			"show_display": true,
+			"tag": ""
+		},
+		{
+			"data": {
+
+			},
+			"node_name": "Bus2",
+			"offset": [
+				100,
+				40
+			],
+			"part_type": "Bus",
+			"show_display": true,
+			"tag": "inM"
+		},
+		{
+			"data": {
+
+			},
+			"node_name": "Bus3",
+			"offset": [
+				100,
+				120
+			],
+			"part_type": "Bus",
+			"show_display": true,
+			"tag": "instruction"
+		},
+		{
+			"data": {
+
+			},
+			"node_name": "Bus5",
+			"offset": [
+				760,
+				40
+			],
+			"part_type": "Bus",
+			"show_display": true,
+			"tag": "outM"
+		},
+		{
+			"data": {
+
+			},
+			"node_name": "Bus7",
+			"offset": [
+				760,
+				200
+			],
+			"part_type": "Bus",
+			"show_display": true,
+			"tag": "pc"
+		},
+		{
+			"data": {
+
+			},
+			"node_name": "Wire8",
+			"offset": [
+				760,
+				280
+			],
+			"part_type": "Wire",
+			"show_display": true,
+			"tag": "writeM"
+		},
+		{
+			"data": {
+
+			},
+			"node_name": "Bus6",
+			"offset": [
+				760,
+				120
+			],
+			"part_type": "Bus",
+			"show_display": true,
+			"tag": "addressM"
+		},
+		{
+			"data": {
+
+			},
+			"node_name": "TriState9",
+			"offset": [
+				580,
+				60
+			],
+			"part_type": "TriState",
+			"show_display": true,
+			"tag": ""
+		},
+		{
+			"data": {
+
+			},
+			"node_name": "ALU10",
+			"offset": [
+				400,
+				100
+			],
+			"part_type": "ALU",
+			"show_display": true,
+			"tag": ""
+		},
+		{
+			"data": {
+				"bits": 16
+			},
+			"node_name": "PC11",
+			"offset": [
+				220,
+				240
+			],
+			"part_type": "PC",
+			"show_display": true,
+			"tag": ""
+		},
+		{
+			"data": {
+
+			},
+			"node_name": "Wire4",
+			"offset": [
+				100,
+				200
+			],
+			"part_type": "Wire",
+			"show_display": true,
+			"tag": "reset"
+		},
+		{
+			"data": {
+
+			},
+			"node_name": "Wire12",
+			"offset": [
+				80,
+				380
+			],
+			"part_type": "Wire",
+			"show_display": true,
+			"tag": "clk"
+		},
+		{
+			"data": {
+
+			},
+			"node_name": "V+13",
+			"offset": [
+				60,
+				280
+			],
+			"part_type": "V+",
+			"show_display": true,
+			"tag": ""
+		}
+	],
+	"scroll_offset": [
+		0,
+		0
+	],
+	"snap_distance": 20,
+	"snapping_distance": 20,
+	"snapping_enabled": true,
+	"title": "CPU",
+	"use_snap": true,
+	"version": 2,
+	"zoom": 1
+}

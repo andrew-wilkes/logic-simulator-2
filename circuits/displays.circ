@@ -1,0 +1,130 @@
+{
+	"connections": [
+		{
+			"from_node": "IO1",
+			"from_port": 1,
+			"to_node": "Display2",
+			"to_port": 0
+		},
+		{
+			"from_node": "IO1",
+			"from_port": 2,
+			"to_node": "Display2",
+			"to_port": 1
+		},
+		{
+			"from_node": "IO1",
+			"from_port": 3,
+			"to_node": "Display2",
+			"to_port": 2
+		},
+		{
+			"from_node": "IO1",
+			"from_port": 4,
+			"to_node": "Display2",
+			"to_port": 3
+		},
+		{
+			"from_node": "IO1",
+			"from_port": 5,
+			"to_node": "Display2",
+			"to_port": 4
+		},
+		{
+			"from_node": "IO1",
+			"from_port": 6,
+			"to_node": "Display2",
+			"to_port": 5
+		},
+		{
+			"from_node": "IO1",
+			"from_port": 7,
+			"to_node": "Display2",
+			"to_port": 6
+		},
+		{
+			"from_node": "IO1",
+			"from_port": 8,
+			"to_node": "Display2",
+			"to_port": 7
+		},
+		{
+			"from_node": "IO1",
+			"from_port": 0,
+			"to_node": "BusDisplay3",
+			"to_port": 0
+		}
+	],
+	"id_num": 3,
+	"minimap_enabled": true,
+	"parts": [
+		{
+			"data": {
+				"color_index": 46,
+				"num_digits": 1
+			},
+			"node_name": "Display2",
+			"offset": [
+				400,
+				140
+			],
+			"part_type": "Display",
+			"show_display": true,
+			"tag": ""
+		},
+		{
+			"data": {
+				"bus_color": "ffb300ff",
+				"labels": [
+					"D",
+					"D0",
+					"D1",
+					"D2",
+					"D3",
+					"D4",
+					"D5",
+					"D6",
+					"D7"
+				],
+				"num_wires": 8,
+				"range": 255,
+				"wire_color": "ffffffff"
+			},
+			"node_name": "IO1",
+			"offset": [
+				120,
+				180
+			],
+			"part_type": "IO",
+			"show_display": true,
+			"tag": ""
+		},
+		{
+			"data": {
+				"color_index": 43,
+				"dp_position": 0,
+				"mode": 0,
+				"num_digits": 3
+			},
+			"node_name": "BusDisplay3",
+			"offset": [
+				640,
+				60
+			],
+			"part_type": "BusDisplay",
+			"show_display": true,
+			"tag": ""
+		}
+	],
+	"scroll_offset": [
+		0,
+		0
+	],
+	"snap_distance": 20,
+	"snapping_distance": 20,
+	"snapping_enabled": true,
+	"title": "",
+	"use_snap": true,
+	"version": 2,
+	"zoom": 1
+}

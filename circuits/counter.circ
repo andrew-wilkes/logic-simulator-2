@@ -1,0 +1,143 @@
+{
+	"connections": [
+		{
+			"from_node": "Clock1",
+			"from_port": 0,
+			"to_node": "PC2",
+			"to_port": 4
+		},
+		{
+			"from_node": "Clock1",
+			"from_port": 1,
+			"to_node": "PC2",
+			"to_port": 3
+		},
+		{
+			"from_node": "V+3",
+			"from_port": 1,
+			"to_node": "PC2",
+			"to_port": 2
+		},
+		{
+			"from_node": "ToggleSwitch4",
+			"from_port": 0,
+			"to_node": "PC2",
+			"to_port": 1
+		},
+		{
+			"from_node": "IO5",
+			"from_port": 0,
+			"to_node": "PC2",
+			"to_port": 0
+		},
+		{
+			"from_node": "PC2",
+			"from_port": 0,
+			"to_node": "BusDisplay6",
+			"to_port": 0
+		}
+	],
+	"id_num": 6,
+	"minimap_enabled": true,
+	"parts": [
+		{
+			"data": {
+
+			},
+			"node_name": "Clock1",
+			"offset": [
+				140,
+				300
+			],
+			"part_type": "Clock",
+			"show_display": true,
+			"tag": ""
+		},
+		{
+			"data": {
+				"bits": 16
+			},
+			"node_name": "PC2",
+			"offset": [
+				440,
+				140
+			],
+			"part_type": "PC",
+			"show_display": true,
+			"tag": "Counter"
+		},
+		{
+			"data": {
+
+			},
+			"node_name": "ToggleSwitch4",
+			"offset": [
+				240,
+				160
+			],
+			"part_type": "ToggleSwitch",
+			"show_display": true,
+			"tag": "Load"
+		},
+		{
+			"data": {
+				"bus_color": "ffff00ff",
+				"labels": [
+					"- Data -",
+					"- D0 -"
+				],
+				"num_wires": 1,
+				"range": 255,
+				"wire_color": "ffffffff"
+			},
+			"node_name": "IO5",
+			"offset": [
+				220,
+				-20
+			],
+			"part_type": "IO",
+			"show_display": true,
+			"tag": "Preset"
+		},
+		{
+			"data": {
+				"color_index": 43,
+				"dp_position": 0,
+				"mode": 1,
+				"num_digits": 2
+			},
+			"node_name": "BusDisplay6",
+			"offset": [
+				680,
+				80
+			],
+			"part_type": "BusDisplay",
+			"show_display": true,
+			"tag": ""
+		},
+		{
+			"data": {
+
+			},
+			"node_name": "V+3",
+			"offset": [
+				100,
+				140
+			],
+			"part_type": "V+",
+			"show_display": true,
+			"tag": ""
+		}
+	],
+	"scroll_offset": [
+		37,
+		-79
+	],
+	"snap_distance": 20,
+	"snapping_distance": 20,
+	"snapping_enabled": true,
+	"title": "Counter",
+	"use_snap": true,
+	"version": 2,
+	"zoom": 1
+}
