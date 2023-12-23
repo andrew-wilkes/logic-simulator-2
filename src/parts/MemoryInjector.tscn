@@ -60,6 +60,8 @@ text = "Address:"
 [node name="Address" parent="HB" instance=ExtResource("2_d4xbl")]
 unique_name_in_owner = true
 layout_mode = 2
+expand_to_text_length = true
+context_menu_enabled = false
 
 [node name="L1" type="Label" parent="."]
 layout_mode = 2

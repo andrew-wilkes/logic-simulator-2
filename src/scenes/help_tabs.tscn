@@ -209,7 +209,7 @@ Some circuits require a clock such as the CPU, so you need to use a Wire input n
 
 When testing the Memory, please ignore this message: \"Before running this script, select the 'Screen' option from the 'View' menu\".
 
-When testing the CPU, the [b]OutM[/b] pin has a high impedance state, so to simulate this a TriState part needs to be connected to the [b]OutM[/b] output Wire part. Some circuit [i]templates[/i] are provided with the required IO pins to help.
+When testing the CPU, the [b]OutM[/b] pin has a high impedance state, so to simulate this a TriState output part needs to be used. Some circuit [i]templates[/i] are provided with the required IO pins to help.
 
 Remember to set the Title of your circuit to the name of the Part that you will test against. The software uses the Title text to search for the required test files.
 

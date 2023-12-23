@@ -459,7 +459,7 @@ func get_int_from_string(s):
 			var num = s.right(-2)
 			match s[1]:
 				"B":
-					x = G.binary_to_int(num, true)
+					x = G.binary_to_int(num, false)
 				"X":
 					if num.is_valid_hex_number():
 						x = num.hex_to_int()

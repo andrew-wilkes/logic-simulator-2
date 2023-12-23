@@ -1,12 +1,6 @@
 {
 	"connections": [
 		{
-			"from_node": "TriState9",
-			"from_port": 0,
-			"to_node": "Bus5",
-			"to_port": 0
-		},
-		{
 			"from_node": "PC11",
 			"from_port": 0,
 			"to_node": "Bus7",
@@ -28,23 +22,6 @@
 	"id_num": 13,
 	"minimap_enabled": true,
 	"parts": [
-		{
-			"data": {
-				"file": "/mnt/sda2/dev/godot/git/andrew-wilkes/logic-simulator-2/tests/05/CPU.hdl",
-				"size": [
-					470,
-					500
-				]
-			},
-			"node_name": "TextView1",
-			"offset": [
-				960,
-				40
-			],
-			"part_type": "TextView",
-			"show_display": true,
-			"tag": ""
-		},
 		{
 			"data": {
 
@@ -70,19 +47,6 @@
 			"part_type": "Bus",
 			"show_display": true,
 			"tag": "instruction"
-		},
-		{
-			"data": {
-
-			},
-			"node_name": "Bus5",
-			"offset": [
-				760,
-				40
-			],
-			"part_type": "Bus",
-			"show_display": true,
-			"tag": "outM"
 		},
 		{
 			"data": {
@@ -122,32 +86,6 @@
 			"part_type": "Bus",
 			"show_display": true,
 			"tag": "addressM"
-		},
-		{
-			"data": {
-
-			},
-			"node_name": "TriState9",
-			"offset": [
-				580,
-				60
-			],
-			"part_type": "TriState",
-			"show_display": true,
-			"tag": ""
-		},
-		{
-			"data": {
-
-			},
-			"node_name": "ALU10",
-			"offset": [
-				400,
-				100
-			],
-			"part_type": "ALU",
-			"show_display": true,
-			"tag": ""
 		},
 		{
 			"data": {
@@ -198,6 +136,32 @@
 				280
 			],
 			"part_type": "V+",
+			"show_display": true,
+			"tag": ""
+		},
+		{
+			"data": {
+
+			},
+			"node_name": "TriState9",
+			"offset": [
+				760,
+				0
+			],
+			"part_type": "TriState",
+			"show_display": true,
+			"tag": "outM"
+		},
+		{
+			"data": {
+
+			},
+			"node_name": "ALU10",
+			"offset": [
+				460,
+				80
+			],
+			"part_type": "ALU",
 			"show_display": true,
 			"tag": ""
 		}

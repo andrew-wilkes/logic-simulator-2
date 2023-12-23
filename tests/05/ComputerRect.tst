@@ -17,9 +17,7 @@ output-list time%S1.4.1 ARegister[0]%D1.7.1 DRegister[0]%D1.7.1 PC[]%D0.4.0 RAM1
 // Loads the program
 ROM32K load Rect.hack,
 
-echo "Before running this script, select the 'Screen' option from the 'View' menu";
-
-echo "A small rectangle should be drawn at the top left of the screen (the 'Screen' option of the 'View' menu must be selected)";
+echo "A small rectangle should be drawn at the top left of the screen";
 
 // Draws a rectangle 16 pixels wide and 4 pixels long
 set RAM16K[0] 4,

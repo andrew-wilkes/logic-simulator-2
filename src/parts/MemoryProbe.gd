@@ -14,7 +14,6 @@ func _init():
 func _ready():
 	super()
 	if show_display:
-		%Address.text_submitted.connect(_on_address_text_submitted)
 		display_address(data.address)
 
 
