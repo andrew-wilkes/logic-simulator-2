@@ -542,6 +542,8 @@ func create_circuit_from_hdl(file_path):
 			count += 1
 		else:
 			input_wires.append(input[0])
+	if file_path.find("03/") + file_path.find("05/") > -2:
+		input_wires.append("clk")
 	# Add wire inputs
 	for input_wire in input_wires:
 		add_wire_io(input_wire, Vector2(100, 40 + 80 * count))
