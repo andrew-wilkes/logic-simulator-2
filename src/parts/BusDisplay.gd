@@ -4,6 +4,8 @@ extends Display
 
 enum { HEX, DEC, BIN, MAP }
 
+var value = 0
+
 func _init():
 	super()
 	data["num_digits"] = 2
@@ -27,12 +29,14 @@ func set_mode_text():
 func _on_mode_button_pressed():
 	data.mode = (int(data.mode) + 1) % 4
 	set_mode_text()
+	set_digits(value)
 	changed()
 
 
 func _on_add_button_pressed():
 	add_digit()
 	data.num_digits += 1
+	set_digits(value)
 	changed()
 
 
@@ -43,6 +47,7 @@ func _on_remove_button_pressed():
 		changed()
 		# Shrink the width of the node after the digit was removed
 		await get_tree().create_timer(0.1).timeout
+		set_digits(value)
 		size.x = 0
 
 
@@ -63,33 +68,37 @@ func set_dp():
 		$HB.get_child(idx).material.set_shader_parameter("dp", on)
 
 
-func evaluate_bus_output_value(_side, port, value):
-	var n = int(value)
+func evaluate_bus_output_value(_side, port, _value):
+	value = int(_value)
 	if port == 0:
-		# Assume that negative numbers are 16 bits
-		if n < 0:
-			n = 65536 + n
-		for idx in data.num_digits:
-			var digit
-			match int(data.mode):
-				HEX:
-					digit = n % 0x10
-					n /= 0x10
-				DEC:
-					digit = n % 10
-					n /= 10
-				BIN:
-					digit = n % 2
-					n /= 2
-				MAP:
-					digit = n % 0x100
-					n /= 0x100
-			# Display digit
-			# Set shader to accept 7 bit pattern
-			$HB.get_child(data.num_digits - idx - 1).material.set_shader_parameter("segs", get_code(digit))
+		set_digits(value)
 	if port == 1:
-		data.dp_position = n
+		data.dp_position = value
 		set_dp()
+
+
+func set_digits(n):
+	# Assume that negative numbers are 16 bits
+	if n < 0:
+		n = 65536 + n
+	for idx in data.num_digits:
+		var digit
+		match int(data.mode):
+			HEX:
+				digit = n % 0x10
+				n /= 0x10
+			DEC:
+				digit = n % 10
+				n /= 10
+			BIN:
+				digit = n % 2
+				n /= 2
+			MAP:
+				digit = n % 0x100
+				n /= 0x100
+		# Display digit
+		# Set shader to accept 7 bit pattern
+		$HB.get_child(data.num_digits - idx - 1).material.set_shader_parameter("segs", get_code(digit))
 
 
 func set_digit_colors(color, bg_color):
