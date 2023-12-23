@@ -358,7 +358,6 @@ func setup_graph():
 	var off = circuit.data.scroll_offset
 	# Can't seem to set the scroll_offset exactly
 	scroll_offset = Vector2(off[0], off[1])
-	#prints(scroll_offset, off, zoom, circuit.data.zoom)
 	minimap_enabled = circuit.data.minimap_enabled
 
 

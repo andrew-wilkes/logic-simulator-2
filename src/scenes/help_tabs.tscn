@@ -195,7 +195,7 @@ text = "[b]Nand2Tetris Integration[/b]
 
 This Digital Logic Simulation software is designed to be very flexible, but at the same time it is useful to support widely-adopted standards. One of these is [b]Nand2Tetris[/b] which offers a platform for learning how digital systems work from the ground up (a NAND gate to a working computer).
 
-So an attempt has been made to support the .hdl (hardware description file format), .tst (circuit test specification), and .cmp ( the output result comparison file format) of the Nand2Tetris platform. The relevant files are in a [i]tests[/i] directory.
+So an attempt has been made to support the .hdl (hardware description file format), .tst (circuit test specification), and .cmp (the output result comparison file format) of the Nand2Tetris platform. The relevant files are in a [i]tests[/i] directory.
 
 In order to process these files, the path to their base directory needs to be set in the  [i]Test file directory[/i] setting in [b]Settings[/b].
 
@@ -205,7 +205,13 @@ Once this is set up, you should be able to make use of them in the [i]Tools[/i] 
 
 A set of IO pins may be automatically produced by loading an HDL file from the Tools menu. Then, you may construct a circuit to fulfill the requirements of the specification in the HDL file which may be displayed by clicking of the TextView part that is produced. Then run the tests on your circuit to see if it passes with the Test runner panel which is opened via the Tools menu.
 
-Remember to set the Title of your circuit to the name of the Part that you will test against.
+Some circuits require a clock such as the CPU, so you need to use a Wire input named [i]clk[/i] for this.
+
+When testing the Memory, please ignore this message: \"Before running this script, select the 'Screen' option from the 'View' menu\".
+
+When testing the CPU, the [b]OutM[/b] pin has a high impedance state, so to simulate this a TriState part needs to be connected to the [b]OutM[/b] output Wire part. Some circuit [i]templates[/i] are provided with the required IO pins to help.
+
+Remember to set the Title of your circuit to the name of the Part that you will test against. The software uses the Title text to search for the required test files.
 
 
 
