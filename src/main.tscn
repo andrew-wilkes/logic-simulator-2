@@ -1,6 +1,7 @@
-[gd_scene load_steps=13 format=3 uid="uid://eohxndqnij0x"]
+[gd_scene load_steps=14 format=3 uid="uid://eohxndqnij0x"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_7i1tr"]
+[ext_resource type="Texture2D" uid="uid://cy7i2jvb0vhoe" path="res://assets/ui/colors.png" id="2_p126i"]
 [ext_resource type="PackedScene" uid="uid://cq3v3io0y1kms" path="res://scenes/schematic.tscn" id="2_qticl"]
 [ext_resource type="StyleBox" uid="uid://d2pelybf770tb" path="res://assets/ui/warning-panel.stylebox" id="3_3bxnd"]
 [ext_resource type="Script" path="res://scenes/WarningPanel.gd" id="4_u4i6y"]
@@ -71,6 +72,11 @@ text = "Tools"
 layout_mode = 2
 text = "Settings"
 
+[node name="ClearLevelsButton" type="Button" parent="VB/HB"]
+layout_mode = 2
+tooltip_text = "Reset wire colors"
+icon = ExtResource("2_p126i")
+
 [node name="Spacer" type="Control" parent="VB/HB"]
 layout_mode = 2
 size_flags_horizontal = 3
@@ -115,6 +121,7 @@ size_flags_horizontal = 3
 
 [node name="Schematic" parent="VB" instance=ExtResource("2_qticl")]
 layout_mode = 2
+scroll_offset = Vector2(0, -33)
 
 [node name="WarningPanel" type="PopupPanel" parent="."]
 size = Vector2i(106, 50)
@@ -173,8 +180,6 @@ borderless = false
 theme_override_styles/panel = SubResource("StyleBoxFlat_605jm")
 
 [node name="Disassembler" parent="DisassemblerPanel" instance=ExtResource("5_ihm75")]
-offset_right = 400.0
-offset_bottom = 500.0
 
 [node name="PartListPanel" type="PopupPanel" parent="."]
 title = "Part Menu"
@@ -186,8 +191,8 @@ borderless = false
 [node name="PartList" parent="PartListPanel" instance=ExtResource("5_3p0gq")]
 offset_left = 4.0
 offset_top = 4.0
-offset_right = 796.0
-offset_bottom = 596.0
+offset_right = -4.0
+offset_bottom = -4.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -210,8 +215,8 @@ borderless = false
 [node name="HelpTabs" parent="HelpPanel" instance=ExtResource("7_qqehi")]
 offset_left = 4.0
 offset_top = 4.0
-offset_right = 796.0
-offset_bottom = 496.0
+offset_right = -4.0
+offset_bottom = -4.0
 
 [node name="LearnPanel" type="PopupPanel" parent="."]
 title = "Learn"
@@ -222,8 +227,8 @@ borderless = false
 [node name="Learn" parent="LearnPanel" instance=ExtResource("8_41uro")]
 offset_left = 4.0
 offset_top = 4.0
-offset_right = 796.0
-offset_bottom = 496.0
+offset_right = -4.0
+offset_bottom = -4.0
 
 [node name="AboutPanel" type="PopupPanel" parent="."]
 title = "About"
@@ -245,6 +250,7 @@ offset_bottom = 496.0
 [connection signal="pressed" from="VB/HB/BlockButton" to="." method="_on_block_button_pressed"]
 [connection signal="pressed" from="VB/HB/AddPartButton" to="." method="_on_add_part_button_pressed"]
 [connection signal="pressed" from="VB/HB/SettingsButton" to="." method="_on_settings_button_pressed"]
+[connection signal="pressed" from="VB/HB/ClearLevelsButton" to="." method="_on_clear_levels_button_pressed"]
 [connection signal="pressed" from="VB/HB/HelpButton" to="." method="_on_help_button_pressed"]
 [connection signal="pressed" from="VB/HB/LearnButton" to="." method="_on_learn_button_pressed"]
 [connection signal="pressed" from="VB/HB/AboutButton" to="." method="_on_about_button_pressed"]

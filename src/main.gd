@@ -259,3 +259,8 @@ func _on_load_hack_file_selected(path):
 		var code = file.get_as_text()
 		$DisassemblerPanel/Disassembler.load_data(code)
 		$DisassemblerPanel.popup_centered()
+
+
+func _on_clear_levels_button_pressed():
+	schematic.set_all_connection_colors()
+	unfocus()
