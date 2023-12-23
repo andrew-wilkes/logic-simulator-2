@@ -49,6 +49,8 @@ The IO part has a control panel that pops up when right clicked on. This allows 
 
 Another color customization feature is for the logic level indication. This is available via the Settings menu. By default, red is used for logic 1 and blue for logic 0. Another setting is for whether or not to indicate the logic levels from the output and/or to the input pins. When stimulating the circuit with inputs from the IO part, the wires change color if set to do so to indicate the logic level. The bus lines do not change color.
 
+To remove logic level coloring of the wires during use, there is a colored button that may be pressed in the menu bar.
+
 [b]Circuit Blocks[/b]
 Previously saved circuits may be loaded as blocks. This causes them to appear as a part with pins mapped to unconnected IO pins of the circuit with the same pin names as those IO pins. Also, the circuit that was loaded as a block is added to the Part List under the Blocks list with the title of the Ciruit or its file name if the Circuit was unnamed. Right-click on block part entry in the part list to remove it.
 

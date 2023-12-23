@@ -48,6 +48,7 @@ func _ready():
 	gui_input.connect(_on_gui_input)
 	if $Tag and $Tag.visible:
 		$Tag.text_changed.connect(_on_tag_text_changed)
+		$Tag.set("context_menu_enabled", false)
 	change_notification_timer = Timer.new()
 	get_child(-1).add_child(change_notification_timer)
 	change_notification_timer.one_shot = true
