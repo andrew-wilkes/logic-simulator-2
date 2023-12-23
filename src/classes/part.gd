@@ -163,7 +163,7 @@ func _on_tag_text_changed(_new_text):
 	changed()
 
 
-# Override this function to apply a reset to a part that has volatile memory
+# Override this function to apply a reset of pins and values
 func reset():
 	pins = {}
 	call_deferred("apply_power")

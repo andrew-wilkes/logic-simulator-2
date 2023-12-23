@@ -98,7 +98,8 @@
        y="-880" />
     <path
        style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:square"
-       d="m -560.00001,-959.99997 h 80 l -40,60 z"
-       id="path1" />
+       d="m -580.00001,-979.99997 h 120 l -60,80 z"
+       id="path1"
+       sodipodi:nodetypes="cccc" />
   </g>
 </svg>

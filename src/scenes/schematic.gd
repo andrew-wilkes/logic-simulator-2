@@ -658,6 +658,12 @@ func reset_parts():
 			part.reset()
 
 
+func reset_pins():
+	for part in get_children():
+		if part is Part:
+			part.pins = {}
+
+
 func _on_test_runner_step():
 	if test_state == G.TEST_STATUS.STEPPABLE:
 		G.test_runner.set_button_status(test_state)

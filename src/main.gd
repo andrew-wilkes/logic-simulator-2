@@ -262,5 +262,6 @@ func _on_load_hack_file_selected(path):
 
 
 func _on_clear_levels_button_pressed():
+	schematic.reset_pins()
 	schematic.set_all_connection_colors()
 	unfocus()
