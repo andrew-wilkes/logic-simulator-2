@@ -11,8 +11,8 @@ var data = {
 
 	# Graph settings
 	scroll_offset = [0, 0],
-	snap_distance = 20,
-	use_snap = true,
+	snapping_distance = 20,
+	snapping_enabled = true,
 	zoom = 1.0,
 	minimap_enabled = true,
 }

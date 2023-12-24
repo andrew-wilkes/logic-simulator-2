@@ -121,11 +121,9 @@
 		-52.1962890625,
 		-26.8138885498047
 	],
-	"snap_distance": 20,
 	"snapping_distance": 20,
 	"snapping_enabled": true,
 	"title": "",
-	"use_snap": true,
 	"version": 2,
 	"zoom": 0.62092125415802
 }

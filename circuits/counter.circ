@@ -133,11 +133,9 @@
 		37,
 		-79
 	],
-	"snap_distance": 20,
 	"snapping_distance": 20,
 	"snapping_enabled": true,
 	"title": "Counter",
-	"use_snap": true,
 	"version": 2,
 	"zoom": 1
 }

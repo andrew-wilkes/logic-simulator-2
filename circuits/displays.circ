@@ -60,15 +60,17 @@
 	"parts": [
 		{
 			"data": {
-				"color_index": 46,
-				"num_digits": 1
+				"color_index": 43,
+				"dp_position": 0,
+				"mode": 0,
+				"num_digits": 3
 			},
-			"node_name": "Display2",
+			"node_name": "BusDisplay3",
 			"offset": [
-				400,
-				140
+				640,
+				60
 			],
-			"part_type": "Display",
+			"part_type": "BusDisplay",
 			"show_display": true,
 			"tag": ""
 		},
@@ -92,8 +94,8 @@
 			},
 			"node_name": "IO1",
 			"offset": [
-				120,
-				180
+				200,
+				60
 			],
 			"part_type": "IO",
 			"show_display": true,
@@ -101,17 +103,15 @@
 		},
 		{
 			"data": {
-				"color_index": 43,
-				"dp_position": 0,
-				"mode": 0,
-				"num_digits": 3
+				"color_index": 103,
+				"num_digits": 1
 			},
-			"node_name": "BusDisplay3",
+			"node_name": "Display2",
 			"offset": [
-				640,
-				60
+				440,
+				200
 			],
-			"part_type": "BusDisplay",
+			"part_type": "Display",
 			"show_display": true,
 			"tag": ""
 		}
@@ -120,11 +120,9 @@
 		0,
 		0
 	],
-	"snap_distance": 20,
 	"snapping_distance": 20,
 	"snapping_enabled": true,
 	"title": "",
-	"use_snap": true,
 	"version": 2,
 	"zoom": 1
 }
