@@ -261,7 +261,7 @@ func load_circuit(file_name):
 		setup_graph()
 		add_parts()
 		await get_tree().process_frame
-		add_connections()
+		add_connections(false)
 		emit_signal("title_changed", circuit.data.title)
 		circuit_changed(false)
 		reset_parts()
@@ -289,7 +289,7 @@ func add_parts():
 		part.size.x = 0 # Shrink width
 
 
-func add_connections():
+func add_connections(checked):
 	var bad_blocks = []
 	for node in get_children():
 		if node is Block and node.has_bad_hash():
@@ -298,6 +298,9 @@ func add_connections():
 				"\n Circuit file: " + node.data.circuit_file)
 	for con in circuit.data.connections:
 		if con.from_node in bad_blocks or con.to_node in bad_blocks:
+			continue
+		if checked:
+			connect_node(con.from_node, con.from_port, con.to_node, con.to_port)
 			continue
 		# Check port compatibility since circuits translated from v1 may have invalid connections
 		var from_part = loaded_parts[con.from_node]
@@ -478,37 +481,38 @@ func set_io_connection_colors(io_part):
 
 func number_parts():
 	var part_names = {}
-	# Order the parts based on position in grid
-	# Create dictionary { pos: part }
+	# Order the parts based on offset in grid
+	# Create dictionary { pos: [part(s)] }
 	var nodes = {}
 	for node in get_children():
 		if node is Part:
-			var len = node.position_offset.length()
-			if nodes.has(len):
-				print(nodes[len].name)
-			nodes[len] = node
-			prints(node.name, node.position_offset.length())
+			var offlen = node.position_offset.length()
+			if nodes.has(offlen):
+				nodes[offlen].append(node)
+			else:
+				nodes[offlen] = [node]
 	var keys = nodes.keys()
 	keys.sort()
 	var counts = {}
 	for key in keys:
-		var part = nodes[key]
-		if counts.has(part.part_type):
-			counts[part.part_type] += 1
-		else:
-			counts[part.part_type] = 1
-		var new_name = part.part_type + str(counts[part.part_type])
-		part.get_node("Tag").text = new_name
-		part_names[part.name] = new_name
-		part.name = new_name
-		part.tooltip_text = new_name
+		var parts = nodes[key]
+		for part in parts:
+			if counts.has(part.part_type):
+				counts[part.part_type] += 1
+			else:
+				counts[part.part_type] = 1
+			var new_name = part.part_type + str(counts[part.part_type])
+			part.get_node("Tag").text = new_name
+			part_names[part.name] = new_name
+			part.name = new_name
+			part.tooltip_text = new_name
 	# Redo the connections with updated part names
 	circuit.data.connections = get_connection_list()
 	for con in circuit.data.connections:
 		con.from_node = part_names[con.from_node]
 		con.to_node = part_names[con.to_node]
 	clear_connections()
-	add_connections()
+	add_connections(true)
 	emit_signal("changed")
 
 
