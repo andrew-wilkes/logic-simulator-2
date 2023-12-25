@@ -24,6 +24,7 @@ var start_time = 0.0
 var busy = false
 var frame_count = 0
 var a_part_was_deleted = false
+var loaded_parts = {}
 
 func _ready():
 	set_process(false)
@@ -271,6 +272,7 @@ func load_circuit(file_name):
 
 
 func add_parts():
+	loaded_parts = {}
 	for node in circuit.data.parts:
 		var part = Parts.scenes[node.part_type].instantiate()
 		part.get_node("Tag").text = node.tag
@@ -280,6 +282,7 @@ func add_parts():
 		add_child(part)
 		part.setup()
 		part.name = node.node_name
+		loaded_parts[part.name] = part
 		part.position_offset = Vector2(node.offset[0], node.offset[1])
 		part.tooltip_text = part.name
 		part.position_offset_changed.connect(part.changed)
@@ -296,7 +299,15 @@ func add_connections():
 	for con in circuit.data.connections:
 		if con.from_node in bad_blocks or con.to_node in bad_blocks:
 			continue
-		connect_node(con.from_node, con.from_port, con.to_node, con.to_port)
+		# Check port compatibility since circuits translated from v1 may have invalid connections
+		var from_part = loaded_parts[con.from_node]
+		var to_part = loaded_parts[con.to_node]
+		if con.from_port >= from_part.get_output_port_count():
+			continue
+		if con.to_port >= to_part.get_input_port_count():
+			continue
+		if from_part.get_output_port_type(con.from_port) == to_part.get_input_port_type(con.to_port):
+			connect_node(con.from_node, con.from_port, con.to_node, con.to_port)
 
 
 func get_part_id(part):
@@ -472,7 +483,11 @@ func number_parts():
 	var nodes = {}
 	for node in get_children():
 		if node is Part:
-			nodes[node.position_offset.length()] = node
+			var len = node.position_offset.length()
+			if nodes.has(len):
+				print(nodes[len].name)
+			nodes[len] = node
+			prints(node.name, node.position_offset.length())
 	var keys = nodes.keys()
 	keys.sort()
 	var counts = {}
