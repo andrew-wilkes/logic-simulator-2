@@ -220,6 +220,7 @@ func _on_about_button_pressed():
 func _on_add_part_button_pressed():
 	$PartListPanel/PartList.update_block_list()
 	$PartListPanel.popup_centered()
+	$PartListPanel.position.y += 15
 
 
 # This removes the highlighting around menu buttons

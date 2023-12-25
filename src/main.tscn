@@ -185,15 +185,15 @@ offset_bottom = 500.0
 [node name="PartListPanel" type="PopupPanel" parent="."]
 title = "Part Menu"
 position = Vector2i(0, 36)
-size = Vector2i(800, 600)
+size = Vector2i(800, 590)
 unresizable = false
 borderless = false
 
 [node name="PartList" parent="PartListPanel" instance=ExtResource("5_3p0gq")]
 offset_left = 4.0
 offset_top = 4.0
-offset_right = 796.0
-offset_bottom = 596.0
+offset_right = -4.0
+offset_bottom = -4.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
