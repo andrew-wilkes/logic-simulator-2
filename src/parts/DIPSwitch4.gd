@@ -33,4 +33,10 @@ func switch_changed(idx):
 	if switches[idx].button_pressed:
 		controller.reset_race_counters() # Cause V+ or Gnd to emit their levels
 		# Propagate the input level to the output
-		update_output_level(FLIP_SIDES[inputs[idx]], idx, pins.get([inputs[idx], idx], false))
+		update_output_level_with_color(FLIP_SIDES[inputs[idx]], idx, pins.get([inputs[idx], idx], false))
+	else:
+		# Set output to white color
+		if FLIP_SIDES[inputs[idx]] == LEFT:
+			set_slot_color_left(idx, Color.WHITE)
+		else:
+			set_slot_color_right(idx, Color.WHITE)
