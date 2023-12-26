@@ -262,6 +262,8 @@ Hovering the mouse over a cell will display the value in binary form.
 
 You may also erase the memory, and reconfigure its size and bit depth.
 
+The Save feature allows the memory contents to be saved as bytes to a .bin file which may be loaded into a ROM.
+
 [b]Keyboard[/b] allows for entering key codes by typing in its' text input box.
 
 [b]BusTap[/b]  allows for splitting out a data bit from a bus to a wire. The bit number is specified on the part.
