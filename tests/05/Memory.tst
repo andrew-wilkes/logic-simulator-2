@@ -17,8 +17,6 @@ compare-to Memory.cmp,
 // and the value of the out output. 
 output-list in%D1.6.1 load%B2.1.2 address%B1.15.1 out%D1.6.1;
 
-echo "Before running this script, select the 'Screen' option from the 'View' menu";
-
 set in -1,				// Sets RAM[0] = -1
 set load 1,
 set address 0,

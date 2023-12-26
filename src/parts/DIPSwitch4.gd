@@ -15,7 +15,6 @@ func _ready():
 	for node in get_children():
 		if node is HBoxContainer:
 			switches.append(node.get_child(1))
-	switches.pop_back() # Remove the label
 	inputs.resize(switches.size())
 	inputs.fill(LEFT)
 	var idx = 0
