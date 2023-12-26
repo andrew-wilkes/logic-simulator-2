@@ -98,6 +98,7 @@ layout_mode = 2
 [node name="FileDialog" type="FileDialog" parent="."]
 size = Vector2i(900, 500)
 access = 2
+filters = PackedStringArray("*.bin ; Binary file")
 
 [connection signal="pressed" from="VBox/Top/UpButton" to="." method="_on_up_button_pressed"]
 [connection signal="pressed" from="VBox/Top/DownButton" to="." method="_on_down_button_pressed"]

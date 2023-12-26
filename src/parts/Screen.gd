@@ -67,3 +67,9 @@ func reset():
 	if show_display:
 		pixels.fill(data.screen_color)
 		texture.update(pixels)
+
+
+func erase():
+	super()
+	pixels.fill(data.screen_color)
+	texture.update(pixels)

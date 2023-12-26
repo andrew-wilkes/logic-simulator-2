@@ -403,6 +403,7 @@ func right_click_on_part(part):
 		"RAM", "Memory", "Screen":
 			$MemoryManagerPanel/MemoryManager.open(part)
 			$MemoryManagerPanel.popup_centered()
+			$MemoryManagerPanel.position.y += 15
 
 
 func output_level_changed_handler(part, side, port, level):
