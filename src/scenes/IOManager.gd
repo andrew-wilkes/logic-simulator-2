@@ -21,7 +21,7 @@ func open(_part: IO):
 	set_button_text_colors()
 	list_pin_names()
 	set_range(part.data.range)
-	set_display_value()
+	%Value.display_value(part.current_value, true, true)
 	%NumWires.value = part.data.num_wires
 	slider_value_changed = false
 	set_slider_value()
@@ -104,12 +104,6 @@ func list_pin_names():
 	%Names.text = "\n".join(part.data.labels)
 
 
-func _on_value_text_submitted(new_text):
-	part._on_text_submitted(new_text)
-	set_display_value()
-	set_slider_value()
-
-
 func _on_up_button_pressed():
 	up_down_initiate(1)
 
@@ -131,6 +125,7 @@ func _on_v_slider_value_changed(value):
 		limit = part.data.range
 	part.current_value = int(value * limit / %VSlider.max_value)
 	slider_value_changed = true
+	%Value.display_value(part.current_value, true, true)
 	$UpdateTimer.start()
 
 
@@ -155,23 +150,12 @@ func change_value():
 		part.current_value = clampi(part.current_value + step, 0, part.data.range)
 	else:
 		part.current_value = posmod(part.current_value + step, DEFAULT_SLIDER_LIMIT + 1)
+	%Value.display_value(part.current_value, true, true)
+	set_slider_value()
 
 
 func _on_update_timer_timeout():
 	update_value()
-
-
-func update_value():
-	part.controller.reset_race_counters()
-	part.evaluate_bus_output_value(0, 0, part.current_value)
-	part.evaluate_bus_output_value(1, 0, part.current_value)
-	set_display_value()
-	set_slider_value()
-
-
-func set_display_value():
-	%Value.text = part.get_formatted_hex_string(part.current_value)
-	%Value.caret_column = %Value.text.length()
 
 
 func set_slider_value():
@@ -212,3 +196,15 @@ func _on_num_wires_value_changed(value):
 func _on_hidden():
 	hide_color_picker()
 	%PinsButton.text = PIN_NAMES_BUTTON_TEXTS[0]
+
+
+func _on_value_value_changed(value):
+	part.current_value = value
+	update_value()
+	set_slider_value()
+
+
+func update_value():
+	part.controller.reset_race_counters()
+	part.evaluate_bus_output_value(0, 0, part.current_value)
+	part.evaluate_bus_output_value(1, 0, part.current_value)

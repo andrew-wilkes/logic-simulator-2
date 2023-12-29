@@ -13,8 +13,7 @@ func _init():
 
 func _ready():
 	super()
-	if show_display:
-		display_address(data.address)
+	%Address.display_value(data.address, false, false)
 
 
 # Need to block updates from bus input from changing the output
@@ -37,18 +36,10 @@ func update_data():
 	update_output_value(RIGHT, OUT, value)
 
 
-func _on_address_text_submitted(new_text):
-	data.address = get_value_from_text(new_text)
-	display_address(data.address)
-	update_data()
-	changed()
-
-
-func display_address(value):
-	%Address.text = get_display_hex_value(value)
-	# The following line avoids the caret blinking at the start of the text
-	%Address.caret_column = %Address.text.length()
-
-
 func display_data(value):
 	%Data.text = get_display_hex_value(value)
+
+
+func _on_address_value_changed(value):
+	data.address = value
+	changed()

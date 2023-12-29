@@ -31,6 +31,7 @@ horizontal_alignment = 1
 unique_name_in_owner = true
 layout_mode = 2
 alignment = 1
+default_color = Color(0, 1, 0, 1)
 
 [node name="HB" type="HBoxContainer" parent="HB/VB"]
 layout_mode = 2
@@ -160,7 +161,7 @@ wait_time = 0.1
 one_shot = true
 
 [connection signal="hidden" from="." to="." method="_on_hidden"]
-[connection signal="text_submitted" from="HB/VB/Value" to="." method="_on_value_text_submitted"]
+[connection signal="value_changed" from="HB/VB/Value" to="." method="_on_value_value_changed"]
 [connection signal="value_changed" from="HB/VB/HB/VSlider" to="." method="_on_v_slider_value_changed"]
 [connection signal="pressed" from="HB/VB/HB/VB/UpButton" to="." method="_on_up_button_pressed"]
 [connection signal="pressed" from="HB/VB/HB/VB/DownButton" to="." method="_on_down_button_pressed"]

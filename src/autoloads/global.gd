@@ -82,3 +82,16 @@ func debug(text = ""):
 	var now = Time.get_ticks_msec()
 	prints("DEBUG", text, "T +", str(now - debug_timestamp) + "ms")
 	debug_timestamp = now
+
+
+func format_value(x, show_minus, shorten_hex):
+	if x < - 0x10000:
+		return "HIGH-Z"
+	if x < 0:
+		if show_minus:
+			return str(x)
+		else:
+			x = 0x10000 + x
+	if x < 0x100 and shorten_hex:
+		return "0x%02X" % x
+	return "0x%04X" % x

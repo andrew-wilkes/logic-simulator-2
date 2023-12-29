@@ -30,16 +30,6 @@ func _ready():
 	super()
 	if get_parent().name == "root":
 		test_set_pins() # Done visually when running the scene.
-	if show_display:
-		$Value.text_submitted.connect(_on_text_submitted)
-	#bug_fix() # Godot 4.1.stable
-
-
-func bug_fix():
-	for node in get_children():
-		if node is LineEdit and node.name != "Tag" and node.name != "Value":
-			remove_child(node)
-			node.queue_free()
 
 
 func setup():
@@ -97,10 +87,7 @@ func set_pin_colors():
 		idx += 1
 
 
-func _on_text_submitted(new_text):
-	var value = get_value_from_text(new_text)
-	# This formats the value as well as updating it from the IO panel
-	set_display_value(value)
+func value_changed(value):
 	current_value = value
 	# The change may propagate before the race reset has occurred,
 	# so the threshold value may need to be increased
@@ -119,12 +106,6 @@ func update_output_levels_from_value(sides: Array, value: int):
 			update_output_level(side, n + 1, level)
 
 
-func set_display_value(value):
-	$Value.text = get_display_hex_value(value)
-	# The following line avoids the caret blinking at the start of the text
-	$Value.caret_column = $Value.text.length()
-
-
 func evaluate_output_level(side, port, level):
 	super(side, port, level)
 	var value = 0
@@ -140,7 +121,7 @@ func evaluate_bus_output_value(side, port, value, update_levels = true):
 	if update_levels:
 		update_output_levels_from_value([(side + 1) % 2], value)
 	if show_display:
-		set_display_value(value)
+		$Value.display_value(value, true, true)
 	current_value = value
 
 
@@ -158,7 +139,7 @@ func test_set_pins():
 func reset():
 	super()
 	if show_display:
-		_on_text_submitted("0")
+		value_changed(0)
 
 
 func apply_power():
