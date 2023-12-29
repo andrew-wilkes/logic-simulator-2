@@ -1,2 +1,5 @@
 # Normalize EOL for all files that Git considers text files.
 * text=auto eol=lf
+
+# Prevent GitHub from catagorizing test files as Scilab files
+tests/* linguist-vendored
