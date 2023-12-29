@@ -59,15 +59,13 @@ func init_grid():
 		var node_idx = row * 18
 		for n in 16:
 			var node = %Grid.get_child(node_idx + n + 1)
-			node.text_submitted.connect(_on_text_submitted.bind(node, row, n))
+			node.value_changed.connect(_on_word_value_changed.bind(node, row, n))
 
 
 func update_grid():
 	var num_words =  16
-	var format = "%02x"
 	var wide = false
 	if ram.data.bits == 16:
-		format = "%04x"
 		wide = true
 		num_words = 8
 	var idx = 0
@@ -76,7 +74,7 @@ func update_grid():
 		%Grid.get_child(idx).text = "%04x:" % [base_addr + row * num_words]
 		for n in num_words:
 			var word = ram.values[base_addr + row * num_words + n]
-			%Grid.get_child(idx + n + 1).text = format % [word]
+			%Grid.get_child(idx + n + 1).display_value(word, false, not wide)
 			%Grid.get_child(idx + n + 1).tooltip_text = int2bin(word)
 			chrs.append(get_chr(word % 256))
 			if wide:
@@ -94,27 +92,6 @@ func set_word_visibility(show_all):
 		for n in 8:
 			%Grid.get_child(row * 18 + 9 + n).visible = show_all
 	%Grid.columns = 18 if show_all else 10
-
-
-func _on_text_submitted(new_text, node, row, col):
-	var value = 0
-	if new_text.is_valid_int():
-		value = int(new_text)
-	if new_text.is_valid_hex_number(true):
-		value = new_text.hex_to_int()
-	elif new_text.begins_with("b"):
-		new_text = new_text.right(-1)
-		if new_text.is_valid_int():
-			for idx in new_text.length():
-				value *= 2
-				if new_text[idx] == "1":
-					value += 1
-	if ram.data.bits == 8:
-		ram.set_value(base_addr + row * 16 + col, value)
-	else:
-		ram.set_value(base_addr + row * 8 + col, value)
-	update_grid()
-	node.caret_column = node.text.length()
 
 
 func int2bin(x: int) -> String:
@@ -148,7 +125,10 @@ func _on_width_button_pressed():
 	else:
 		ram.data.bits = 8
 	set_width_text(ram.data.bits)
+	set_word_visibility(ram.data.bits == 8)
 	ram.update()
+	update_grid()
+	get_parent().size.x = 0
 
 
 func set_width_text(n):
@@ -168,3 +148,11 @@ func _on_file_dialog_file_selected(path):
 	var file = FileAccess.open(path, FileAccess.WRITE)
 	file.store_buffer(ram.values)
 	G.notify_user("File saved")
+
+
+func _on_word_value_changed(value, node, row, col):
+	if ram.data.bits == 8:
+		ram.set_value(base_addr + row * 16 + col, value)
+	else:
+		ram.set_value(base_addr + row * 8 + col, value)
+	node.tooltip_text = int2bin(value)

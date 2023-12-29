@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://soo142csxxxi"]
+[gd_scene load_steps=6 format=3 uid="uid://soo142csxxxi"]
 
 [ext_resource type="Texture2D" uid="uid://ss0cek62ksv5" path="res://assets/ui/up.png" id="1_o2ut6"]
 [ext_resource type="Script" path="res://scenes/MemoryManager.gd" id="1_xkkyp"]
 [ext_resource type="Texture2D" uid="uid://dn136vtmnaep" path="res://assets/ui/down.png" id="2_w0hc1"]
 [ext_resource type="FontFile" uid="uid://ck2sp0iypcks" path="res://assets/fonts/RobotoMono-Regular.ttf" id="4_x5vw3"]
+[ext_resource type="PackedScene" uid="uid://dpighqrkisujs" path="res://scenes/highlighted_text_entry.tscn" id="5_euamx"]
 
 [node name="MemoryManager" type="MarginContainer"]
 offset_left = 4.0
@@ -80,12 +81,9 @@ layout_mode = 2
 theme_override_fonts/font = ExtResource("4_x5vw3")
 text = "0000:"
 
-[node name="Word" type="LineEdit" parent="VBox/Grid"]
+[node name="Word" parent="VBox/Grid" instance=ExtResource("5_euamx")]
+unique_name_in_owner = true
 layout_mode = 2
-theme_override_fonts/font = ExtResource("4_x5vw3")
-text = "0000"
-expand_to_text_length = true
-context_menu_enabled = false
 
 [node name="Chrs" type="Label" parent="VBox/Grid"]
 layout_mode = 2
