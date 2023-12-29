@@ -8,6 +8,8 @@ signal value_changed(value)
 @export var shorten_hex = true
 @export var clamp_value = 0
 
+var previous_text = ""
+
 func set_text_color(default):
 	var color = default_color if default else highlight_color
 	set("theme_override_colors/font_color", color)
@@ -42,4 +44,11 @@ func display_value(value, show_minus_, shorten_hex_):
 
 
 func _on_focus_entered():
+	previous_text = text
 	text = ""
+
+
+# Avoid leaving blanks
+func _on_focus_exited():
+	if text == "":
+		text = previous_text
