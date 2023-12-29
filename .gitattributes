@@ -1,0 +1,2 @@
+# Prevent GitHub from catagorizing test files as Scilab files
+tests/* linguist-vendored
