@@ -77,6 +77,7 @@ layout_mode = 2
 columns = 18
 
 [node name="Addr" type="Label" parent="VBox/Grid"]
+modulate = Color(0.411765, 0.596078, 1, 1)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("4_x5vw3")
 text = "0000:"

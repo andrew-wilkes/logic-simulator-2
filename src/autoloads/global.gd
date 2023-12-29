@@ -84,7 +84,7 @@ func debug(text = ""):
 	debug_timestamp = now
 
 
-func format_value(x, show_minus, shorten_hex):
+func format_value(x, show_minus, shorten_hex, clamp_value = 0):
 	if x < - 0x10000:
 		return "HIGH-Z"
 	if x < 0:
@@ -94,4 +94,8 @@ func format_value(x, show_minus, shorten_hex):
 			x = 0x10000 + x
 	if x < 0x100 and shorten_hex:
 		return "0x%02X" % x
+	if clamp_value > 0:
+		x %= clamp_value
+		if clamp_value < 0x10000:
+			return "0x%02X" % x
 	return "0x%04X" % x

@@ -74,8 +74,10 @@ func update_grid():
 		%Grid.get_child(idx).text = "%04x:" % [base_addr + row * num_words]
 		for n in num_words:
 			var word = ram.values[base_addr + row * num_words + n]
-			%Grid.get_child(idx + n + 1).display_value(word, false, not wide)
-			%Grid.get_child(idx + n + 1).tooltip_text = int2bin(word)
+			var cell = %Grid.get_child(idx + n + 1)
+			cell.clamp_value = 0x100 if ram.data.bits == 8 else 0x10000
+			cell.display_value(word, false, not wide)
+			cell.tooltip_text = int2bin(word)
 			chrs.append(get_chr(word % 256))
 			if wide:
 				chrs.append(get_chr(word / 256))
@@ -152,8 +154,8 @@ func _on_file_dialog_file_selected(path):
 
 func _on_word_value_changed(value, node, row, col):
 	if ram.data.bits == 8:
-		ram.set_value(base_addr + row * 16 + col, value)
+		ram.set_value(base_addr + row * 16 + col, value % 0x100)
 	else:
-		ram.set_value(base_addr + row * 8 + col, value)
+		ram.set_value(base_addr + row * 8 + col, value % 0x10000)
 	node.tooltip_text = int2bin(value)
 	ram.update_probes()
