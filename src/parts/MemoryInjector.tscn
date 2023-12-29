@@ -59,6 +59,7 @@ text = "Address:"
 
 [node name="Address" parent="HB" instance=ExtResource("2_d4xbl")]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(72, 0)
 layout_mode = 2
 show_minus = false
 shorten_hex = false

@@ -17,6 +17,7 @@ func _ready():
 
 
 # Need to block updates from bus input from changing the output
+# The bus input is used to link the probe to a memory chip
 func update_bus_input_value(_side, _port, _value):
 	pass
 
@@ -42,4 +43,5 @@ func display_data(value):
 
 func _on_address_value_changed(value):
 	data.address = value
+	update_data()
 	changed()
