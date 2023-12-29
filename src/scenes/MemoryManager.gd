@@ -156,3 +156,4 @@ func _on_word_value_changed(value, node, row, col):
 	else:
 		ram.set_value(base_addr + row * 8 + col, value)
 	node.tooltip_text = int2bin(value)
+	ram.update_probes()
