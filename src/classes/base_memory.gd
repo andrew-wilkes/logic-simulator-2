@@ -24,8 +24,6 @@ func _on_bits_text_submitted(new_text):
 	if new_text.is_valid_int():
 		data.bits = clampi(int(new_text), 1, 1024)
 		set_max_value()
-	elif show_display:
-		%Bits.text = ""
 
 
 func set_max_value():

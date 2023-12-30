@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://fq11eexr4mqb"]
 
-[ext_resource type="PackedScene" uid="uid://dpighqrkisujs" path="res://scenes/highlighted_text_entry.tscn" id="2_3euyo"]
+[ext_resource type="PackedScene" uid="uid://b1q1tvqg3cnqm" path="res://scenes/simple_highlighted_text_entry.tscn" id="2_6s67a"]
 [ext_resource type="Script" path="res://parts/RAM.gd" id="3_5jrxe"]
 
 [node name="RAM" type="GraphNode"]
@@ -138,7 +138,7 @@ text = "clk"
 layout_mode = 2
 tooltip_text = "Address"
 
-[node name="Bits" parent="HB2" instance=ExtResource("2_3euyo")]
+[node name="Bits" parent="HB2" instance=ExtResource("2_6s67a")]
 unique_name_in_owner = true
 layout_mode = 2
 
@@ -146,10 +146,9 @@ layout_mode = 2
 layout_mode = 2
 text = "bits"
 
-[node name="Size" parent="." instance=ExtResource("2_3euyo")]
+[node name="Size" parent="." instance=ExtResource("2_6s67a")]
 layout_mode = 2
 text = "8K"
-placeholder_text = "Size"
 
 [node name="Tag" type="LineEdit" parent="."]
 layout_mode = 2

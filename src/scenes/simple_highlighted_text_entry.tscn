@@ -1,0 +1,21 @@
+[gd_scene load_steps=2 format=3 uid="uid://b1q1tvqg3cnqm"]
+
+[ext_resource type="Script" path="res://scenes/simple_highlighted_text_entry.gd" id="1_hc2gy"]
+
+[node name="SimpleHighlightedTextEntry" type="LineEdit"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "16"
+expand_to_text_length = true
+context_menu_enabled = false
+caret_blink = true
+caret_blink_interval = 0.5
+script = ExtResource("1_hc2gy")
+
+[connection signal="focus_entered" from="." to="." method="_on_focus_entered"]
+[connection signal="focus_exited" from="." to="." method="_on_focus_exited"]
+[connection signal="text_changed" from="." to="." method="_on_text_changed"]
+[connection signal="text_submitted" from="." to="." method="_on_text_submitted"]
