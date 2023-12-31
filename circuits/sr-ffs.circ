@@ -1,0 +1,204 @@
+{
+	"connections": [
+		{
+			"from_node": "IO1",
+			"from_port": 1,
+			"to_node": "Nand2",
+			"to_port": 0
+		},
+		{
+			"from_node": "IO1",
+			"from_port": 2,
+			"to_node": "Nand3",
+			"to_port": 1
+		},
+		{
+			"from_node": "Nand3",
+			"from_port": 0,
+			"to_node": "Nand2",
+			"to_port": 1
+		},
+		{
+			"from_node": "Nand2",
+			"from_port": 0,
+			"to_node": "Nand3",
+			"to_port": 0
+		},
+		{
+			"from_node": "Nand2",
+			"from_port": 0,
+			"to_node": "IO4",
+			"to_port": 1
+		},
+		{
+			"from_node": "Nand3",
+			"from_port": 0,
+			"to_node": "IO4",
+			"to_port": 2
+		},
+		{
+			"from_node": "IO1",
+			"from_port": 1,
+			"to_node": "Nor6",
+			"to_port": 0
+		},
+		{
+			"from_node": "IO1",
+			"from_port": 2,
+			"to_node": "Nor7",
+			"to_port": 1
+		},
+		{
+			"from_node": "Nor6",
+			"from_port": 0,
+			"to_node": "Nor7",
+			"to_port": 0
+		},
+		{
+			"from_node": "Nor7",
+			"from_port": 0,
+			"to_node": "Nor6",
+			"to_port": 1
+		},
+		{
+			"from_node": "Nor6",
+			"from_port": 0,
+			"to_node": "IO5",
+			"to_port": 1
+		},
+		{
+			"from_node": "Nor7",
+			"from_port": 0,
+			"to_node": "IO5",
+			"to_port": 2
+		}
+	],
+	"id_num": 7,
+	"minimap_enabled": true,
+	"parts": [
+		{
+			"data": {
+
+			},
+			"node_name": "Nand2",
+			"offset": [
+				220,
+				160
+			],
+			"part_type": "Nand",
+			"show_display": true,
+			"tag": ""
+		},
+		{
+			"data": {
+
+			},
+			"node_name": "Nand3",
+			"offset": [
+				220,
+				300
+			],
+			"part_type": "Nand",
+			"show_display": true,
+			"tag": ""
+		},
+		{
+			"data": {
+				"bus_color": "ffff00ff",
+				"labels": [
+					"- D -",
+					"a",
+					"b"
+				],
+				"num_wires": 2,
+				"range": 255,
+				"wire_color": "ffffffff"
+			},
+			"node_name": "IO1",
+			"offset": [
+				20,
+				180
+			],
+			"part_type": "IO",
+			"show_display": true,
+			"tag": "Input"
+		},
+		{
+			"data": {
+				"bus_color": "ffff00ff",
+				"labels": [
+					"- D -",
+					"/Q",
+					"Q"
+				],
+				"num_wires": 2,
+				"range": 255,
+				"wire_color": "ffffffff"
+			},
+			"node_name": "IO4",
+			"offset": [
+				440,
+				180
+			],
+			"part_type": "IO",
+			"show_display": true,
+			"tag": "Output"
+		},
+		{
+			"data": {
+				"bus_color": "ffff00ff",
+				"labels": [
+					"- D -",
+					"/Q",
+					"Q"
+				],
+				"num_wires": 2,
+				"range": 255,
+				"wire_color": "ffffffff"
+			},
+			"node_name": "IO5",
+			"offset": [
+				440,
+				480
+			],
+			"part_type": "IO",
+			"show_display": true,
+			"tag": "Output"
+		},
+		{
+			"data": {
+
+			},
+			"node_name": "Nor6",
+			"offset": [
+				220,
+				460
+			],
+			"part_type": "Nor",
+			"show_display": true,
+			"tag": ""
+		},
+		{
+			"data": {
+
+			},
+			"node_name": "Nor7",
+			"offset": [
+				220,
+				600
+			],
+			"part_type": "Nor",
+			"show_display": true,
+			"tag": ""
+		}
+	],
+	"scroll_offset": [
+		-199.300048828125,
+		60.8999938964844
+	],
+	"snapping_distance": 20,
+	"snapping_enabled": true,
+	"title": "SR Flip Flops",
+	"version": 2,
+	"zoom": 1.10000002384186
+}
