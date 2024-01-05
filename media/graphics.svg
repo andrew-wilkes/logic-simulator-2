@@ -23,9 +23,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.7"
-     inkscape:cx="-458.57143"
-     inkscape:cy="-862.14286"
+     inkscape:zoom="0.64"
+     inkscape:cx="-448.4375"
+     inkscape:cy="-369.53125"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      inkscape:document-rotation="0"
@@ -101,5 +101,20 @@
        d="m -580.00001,-979.99997 h 120 l -60,80 z"
        id="path1"
        sodipodi:nodetypes="cccc" />
+    <path
+       style="fill:#ffffff;fill-opacity:0.996919;stroke:#000000;stroke-width:6;stroke-linecap:square;stroke-opacity:1;stroke-dasharray:none"
+       d="m -660.00002,-219.99999 240.00001,-160 -240.00001,-159.99999 z"
+       id="path3"
+       sodipodi:nodetypes="cccc"
+       inkscape:export-filename="../src/assets/ui/icon-1024.png"
+       inkscape:export-xdpi="296.80167"
+       inkscape:export-ydpi="296.80167" />
+    <ellipse
+       style="fill:#ffffff;fill-opacity:0.996919;stroke:#000000;stroke-width:6;stroke-linecap:square;stroke-dasharray:none;stroke-opacity:1"
+       id="path4"
+       cx="-400"
+       cy="-380"
+       rx="20.00001"
+       ry="19.999989" />
   </g>
 </svg>

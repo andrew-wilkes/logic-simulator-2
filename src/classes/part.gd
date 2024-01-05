@@ -9,12 +9,9 @@ enum { WIRE_TYPE, BUS_TYPE }
 enum { UTILITY, ASYNC, SYNC, BLOCK }
 enum { A,B,C,D }
 
-# This is based on the number of bits that may change per update of the value.
-# The value is applied bit by bit so a stable state is reached after all of
-# the bit levels have been applied.
-# Using a high threshold should be faster than introducing delays in the part
-# outputs.
-const RACE_COUNT_THRESHOLD = 128
+# The clock may run fast so we may improve performance by not resetting race
+#  counters on every cycle
+const RACE_COUNT_THRESHOLD = 6
 const DEBUG = false
 const FLIP_SIDES = [RIGHT, LEFT]
 const IN = 0
