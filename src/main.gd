@@ -156,6 +156,9 @@ func _unhandled_key_input(event: InputEvent):
 			KEY_P:
 				if event.ctrl_pressed:
 					_on_add_part_button_pressed()
+			KEY_SPACE:
+				if event.ctrl_pressed:
+					_on_add_part_button_pressed()
 			KEY_T:
 				if event.ctrl_pressed:
 					%ToolsButton.get_popup().show()
