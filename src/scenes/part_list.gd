@@ -38,7 +38,7 @@ func update_block_list():
 func _on_list_item_clicked(index, _at_position, mouse_button_index, column_index):
 	# Only accept left and right mouse button clicks. 
 	# Don't react to scroll (button) - number 4
-	if mouse_button_index != 1 and mouse_button_index != 2:
+	if mouse_button_index != MOUSE_BUTTON_LEFT and mouse_button_index != MOUSE_BUTTON_RIGHT:
 		return
 	
 	get_parent().hide()

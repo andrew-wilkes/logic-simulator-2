@@ -26,6 +26,7 @@ func _ready():
 	%Title.text_submitted.connect(unfocus)
 	G.warning = $WarningPanel
 
+
 func tool_action(idx):
 	match idx:
 		0:
@@ -153,10 +154,7 @@ func _unhandled_key_input(event: InputEvent):
 						_on_block_button_pressed()
 					else:
 						_on_load_button_pressed()
-			KEY_P:
-				if event.ctrl_pressed:
-					_on_add_part_button_pressed()
-			KEY_SPACE:
+			KEY_P, KEY_SPACE:
 				if event.ctrl_pressed:
 					_on_add_part_button_pressed()
 			KEY_T:

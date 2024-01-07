@@ -642,17 +642,17 @@ func test_circuit():
 			var io_nodes = tester.get_io_nodes(get_children(), get_connection_list())
 			var file = FileAccess.open(result.path + "/" + test_file, FileAccess.READ)
 			if file:
-					var test_spec = file.get_as_text()
-					G.test_runner.set_title(test_file)
-					tester.init_tests(test_spec, io_nodes)
-					reset_test_environment()
-					# Make panel fit the width of the test output
-					for task in tester.tasks:
-						if task[0] == "output-list":
-							var width = task[1].length() * 8.2
-							if G.test_runner.size.x < width:
-								G.test_runner.size.x = width
-					G.test_runner.open()
+				var test_spec = file.get_as_text()
+				G.test_runner.set_title(test_file)
+				tester.init_tests(test_spec, io_nodes)
+				reset_test_environment()
+				# Make panel fit the width of the test output
+				for task in tester.tasks:
+					if task[0] == "output-list":
+						var width = task[1].length() * 8.2
+						if G.test_runner.size.x < width:
+							G.test_runner.size.x = width
+				G.test_runner.open()
 			else:
 				G.warn_user("Error opening file: " + test_file)
 
