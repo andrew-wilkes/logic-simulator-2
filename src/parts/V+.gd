@@ -15,7 +15,7 @@ func _ready():
 
 func apply_power():
 	update_output_level(RIGHT, 1, true)
-	update_output_value(RIGHT, 0, INF)
+	update_output_value(RIGHT, 0, 0xffff)
 
 
 func set_color():
