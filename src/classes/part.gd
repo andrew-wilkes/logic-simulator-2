@@ -9,9 +9,10 @@ enum { WIRE_TYPE, BUS_TYPE }
 enum { UTILITY, ASYNC, SYNC, BLOCK }
 enum { A,B,C,D }
 
-# The clock may run fast so we may improve performance by not resetting race
-#  counters on every cycle
-const RACE_COUNT_THRESHOLD = 6
+# If this value is too low we get false flags.
+# If too high get stack overflows with unstable circuits.
+# A value of 10 seems to be a good choice when testing.
+const RACE_COUNT_THRESHOLD = 10
 const DEBUG = false
 const FLIP_SIDES = [RIGHT, LEFT]
 const IN = 0
