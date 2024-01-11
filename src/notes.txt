@@ -1,4 +1,24 @@
-Are test scripts and GDUnit excluded in software builds?
+Enhancement:
+
+Currently, there is no accounting for propagation delays throughout a circuit.
+
+This is a problem when implementing a clocked circuit using gates because the circuit treats a clock just like any other input.
+
+For example: an edge-triggered flip flop.
+
+In one configurtion it works fine where the clock pulse arrives at the 2nd latch before the output of the first latch changes.
+
+But in another configuration, it does not work properly where the clock is late to affect the second latch. Because the
+clock was wired up later when creating the circuit.
+
+So, the input wires need to be organized such that the shortest paths to common parts are evaluated first i.e. as if these connections
+were made first. This can be done by the user when implementing a circuit, but it is not natural. It is better for the software
+to evaluate the situation and arrange the input connections in order, based on path lengths to common parts.
+
+The solution may involve building a tree of parts from each input and then evaluating the lengths of paths to common parts,
+and then ordering the connections of the input wires from each connection from shortest first. This will then result
+in simulation behaviour as if each gate has equal propagation delay like an actual hardware circuit would be expected to behave.
+
 
 --- Bugs ---
 
