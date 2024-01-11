@@ -15,8 +15,6 @@ To learn about testing with this AddOn, head over to: https://mikeschulze.github
 
 The test suite scripts are in the `src/tests/` directory.
 
-Note: *Have to remember to exclude test scripts from software builds*
-
 ## Links
 
 [Nand to Tetris](https://www.nand2tetris.org/) - lets try to make this software useable with that project.
