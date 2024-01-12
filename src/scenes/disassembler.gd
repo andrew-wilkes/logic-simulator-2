@@ -1,6 +1,6 @@
-extends MarginContainer
-
 class_name Disassembler
+
+extends MarginContainer
 
 const COMPS = { 0b0101010: "0", 0b0111111: "1", 0b0111010: "-1", 0b0001100: "D", 0b0110000: "A",
 	0b0001101: "!D", 0b0110001: "!A",0b0001111: "-D",0b0110011: "-A", 0b0011111: "D+1",
@@ -9,7 +9,7 @@ const COMPS = { 0b0101010: "0", 0b0111111: "1", 0b0111010: "-1", 0b0001100: "D",
 	0b1110011: "-M", 0b1110111: "M+1", 0b1110010: "M-1", 0b1000010: "D+M",0b1010011: "D-M",
 	0b1000111: "M-D", 0b1000000: "D&M", 0b1010101: "D|M" }
 
-const INDENT_WIDTH = 8
+const INDENT_WIDTH = 10
 
 func disassemble(hack):
 	var labels = {}
@@ -38,7 +38,7 @@ func disassemble(hack):
 					if not labels.has(a_value):
 						labels[a_value] = char(next_label_code).repeat(4)
 						next_label_code += 1
-					instructions.append("@" + labels[a_value])
+					instructions.append("[color=cyan]@" + labels[a_value] + "[/color]")
 				else:
 					if a_value == 0x4000:
 						instructions.append("@SCREEN // 0x%04x" % [a_value])
@@ -68,11 +68,12 @@ func disassemble(hack):
 		address += 1
 	var lines = PackedStringArray()
 	address = 0
-	var format = "%-" + str(INDENT_WIDTH) + "d%s"
-	lines.append("Address Instruction") # Improve this later
+	var format = "[color=SALMON]%-" + str(INDENT_WIDTH) + "d[/color][color=SILVER]%s[/color]"
+	var header_format = "%-" + str(INDENT_WIDTH) + "s%s"
+	lines.append(header_format % ["Address", "Instruction"])
 	for instr in instructions:
 		if labels.has(address):
-			lines.append("(" + labels[address] + ")")
+			lines.append("([color=cyan]" + labels[address] + "[/color])")
 		lines.append(format % [address, instr])
 		address += 1
 	return lines

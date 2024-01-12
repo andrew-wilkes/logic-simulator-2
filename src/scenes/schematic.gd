@@ -7,6 +7,7 @@ signal changed # Something changed that needs to be part of a save in order to b
 signal title_changed(text)
 
 const PART_INITIAL_OFFSET = Vector2(50, 50)
+const MAX_TREE_DEPTH = 5
 
 enum { LEFT, RIGHT }
 
@@ -69,11 +70,49 @@ func connect_wire(from_part, from_pin, to_part, to_pin):
 				else:
 					node.update_bus_input_value(LEFT, to_pin, from.pins.get([RIGHT, from_pin], 0))
 				break
+		sort_io_connections(from)
 	circuit_changed()
+
+
+func sort_io_connections(part):
+	# If from_part is an IO part then add the connection to io_connections of part
+	if part.part_type in ["IO", "ToggleSwitch", "Clock"]:
+		part.io_connections = []
+		# Get a list of all parts that the from part connects to and their path lengths
+		var sets = {}
+		for con in get_connection_list():
+			if part.name == con.from_node:
+				var parts = { con.to_node: 1 }
+				get_connection_tree(con.to_node, parts, 2)
+				sets[con] = parts
+		part.io_connections = sets.keys()
+		if sets.size() > 1:
+			# Sort the connections
+			print(part.io_connections)
+			part.io_connections.sort_custom(func (a, b): return sort_path_lengths(sets[a], sets[b]))
+			print(part.io_connections)
+
+
+func sort_path_lengths(a, b):
+	for part in a:
+		if b.has(part):
+			return b[part] > a[part]
+	return true
+
+
+func get_connection_tree(part_name, parts, depth):
+	if depth > MAX_TREE_DEPTH:
+		return
+	for con in get_connection_list():
+		if con.from_node == part_name:
+			parts[con.to_node] = depth
+			get_connection_tree(con.to_node, parts, depth + 1)
+	return
 
 
 func disconnect_wire(from_part, from_pin, to_part, to_pin):
 	disconnect_node(from_part, from_pin, to_part, to_pin)
+	sort_io_connections(get_part_by_name(from_part))
 	circuit_changed()
 
 
@@ -193,6 +232,12 @@ func add_part_by_name(part_name):
 	grab_focus()
 
 
+func get_part_by_name(part_name):
+	for node in get_children():
+		if node.name == part_name:
+			return node
+
+
 func add_part(part):
 	part.controller = self
 	add_child(part)
@@ -262,6 +307,7 @@ func load_circuit(file_name):
 		add_parts()
 		await get_tree().process_frame
 		add_connections(false)
+		sort_all_io_connections()
 		emit_signal("title_changed", circuit.data.title)
 		circuit_changed(false)
 		reset_parts()
@@ -311,6 +357,12 @@ func add_connections(checked):
 			continue
 		if from_part.get_output_port_type(con.from_port) == to_part.get_input_port_type(con.to_port):
 			connect_node(con.from_node, con.from_port, con.to_node, con.to_port)
+
+
+func sort_all_io_connections():
+	for node in get_children():
+		if node is Part:
+			sort_io_connections(node)
 
 
 func get_part_id(part):
@@ -407,7 +459,9 @@ func right_click_on_part(part):
 
 
 func output_level_changed_handler(part, side, port, level):
-	for con in get_connection_list():
+	# IO parts may have a stored list of connections to process in a given order
+	var cons = part.io_connections if part.io_connections.size() > 0 else get_connection_list()
+	for con in cons:
 		if side == RIGHT:
 			if con.from_node == part.name and con.from_port == port:
 				var node = get_node(NodePath(con.to_node))

@@ -45,7 +45,7 @@ To hold a pin high or low, there are parts for V+ and Gnd available.
 
 To colorize lines, there are the WireColor and BusColor parts that may be wired up to any output pin of that type. Right-clicking on the part opens a color selection panel. The chosen color affects the net of lines that the part is attached to.
 
-The IO part has a control panel that pops up when right clicked on. This allows for setting of its' wire and bus colors i.e. all of the pins of the part. The panel also allows for setting up how many pins it has, and a tool to edit the pin names. The pin names may be generated with an optional prefix and suffix charcter or string. Or the pin names may be individually edited. Then the names may be applied by clicking the Application button.
+The IO part has a control panel that pops up when right-clicked on. This allows for setting of its' wire and bus colors i.e. all of the pins of the part. The panel also allows for setting up how many pins it has, and a tool to edit the pin names. The pin names may be generated with an optional prefix and suffix charcter or string. Or the pin names may be individually edited. Then the names may be applied by clicking the [b]Apply[/b] button.
 
 Another color customization feature is for the logic level indication. This is available via the Settings menu. By default, red is used for logic 1 and blue for logic 0. Another setting is for whether or not to indicate the logic levels from the output and/or to the input pins. When stimulating the circuit with inputs from the IO part, the wires change color if set to do so to indicate the logic level. The bus lines do not change color.
 
@@ -81,7 +81,7 @@ The circuit has an editable Title label which is saved with the circuit and used
 
 The New button erases the circuit, Save saves to the current file or initiates the SaveAs dialog, and Load is used to open a saved circuit. Load as block inserts a block part into the current circuit. The Tools menu is available for tasks such as numbering parts. Settings are saved and loaded with the software. Circuits are saved with the schematic settings, part settings, connections, and data such as colors.
 
-Quit the App. by pressing the Esc key. sUnsaved changes are indicated by a red color of the file name.
+Quit the App. by pressing the Esc key. Unsaved changes are indicated by a red color of the file name.
 "
 
 [node name="Shortcuts" type="MarginContainer" parent="."]
@@ -201,7 +201,7 @@ So an attempt has been made to support the .hdl (hardware description file forma
 
 In order to process these files, the path to their base directory needs to be set in the  [i]Test file directory[/i] setting in [b]Settings[/b].
 
-These files are also shipped with the [i]Nand2tetris Software Suite[/i] from the [url=nand]Nand2tetris Software[/url] website.
+These files are also shipped with the [i]Nand2tetris Software Suite[/i] from the [url=nand]Nand2Tetris Software[/url] website.
 
 Once this is set up, you should be able to make use of them in the [i]Tools[/i] menu.
 
@@ -275,7 +275,7 @@ The dp_select input value sets the position of the decimal point for values over
 
 [b]Clock[/b]
 This has a clock pulse output and a reset output. The reset is toggled high and low with each press of the button.
-The clock may be manually toggled or the slider bar moved to set a constant rate of pulses.s
+The clock may be manually toggled or the slider bar moved to set a constant rate of pulses.
 
 [b]Screen[/b]
 The screen part has a 256 x 512 pixel display and operates in the same way as a 16bit 8K RAM.

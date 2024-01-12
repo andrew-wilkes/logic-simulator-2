@@ -271,7 +271,7 @@ text = "[b]Digtal Systems[/b]
 
 Digital systems combine building blocks connected with data busses, signals, and tend to be driven with a clock.
 
-Data busses are groups of wires carring binary data such as 8-bit bytes or 16-bit words. These may be used as addresses for memory device locations, or for data and I/O (Input/Output values).
+Data busses are groups of wires carrying binary data such as 8-bit bytes or 16-bit words. These may be used as addresses for memory device locations, or for data and I/O (Input/Output values).
 
 A typical digital system is a computer. Here is an example of a a simple 8-bit CPU (Central Processing Unit) with a program ROM attached. It features a classic Von Neumann architecture comprising a simple data path with a few registers, an ALU (Arithmetic Logic Unit), and IO (keyboard inputs and a display output).
 

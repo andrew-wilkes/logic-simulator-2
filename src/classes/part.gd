@@ -28,6 +28,7 @@ var show_display = true
 var controller # The schematic or a parent block
 var race_counter = {} # [side, port]: count
 var connections = {} # Used with parts in blocks
+var io_connections = [] # Used to store a sorted list of IO part output connections
 var pins = {} # [side, port]: level / value
 var change_notification_timer: Timer
 
