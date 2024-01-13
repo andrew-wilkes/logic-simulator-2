@@ -10,7 +10,7 @@ func _init():
 
 
 func evaluate_output_level(side, port, level):
-	if side == LEFT and port == 2:
+	if side == LEFT and port == 2: # clk
 		if level:
 			var ld = pins.get([side, 1], false)
 			if ld:
@@ -22,13 +22,9 @@ func evaluate_output_level(side, port, level):
 			update_output_value(RIGHT, OUT, value)
 
 
-func evaluate_bus_output_value(side, _port, _value):
-	# Don't let the load value immediately go to the output
-	if side == LEFT and pins.get([side, 1], false) and pins.get([side, 2], false):
-		value = _value
-		update_output_value(RIGHT, 1, value)
-		if show_display:
-			$Value.text = get_display_hex_value(value)
+func evaluate_bus_output_value(_side, _port, _value):
+	# Only update on clock edge
+	pass
 
 
 func reset():

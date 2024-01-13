@@ -75,22 +75,18 @@ func connect_wire(from_part, from_pin, to_part, to_pin):
 
 
 func sort_io_connections(part):
-	# If from_part is an IO part then add the connection to io_connections of part
-	if part.part_type in ["IO", "ToggleSwitch", "Clock"]:
-		part.io_connections = []
-		# Get a list of all parts that the from part connects to and their path lengths
-		var sets = {}
-		for con in get_connection_list():
-			if part.name == con.from_node:
-				var parts = { con.to_node: 1 }
-				get_connection_tree(con.to_node, parts, 2)
-				sets[con] = parts
-		part.io_connections = sets.keys()
-		if sets.size() > 1:
-			# Sort the connections
-			print(part.io_connections)
-			part.io_connections.sort_custom(func (a, b): return sort_path_lengths(sets[a], sets[b]))
-			print(part.io_connections)
+	part.io_connections = []
+	# Get a list of all parts that the from part connects to and their path lengths
+	var sets = {}
+	for con in get_connection_list():
+		if part.name == con.from_node:
+			var parts = { con.to_node: 1 }
+			get_connection_tree(con.to_node, parts, 2)
+			sets[con] = parts
+	part.io_connections = sets.keys()
+	if sets.size() > 1:
+		# Sort the connections
+		part.io_connections.sort_custom(func (a, b): return sort_path_lengths(sets[a], sets[b]))
 
 
 func sort_path_lengths(a, b):
@@ -479,7 +475,8 @@ func output_level_changed_handler(part, side, port, level):
 
 
 func bus_value_changed_handler(part, side, port, value):
-	for con in get_connection_list():
+	var cons = part.io_connections if part.io_connections.size() > 0 else get_connection_list()
+	for con in cons:
 		if side == RIGHT:
 			if con.from_node == part.name and con.from_port == port:
 				get_node(NodePath(con.to_node)).update_bus_input_value(LEFT, con.to_port, value)
