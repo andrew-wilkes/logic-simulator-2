@@ -63,8 +63,8 @@ func block_setup(_file_chain = []):
 	if cname.is_empty():
 		# Use the file name without the extension
 		cname = data.circuit_file.get_file().get_slice('.', 0)
-	# If Tag is empty set it to cname
-	if $Tag.text.is_empty():
+	# If this is the top-level block and Tag is empty set it to cname
+	if file_chain.size() == 1 and $Tag.text.is_empty():
 		$Tag.text = cname
 	if not G.settings.blocks.has(cname):
 		G.settings.blocks[cname] = data.circuit_file
@@ -192,8 +192,8 @@ func add_parts():
 		# Part instances have a name but circuit.data.parts store the name as node_name
 		part.name = node.node_name
 		part.show_display = false
-		part.setup_instance()
 		part.controller = self
+		part.setup_instance()
 		add_connections_to_part(part)
 		if part.part_type == "Block":
 			part.block_setup(file_chain)
