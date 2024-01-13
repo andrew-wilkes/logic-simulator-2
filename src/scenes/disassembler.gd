@@ -1,6 +1,6 @@
 class_name Disassembler
 
-extends MarginContainer
+extends CustomPopup
 
 const COMPS = { 0b0101010: "0", 0b0111111: "1", 0b0111010: "-1", 0b0001100: "D", 0b0110000: "A",
 	0b0001101: "!D", 0b0110001: "!A",0b0001111: "-D",0b0110011: "-A", 0b0011111: "D+1",
@@ -68,17 +68,24 @@ func disassemble(hack):
 		address += 1
 	var lines = PackedStringArray()
 	address = 0
-	var format = "[color=SALMON]%-" + str(INDENT_WIDTH) + "d[/color][color=SILVER]%s[/color]"
-	var header_format = "%-" + str(INDENT_WIDTH) + "s%s"
-	lines.append(header_format % ["Address", "Instruction"])
+	var format = "[color=SALMON]%-" + str(INDENT_WIDTH) + "d%-" + str(INDENT_WIDTH) + "s[/color][color=SILVER]%s[/color]"
+	var header_format = "%-" + str(INDENT_WIDTH) + "s%-" + str(INDENT_WIDTH) + "s%s"
+	lines.append(header_format % ["Address", "Value", "Instruction"])
 	for instr in instructions:
 		if labels.has(address):
 			lines.append("([color=cyan]" + labels[address] + "[/color])")
-		lines.append(format % [address, instr])
+		lines.append(format % [address, "0x%04x" % words[address], instr])
 		address += 1
 	return lines
 
 
 func load_data(hack):
 	var lines = disassemble(hack)
-	$Code.text = "\n".join(lines)
+	text_area.text = "\n".join(lines)
+
+
+func _on_open_button_pressed():
+	text_area.select_all()
+	DisplayServer.clipboard_set(text_area.get_selected_text())
+	text_area.deselect()
+	G.notify_user("Text copied to clipboard")
