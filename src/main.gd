@@ -259,7 +259,7 @@ func _on_load_hack_file_selected(path):
 		# The file popup needs to close before opening the new popup
 		await get_tree().process_frame
 		var code = file.get_as_text()
-		$Disassembler.load_data(code)
+		$Disassembler.load_data(code, path.get_file())
 		$Disassembler.open()
 
 

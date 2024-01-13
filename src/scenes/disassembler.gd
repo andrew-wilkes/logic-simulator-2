@@ -9,7 +9,7 @@ const COMPS = { 0b0101010: "0", 0b0111111: "1", 0b0111010: "-1", 0b0001100: "D",
 	0b1110011: "-M", 0b1110111: "M+1", 0b1110010: "M-1", 0b1000010: "D+M",0b1010011: "D-M",
 	0b1000111: "M-D", 0b1000000: "D&M", 0b1010101: "D|M" }
 
-const INDENT_WIDTH = 10
+const INDENT_WIDTH = 9
 
 func disassemble(hack):
 	var labels = {}
@@ -68,18 +68,19 @@ func disassemble(hack):
 		address += 1
 	var lines = PackedStringArray()
 	address = 0
-	var format = "[color=SALMON]%-" + str(INDENT_WIDTH) + "d%-" + str(INDENT_WIDTH) + "s[/color][color=SILVER]%s[/color]"
+	var format = "[color=SALMON]%-" + str(INDENT_WIDTH) + "s%-" + str(INDENT_WIDTH) + "s[/color][color=SILVER]%s[/color]"
 	var header_format = "%-" + str(INDENT_WIDTH) + "s%-" + str(INDENT_WIDTH) + "s%s"
 	lines.append(header_format % ["Address", "Value", "Instruction"])
 	for instr in instructions:
 		if labels.has(address):
 			lines.append("([color=cyan]" + labels[address] + "[/color])")
-		lines.append(format % [address, "0x%04x" % words[address], instr])
+		lines.append(format % ["%-3d %02X" % [address, address], "0x%04x" % words[address], instr])
 		address += 1
 	return lines
 
 
-func load_data(hack):
+func load_data(hack, filename):
+	$M/VB/Title.text = filename + " disassembly"
 	var lines = disassemble(hack)
 	text_area.text = "\n".join(lines)
 
