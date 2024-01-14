@@ -332,15 +332,11 @@ func add_parts():
 
 
 func add_connections(checked):
-	var bad_blocks = []
 	for node in get_children():
 		if node is Block and node.has_bad_hash():
-			bad_blocks.append(node.name)
-			G.warn_user(get_part_id(node) + " has changed internally." +\
+			G.warn_user(get_part_id(node) + " has changed IO pins." +\
 				"\n Circuit file: " + node.data.circuit_file)
 	for con in circuit.data.connections:
-		#if con.from_node in bad_blocks or con.to_node in bad_blocks:
-		#	continue
 		if checked:
 			connect_node(con.from_node, con.from_port, con.to_node, con.to_port)
 			continue

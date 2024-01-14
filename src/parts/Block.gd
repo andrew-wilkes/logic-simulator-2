@@ -37,7 +37,7 @@ func _ready():
 
 
 func has_bad_hash():
-	var current_hash = circuit.data.connections.hash()
+	var current_hash = (input_map + output_map).hash()
 	if current_hash != data.wiring_hash:
 		data.wiring_hash = current_hash
 		return true
@@ -57,15 +57,13 @@ func block_setup(_files):
 	if load_result != OK:
 		G.warning.open("The circuit block data from %s was invalid!" % [data.circuit_file.get_file()])
 		return
-	if data.get("wiring_hash", 0) == 0: # Set this for new blocks
-		data.wiring_hash = circuit.data.connections.hash()
 	# Every circuit opened as a block is added to the available parts list
 	var cname = circuit.data.title
 	if cname.is_empty():
 		# Use the file name without the extension
 		cname = data.circuit_file.get_file().get_slice('.', 0)
 	# If this is the top-level block and Tag is empty set it to cname
-	if files.size() == 1 and $Tag.text.is_empty():
+	if files.size() == 2 and $Tag.text.is_empty():
 		$Tag.text = cname
 	if not G.settings.blocks.has(cname):
 		G.settings.blocks[cname] = data.circuit_file
@@ -102,6 +100,8 @@ func block_setup(_files):
 		if io_part.part_type == "IO":
 			for n in io_part.data.num_wires:
 				output_map.append([io_part.node_name, int(n + 1)])
+	if data.get("wiring_hash", 0) == 0: # Set this for new blocks
+		data.wiring_hash = (input_map + output_map).hash()
 	add_parts(files)
 
 
