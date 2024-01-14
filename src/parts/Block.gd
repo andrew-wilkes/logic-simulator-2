@@ -20,7 +20,6 @@ var input_pin_count = 0
 var output_pin_count = 0
 var inputs = []
 var outputs = []
-var file_chain = []
 var wire_color = Color.WHITE
 var bus_color = Color.YELLOW
 var memory
@@ -31,7 +30,7 @@ func _init():
 
 func _ready():
 	super() # It's easy to forget to call the parent _ready code to add the Tag etc.
-	block_setup()
+	block_setup([G.settings.current_file])
 	set_slots(max(input_pin_count, output_pin_count) - 1)
 	configure_pins()
 	reset()
@@ -45,13 +44,15 @@ func has_bad_hash():
 	return false
 
 
-func block_setup(_file_chain = []):
-	file_chain = _file_chain
+func block_setup(_files):
 	circuit = Circuit.new()
-	if file_chain.has(data.circuit_file):
-		G.warning.open("Detected an infinite loop! %s was previously loaded as a block." % [data.circuit_file.get_file()])
+	if _files.has(data.circuit_file.get_file()):
+		G.warning.open("Detected that %s is nested inside itself!" % [data.circuit_file.get_file()])
 		return
-	file_chain.append(data.circuit_file)
+	# Add the file name to the list of files to detect.
+	# Ignore the path, this allows for files to be moved and can compare to current file.
+	# Downside is that blocks must have unique names.
+	var files = _files + [data.circuit_file.get_file()]
 	var load_result = circuit.load_data(data.circuit_file)
 	if load_result != OK:
 		G.warning.open("The circuit block data from %s was invalid!" % [data.circuit_file.get_file()])
@@ -64,7 +65,7 @@ func block_setup(_file_chain = []):
 		# Use the file name without the extension
 		cname = data.circuit_file.get_file().get_slice('.', 0)
 	# If this is the top-level block and Tag is empty set it to cname
-	if file_chain.size() == 1 and $Tag.text.is_empty():
+	if files.size() == 1 and $Tag.text.is_empty():
 		$Tag.text = cname
 	if not G.settings.blocks.has(cname):
 		G.settings.blocks[cname] = data.circuit_file
@@ -101,7 +102,7 @@ func block_setup(_file_chain = []):
 		if io_part.part_type == "IO":
 			for n in io_part.data.num_wires:
 				output_map.append([io_part.node_name, int(n + 1)])
-	add_parts()
+	add_parts(files)
 
 
 func set_slots(to_add):
@@ -181,7 +182,7 @@ func is_output(part):
 	return true
 
 
-func add_parts():
+func add_parts(files):
 	for node in circuit.data.parts:
 		var part = Parts.get_instance(node.part_type)
 		part.tag = node.tag
@@ -196,7 +197,7 @@ func add_parts():
 		part.setup_instance()
 		add_connections_to_part(part)
 		if part.part_type == "Block":
-			part.block_setup(file_chain)
+			part.block_setup(files)
 		parts[part.name] = part
 
 
