@@ -545,12 +545,16 @@ func number_parts():
 	for key in keys:
 		var parts = nodes[key]
 		for part in parts:
-			if counts.has(part.part_type):
-				counts[part.part_type] += 1
+			var tag = part.get_node("Tag")
+			var idx = tag.text
+			if idx.is_empty():
+				idx = part.part_type
+			if counts.has(idx):
+				counts[idx] += 1
 			else:
-				counts[part.part_type] = 1
-			var new_name = part.part_type + str(counts[part.part_type])
-			part.get_node("Tag").text = new_name
+				counts[idx] = 1
+			var new_name = idx + str(counts[idx])
+			tag.text = new_name
 			part_names[part.name] = new_name
 			part.name = new_name
 			part.tooltip_text = new_name
