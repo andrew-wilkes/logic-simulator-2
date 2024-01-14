@@ -336,6 +336,8 @@ func add_connections(checked):
 		if node is Block and node.has_bad_hash():
 			G.warn_user(get_part_id(node) + " has changed IO pins." +\
 				"\n Circuit file: " + node.data.circuit_file)
+			# User can update the hash by saving the circuit
+			emit_signal("changed")
 	for con in circuit.data.connections:
 		if checked:
 			connect_node(con.from_node, con.from_port, con.to_node, con.to_port)
