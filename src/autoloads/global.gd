@@ -6,6 +6,7 @@ enum TEST_STATUS { STEPPABLE, PLAYING, DONE }
 
 var settings
 var warning
+var warnings
 var message_panel
 var test_runner
 var debug_timestamp = 0
@@ -76,6 +77,7 @@ func notify_user(msg):
 
 func warn_user(msg):
 	warning.open(msg)
+	warnings.add_text(msg)
 
 
 func debug(text = ""):

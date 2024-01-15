@@ -12,6 +12,7 @@ func _ready():
 	%ToolsButton.get_popup().add_item("Test circuit")
 	%ToolsButton.get_popup().add_item("Load HDL circuit")
 	%ToolsButton.get_popup().add_item("Disassembler")
+	%ToolsButton.get_popup().add_item("List Warnings")
 	%ToolsButton.get_popup().index_pressed.connect(tool_action)
 	schematic.changed.connect(set_current_file_color)
 	schematic.title_changed.connect(%Title.set_text)
@@ -25,6 +26,7 @@ func _ready():
 	$HelpPanel/HelpTabs/Nand2Tetris/RichText.meta_clicked.connect(_on_nand_text_meta_clicked)
 	%Title.text_submitted.connect(unfocus)
 	G.warning = $WarningPanel
+	G.warnings = $WarningsPanel/Warnings
 
 
 func tool_action(idx):
@@ -49,6 +51,8 @@ func tool_action(idx):
 			else:
 				$LoadHack.current_dir = G.settings.test_dir
 			$LoadHack.popup_centered()
+		4:
+			$WarningsPanel.popup_centered()
 
 #region File Code
 func _on_save_button_pressed():
@@ -71,6 +75,7 @@ func _on_block_button_pressed():
 func _on_new_button_pressed():
 	set_current_file("")
 	schematic.clear()
+	G.warnings.clear()
 
 
 func do_action(action):
@@ -105,6 +110,7 @@ func _on_file_dialog_file_selected(file_path):
 			save_file()
 		OPEN:
 			schematic.load_circuit(file_path)
+			G.warnings.clear()
 		OPEN_AS_BLOCK:
 			schematic.add_block(file_path)
 
@@ -165,6 +171,9 @@ func _unhandled_key_input(event: InputEvent):
 			KEY_H:
 				if event.ctrl_pressed:
 					_on_help_button_pressed()
+			KEY_AT:
+				# Test something
+				G.warn_user("Test")
 
 
 # Listen for notification of quit request such as after user clicked on x of window

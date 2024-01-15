@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://eohxndqnij0x"]
+[gd_scene load_steps=14 format=3 uid="uid://eohxndqnij0x"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_7i1tr"]
 [ext_resource type="Texture2D" uid="uid://cy7i2jvb0vhoe" path="res://assets/ui/colors.png" id="2_p126i"]
@@ -12,6 +12,7 @@
 [ext_resource type="PackedScene" uid="uid://b1a77l6rte3i" path="res://scenes/help_tabs.tscn" id="7_qqehi"]
 [ext_resource type="PackedScene" uid="uid://cvfhme8tmg2c5" path="res://scenes/about_tabs.tscn" id="8_2rex3"]
 [ext_resource type="PackedScene" uid="uid://k4j50g4q56tt" path="res://scenes/LearnTabs.tscn" id="8_41uro"]
+[ext_resource type="PackedScene" uid="uid://cf4oxh63tlyh" path="res://scenes/warnings.tscn" id="12_xvlfp"]
 
 [node name="Main" type="Control"]
 layout_mode = 3
@@ -228,6 +229,19 @@ offset_left = 4.0
 offset_top = 4.0
 offset_right = 696.0
 offset_bottom = 496.0
+
+[node name="WarningsPanel" type="PopupPanel" parent="."]
+title = "Warnings"
+position = Vector2i(0, 36)
+size = Vector2i(500, 300)
+unresizable = false
+borderless = false
+
+[node name="Warnings" parent="WarningsPanel" instance=ExtResource("12_xvlfp")]
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 496.0
+offset_bottom = 296.0
 
 [node name="Disassembler" parent="." instance=ExtResource("5_ihm75")]
 visible = false

@@ -1,0 +1,49 @@
+[gd_scene load_steps=3 format=3 uid="uid://cf4oxh63tlyh"]
+
+[ext_resource type="Theme" uid="uid://gleoxvoch1e4" path="res://assets/ui/tab_panel_theme.tres" id="1_qimaa"]
+[ext_resource type="Script" path="res://scenes/warnings.gd" id="2_3gjcf"]
+
+[node name="Warnings" type="TabContainer"]
+offset_right = 431.0
+offset_bottom = 357.0
+theme = ExtResource("1_qimaa")
+script = ExtResource("2_3gjcf")
+
+[node name="List" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VB" type="VBoxContainer" parent="List"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Text" type="RichTextLabel" parent="List/VB"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+focus_mode = 2
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+scroll_following = true
+selection_enabled = true
+drag_and_drop_selection_enabled = false
+
+[node name="HB" type="HBoxContainer" parent="List/VB"]
+layout_mode = 2
+
+[node name="ClearButton" type="Button" parent="List/VB/HB"]
+layout_mode = 2
+text = "Clear"
+
+[node name="Spacer" type="Control" parent="List/VB/HB"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="OKButton" type="Button" parent="List/VB/HB"]
+layout_mode = 2
+text = "Close"
+
+[connection signal="pressed" from="List/VB/HB/ClearButton" to="." method="_on_clear_button_pressed"]
+[connection signal="pressed" from="List/VB/HB/OKButton" to="." method="_on_ok_button_pressed"]
