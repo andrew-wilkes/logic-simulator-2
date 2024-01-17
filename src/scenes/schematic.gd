@@ -505,20 +505,28 @@ func number_parts():
 			var idx = tag.text
 			if idx.is_empty():
 				idx = part.part_type
-			if counts.has(idx):
-				counts[idx] += 1
+				if counts.has(idx):
+					counts[idx] += 1
+				else:
+					counts[idx] = 1
+				var new_name = idx + str(counts[idx])
+				tag.text = new_name
+				part_names[part.name] = new_name
+				part.name = new_name
+				part.tooltip_text = new_name
 			else:
-				counts[idx] = 1
-			var new_name = idx + str(counts[idx])
-			tag.text = new_name
-			part_names[part.name] = new_name
-			part.name = new_name
-			part.tooltip_text = new_name
+				# Don't change existing tagged part
+				part_names[part.name] = part.name
 	# Redo the connections with updated part names
 	circuit.data.connections = get_connection_list()
 	for con in circuit.data.connections:
 		con.from_node = part_names[con.from_node]
 		con.to_node = part_names[con.to_node]
+	for node in get_children():
+		if node is Part:
+			for con in node.connections:
+				con.from_node = part_names[con.from_node]
+				con.to_node = part_names[con.to_node]
 	clear_connections()
 	add_connections(true)
 	emit_signal("changed")
