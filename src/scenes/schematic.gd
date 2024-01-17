@@ -271,7 +271,7 @@ func load_circuit(file_name):
 		add_parts()
 		await get_tree().process_frame
 		add_connections(false)
-		sort_all_io_connections()
+		sort_all_connections()
 		emit_signal("title_changed", circuit.data.title)
 		circuit_changed(false)
 		reset_parts()
@@ -321,7 +321,7 @@ func add_connections(checked):
 			connect_node(con.from_node, con.from_port, con.to_node, con.to_port)
 
 
-func sort_all_io_connections():
+func sort_all_connections():
 	for node in get_children():
 		if node is Part:
 			ConnectionSorter.set_part_outputs(node, get_connection_list())
@@ -423,9 +423,7 @@ func right_click_on_part(part):
 func output_level_changed_handler(part, port, level):
 	if G.settings.indicate_from_levels:
 		part.indicate_level(RIGHT, port, level)
-	# Parts may have a stored list of connections to process in a given order
-	var cons = part.io_connections if part.io_connections.size() > 0 else get_connection_list()
-	for con in cons:
+	for con in part.connections:
 		if con.from_node == part.name and con.from_port == port:
 			var node = get_node(NodePath(con.to_node))
 			node.update_input_level(con.to_port, level)
@@ -434,8 +432,7 @@ func output_level_changed_handler(part, port, level):
 
 
 func bus_value_changed_handler(part, port, value):
-	var cons = part.io_connections if part.io_connections.size() > 0 else get_connection_list()
-	for con in cons:
+	for con in part.connections:
 		if con.from_node == part.name and con.from_port == port:
 			get_node(NodePath(con.to_node)).update_bus_input_value(con.to_port, value)
 
