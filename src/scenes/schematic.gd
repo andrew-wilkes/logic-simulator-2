@@ -71,45 +71,13 @@ func connect_wire(from_part, from_pin, to_part, to_pin):
 				else:
 					node.update_bus_input_value(to_pin, from.pins.get([RIGHT, from_pin], 0))
 				break
-		sort_io_connections(from)
+		ConnectionSorter.sort_connections(from, get_connection_list())
 	circuit_changed()
-
-
-func sort_io_connections(part):
-	part.io_connections = []
-	# Get a list of all parts that the from part connects to and their path lengths
-	var sets = {}
-	for con in get_connection_list():
-		if part.name == con.from_node:
-			var parts = { con.to_node: 1 }
-			get_connection_tree(con.to_node, parts, 2)
-			sets[con] = parts
-	part.io_connections = sets.keys()
-	if sets.size() > 1:
-		# Sort the connections
-		part.io_connections.sort_custom(func (a, b): return sort_path_lengths(sets[a], sets[b]))
-
-
-func sort_path_lengths(a, b):
-	for part in a:
-		if b.has(part):
-			return b[part] > a[part]
-	return true
-
-
-func get_connection_tree(part_name, parts, depth):
-	if depth > MAX_TREE_DEPTH:
-		return
-	for con in get_connection_list():
-		if con.from_node == part_name:
-			parts[con.to_node] = depth
-			get_connection_tree(con.to_node, parts, depth + 1)
-	return
 
 
 func disconnect_wire(from_part, from_pin, to_part, to_pin):
 	disconnect_node(from_part, from_pin, to_part, to_pin)
-	sort_io_connections(get_part_by_name(from_part))
+	ConnectionSorter.sort_connections(get_part_by_name(from_part), get_connection_list())
 	circuit_changed()
 
 
@@ -357,7 +325,7 @@ func add_connections(checked):
 func sort_all_io_connections():
 	for node in get_children():
 		if node is Part:
-			sort_io_connections(node)
+			ConnectionSorter.sort_connections(node, get_connection_list())
 
 
 func get_part_id(part):
