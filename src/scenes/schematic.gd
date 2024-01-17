@@ -70,13 +70,13 @@ func connect_wire(from_part, from_pin, to_part, to_pin):
 				else:
 					node.update_bus_input_value(to_pin, from.pins.get([RIGHT, from_pin], 0))
 				break
-		ConnectionSorter.sort_connections(from, get_connection_list())
+		ConnectionSorter.set_part_outputs(from, get_connection_list())
 	circuit_changed()
 
 
 func disconnect_wire(from_part, from_pin, to_part, to_pin):
 	disconnect_node(from_part, from_pin, to_part, to_pin)
-	ConnectionSorter.sort_connections(get_part_by_name(from_part), get_connection_list())
+	ConnectionSorter.set_part_outputs(get_part_by_name(from_part), get_connection_list())
 	circuit_changed()
 
 
@@ -324,7 +324,7 @@ func add_connections(checked):
 func sort_all_io_connections():
 	for node in get_children():
 		if node is Part:
-			ConnectionSorter.sort_connections(node, get_connection_list())
+			ConnectionSorter.set_part_outputs(node, get_connection_list())
 
 
 func get_part_id(part):
