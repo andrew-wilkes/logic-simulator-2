@@ -9,12 +9,12 @@ const CLOCK_PIN = "clk"
 const LOOP_TIME_LIMIT = 10000 # ms
 
 var running = true
-var tasks
-var output_format
-var pin_states
-var output
-var inputs
-var outputs
+var tasks = []
+var output_format = ""
+var pin_states = {}
+var output = ""
+var inputs = {}
+var outputs = {}
 var repetitive_tasks = []
 var repeat_counter = 0
 var repeat_decrement = 1
@@ -101,9 +101,9 @@ func process_task(task):
 				pin_states[pin_name] = value
 				var target = inputs[pin_name] # [part, port, port_type]
 				if target[2] == 0: # Wire
-					target[0].update_input_level(0, target[1], value == 1)
+					target[0].update_input_level(target[1], value == 1)
 				else: #Bus
-					target[0].update_bus_input_value(0, target[1], int(value))
+					target[0].update_bus_input_value(target[1], int(value))
 		"eval":
 			get_output_values()
 		"output":
@@ -115,7 +115,7 @@ func process_task(task):
 				time += 1 # tock
 			if inputs.has(CLOCK_PIN):
 				var target = inputs[CLOCK_PIN] # [part, port, port_type]
-				target[0].update_input_level(0, target[1], tick)
+				target[0].update_input_level(target[1], tick)
 			get_output_values()
 		"repeat":
 			if repeat_counter > 0:
@@ -180,7 +180,7 @@ func get_pin_value(pin: String):
 		return int(pin)
 	if outputs.has(pin):
 		var target = outputs[pin]
-		var pin_key = [1, target[1]] # [side, port]
+		var pin_key = [1, target[1]] # [port]
 		# Cast bools to int and set the value to 0 if the pin has not been touched
 		return int(target[0].pins.get(pin_key, 0))
 	if inputs.has(pin):
@@ -197,7 +197,7 @@ func get_output_values():
 			pin_states[pin] = 0
 		if outputs.has(pin):
 			var target = outputs[pin]
-			var pin_key = [1, target[1]] # [side, port]
+			var pin_key = [1, target[1]] # [port]
 			# Cast bools to int and set the value to 0 if the pin has not been touched
 			pin_states[pin] = int(target[0].pins.get(pin_key, 0))
 

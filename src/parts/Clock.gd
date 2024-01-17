@@ -55,7 +55,7 @@ func output_clock(level):
 
 
 func update_clock_output(level):
-	update_output_level_with_color(RIGHT, OUT, level)
+	update_output_level_with_color(OUT, level)
 
 
 func _on_reset_button_toggled(button_pressed):
@@ -65,7 +65,7 @@ func _on_reset_button_toggled(button_pressed):
 
 
 func update_reset_output(level):
-	update_output_level_with_color(RIGHT, 1, level)
+	update_output_level_with_color(1, level)
 
 
 func apply_power():

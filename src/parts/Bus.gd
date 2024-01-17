@@ -9,4 +9,4 @@ func _init():
 
 func apply_power():
 	if not pins.has([RIGHT, OUT]):
-		update_output_value(RIGHT, OUT, 0)
+		update_output_value(OUT, 0)

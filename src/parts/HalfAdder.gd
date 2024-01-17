@@ -8,9 +8,8 @@ func _init():
 	category = ASYNC
 
 
-func evaluate_output_level(side, _port, _level):
-	if side == LEFT:
-		var a = pins.get([side, A], false)
-		var b = pins.get([side, B], false)
-		update_output_level(RIGHT, 0, a != b)
-		update_output_level(RIGHT, 1, a and b)
+func evaluate_output_level(_port, _level):
+	var a = pins.get([LEFT, A], false)
+	var b = pins.get([LEFT, B], false)
+	update_output_level(0, a != b)
+	update_output_level(1, a and b)

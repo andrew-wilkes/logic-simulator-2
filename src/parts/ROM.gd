@@ -26,8 +26,8 @@ func setup_instance():
 		load_data(data.file, false)
 
 
-func evaluate_bus_output_value(side, port, _value):
-	if side == LEFT and port == 0: # Change of address
+func evaluate_bus_output_value(port, _value):
+	if port == 0: # Change of address
 		set_output_data()
 
 
@@ -36,7 +36,7 @@ func set_output_data():
 	if show_display:
 		%Address.text = get_display_hex_value(address)
 		%Data.text = get_display_hex_value(values[address])
-	update_output_value(RIGHT, OUT, values[address])
+	update_output_value(OUT, values[address])
 
 
 func open_file():

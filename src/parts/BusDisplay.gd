@@ -68,7 +68,7 @@ func set_dp():
 		$HB.get_child(idx).material.set_shader_parameter("dp", on)
 
 
-func evaluate_bus_output_value(_side, port, _value):
+func evaluate_bus_output_value(port, _value):
 	value = int(_value)
 	if port == 0:
 		set_digits(value)

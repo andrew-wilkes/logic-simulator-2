@@ -167,7 +167,7 @@ func configure_pins():
 
 
 func is_input(part):
-	# If there are no wires connected to the part input side, then it is an input to the circuit.data
+	# If there are no wires connected to the part input then it is an input to the circuit.data
 	for con in circuit.data.connections:
 		if con.to_node == part.node_name:
 			return false
@@ -175,7 +175,7 @@ func is_input(part):
 
 
 func is_output(part):
-	# If there are no wires connected to the part output side, then it is an output to the circuit.data
+	# If there are no wires connected to the part output then it is an output to the circuit.data
 	for con in circuit.data.connections:
 		if con.from_node == part.node_name:
 			return false
@@ -201,61 +201,54 @@ func add_parts(files):
 		parts[part.name] = part
 
 
-func get_map(side: int, port: int):
-	return input_map[port] if side == LEFT else output_map[port]
-
-
 # Map external input to internal IO part
-func evaluate_output_level(input_side: int, port: int, level):
+func evaluate_output_level(port: int, level):
 	if DEBUG:
-		prints("block evaluate_output_level", self.name, input_side, port, level)
-	var map = get_map(input_side, port)
+		prints("block evaluate_output_level", self.name, port, level)
+	var map = input_map[port]
 	var part = parts[map[PART]]
-	var output_side = FLIP_SIDES[input_side]
-	part.update_output_level(output_side, map[PORT], level)
+	part.update_output_level(map[PORT], level)
 	if part.part_type == "IO":
 		# Update the bus
 		var value = 0
 		for n in part.data.num_wires:
 			value *= 2
-			value += int(part.pins.get([output_side, int(part.data.num_wires - n)], false))
-		part.evaluate_bus_output_value(input_side, 0, value, false)
+			value += int(part.pins.get([LEFT, int(part.data.num_wires - n)], false))
+		part.evaluate_bus_output_value(value, false)
 
 
 # Map external bus input to internal part
-func evaluate_bus_output_value(side: int, port: int, value: int, update_levels = true):
-	var map = get_map(side, port)
-	# Flip the side to the output side
-	side = FLIP_SIDES[side]
+func evaluate_bus_output_value(port: int, value: int, update_levels = true):
+	var map = input_map[port]
 	var part = parts[map[PART]]
-	part.update_output_value(side, map[PORT], value)
+	part.update_output_value(map[PORT], value)
 	if update_levels and part.part_type == "IO":
 		# This will ignore (clip) value bits above the range that the wires cover
 		for n in part.data.num_wires:
 			var level = bool(value % 2)
 			value /= 2
-			part.update_output_level(side, n + 1, level)
+			part.update_output_level(n + 1, level)
 
 
-func output_level_changed_handler(part, side: int, port: int, level):
+func output_level_changed_handler(part, port: int, level):
 	if DEBUG:
-		prints("block output_level_changed_handler", part.name, side, port, level)
+		prints("block output_level_changed_handler", part.name, port, level)
 	var map_idx = [str(part.name), port] # part.name seems to be a pointer to a string
-	var port_idx = [input_map, output_map][side].find(map_idx)
+	var port_idx = input_map.find(map_idx)
 	if port_idx > -1:
-		pins[[side, port_idx]] = level
-		controller.output_level_changed_handler(self, side, port_idx, level)
+		pins[[port_idx]] = level
+		controller.output_level_changed_handler(self, port_idx, level)
 	else:
-		update_internal_input_level(part, side, port, level)
+		update_internal_input_level(part, port, level)
 
 
-func update_internal_input_level(part, side: int, port: int, level):
+func update_internal_input_level(part, port: int, level):
 	if DEBUG:
-		prints("block update_internal_input_level", part.name, side, port, level)
-	var cons = part.connections.get([side, port])
+		prints("block update_internal_input_level", part.name, port, level)
+	var cons = part.connections.get([port])
 	if cons:
 		for connection in cons:
-			parts[connection[0]].update_input_level(int(side == 0), connection[1], level)
+			parts[connection[0]].update_input_level(connection[1], level)
 
 
 func add_connections_to_part(part):
@@ -277,28 +270,28 @@ func add_to_connections(part, key, value):
 		part.connections[key] = [value]
 
 
-func bus_value_changed_handler(part, side: int, port: int, value: int):
+func bus_value_changed_handler(part, port: int, value: int):
 	var map_idx = [str(part.name), port]
-	var port_idx = [input_map, output_map][side].find(map_idx)
+	var port_idx = input_map.find(map_idx)
 	if port_idx > -1:
-		pins[[side, port_idx]] = value
-		controller.bus_value_changed_handler(self, side, port_idx, value)
+		pins[[port_idx]] = value
+		controller.bus_value_changed_handler(self, port_idx, value)
 		if part is IO:
 			for n in part.data.num_wires:
 				port_idx += 1
 				var level = value % 2 == 1
 				value /= 2
-				pins[[side, port_idx]] = level
-				controller.output_level_changed_handler(self, side, port_idx, level)
+				pins[[port_idx]] = level
+				controller.output_level_changed_handler(self, port_idx, level)
 	else:
-		update_internal_bus_input_value(part, side, port, value)
+		update_internal_bus_input_value(part, port, value)
 
 
-func update_internal_bus_input_value(part, side: int, port: int, value):
-	var cons = part.connections.get([side, port])
+func update_internal_bus_input_value(part, port: int, value):
+	var cons = part.connections.get([port])
 	if cons:
 		for connection in cons:
-			parts[connection[0]].update_bus_input_value(int(side == 0), connection[1], value)
+			parts[connection[0]].update_bus_input_value(connection[1], value)
 
 
 func reset_block_race_counters():
@@ -321,8 +314,8 @@ func reset():
 		input.pins = {}
 
 
-func unstable_handler(_name, side, port):
-	controller.unstable_handler(name + ":" + _name, side, port)
+func unstable_handler(_name, port):
+	controller.unstable_handler(name + ":" + _name, port)
 
 
 func compare_offsets(a, b):

@@ -92,34 +92,32 @@ func value_changed(value):
 	# The change may propagate before the race reset has occurred,
 	# so the threshold value may need to be increased
 	controller.reset_race_counters()
-	update_output_levels_from_value([0, 1], value)
-	update_output_value(0, 0, value)
-	update_output_value(1, 0, value)
+	update_output_levels_from_value(value)
+	update_output_value(0, value)
 
 
-func update_output_levels_from_value(sides: Array, value: int):
+func update_output_levels_from_value(value: int):
 	# This will ignore (clip) value bits above the range that the wires cover
 	for n in data.num_wires:
 		var level = bool(value % 2)
 		value /= 2
-		for side in sides:
-			update_output_level(side, n + 1, level)
+		update_output_level(n + 1, level)
 
 
-func evaluate_output_level(side, port, level):
-	super(side, port, level)
+func evaluate_output_level(port, level):
+	super(port, level)
 	var value = 0
 	for n in data.num_wires:
 		value *= 2
-		value += int(pins.get([side, int(data.num_wires - n)], false))
-	evaluate_bus_output_value(side, 0, value, false)
+		value += int(pins.get([LEFT, int(data.num_wires - n)], false))
+	evaluate_bus_output_value(0, value, false)
 
 
-func evaluate_bus_output_value(side, port, value, update_levels = true):
-	super(side, port, value)
+func evaluate_bus_output_value(port, value, update_levels = true):
+	super(port, value)
 	# A speed optimization could be to not call this unless there are wire connections.
 	if update_levels:
-		update_output_levels_from_value([(side + 1) % 2], value)
+		update_output_levels_from_value(value)
 	if show_display:
 		$Value.display_value(value, true, true)
 	current_value = value

@@ -26,10 +26,10 @@ var order = 0
 var data = {}
 var show_display = true
 var controller # The schematic or a parent block
-var race_counter = {} # [side, port]: count
+var race_counter = {} # [port]: count
 var connections = {} # Used with parts in blocks
 var io_connections = [] # Used to store a sorted list of IO part output connections
-var pins = {} # [side, port]: level / value
+var pins = {} # [port]: level / value
 var change_notification_timer: Timer
 
 func get_dict():
@@ -74,19 +74,19 @@ func setup_instance():
 	pass
 
 
-func update_input_level(side, port, level):
+func update_input_level(port, level):
 	if DEBUG:
-		prints("part update_input_level", self.name, side, port, level)
-	var key = set_pin_value(side, port, level)
+		prints("part update_input_level", self.name, port, level)
+	var key = set_pin_value(LEFT, port, level)
 	if key != null:
 		if race_counter.has(key):
 			race_counter[key] += 1
 			if race_counter[key] == RACE_COUNT_THRESHOLD:
-				controller.unstable_handler(self, side, port)
+				controller.unstable_handler(self, port)
 				return
 		else:
 			race_counter[key] = 1
-		evaluate_output_level(side, port, level)
+		evaluate_output_level(port, level)
 
 
 func set_pin_value(side, port, value):
@@ -103,35 +103,35 @@ func set_pin_value(side, port, value):
 	return key
 
 
-func update_bus_input_value(side, port, value):
-	if set_pin_value(side, port, value) != null:
-		evaluate_bus_output_value(side, port, value)
+func update_bus_input_value(port, value):
+	if set_pin_value(LEFT, port, value) != null:
+		evaluate_bus_output_value(port, value)
 
 
 # Override this function in extended parts
-func evaluate_output_level(side, port, level):
+func evaluate_output_level(port, level):
 	if DEBUG:
-		prints("part evaluate_output_level", self.name, side, port, level)
+		prints("part evaluate_output_level", self.name, port, level)
 	# Put logic here to derive the new level
-	update_output_level(FLIP_SIDES[side], port, level)
+	update_output_level(port, level)
 
 
-func update_output_level(side, port, level):
+func update_output_level(port, level):
 	if DEBUG:
-		prints("part update_output_level", self.name, side, port, level)
-	if set_pin_value(side, port, level) != null:
-		controller.output_level_changed_handler(self, side, port, level)
+		prints("part update_output_level", self.name, port, level)
+	if set_pin_value(RIGHT, port, level) != null:
+		controller.output_level_changed_handler(self, port, level)
 
 
 # Override this function in extended parts
-func evaluate_bus_output_value(side, port, value):
+func evaluate_bus_output_value(port, value):
 	# Put logic here to derive the new value
-	update_output_value(FLIP_SIDES[side], port, value)
+	update_output_value(port, value)
 
 
-func update_output_value(side, port, value):
-	if set_pin_value(side, port, value) != null:
-		controller.bus_value_changed_handler(self, side, port, value)
+func update_output_value(port, value):
+	if set_pin_value(RIGHT, port, value) != null:
+		controller.bus_value_changed_handler(self, port, value)
 
 
 # Override this function for custom setup of the Part when it is loaded into the Schematic
@@ -174,9 +174,10 @@ func apply_power():
 	pass
 
 
-func update_output_level_with_color(side, port, level):
-	update_output_level(side, port, level)
-	indicate_level(side, port, level)
+# Set the output pin color and emit the output level
+func update_output_level_with_color(port, level):
+	update_output_level(port, level)
+	indicate_level(RIGHT, port, level)
 
 
 func indicate_level(side, port, level):

@@ -206,5 +206,4 @@ func _on_value_value_changed(value):
 
 func update_value():
 	part.controller.reset_race_counters()
-	part.evaluate_bus_output_value(0, 0, part.current_value)
-	part.evaluate_bus_output_value(1, 0, part.current_value)
+	part.evaluate_bus_output_value(0, part.current_value)

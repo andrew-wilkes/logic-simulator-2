@@ -7,5 +7,5 @@ func _init():
 	category = ASYNC
 
 
-func evaluate_bus_output_value(_side, _port, value):
-	update_output_value(RIGHT, OUT, ~value)
+func evaluate_bus_output_value(__port, value):
+	update_output_value(OUT, ~value)

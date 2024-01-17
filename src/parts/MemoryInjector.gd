@@ -15,7 +15,7 @@ func _ready():
 	%Address.display_value(data.address, false, false)
 
 
-func evaluate_bus_output_value(_side, port, value):
+func evaluate_bus_output_value(port, value):
 	if port == 1 and memory:
 		memory.set_value(data.address, value)
 		memory.update_probes()

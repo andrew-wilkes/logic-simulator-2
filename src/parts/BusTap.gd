@@ -21,12 +21,11 @@ func setup_instance():
 	set_bit_mask()
 
 
-func evaluate_bus_output_value(side, _port, value):
-	if side == LEFT:
-		var bit = value & bit_mask
-		if bit != last_bit_value:
-			last_bit_value = bit
-			update_output_level(RIGHT, 0, bool(bit))
+func evaluate_bus_output_value(_port, value):
+	var bit = value & bit_mask
+	if bit != last_bit_value:
+		last_bit_value = bit
+		update_output_level(0, bool(bit))
 
 
 func _on_bit_value_changed(value):

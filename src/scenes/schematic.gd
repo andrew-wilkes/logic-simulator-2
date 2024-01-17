@@ -65,10 +65,11 @@ func connect_wire(from_part, from_pin, to_part, to_pin):
 				var con_type = from.get_slot_type_right(slot)
 				if con_type == 0:
 					var level = from.pins.get([RIGHT, from_pin], false)
-					node.update_input_level(LEFT, to_pin, level)
-					node.update_output_level_with_color(LEFT, to_pin, level)
+					node.update_input_level(to_pin, level)
+					if G.settings.indicate_to_levels:
+						node.indicate_level(LEFT, to_pin, level)
 				else:
-					node.update_bus_input_value(LEFT, to_pin, from.pins.get([RIGHT, from_pin], 0))
+					node.update_bus_input_value(to_pin, from.pins.get([RIGHT, from_pin], 0))
 				break
 		sort_io_connections(from)
 	circuit_changed()
@@ -452,39 +453,28 @@ func right_click_on_part(part):
 			$MemoryManagerPanel.position.y += 15
 
 
-func output_level_changed_handler(part, side, port, level):
-	# IO parts may have a stored list of connections to process in a given order
+func output_level_changed_handler(part, port, level):
+	if G.settings.indicate_from_levels:
+		part.indicate_level(RIGHT, port, level)
+	# Parts may have a stored list of connections to process in a given order
 	var cons = part.io_connections if part.io_connections.size() > 0 else get_connection_list()
 	for con in cons:
-		if side == RIGHT:
-			if con.from_node == part.name and con.from_port == port:
-				var node = get_node(NodePath(con.to_node))
-				node.update_input_level(LEFT, con.to_port, level)
-				if G.settings.indicate_to_levels:
-					node.indicate_level(LEFT, con.to_port, level)
-		else:
-			if con.to_node == part.name and con.to_port == port:
-				var node = get_node(NodePath(con.from_node))
-				node.update_input_level(RIGHT, con.from_port, level)
-				if G.settings.indicate_to_levels:
-					node.indicate_level(RIGHT, con.from_port, level)
-		if G.settings.indicate_from_levels:
-			part.indicate_level(side, port, level)
+		if con.from_node == part.name and con.from_port == port:
+			var node = get_node(NodePath(con.to_node))
+			node.update_input_level(con.to_port, level)
+			if G.settings.indicate_to_levels:
+				node.indicate_level(LEFT, con.to_port, level)
 
 
-func bus_value_changed_handler(part, side, port, value):
+func bus_value_changed_handler(part, port, value):
 	var cons = part.io_connections if part.io_connections.size() > 0 else get_connection_list()
 	for con in cons:
-		if side == RIGHT:
-			if con.from_node == part.name and con.from_port == port:
-				get_node(NodePath(con.to_node)).update_bus_input_value(LEFT, con.to_port, value)
-		else:
-			if con.to_node == part.name and con.to_port == port:
-				get_node(NodePath(con.from_node)).update_bus_input_value(RIGHT, con.from_port, value)
+		if con.from_node == part.name and con.from_port == port:
+			get_node(NodePath(con.to_node)).update_bus_input_value(con.to_port, value)
 
 
-func unstable_handler(part, side, port):
-	G.warn_user("Unstable input to %s on %s side, pin: %d" % [part.name, ["left", "right"][side], port])
+func unstable_handler(part, port):
+	G.warn_user("Unstable input to %s on %s pin: %d" % [part.name, "left", port])
 
 
 func reset_race_counters():
