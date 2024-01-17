@@ -7,7 +7,6 @@ signal changed # Something changed that needs to be part of a save in order to b
 signal title_changed(text)
 
 const PART_INITIAL_OFFSET = Vector2(50, 50)
-const MAX_TREE_DEPTH = 5
 
 enum { LEFT, RIGHT }
 

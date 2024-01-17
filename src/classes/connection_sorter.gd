@@ -1,7 +1,5 @@
 class_name ConnectionSorter
 
-extends RefCounted
-
 const MAX_TREE_DEPTH = 5
 
 static func sort_connections(part, all_connections):

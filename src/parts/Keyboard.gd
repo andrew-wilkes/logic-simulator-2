@@ -1,9 +1,5 @@
 class_name Keyboard
 
-# This part incorporates a message display feature since that enables the focus
-# to stay on the Keyboard part when running tests and the "echo" task is run.
-# This is to avoid confusing the user when they need to press keys following a text prompt.
-
 extends Part
 
 var last_text_length = 0
