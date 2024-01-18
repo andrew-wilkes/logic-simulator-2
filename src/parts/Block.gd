@@ -19,6 +19,7 @@ var outputs = []
 var wire_color = Color.WHITE
 var bus_color = Color.YELLOW
 var memory
+var file_tree
 
 func _init():
 	data = { "circuit_file": "", "wiring_hash": 0 }
@@ -26,7 +27,7 @@ func _init():
 
 func _ready():
 	super() # It's easy to forget to call the parent _ready code to add the Tag etc.
-	block_setup([G.settings.current_file])
+	block_setup([G.settings.current_file], "root", { "root": [] })
 	set_slots(max(input_pin_count, output_pin_count) - 1)
 	configure_pins()
 	reset()
@@ -40,7 +41,8 @@ func has_bad_hash():
 	return false
 
 
-func block_setup(_files):
+func block_setup(_files, tree_key, _file_tree):
+	file_tree = _file_tree
 	circuit = Circuit.new()
 	if _files.has(data.circuit_file.get_file()):
 		G.warning.open("Detected that %s is nested inside itself!" % [data.circuit_file.get_file()])
@@ -48,7 +50,11 @@ func block_setup(_files):
 	# Add the file name to the list of files to detect.
 	# Ignore the path, this allows for files to be moved and can compare to current file.
 	# Downside is that blocks must have unique names.
-	var files = _files + [data.circuit_file.get_file()]
+	var current_file = data.circuit_file.get_file()
+	file_tree[tree_key].append(current_file)
+	tree_key = current_file.hash()
+	file_tree[tree_key] = []
+	var files = _files + [current_file]
 	var load_result = circuit.load_data(data.circuit_file)
 	if load_result != OK:
 		G.warning.open("The circuit block data from %s was invalid!" % [data.circuit_file.get_file()])
@@ -99,7 +105,7 @@ func block_setup(_files):
 				output_map.append([io_part.node_name, int(n + 1)])
 	if data.get("wiring_hash", 0) == 0: # Set this for new blocks
 		data.wiring_hash = (input_map + output_map).hash()
-	add_parts(files)
+	add_parts(files, tree_key)
 
 
 func set_slots(to_add):
@@ -185,7 +191,7 @@ func is_output(part):
 	return true
 
 
-func add_parts(files):
+func add_parts(files, tree_key):
 	for node in circuit.data.parts:
 		var part = Parts.get_instance(node.part_type)
 		part.tag = node.tag
@@ -200,7 +206,7 @@ func add_parts(files):
 		part.setup_instance()
 		ConnectionSorter.set_part_outputs(part, circuit.data.connections)
 		if part.part_type == "Block":
-			part.block_setup(files)
+			part.block_setup(files, tree_key, file_tree)
 		parts[part.name] = part
 
 

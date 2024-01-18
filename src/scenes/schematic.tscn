@@ -1,10 +1,11 @@
-[gd_scene load_steps=7 format=3 uid="uid://cq3v3io0y1kms"]
+[gd_scene load_steps=8 format=3 uid="uid://cq3v3io0y1kms"]
 
 [ext_resource type="Script" path="res://scenes/schematic.gd" id="1_q7w2l"]
 [ext_resource type="Theme" uid="uid://deqbs7na0dine" path="res://assets/ui/schematic.theme" id="1_tlap4"]
 [ext_resource type="PackedScene" uid="uid://1ugdcg3f5q1w" path="res://scenes/IOManager.tscn" id="2_7dp20"]
 [ext_resource type="PackedScene" uid="uid://soo142csxxxi" path="res://scenes/MemoryManager.tscn" id="3_3rybu"]
 [ext_resource type="PackedScene" uid="uid://c7pcrpp8inqwr" path="res://scenes/TestRunner.tscn" id="3_lacat"]
+[ext_resource type="PackedScene" uid="uid://kp63t0sdyggh" path="res://scenes/circuit_tree.tscn" id="5_gxq4f"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ydr2j"]
 bg_color = Color(0.14902, 0.14902, 0.14902, 1)
@@ -34,6 +35,18 @@ offset_left = 0.0
 offset_top = 0.0
 offset_right = 412.0
 offset_bottom = 100.0
+
+[node name="BlockTreePanel" type="PopupPanel" parent="."]
+title = "Circuit Tree"
+size = Vector2i(400, 300)
+unresizable = false
+borderless = false
+
+[node name="CircuitTree" parent="BlockTreePanel" instance=ExtResource("5_gxq4f")]
+offset_left = 4.0
+offset_top = 4.0
+offset_right = -4.0
+offset_bottom = -4.0
 
 [node name="C" type="CanvasLayer" parent="."]
 

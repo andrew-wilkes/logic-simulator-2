@@ -418,6 +418,9 @@ func right_click_on_part(part):
 			$MemoryManagerPanel/MemoryManager.open(part)
 			$MemoryManagerPanel.popup_centered()
 			$MemoryManagerPanel.position.y += 15
+		"Block":
+			$BlockTreePanel/CircuitTree.generate_tree(part.file_tree)
+			$BlockTreePanel.popup_centered()
 
 
 func output_level_changed_handler(part, port, level):
