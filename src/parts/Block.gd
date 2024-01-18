@@ -221,7 +221,7 @@ func evaluate_output_level(port: int, level):
 		for n in part.data.num_wires:
 			value *= 2
 			value += int(part.pins.get([LEFT, int(part.data.num_wires - n)], false))
-		part.evaluate_bus_output_value(value, false)
+		part.evaluate_bus_output_value(0, value, false)
 
 
 # Map external bus input to internal part

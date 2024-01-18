@@ -45,8 +45,8 @@ borderless = false
 [node name="CircuitTree" parent="BlockTreePanel" instance=ExtResource("5_gxq4f")]
 offset_left = 4.0
 offset_top = 4.0
-offset_right = -4.0
-offset_bottom = -4.0
+offset_right = 396.0
+offset_bottom = 296.0
 
 [node name="C" type="CanvasLayer" parent="."]
 

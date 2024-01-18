@@ -178,6 +178,10 @@ It's up to you to create the internal circuit to connect the inputs to the outpu
 
 This tool is used to load .hack files that contain words of machine code, and converts these into Assembly language to help you to understand the code that it represents.
 
+[b]List Warnings[/b]
+
+View a list of recent warnings for the current circuit.
+
 
 "
 
@@ -237,10 +241,11 @@ text = "[b]Special Parts[/b]
 Some parts have functionality that is accessed by right-clicking on the part to pop up a window. These parts are:
 
 [ul]
- IO - the popup panel allows for setting the number of wires, the number range, colors of wires, naming of pins, and to change the data value via a slider, step buttons, or by editing the value
- ROM - the popup panel allows for choosing a data file (in .hack or .bin format) to load into the memory
- RAM - the popup panel provides a hex viewer/editor for the contents of the memory
- TextView - the popup panel allows for choosing a text file to be associated with this part
+IO - the popup panel allows for setting the number of wires, the number range, colors of wires, naming of pins, and to change the data value via a slider, step buttons, or by editing the value
+ROM - the popup panel allows for choosing a data file (in .hack or .bin format) to load into the memory
+RAM - the popup panel provides a hex viewer/editor for the contents of the memory
+Block - view the heirarchy of embedded circuits
+TextView - the popup panel allows for choosing a text file to be associated with this part
 Note - this allows for keeping some notes to save with your circuit
 [/ul]
 
