@@ -87,9 +87,9 @@ func change_capture():
 
 # Mock functions to allow the parts to be added to the scene:
 
-func output_level_changed_handler(_part, _side, _port, _level):
+func output_level_changed_handler(_part, __port, _level):
 	pass
 
 
-func bus_value_changed_handler(_part, _side, _port, _value):
+func bus_value_changed_handler(_part, __port, _value):
 	pass

@@ -3,10 +3,6 @@ class_name Block
 # This Part allows for loading a circuit as a Block
 # Then a part is created with inputs and outputs derived from the IO parts of the circuit.
 # And the circuit within a block may also contain blocks.
-# Have to think about a requested feature of surfacing embedded displays.
-# This could be via a right-click feature.
-# Also, there should be reports of how the block is comprised in terms of a tree.
-# Again, a possible right-click feature.
 
 extends Part
 
@@ -23,6 +19,7 @@ var outputs = []
 var wire_color = Color.WHITE
 var bus_color = Color.YELLOW
 var memory
+var file_tree
 
 func _init():
 	data = { "circuit_file": "", "wiring_hash": 0 }
@@ -30,7 +27,7 @@ func _init():
 
 func _ready():
 	super() # It's easy to forget to call the parent _ready code to add the Tag etc.
-	block_setup([G.settings.current_file])
+	block_setup([G.settings.current_file], "root", { "root": [] })
 	set_slots(max(input_pin_count, output_pin_count) - 1)
 	configure_pins()
 	reset()
@@ -44,7 +41,8 @@ func has_bad_hash():
 	return false
 
 
-func block_setup(_files):
+func block_setup(_files, tree_key, _file_tree):
+	file_tree = _file_tree
 	circuit = Circuit.new()
 	if _files.has(data.circuit_file.get_file()):
 		G.warning.open("Detected that %s is nested inside itself!" % [data.circuit_file.get_file()])
@@ -52,7 +50,11 @@ func block_setup(_files):
 	# Add the file name to the list of files to detect.
 	# Ignore the path, this allows for files to be moved and can compare to current file.
 	# Downside is that blocks must have unique names.
-	var files = _files + [data.circuit_file.get_file()]
+	var current_file = data.circuit_file.get_file()
+	file_tree[tree_key].append(current_file)
+	tree_key = current_file.hash()
+	file_tree[tree_key] = []
+	var files = _files + [current_file]
 	var load_result = circuit.load_data(data.circuit_file)
 	if load_result != OK:
 		G.warning.open("The circuit block data from %s was invalid!" % [data.circuit_file.get_file()])
@@ -68,20 +70,19 @@ func block_setup(_files):
 	if not G.settings.blocks.has(cname):
 		G.settings.blocks[cname] = data.circuit_file
 	for part in circuit.data.parts:
-		if part.part_type == "IO":
+		if part.part_type in ["IO", "Bus", "Wire", "TriState", "ToggleSwitch", "Clock"]:
+			var num_pins = 1
+			match part.part_type:
+				"IO":
+					num_pins = part.data.num_wires + 1
+				"Clock":
+					num_pins = 2
 			if is_input(part):
 				inputs.append(part)
-				input_pin_count += part.data.num_wires + 1
+				input_pin_count += num_pins
 			if is_output(part):
 				outputs.append(part)
-				output_pin_count += part.data.num_wires + 1
-		if part.part_type in ["Bus", "Wire", "TriState"]:
-			if is_input(part):
-				inputs.append(part)
-				input_pin_count += 1
-			if is_output(part):
-				outputs.append(part)
-				output_pin_count += 1
+				output_pin_count += num_pins
 	# Sort according to position offset
 	inputs.sort_custom(compare_offsets)
 	outputs.sort_custom(compare_offsets)
@@ -89,6 +90,8 @@ func block_setup(_files):
 	for io_part in inputs:
 		# [part_name, port]
 		input_map.append([io_part.node_name, 0])
+		if io_part.part_type == "Clock":
+			input_map.append([io_part.node_name, 1])
 		if io_part.part_type == "IO":
 			for n in io_part.data.num_wires:
 				# n is type float!
@@ -102,7 +105,7 @@ func block_setup(_files):
 				output_map.append([io_part.node_name, int(n + 1)])
 	if data.get("wiring_hash", 0) == 0: # Set this for new blocks
 		data.wiring_hash = (input_map + output_map).hash()
-	add_parts(files)
+	add_parts(files, tree_key)
 
 
 func set_slots(to_add):
@@ -136,6 +139,12 @@ func configure_pins():
 		set_slot_color_left(slot_idx, bus_color if input.part_type in ["IO", "Bus"] else wire_color)
 		get_child(slot_idx).get_child(0).text = input.data.labels[label_idx]\
 			if input.part_type == "IO" else input.tag
+		if input.part_type == "Clock":
+			slot_idx += 1
+			get_child(slot_idx).get_child(0).text = "reset"
+			set_slot_enabled_left(slot_idx, true)
+			set_slot_type_left(slot_idx, WIRE_TYPE)
+			set_slot_color_left(slot_idx, wire_color)
 		if input.part_type == "IO":
 			for n in input.data.num_wires:
 				slot_idx += 1
@@ -167,7 +176,7 @@ func configure_pins():
 
 
 func is_input(part):
-	# If there are no wires connected to the part input side, then it is an input to the circuit.data
+	# If there are no wires connected to the part input then it is an input to the circuit.data
 	for con in circuit.data.connections:
 		if con.to_node == part.node_name:
 			return false
@@ -175,14 +184,14 @@ func is_input(part):
 
 
 func is_output(part):
-	# If there are no wires connected to the part output side, then it is an output to the circuit.data
+	# If there are no wires connected to the part output then it is an output to the circuit.data
 	for con in circuit.data.connections:
 		if con.from_node == part.node_name:
 			return false
 	return true
 
 
-func add_parts(files):
+func add_parts(files, tree_key):
 	for node in circuit.data.parts:
 		var part = Parts.get_instance(node.part_type)
 		part.tag = node.tag
@@ -195,110 +204,68 @@ func add_parts(files):
 		part.show_display = false
 		part.controller = self
 		part.setup_instance()
-		add_connections_to_part(part)
+		ConnectionSorter.set_part_outputs(part, circuit.data.connections)
 		if part.part_type == "Block":
-			part.block_setup(files)
+			part.block_setup(files, tree_key, file_tree)
 		parts[part.name] = part
 
 
-func get_map(side: int, port: int):
-	return input_map[port] if side == LEFT else output_map[port]
-
-
 # Map external input to internal IO part
-func evaluate_output_level(input_side: int, port: int, level):
-	if DEBUG:
-		prints("block evaluate_output_level", self.name, input_side, port, level)
-	var map = get_map(input_side, port)
+func evaluate_output_level(port: int, level):
+	var map = input_map[port]
 	var part = parts[map[PART]]
-	var output_side = FLIP_SIDES[input_side]
-	part.update_output_level(output_side, map[PORT], level)
+	part.update_output_level(map[PORT], level)
 	if part.part_type == "IO":
 		# Update the bus
 		var value = 0
 		for n in part.data.num_wires:
 			value *= 2
-			value += int(part.pins.get([output_side, int(part.data.num_wires - n)], false))
-		part.evaluate_bus_output_value(input_side, 0, value, false)
+			value += int(part.pins.get([LEFT, int(part.data.num_wires - n)], false))
+		part.evaluate_bus_output_value(0, value, false)
 
 
 # Map external bus input to internal part
-func evaluate_bus_output_value(side: int, port: int, value: int, update_levels = true):
-	var map = get_map(side, port)
-	# Flip the side to the output side
-	side = FLIP_SIDES[side]
+func evaluate_bus_output_value(port: int, value: int, update_levels = true):
+	var map = input_map[port]
 	var part = parts[map[PART]]
-	part.update_output_value(side, map[PORT], value)
+	part.update_output_value(map[PORT], value)
 	if update_levels and part.part_type == "IO":
 		# This will ignore (clip) value bits above the range that the wires cover
 		for n in part.data.num_wires:
 			var level = bool(value % 2)
 			value /= 2
-			part.update_output_level(side, n + 1, level)
+			part.update_output_level(n + 1, level)
 
 
-func output_level_changed_handler(part, side: int, port: int, level):
-	if DEBUG:
-		prints("block output_level_changed_handler", part.name, side, port, level)
+func output_level_changed_handler(part, port: int, level):
 	var map_idx = [str(part.name), port] # part.name seems to be a pointer to a string
-	var port_idx = [input_map, output_map][side].find(map_idx)
+	var port_idx = output_map.find(map_idx)
 	if port_idx > -1:
-		pins[[side, port_idx]] = level
-		controller.output_level_changed_handler(self, side, port_idx, level)
+		pins[[RIGHT, port_idx]] = level
+		controller.output_level_changed_handler(self, port_idx, level)
 	else:
-		update_internal_input_level(part, side, port, level)
+		for con in part.connections:
+			if con.from_port == port:
+				parts[con.to_node].update_input_level(con.to_port, level)
 
 
-func update_internal_input_level(part, side: int, port: int, level):
-	if DEBUG:
-		prints("block update_internal_input_level", part.name, side, port, level)
-	var cons = part.connections.get([side, port])
-	if cons:
-		for connection in cons:
-			parts[connection[0]].update_input_level(int(side == 0), connection[1], level)
-
-
-func add_connections_to_part(part):
-	for con in circuit.data.connections:
-		if con.from_node == part.name:
-			var key = [RIGHT, int(con.from_port)]
-			var value = [con.to_node, con.to_port]
-			add_to_connections(part, key, value)
-		elif con.to_node == part.name:
-			var key = [LEFT, int(con.to_port)]
-			var value = [con.from_node, con.from_port]
-			add_to_connections(part, key, value)
-
-
-func add_to_connections(part, key, value):
-	if part.connections.has(key):
-		part.connections[key].append(value)
-	else:
-		part.connections[key] = [value]
-
-
-func bus_value_changed_handler(part, side: int, port: int, value: int):
+func bus_value_changed_handler(part, port: int, value: int):
 	var map_idx = [str(part.name), port]
-	var port_idx = [input_map, output_map][side].find(map_idx)
+	var port_idx = output_map.find(map_idx)
 	if port_idx > -1:
-		pins[[side, port_idx]] = value
-		controller.bus_value_changed_handler(self, side, port_idx, value)
+		pins[[RIGHT, port_idx]] = value
+		controller.bus_value_changed_handler(self, port_idx, value)
 		if part is IO:
 			for n in part.data.num_wires:
 				port_idx += 1
 				var level = value % 2 == 1
 				value /= 2
-				pins[[side, port_idx]] = level
-				controller.output_level_changed_handler(self, side, port_idx, level)
+				pins[[RIGHT, port_idx]] = level
+				controller.output_level_changed_handler(self, port_idx, level)
 	else:
-		update_internal_bus_input_value(part, side, port, value)
-
-
-func update_internal_bus_input_value(part, side: int, port: int, value):
-	var cons = part.connections.get([side, port])
-	if cons:
-		for connection in cons:
-			parts[connection[0]].update_bus_input_value(int(side == 0), connection[1], value)
+		for con in part.connections:
+			if con.from_port == port:
+				parts[con.to_node].update_bus_input_value(con.to_port, value)
 
 
 func reset_block_race_counters():
@@ -321,8 +288,8 @@ func reset():
 		input.pins = {}
 
 
-func unstable_handler(_name, side, port):
-	controller.unstable_handler(name + ":" + _name, side, port)
+func unstable_handler(_name, port):
+	controller.unstable_handler(name + ":" + _name, port)
 
 
 func compare_offsets(a, b):

@@ -18,8 +18,8 @@ func reset():
 
 
 func apply_power():
-	update_output_level(RIGHT, 1, false)
-	update_output_value(RIGHT, 0, 0)
+	update_output_level(1, false)
+	update_output_value(0, 0)
 
 
 func set_color():

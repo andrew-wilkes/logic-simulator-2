@@ -7,7 +7,6 @@ signal changed # Something changed that needs to be part of a save in order to b
 signal title_changed(text)
 
 const PART_INITIAL_OFFSET = Vector2(50, 50)
-const MAX_TREE_DEPTH = 5
 
 enum { LEFT, RIGHT }
 
@@ -65,50 +64,19 @@ func connect_wire(from_part, from_pin, to_part, to_pin):
 				var con_type = from.get_slot_type_right(slot)
 				if con_type == 0:
 					var level = from.pins.get([RIGHT, from_pin], false)
-					node.update_input_level(LEFT, to_pin, level)
-					node.update_output_level_with_color(LEFT, to_pin, level)
+					node.update_input_level(to_pin, level)
+					if G.settings.indicate_to_levels:
+						node.indicate_level(LEFT, to_pin, level)
 				else:
-					node.update_bus_input_value(LEFT, to_pin, from.pins.get([RIGHT, from_pin], 0))
+					node.update_bus_input_value(to_pin, from.pins.get([RIGHT, from_pin], 0))
 				break
-		sort_io_connections(from)
+		ConnectionSorter.set_part_outputs(from, get_connection_list())
 	circuit_changed()
-
-
-func sort_io_connections(part):
-	part.io_connections = []
-	# Get a list of all parts that the from part connects to and their path lengths
-	var sets = {}
-	for con in get_connection_list():
-		if part.name == con.from_node:
-			var parts = { con.to_node: 1 }
-			get_connection_tree(con.to_node, parts, 2)
-			sets[con] = parts
-	part.io_connections = sets.keys()
-	if sets.size() > 1:
-		# Sort the connections
-		part.io_connections.sort_custom(func (a, b): return sort_path_lengths(sets[a], sets[b]))
-
-
-func sort_path_lengths(a, b):
-	for part in a:
-		if b.has(part):
-			return b[part] > a[part]
-	return true
-
-
-func get_connection_tree(part_name, parts, depth):
-	if depth > MAX_TREE_DEPTH:
-		return
-	for con in get_connection_list():
-		if con.from_node == part_name:
-			parts[con.to_node] = depth
-			get_connection_tree(con.to_node, parts, depth + 1)
-	return
 
 
 func disconnect_wire(from_part, from_pin, to_part, to_pin):
 	disconnect_node(from_part, from_pin, to_part, to_pin)
-	sort_io_connections(get_part_by_name(from_part))
+	ConnectionSorter.set_part_outputs(get_part_by_name(from_part), get_connection_list())
 	circuit_changed()
 
 
@@ -303,7 +271,7 @@ func load_circuit(file_name):
 		add_parts()
 		await get_tree().process_frame
 		add_connections(false)
-		sort_all_io_connections()
+		sort_all_connections()
 		emit_signal("title_changed", circuit.data.title)
 		circuit_changed(false)
 		reset_parts()
@@ -353,10 +321,10 @@ func add_connections(checked):
 			connect_node(con.from_node, con.from_port, con.to_node, con.to_port)
 
 
-func sort_all_io_connections():
+func sort_all_connections():
 	for node in get_children():
 		if node is Part:
-			sort_io_connections(node)
+			ConnectionSorter.set_part_outputs(node, get_connection_list())
 
 
 func get_part_id(part):
@@ -450,41 +418,30 @@ func right_click_on_part(part):
 			$MemoryManagerPanel/MemoryManager.open(part)
 			$MemoryManagerPanel.popup_centered()
 			$MemoryManagerPanel.position.y += 15
+		"Block":
+			$BlockTreePanel/CircuitTree.generate_tree(part.file_tree)
+			$BlockTreePanel.popup_centered()
 
 
-func output_level_changed_handler(part, side, port, level):
-	# IO parts may have a stored list of connections to process in a given order
-	var cons = part.io_connections if part.io_connections.size() > 0 else get_connection_list()
-	for con in cons:
-		if side == RIGHT:
-			if con.from_node == part.name and con.from_port == port:
-				var node = get_node(NodePath(con.to_node))
-				node.update_input_level(LEFT, con.to_port, level)
-				if G.settings.indicate_to_levels:
-					node.indicate_level(LEFT, con.to_port, level)
-		else:
-			if con.to_node == part.name and con.to_port == port:
-				var node = get_node(NodePath(con.from_node))
-				node.update_input_level(RIGHT, con.from_port, level)
-				if G.settings.indicate_to_levels:
-					node.indicate_level(RIGHT, con.from_port, level)
-		if G.settings.indicate_from_levels:
-			part.indicate_level(side, port, level)
+func output_level_changed_handler(part, port, level):
+	if G.settings.indicate_from_levels:
+		part.indicate_level(RIGHT, port, level)
+	for con in part.connections:
+		if con.from_node == part.name and con.from_port == port:
+			var node = get_node(NodePath(con.to_node))
+			node.update_input_level(con.to_port, level)
+			if G.settings.indicate_to_levels:
+				node.indicate_level(LEFT, con.to_port, level)
 
 
-func bus_value_changed_handler(part, side, port, value):
-	var cons = part.io_connections if part.io_connections.size() > 0 else get_connection_list()
-	for con in cons:
-		if side == RIGHT:
-			if con.from_node == part.name and con.from_port == port:
-				get_node(NodePath(con.to_node)).update_bus_input_value(LEFT, con.to_port, value)
-		else:
-			if con.to_node == part.name and con.to_port == port:
-				get_node(NodePath(con.from_node)).update_bus_input_value(RIGHT, con.from_port, value)
+func bus_value_changed_handler(part, port, value):
+	for con in part.connections:
+		if con.from_node == part.name and con.from_port == port:
+			get_node(NodePath(con.to_node)).update_bus_input_value(con.to_port, value)
 
 
-func unstable_handler(part, side, port):
-	G.warn_user("Unstable input to %s on %s side, pin: %d" % [part.name, ["left", "right"][side], port])
+func unstable_handler(part, port):
+	G.warn_user("Unstable input to %s on %s pin: %d" % [part.name, "left", port])
 
 
 func reset_race_counters():
@@ -551,20 +508,28 @@ func number_parts():
 			var idx = tag.text
 			if idx.is_empty():
 				idx = part.part_type
-			if counts.has(idx):
-				counts[idx] += 1
+				if counts.has(idx):
+					counts[idx] += 1
+				else:
+					counts[idx] = 1
+				var new_name = idx + str(counts[idx])
+				tag.text = new_name
+				part_names[part.name] = new_name
+				part.name = new_name
+				part.tooltip_text = new_name
 			else:
-				counts[idx] = 1
-			var new_name = idx + str(counts[idx])
-			tag.text = new_name
-			part_names[part.name] = new_name
-			part.name = new_name
-			part.tooltip_text = new_name
+				# Don't change existing tagged part
+				part_names[part.name] = part.name
 	# Redo the connections with updated part names
 	circuit.data.connections = get_connection_list()
 	for con in circuit.data.connections:
 		con.from_node = part_names[con.from_node]
 		con.to_node = part_names[con.to_node]
+	for node in get_children():
+		if node is Part:
+			for con in node.connections:
+				con.from_node = part_names[con.from_node]
+				con.to_node = part_names[con.to_node]
 	clear_connections()
 	add_connections(true)
 	emit_signal("changed")

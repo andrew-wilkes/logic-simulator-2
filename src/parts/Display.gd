@@ -18,7 +18,7 @@ func _ready():
 	%Hue.set_value_no_signal(data.color_index)
 
 
-func evaluate_output_level(_side, port, level):
+func evaluate_output_level(port, level):
 	%Segments.material.set_shader_parameter(["a","b","c","d","e","f","g","dp"][port], level)
 
 

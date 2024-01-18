@@ -9,10 +9,9 @@ func _init():
 	category = SYNC
 
 
-func evaluate_output_level(side, port, level):
-	if side == LEFT:
-		if port == 1: # clk
-			if level:
-				state = pins.get([side, IN], false)
-			else:
-				update_output_level(RIGHT, OUT, state)
+func evaluate_output_level(port, level):
+	if port == 1: # clk
+		if level:
+			state = pins.get([LEFT, IN], false)
+		else:
+			update_output_level(OUT, state)

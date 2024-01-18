@@ -17,9 +17,8 @@ func _ready():
 	
 
 
-func evaluate_bus_output_value(side, _port, value):
-	if side == LEFT:
-		update_output_value(RIGHT, 0, (value + 1) % max_value)
+func evaluate_bus_output_value(_port, value):
+	update_output_value(0, (value + 1) % max_value)
 
 
 func _on_bits_text_submitted(new_text):

@@ -1,9 +1,5 @@
 class_name Keyboard
 
-# This part incorporates a message display feature since that enables the focus
-# to stay on the Keyboard part when running tests and the "echo" task is run.
-# This is to avoid confusing the user when they need to press keys following a text prompt.
-
 extends Part
 
 var last_text_length = 0
@@ -25,14 +21,14 @@ func _on_chars_text_changed(new_text):
 		var char_code = new_text.right(1).to_ascii_buffer()[0]
 		if DEBUG:
 			print(char_code)
-		update_output_value(RIGHT, OUT, char_code)
+		update_output_value(OUT, char_code)
 	last_text_length = length
 
 
 # Emit 0 when key is released
 func _unhandled_key_input(event):
 	if not event.pressed:
-		update_output_value(RIGHT, OUT, 0)
+		update_output_value(OUT, 0)
 
 
 func _on_blink_timer_timeout():

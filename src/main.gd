@@ -172,8 +172,9 @@ func _unhandled_key_input(event: InputEvent):
 				if event.ctrl_pressed:
 					_on_help_button_pressed()
 			KEY_AT:
-				# Test something
-				G.warn_user("Test")
+				if event.ctrl_pressed:
+					# Test something
+					G.notify_user("You found an Easter egg :-)")
 
 
 # Listen for notification of quit request such as after user clicked on x of window

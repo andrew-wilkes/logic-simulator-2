@@ -9,7 +9,6 @@ func _init():
 	category = ASYNC
 
 
-func evaluate_bus_output_value(side, port, value):
-	if side == LEFT:
-		ab[port] = value
-		update_output_value(RIGHT, OUT, ab[A] + ab[B])
+func evaluate_bus_output_value(port, value):
+	ab[port] = value
+	update_output_value(OUT, ab[A] + ab[B])

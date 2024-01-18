@@ -9,20 +9,20 @@ func _init():
 	category = SYNC
 
 
-func evaluate_output_level(side, port, level):
-	if side == LEFT and port == 2: # clk
+func evaluate_output_level(port, level):
+	if port == 2: # clk
 		if level:
-			var ld = pins.get([side, 1], false)
+			var ld = pins.get([LEFT, 1], false)
 			if ld:
-				value = pins.get([side, 0], 0)
+				value = pins.get([LEFT, 0], 0)
 				if show_display:
 					$Value.text = get_display_hex_value(value)
-				update_output_value(RIGHT, 1, value)
+				update_output_value(1, value)
 		else:
-			update_output_value(RIGHT, OUT, value)
+			update_output_value(OUT, value)
 
 
-func evaluate_bus_output_value(_side, _port, _value):
+func evaluate_bus_output_value(__port, _value):
 	# Only update on clock edge
 	pass
 

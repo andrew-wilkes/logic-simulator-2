@@ -66,6 +66,8 @@ func test_format_value() -> void:
 func test_set_output_header() -> void:
 	var test_circuit = TestCircuit.new()
 	test_circuit.output_format = "a%B1.3.1 b%D2.4.3"
+	test_circuit.inputs = ["a"]
+	test_circuit.outputs = ["b"]
 	test_circuit.set_output_header()
 	assert_str(test_circuit.output).is_equal("|  a  |    b    |\n")
 	test_circuit.free()
@@ -96,7 +98,7 @@ func test_parse_spec() -> void:
 func test_get_int_from_string() -> void:
 	var test_circuit = TestCircuit.new()
 	assert_int(test_circuit.get_int_from_string("8")).is_equal(8)
-	assert_int(test_circuit.get_int_from_string("%B1111111111111111")).is_equal(-1)
+	assert_int(test_circuit.get_int_from_string("%B1111111111111111")).is_equal(65535)
 	assert_int(test_circuit.get_int_from_string("%B0111111111111111")).is_equal(32767)
 	assert_int(test_circuit.get_int_from_string("%XFF")).is_equal(255)
 	test_circuit.free()

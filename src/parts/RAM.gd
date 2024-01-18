@@ -31,8 +31,8 @@ func show_bits():
 		$Size.text = data.size
 
 
-func evaluate_output_level(side, port, level):
-	if side == LEFT and port == 3: # clk edge
+func evaluate_output_level(port, level):
+	if port == 3: # clk edge
 		var address = get_address()
 		if level:
 			var ld = pins.get([LEFT, 2], false)
@@ -42,7 +42,7 @@ func evaluate_output_level(side, port, level):
 				update_probes()
 		else:
 			show_data(values[address])
-			update_output_value(RIGHT, OUT, values[address])
+			update_output_value(OUT, values[address])
 
 
 func get_address():
@@ -53,11 +53,11 @@ func update_value(value: int, address: int):
 	values[address % mem_size] = value
 
 
-func evaluate_bus_output_value(side, port, value: int):
-	if side == LEFT and port == 1: # Change of address
+func evaluate_bus_output_value(port, value: int):
+	if port == 1: # Change of address
 		show_address(value % mem_size)
 		show_data(values[value % mem_size])
-		update_output_value(RIGHT, OUT, values[value % mem_size])
+		update_output_value(OUT, values[value % mem_size])
 
 
 func show_data(value):
@@ -78,13 +78,13 @@ func reset():
 func erase():
 	values.fill(0)
 	show_data(0)
-	update_output_value(RIGHT, OUT, 0)
+	update_output_value(OUT, 0)
 	update_probes()
 
 
 func set_value(address, value):
 	values[address] = value
 	if address == get_address():
-		update_output_value(RIGHT, OUT, value)
+		update_output_value(OUT, value)
 		show_address(address)
 		show_data(value)

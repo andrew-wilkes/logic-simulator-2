@@ -7,6 +7,5 @@ func _init():
 	order = 900
 
 
-func evaluate_output_level(side, _port, level):
-	side = (side + 1) % 2
-	update_output_level(side, OUT, not level)
+func evaluate_output_level(_port, level):
+	update_output_level(OUT, not level)

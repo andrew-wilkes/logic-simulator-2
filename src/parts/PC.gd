@@ -18,8 +18,8 @@ func _ready():
 	reset()
 
 
-func evaluate_output_level(side, port, level):
-	if side == LEFT and port == 4: # clk edge
+func evaluate_output_level(port, level):
+	if port == 4: # clk edge
 		if level:
 			if pins.get([LEFT, 3], false): # reset
 				value = 0
@@ -29,7 +29,7 @@ func evaluate_output_level(side, port, level):
 				value += 1
 			set_limited_value()
 		else:
-			update_output_value(RIGHT, OUT, value)
+			update_output_value(OUT, value)
 
 
 func _on_bits_text_submitted(new_text):
@@ -55,9 +55,9 @@ func setup_instance():
 	set_wrap_value()
 
 
-func evaluate_bus_output_value(side, _port, _value):
+func evaluate_bus_output_value(_port, _value):
 	# load and clk
-	if pins.get([side, 1], false) and pins.get([side, 4], false):
+	if pins.get([LEFT, 1], false) and pins.get([LEFT, 4], false):
 		value = _value
 		set_limited_value()
 

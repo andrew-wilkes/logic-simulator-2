@@ -7,14 +7,12 @@ func _init():
 	category = ASYNC
 
 
-func evaluate_output_level(side, _port, _level):
-	if side == LEFT:
-		update_outputs()
+func evaluate_output_level(_port, _level):
+	update_outputs()
 
 
-func evaluate_bus_output_value(side, _port, _value):
-	if side == LEFT:
-		update_outputs()
+func evaluate_bus_output_value(_port, _value):
+	update_outputs()
 
 
 func update_outputs():
@@ -37,6 +35,6 @@ func update_outputs():
 	if pins.get([LEFT, 7], false): # no
 		result = ~result
 	result &= 0xffff
-	update_output_value(RIGHT, 0, result)
-	update_output_level(RIGHT, 1, result == 0)
-	update_output_level(RIGHT, 2, result > 0x7fff)
+	update_output_value(0, result)
+	update_output_level(1, result == 0)
+	update_output_level(2, result > 0x7fff)
