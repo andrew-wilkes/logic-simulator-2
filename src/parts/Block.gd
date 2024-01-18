@@ -3,10 +3,6 @@ class_name Block
 # This Part allows for loading a circuit as a Block
 # Then a part is created with inputs and outputs derived from the IO parts of the circuit.
 # And the circuit within a block may also contain blocks.
-# Have to think about a requested feature of surfacing embedded displays.
-# This could be via a right-click feature.
-# Also, there should be reports of how the block is comprised in terms of a tree.
-# Again, a possible right-click feature.
 
 extends Part
 
@@ -195,7 +191,7 @@ func add_parts(files):
 		part.show_display = false
 		part.controller = self
 		part.setup_instance()
-		add_connections_to_part(part)
+		ConnectionSorter.set_part_outputs(part, circuit.data.connections)
 		if part.part_type == "Block":
 			part.block_setup(files)
 		parts[part.name] = part
@@ -203,8 +199,6 @@ func add_parts(files):
 
 # Map external input to internal IO part
 func evaluate_output_level(port: int, level):
-	if DEBUG:
-		prints("block evaluate_output_level", self.name, port, level)
 	var map = input_map[port]
 	var part = parts[map[PART]]
 	part.update_output_level(map[PORT], level)
@@ -231,67 +225,34 @@ func evaluate_bus_output_value(port: int, value: int, update_levels = true):
 
 
 func output_level_changed_handler(part, port: int, level):
-	if DEBUG:
-		prints("block output_level_changed_handler", part.name, port, level)
 	var map_idx = [str(part.name), port] # part.name seems to be a pointer to a string
-	var port_idx = input_map.find(map_idx)
+	var port_idx = output_map.find(map_idx)
 	if port_idx > -1:
-		pins[[port_idx]] = level
+		pins[[RIGHT, port_idx]] = level
 		controller.output_level_changed_handler(self, port_idx, level)
 	else:
-		update_internal_input_level(part, port, level)
-
-
-func update_internal_input_level(part, port: int, level):
-	if DEBUG:
-		prints("block update_internal_input_level", part.name, port, level)
-	var cons = part.connections.get([port])
-	if cons:
-		for connection in cons:
-			parts[connection[0]].update_input_level(connection[1], level)
-
-
-func add_connections_to_part(part):
-	for con in circuit.data.connections:
-		if con.from_node == part.name:
-			var key = [RIGHT, int(con.from_port)]
-			var value = [con.to_node, con.to_port]
-			add_to_connections(part, key, value)
-		elif con.to_node == part.name:
-			var key = [LEFT, int(con.to_port)]
-			var value = [con.from_node, con.from_port]
-			add_to_connections(part, key, value)
-
-
-func add_to_connections(part, key, value):
-	if part.connections.has(key):
-		part.connections[key].append(value)
-	else:
-		part.connections[key] = [value]
+		for con in part.connections:
+			if con.from_port == port:
+				parts[con.to_node].update_input_level(con.to_port, level)
 
 
 func bus_value_changed_handler(part, port: int, value: int):
 	var map_idx = [str(part.name), port]
-	var port_idx = input_map.find(map_idx)
+	var port_idx = output_map.find(map_idx)
 	if port_idx > -1:
-		pins[[port_idx]] = value
+		pins[[RIGHT, port_idx]] = value
 		controller.bus_value_changed_handler(self, port_idx, value)
 		if part is IO:
 			for n in part.data.num_wires:
 				port_idx += 1
 				var level = value % 2 == 1
 				value /= 2
-				pins[[port_idx]] = level
+				pins[[RIGHT, port_idx]] = level
 				controller.output_level_changed_handler(self, port_idx, level)
 	else:
-		update_internal_bus_input_value(part, port, value)
-
-
-func update_internal_bus_input_value(part, port: int, value):
-	var cons = part.connections.get([port])
-	if cons:
-		for connection in cons:
-			parts[connection[0]].update_bus_input_value(connection[1], value)
+		for con in part.connections:
+			if con.from_port == port:
+				parts[con.to_node].update_bus_input_value(con.to_port, value)
 
 
 func reset_block_race_counters():
