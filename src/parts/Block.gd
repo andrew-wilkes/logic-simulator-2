@@ -64,20 +64,19 @@ func block_setup(_files):
 	if not G.settings.blocks.has(cname):
 		G.settings.blocks[cname] = data.circuit_file
 	for part in circuit.data.parts:
-		if part.part_type == "IO":
+		if part.part_type in ["IO", "Bus", "Wire", "TriState", "ToggleSwitch", "Clock"]:
+			var num_pins = 1
+			match part.part_type:
+				"IO":
+					num_pins = part.data.num_wires + 1
+				"Clock":
+					num_pins = 2
 			if is_input(part):
 				inputs.append(part)
-				input_pin_count += part.data.num_wires + 1
+				input_pin_count += num_pins
 			if is_output(part):
 				outputs.append(part)
-				output_pin_count += part.data.num_wires + 1
-		if part.part_type in ["Bus", "Wire", "TriState"]:
-			if is_input(part):
-				inputs.append(part)
-				input_pin_count += 1
-			if is_output(part):
-				outputs.append(part)
-				output_pin_count += 1
+				output_pin_count += num_pins
 	# Sort according to position offset
 	inputs.sort_custom(compare_offsets)
 	outputs.sort_custom(compare_offsets)
@@ -85,6 +84,8 @@ func block_setup(_files):
 	for io_part in inputs:
 		# [part_name, port]
 		input_map.append([io_part.node_name, 0])
+		if io_part.part_type == "Clock":
+			input_map.append([io_part.node_name, 1])
 		if io_part.part_type == "IO":
 			for n in io_part.data.num_wires:
 				# n is type float!
@@ -132,6 +133,12 @@ func configure_pins():
 		set_slot_color_left(slot_idx, bus_color if input.part_type in ["IO", "Bus"] else wire_color)
 		get_child(slot_idx).get_child(0).text = input.data.labels[label_idx]\
 			if input.part_type == "IO" else input.tag
+		if input.part_type == "Clock":
+			slot_idx += 1
+			get_child(slot_idx).get_child(0).text = "reset"
+			set_slot_enabled_left(slot_idx, true)
+			set_slot_type_left(slot_idx, WIRE_TYPE)
+			set_slot_color_left(slot_idx, wire_color)
 		if input.part_type == "IO":
 			for n in input.data.num_wires:
 				slot_idx += 1
