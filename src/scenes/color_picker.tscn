@@ -7,15 +7,15 @@ bg_color = Color(0.278431, 0.278431, 0.278431, 1)
 
 [node name="ColorPicker" type="PopupPanel"]
 title = "Color Picker"
-size = Vector2i(310, 518)
+size = Vector2i(318, 526)
 visible = true
 borderless = false
 theme_override_styles/panel = SubResource("StyleBoxFlat_v76vi")
 script = ExtResource("1_kw6um")
 
 [node name="M" type="MarginContainer" parent="."]
-offset_right = 310.0
-offset_bottom = 518.0
+offset_right = 318.0
+offset_bottom = 526.0
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10

@@ -17,6 +17,19 @@ func _init():
 			names.append(part_name)
 		scenes[part_name] = ResourceLoader.load(path + file_name.replace(".gd", ".tscn"))
 		scripts[part_name] = ResourceLoader.load(path + file_name)
+	add_mods()
+
+
+func add_mods():
+	var mod_files = ModImporter.get_file_list()
+	for file in mod_files:
+		var scene = ModImporter.get_part_scene(file)
+		if scene:
+			var ob = scene.instantiate()
+			if ob is Part:
+				scenes[ob.name] = scene
+				scripts[ob.name] = ob.script
+			ob.free()
 
 
 # This is used with circuit blocks where there are no visual elements internally.
