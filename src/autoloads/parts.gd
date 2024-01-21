@@ -7,9 +7,19 @@ var names = []
 var scripts = {}
 
 func _init():
-	var path = "res://parts/"
+	add_parts("res://parts/")
+	if OS.is_debug_build():
+		var path = "res://mods/"
+		if DirAccess.dir_exists_absolute(path):
+			add_parts(path)
+		else:
+			print(path + " doesn't exist.")
+	add_mods()
+
+
+func add_parts(path):
 	var dir = DirAccess.open(path)
-	var files = Array(dir.get_files()).filter(func(fn): return fn.ends_with("gd"))
+	var files = get_files(dir)
 	for file_name in files:
 		var part_name = file_name.get_file().get_slice('.', 0)
 		# Don't add the Block part as a Part option in the menu.
@@ -17,7 +27,10 @@ func _init():
 			names.append(part_name)
 		scenes[part_name] = ResourceLoader.load(path + file_name.replace(".gd", ".tscn"))
 		scripts[part_name] = ResourceLoader.load(path + file_name)
-	add_mods()
+
+
+func get_files(dir):
+	return Array(dir.get_files()).filter(func(fn): return fn.ends_with("gd"))
 
 
 func add_mods():

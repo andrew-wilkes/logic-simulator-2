@@ -5,7 +5,7 @@ class_name ModImporter
 # Filename format: lsx-name_of_scene.pck
 # e.g. lsx-8080_cpu.pck would contain 8080_cpu.tscn
 # These files must be located in the same folder as the executeable.
-# The scene must extend the Part class and be located in: res://parts/
+# The scene must extend the Part class and be located in: res://mods/
 
 static func get_file_list():
 	var files = []
