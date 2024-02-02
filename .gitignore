@@ -25,3 +25,4 @@ out/
 build/
 deploy/
 src/mods
+*mods

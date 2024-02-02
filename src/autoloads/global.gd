@@ -101,3 +101,11 @@ func format_value(x, show_minus, shorten_hex, clamp_value = 0):
 		if clamp_value < 0x10000:
 			return "0x%02X" % x
 	return "0x%04X" % x
+
+
+func int2bin(x: int, num_bits) -> String:
+	var b = ""
+	for n in num_bits:
+		b = str(x % 2) + b
+		x /= 2
+	return b

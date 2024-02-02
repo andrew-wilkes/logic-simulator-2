@@ -77,7 +77,7 @@ func update_grid():
 			var cell = %Grid.get_child(idx + n + 1)
 			cell.clamp_value = 0x100 if ram.data.bits == 8 else 0x10000
 			cell.display_value(word, false, not wide)
-			cell.tooltip_text = int2bin(word)
+			cell.tooltip_text = G.int2bin(word, ram.data.bits)
 			chrs.append(get_chr(word % 256))
 			if wide:
 				chrs.append(get_chr(word / 256))
@@ -94,14 +94,6 @@ func set_word_visibility(show_all):
 		for n in 8:
 			%Grid.get_child(row * 18 + 9 + n).visible = show_all
 	%Grid.columns = 18 if show_all else 10
-
-
-func int2bin(x: int) -> String:
-	var b = ""
-	for n in ram.data.bits:
-		b = str(x % 2) + b
-		x /= 2
-	return b
 
 
 func _on_up_button_pressed():
