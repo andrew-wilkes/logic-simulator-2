@@ -26,3 +26,4 @@ build/
 deploy/
 src/mods
 *mods
+src/tests/mods
