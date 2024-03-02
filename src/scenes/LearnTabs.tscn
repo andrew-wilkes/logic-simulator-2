@@ -29,8 +29,6 @@ text = "[b]Numbers[/b]
 
 Numbers in digital systems are represented by logic levels of zeros and ones which form binary numbers.
 
-Using the Number Spinner you can see how the numbers change when incrementing or decrementing.
-
 Also, conditions for when signed overflow, carry, and borrow are indicated.
 
 Change the number of bits between 4 and 8.
@@ -186,7 +184,7 @@ This does binary addition of 2 inputs. It has a sum and carry output. However, t
 
 [b]Subtractor[/b]
 
-We may convert the adder to a subtractor by inverting its B input and adding a 1 by injecting 1 into the carry in input.
+We may convert the adder to a subtractor by inverting its B input and adding a 1 by injecting it into the carry (borrow in the case of subtracting) input.
 
 [img]res://assets/pics/sub.png[/img]
 

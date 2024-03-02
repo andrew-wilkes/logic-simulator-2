@@ -27,10 +27,6 @@ G="*res://autoloads/global.gd"
 
 gdscript/warnings/integer_division=0
 
-[editor_plugins]
-
-enabled=PackedStringArray("res://addons/gdUnit4/plugin.cfg")
-
 [gdunit4]
 
 settings/test/test_lookup_folder="tests"

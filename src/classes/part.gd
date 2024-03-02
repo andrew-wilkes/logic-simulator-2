@@ -14,7 +14,6 @@ enum { A,B,C,D }
 # A value of 10 seems to be a good choice when testing.
 const RACE_COUNT_THRESHOLD = 10
 const DEBUG = false
-const FLIP_SIDES = [RIGHT, LEFT]
 const IN = 0
 const OUT = 0
 

@@ -39,7 +39,7 @@ Connections are made by clicking on a pin and dragging a line out to snap to ano
 
 Pins on the right side of parts may fan out to multiple end points, but pins on the left side only accept one input.
 
-In general, pins on the left side of a part are inputs, and pins on the right side of a part are outputs. But IO and some others (to be decided) are bi-directional, however the signal input does not go back along other wires connected to the same pin.
+Pins on the left side of parts are inputs, and pins on the right side are outputs. So, some parts that normally have bi-directional data busses have these busses split between input data and output data such as for say a memory part. 
 
 To hold a pin high or low, there are parts for V+ and Gnd available.
 
@@ -52,7 +52,7 @@ Another color customization feature is for the logic level indication. This is a
 To remove logic level coloring of the wires during use, there is a colored button that may be pressed in the menu bar.
 
 [b]Circuit Blocks[/b]
-Previously saved circuits may be loaded as blocks. This causes them to appear as a part with pins mapped to unconnected IO pins of the circuit with the same pin names as those IO pins. Also, the circuit that was loaded as a block is added to the Part List under the Blocks list with the title of the Ciruit or its file name if the Circuit was unnamed. Right-click on block part entry in the part list to remove it.
+Previously saved circuits may be loaded as blocks. This causes them to appear as a part with pins mapped to unconnected IO pins of the circuit with the same pin names as those IO pins. Also, the circuit that was loaded as a block is added to the Part List under the Blocks list with the title of the Circuit or its file name if the Circuit was unnamed. Right-click on block part entry in the part list to remove it.
 
 IO parts are required in order to obtain IO pins for block parts. One side of each of these parts should be fully un-connected for it to be deemed an input or output of the circuit when loaded as a block. Inside of a block, the IO Manager panel is no longer available. The internal IO parts of the block have their pins assigned to block pins in relation to their positions in the schematic diagram.
 
