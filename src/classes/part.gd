@@ -8,6 +8,7 @@ enum { LEFT, RIGHT }
 enum { WIRE_TYPE, BUS_TYPE }
 enum { UTILITY, ASYNC, SYNC, BLOCK }
 enum { A,B,C,D }
+enum { BIT0 = 1, BIT1 = 2, BIT2 = 4, BIT3 = 8, BIT4 = 0x10, BIT5 = 0x20, BIT6 = 0x40, BIT7 = 0x80 }
 
 # If this value is too low we get false flags.
 # If too high get stack overflows with unstable circuits.
@@ -16,6 +17,8 @@ const RACE_COUNT_THRESHOLD = 10
 const DEBUG = false
 const IN = 0
 const OUT = 0
+const MASK16 = 0xffff
+const MASK8 = 0xff
 
 # Part properties
 var tag = ""
