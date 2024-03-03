@@ -1,5 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://bymsvj5d3666r"]
+[gd_scene load_steps=3 format=3 uid="uid://bymsvj5d3666r"]
 
+[ext_resource type="Texture2D" uid="uid://c11sg3ovuxbbo" path="res://assets/parts/reset.png" id="2_ra3h8"]
 [ext_resource type="Script" path="res://parts/Clock.gd" id="3_3oidf"]
 
 [node name="Clock" type="GraphNode"]
@@ -23,7 +24,7 @@ slot/1/left_enabled = false
 slot/1/left_type = 0
 slot/1/left_color = Color(0.980392, 1, 1, 1)
 slot/1/left_icon = null
-slot/1/right_enabled = false
+slot/1/right_enabled = true
 slot/1/right_type = 0
 slot/1/right_color = Color(0.980392, 1, 1, 1)
 slot/1/right_icon = null
@@ -46,6 +47,24 @@ slot/3/right_type = 0
 slot/3/right_color = Color(1, 1, 1, 1)
 slot/3/right_icon = null
 slot/3/draw_stylebox = true
+slot/4/left_enabled = false
+slot/4/left_type = 0
+slot/4/left_color = Color(1, 1, 1, 1)
+slot/4/left_icon = null
+slot/4/right_enabled = false
+slot/4/right_type = 0
+slot/4/right_color = Color(1, 1, 1, 1)
+slot/4/right_icon = null
+slot/4/draw_stylebox = true
+slot/5/left_enabled = false
+slot/5/left_type = 0
+slot/5/left_color = Color(1, 1, 1, 1)
+slot/5/left_icon = null
+slot/5/right_enabled = false
+slot/5/right_type = 0
+slot/5/right_color = Color(1, 1, 1, 1)
+slot/5/right_icon = null
+slot/5/draw_stylebox = true
 script = ExtResource("3_3oidf")
 
 [node name="HB" type="HBoxContainer" parent="."]
@@ -63,10 +82,6 @@ size_flags_horizontal = 3
 text = "out"
 horizontal_alignment = 2
 
-[node name="Rate" type="HSlider" parent="."]
-layout_mode = 2
-max_value = 60.0
-
 [node name="HB2" type="HBoxContainer" parent="."]
 layout_mode = 2
 theme_override_constants/separation = 10
@@ -82,6 +97,47 @@ text = "Reset"
 layout_mode = 2
 text = "reset"
 
+[node name="Label2" type="Label" parent="."]
+layout_mode = 2
+text = "inv"
+horizontal_alignment = 2
+
+[node name="Rate" type="HSlider" parent="."]
+layout_mode = 2
+max_value = 60.0
+
+[node name="VB" type="VBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Label" type="Label" parent="VB"]
+layout_mode = 2
+text = "Cycle count"
+
+[node name="HB" type="HBoxContainer" parent="VB"]
+layout_mode = 2
+
+[node name="CycleCount" type="Label" parent="VB/HB"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0, 1, 0, 1)
+text = "0"
+
+[node name="ResetCycleCount" type="Button" parent="VB/HB"]
+layout_mode = 2
+tooltip_text = "Reset cycle count"
+icon = ExtResource("2_ra3h8")
+
+[node name="Label2" type="Label" parent="VB"]
+layout_mode = 2
+text = "Cycle limit"
+
+[node name="CycleLimit" type="SpinBox" parent="VB"]
+unique_name_in_owner = true
+layout_mode = 2
+allow_greater = true
+
 [node name="Tag" type="LineEdit" parent="."]
 layout_mode = 2
 expand_to_text_length = true
@@ -91,8 +147,10 @@ one_shot = true
 
 [connection signal="button_down" from="HB/PulseButton" to="." method="_on_pulse_button_button_down"]
 [connection signal="button_up" from="HB/PulseButton" to="." method="_on_pulse_button_button_up"]
-[connection signal="value_changed" from="Rate" to="." method="_on_rate_value_changed"]
 [connection signal="button_down" from="HB2/ResetButton" to="." method="_on_reset_button_button_down"]
 [connection signal="button_up" from="HB2/ResetButton" to="." method="_on_reset_button_button_up"]
 [connection signal="toggled" from="HB2/ResetButton" to="." method="_on_reset_button_toggled"]
+[connection signal="value_changed" from="Rate" to="." method="_on_rate_value_changed"]
+[connection signal="pressed" from="VB/HB/ResetCycleCount" to="." method="_on_reset_cycle_count_pressed"]
+[connection signal="value_changed" from="VB/CycleLimit" to="." method="_on_cycle_limit_value_changed"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

@@ -15,7 +15,27 @@
    xmlns:cc="http://creativecommons.org/ns#"
    xmlns:dc="http://purl.org/dc/elements/1.1/">
   <defs
-     id="defs857" />
+     id="defs857">
+    <marker
+       style="overflow:visible"
+       id="Triangle"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       inkscape:stockid="Triangle arrow"
+       markerWidth="0.5"
+       markerHeight="0.5"
+       viewBox="0 0 1 1"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         transform="scale(0.5)"
+         style="fill:context-stroke;fill-rule:evenodd;stroke:context-stroke;stroke-width:1pt"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path135" />
+    </marker>
+  </defs>
   <sodipodi:namedview
      id="base"
      pagecolor="#ffffff"
@@ -24,8 +44,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.64"
-     inkscape:cx="-448.4375"
-     inkscape:cy="-369.53125"
+     inkscape:cx="-138.28125"
+     inkscape:cy="-625.78125"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      inkscape:document-rotation="0"
@@ -116,5 +136,21 @@
        cy="-380"
        rx="20.00001"
        ry="19.999989" />
+    <path
+       style="fill:none;stroke:#ffffff;stroke-width:60;stroke-linecap:square;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Triangle)"
+       id="path2"
+       sodipodi:type="arc"
+       sodipodi:cx="50.433575"
+       sodipodi:cy="-776.24603"
+       sodipodi:rx="200"
+       sodipodi:ry="200"
+       sodipodi:start="1.0184571"
+       sodipodi:end="5.958754"
+       sodipodi:arc-type="arc"
+       d="M 155.36958,-605.98613 A 200,200 0 0 1 -75.749891,-621.07602 200,200 0 0 1 -137.64498,-844.26409 200,200 0 0 1 52.691686,-976.23328 200,200 0 0 1 240.00001,-840"
+       sodipodi:open="true"
+       inkscape:export-filename="../src/assets/parts/reset.png"
+       inkscape:export-xdpi="3.1340263"
+       inkscape:export-ydpi="3.1340263" />
   </g>
 </svg>

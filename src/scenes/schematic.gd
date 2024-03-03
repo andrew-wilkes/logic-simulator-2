@@ -121,6 +121,7 @@ func delete_selected_parts(_arr):
 	selected_parts.clear()
 	if flag_changed:
 		circuit_changed()
+		sort_all_connections()
 
 
 func delete_selected_part(part):
@@ -175,6 +176,7 @@ func duplicate_selected_parts():
 			connect_node(part_map[con.from_node], con.from_port, part_map[con.to_node], con.to_port)
 	if flag_changed:
 		circuit_changed()
+		sort_all_connections()
 
 
 func remove_connections_between_selected_parts():
