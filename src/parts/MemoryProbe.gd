@@ -4,6 +4,7 @@ extends Part
 
 # This needs to be set when connecting to this part
 var memory: Part
+var current_value = 0
 
 func _init():
 	category = UTILITY
@@ -13,6 +14,11 @@ func _init():
 
 func _ready():
 	super()
+	if show_display:
+		display_update_timer = Timer.new()
+		get_child(-1).add_child(display_update_timer)
+		display_update_timer.timeout.connect(display_data)
+		display_update_timer.start(0.1)
 	%Address.display_value(data.address, false, false)
 
 
@@ -31,14 +37,12 @@ func fetch_data():
 
 # Called from Memory part when the values change
 func update_data():
-	var value = fetch_data()
-	if show_display:
-		display_data(value)
-	update_output_value(OUT, value)
+	current_value = fetch_data()
+	update_output_value(OUT, current_value)
 
 
-func display_data(value):
-	%Data.text = get_display_hex_value(value)
+func display_data():
+	%Data.text = get_display_hex_value(current_value)
 
 
 func _on_address_value_changed(value):

@@ -7,10 +7,20 @@ var tick = false
 var race_counter_reset_counter: = 0
 var cycles := 0
 var cycle_limit := 0
+var turbo_off = true
 
 func _init():
 	category = UTILITY
 	order = 88
+
+
+func _ready():
+	super()
+	if show_display:
+		display_update_timer = Timer.new()
+		get_child(-1).add_child(display_update_timer)
+		display_update_timer.timeout.connect(update_cycle_count)
+		display_update_timer.start(0.1)
 
 
 func _on_rate_value_changed(value):
@@ -67,8 +77,7 @@ func output_clock(level):
 
 
 func update_cycle_count():
-	if cycles > 0:
-		%CycleCount.text = str(cycles)
+	%CycleCount.text = str(cycles)
 
 
 func update_clock_output(level):
@@ -97,9 +106,28 @@ func _on_reset_cycle_count_pressed():
 
 func reset_cycle_count():
 	cycles = 0
-	%CycleCount.text = str(0)
 
 
 func _on_cycle_limit_value_changed(value):
 	cycle_limit = int(value)
 	reset_cycle_count()
+
+
+func _on_turbo_button_toggled(toggled_on):
+	if toggled_on:
+		turbo_off = false
+		controller.thread.start(fast_clock, Thread.PRIORITY_NORMAL)
+	else:
+		turbo_off = true
+		controller.thread.wait_to_finish()
+
+
+func fast_clock():
+	var level = true
+	while not turbo_off:
+		controller.reset_race_counters()
+		controller.output_level_changed_handler(self, OUT, level)
+		level = !level
+		controller.reset_race_counters()
+		controller.output_level_changed_handler(self, 2, level)
+		cycles += 1

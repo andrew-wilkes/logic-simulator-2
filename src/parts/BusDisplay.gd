@@ -4,7 +4,7 @@ extends Display
 
 enum { HEX, DEC, BIN, MAP }
 
-var value = 0
+var value := 0
 
 func _init():
 	super()
@@ -15,6 +15,11 @@ func _init():
 
 
 func _ready():
+	if show_display:
+		display_update_timer = Timer.new()
+		get_child(-1).add_child(display_update_timer)
+		display_update_timer.timeout.connect(update_display)
+		display_update_timer.start(0.1)
 	set_mode_text()
 	for n in data.num_digits - 1:
 		add_digit()
@@ -29,14 +34,14 @@ func set_mode_text():
 func _on_mode_button_pressed():
 	data.mode = (int(data.mode) + 1) % 4
 	set_mode_text()
-	set_digits(value)
+	set_digits()
 	changed()
 
 
 func _on_add_button_pressed():
 	add_digit()
 	data.num_digits += 1
-	set_digits(value)
+	set_digits()
 	changed()
 
 
@@ -47,7 +52,7 @@ func _on_remove_button_pressed():
 		changed()
 		# Shrink the width of the node after the digit was removed
 		await get_tree().create_timer(0.1).timeout
-		set_digits(value)
+		set_digits()
 		size.x = 0
 
 
@@ -68,16 +73,15 @@ func set_dp():
 		$HB.get_child(idx).material.set_shader_parameter("dp", on)
 
 
-func evaluate_bus_output_value(port, _value):
-	value = int(_value)
+func evaluate_bus_output_value(port: int, _value: int):
 	if port == 0:
-		set_digits(value)
+		value = _value
 	if port == 1:
-		data.dp_position = value
-		set_dp()
+		data.dp_position = _value
 
 
-func set_digits(n):
+func set_digits():
+	var n = value
 	# Assume that negative numbers are 16 bits
 	if n < 0:
 		n = 65536 + n
@@ -216,3 +220,8 @@ func get_code(n):
 		return codes[16 + n]
 	if n < 16:
 		return codes[23 + n]
+
+
+func update_display():
+		set_digits()
+		set_dp()

@@ -54,8 +54,6 @@ func update_value(new_val: int, address: int):
 				if new_val & 1 else data.screen_color)
 		old_val /= 2
 		new_val /= 2
-	texture.update(pixels)
-	update_probes()
 
 
 func set_value(address, value):
@@ -73,3 +71,9 @@ func erase():
 	super()
 	pixels.fill(data.screen_color)
 	texture.update(pixels)
+
+
+func update_display():
+	super()
+	texture.update(pixels)
+	update_probes()

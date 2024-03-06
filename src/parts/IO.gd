@@ -28,6 +28,11 @@ func _init():
 
 func _ready():
 	super()
+	if show_display:
+		display_update_timer = Timer.new()
+		get_child(-1).add_child(display_update_timer)
+		display_update_timer.timeout.connect(update_display)
+		display_update_timer.start(0.1)
 	if get_parent().name == "root":
 		test_set_pins() # Done visually when running the scene.
 
@@ -118,8 +123,6 @@ func evaluate_bus_output_value(port, value, update_levels = true):
 	# A speed optimization could be to not call this unless there are wire connections.
 	if update_levels:
 		update_output_levels_from_value(value)
-	if show_display:
-		$Value.display_value(value, true, true)
 	current_value = value
 
 
@@ -144,3 +147,7 @@ func apply_power():
 	pins = { [RIGHT, OUT]: 0 }
 	for n in data.num_wires:
 		pins[[RIGHT, n + 1]] = false
+
+
+func update_display():
+	$Value.display_value(current_value, true, true)

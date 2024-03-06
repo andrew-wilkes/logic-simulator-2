@@ -97,8 +97,17 @@ text = "Reset"
 layout_mode = 2
 text = "reset"
 
-[node name="Label2" type="Label" parent="."]
+[node name="HB3" type="HBoxContainer" parent="."]
 layout_mode = 2
+
+[node name="TurboButton" type="Button" parent="HB3"]
+layout_mode = 2
+toggle_mode = true
+text = "Turbo"
+
+[node name="Label2" type="Label" parent="HB3"]
+layout_mode = 2
+size_flags_horizontal = 3
 text = "inv"
 horizontal_alignment = 2
 
@@ -150,6 +159,7 @@ one_shot = true
 [connection signal="button_down" from="HB2/ResetButton" to="." method="_on_reset_button_button_down"]
 [connection signal="button_up" from="HB2/ResetButton" to="." method="_on_reset_button_button_up"]
 [connection signal="toggled" from="HB2/ResetButton" to="." method="_on_reset_button_toggled"]
+[connection signal="toggled" from="HB3/TurboButton" to="." method="_on_turbo_button_toggled"]
 [connection signal="value_changed" from="Rate" to="." method="_on_rate_value_changed"]
 [connection signal="pressed" from="VB/HB/ResetCycleCount" to="." method="_on_reset_cycle_count_pressed"]
 [connection signal="value_changed" from="VB/CycleLimit" to="." method="_on_cycle_limit_value_changed"]

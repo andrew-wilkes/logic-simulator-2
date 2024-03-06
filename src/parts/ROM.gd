@@ -2,7 +2,7 @@ class_name ROM
 
 extends BaseMemory
 
-var old_address = 0
+var old_address := 0
 
 func _init():
 	order = 2
@@ -16,6 +16,11 @@ func _ready():
 	super()
 	%Bits.text = str(data.bits)
 	$Size.text = data.size
+	if show_display:
+		display_update_timer = Timer.new()
+		get_child(-1).add_child(display_update_timer)
+		display_update_timer.timeout.connect(update_display)
+		display_update_timer.start(0.1)
 
 
 func setup_instance():
@@ -32,11 +37,8 @@ func evaluate_bus_output_value(port, _value):
 
 
 func set_output_data():
-	var address = pins.get([LEFT, 0], 0) % mem_size
-	if show_display:
-		%Address.text = get_display_hex_value(address)
-		%Data.text = get_display_hex_value(values[address])
-	update_output_value(OUT, values[address])
+	current_address = pins.get([LEFT, 0], 0) % mem_size
+	update_output_value(OUT, values[current_address])
 
 
 func open_file():
@@ -75,3 +77,8 @@ func load_data(file_path, signal_changed = true):
 	update_probes()
 	if signal_changed:
 		changed()
+
+
+func update_display():
+	%Address.text = get_display_hex_value(current_address)
+	%Data.text = get_display_hex_value(values[current_address])

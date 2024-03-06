@@ -15,6 +15,7 @@ var selected_parts = []
 var part_initial_offset_delta = Vector2.ZERO
 var parent_file = ""
 var tester
+var running_tests = false
 var test_output_line = 0
 var compare_lines = []
 var test_state = G.TEST_STATUS.STEPPABLE
@@ -25,9 +26,12 @@ var busy = false
 var frame_count = 0
 var a_part_was_deleted = false
 var loaded_parts = {}
+var level_indications_to_update = {}
+var mutex: Mutex
+var thread: Thread
+var part_references = {}
 
 func _ready():
-	set_process(false)
 	circuit = Circuit.new()
 	node_deselected.connect(deselect_part)
 	node_selected.connect(select_part)
@@ -36,6 +40,8 @@ func _ready():
 	disconnection_request.connect(disconnect_wire)
 	duplicate_nodes_request.connect(duplicate_selected_parts)
 	G.test_runner = $C/TestRunner
+	mutex = Mutex.new()
+	thread = Thread.new()
 
 
 func _unhandled_key_input(event):
@@ -66,7 +72,7 @@ func connect_wire(from_part, from_pin, to_part, to_pin):
 					var level = from.pins.get([RIGHT, from_pin], false)
 					node.update_input_level(to_pin, level)
 					if G.settings.indicate_to_levels:
-						node.indicate_level(LEFT, to_pin, level)
+						add_level_to_update(node, LEFT, to_pin, level)
 				else:
 					node.update_bus_input_value(to_pin, from.pins.get([RIGHT, from_pin], 0))
 				break
@@ -427,31 +433,41 @@ func right_click_on_part(part):
 
 func output_level_changed_handler(part, port, level):
 	if G.settings.indicate_from_levels:
-		part.indicate_level(RIGHT, port, level)
+		add_level_to_update(part, RIGHT, port, level)
 	for con in part.connections:
 		if con.from_node == part.name and con.from_port == port:
-			var node = get_node(NodePath(con.to_node))
-			node.update_input_level(con.to_port, level)
-			if G.settings.indicate_to_levels:
-				node.indicate_level(LEFT, con.to_port, level)
+			var node = part_references.get(con.to_node)
+			if node:
+				node.update_input_level(con.to_port, level)
+				if G.settings.indicate_to_levels:
+					add_level_to_update(node, LEFT, con.to_port, level)
 
 
 func bus_value_changed_handler(part, port, value):
 	for con in part.connections:
 		if con.from_node == part.name and con.from_port == port:
-			get_node(NodePath(con.to_node)).update_bus_input_value(con.to_port, value)
+			var node = part_references.get(con.to_node)
+			if node:
+				node.update_bus_input_value(con.to_port, value)
 
 
 func unstable_handler(part, port):
 	G.warn_user("Unstable input to %s on %s pin: %d" % [part.name, "left", port])
 
 
-func reset_race_counters():
+func update_part_references():
+	part_references.clear()
 	for node in get_children():
 		if node is Part:
-			node.reset_race_counter()
-			if node is Block:
-				node.reset_block_race_counters()
+			part_references[node.name] = node
+
+
+func reset_race_counters():
+	for node_name in part_references:
+		var node = part_references[node_name]
+		node.reset_race_counter()
+		if node is Block:
+			node.reset_block_race_counters()
 
 
 func set_pin_colors(to_part, color):
@@ -486,6 +502,21 @@ func set_io_connection_colors(io_part):
 			from_node.set_slot_color_right(slot, color)
 			slot = io_part.get_input_port_slot(con.to_port)
 			io_part.set_slot_color_left(slot, color)
+
+
+func add_level_to_update(part, side, pin, level):
+	mutex.lock()
+	level_indications_to_update[[part, side, pin]] = level
+	mutex.unlock()
+
+
+func apply_level_indications():
+	mutex.lock()
+	var levels = level_indications_to_update.duplicate()
+	level_indications_to_update.clear()
+	mutex.unlock()
+	for level in levels:
+		level[0].indicate_level(level[1], level[2], levels[level])
 
 
 func number_parts():
@@ -614,6 +645,7 @@ func _on_scroll_offset_changed(offset):
 func circuit_changed(emit = true):
 	if emit:
 		emit_signal("changed")
+	update_part_references()
 	# Update Memory links
 	var probes = {}
 	var memories = {}
@@ -709,6 +741,7 @@ func reset_pins():
 func _on_test_runner_step():
 	if test_state == G.TEST_STATUS.STEPPABLE:
 		G.test_runner.set_button_status(test_state)
+		update_part_references()
 		run_test()
 
 
@@ -717,14 +750,14 @@ func _on_test_runner_play():
 		test_state = G.TEST_STATUS.PLAYING
 		G.test_runner.set_button_status(test_state)
 		start_time = Time.get_ticks_msec()
-		set_process(true)
+		running_tests = true
 
 
 func _on_test_runner_stop():
 	if test_state != G.TEST_STATUS.DONE:
 		test_state = G.TEST_STATUS.STEPPABLE
 		G.test_runner.set_button_status(test_state)
-		set_process(false)
+		running_tests = false
 
 
 func run_test():
@@ -734,7 +767,7 @@ func run_test():
 		if a_part_was_deleted:
 			# A deleted part will cause a crash so abort the tests
 			test_state = G.TEST_STATUS.DONE
-			set_process(false)
+			running_tests = false
 			G.test_runner.hide()
 			break
 		if tester.test_step == tester.tasks.size():
@@ -743,7 +776,7 @@ func run_test():
 			G.test_runner.text_area.add_text("DONE")
 			test_state = G.TEST_STATUS.DONE
 			G.test_runner.set_button_status(test_state)
-			set_process(false)
+			running_tests = false
 			break
 		reset_race_counters()
 		var task
@@ -776,10 +809,12 @@ func run_test():
 
 
 func _process(delta):
-	frame_count -= 1
-	if frame_count < 0 and test_state == G.TEST_STATUS.PLAYING and not busy:
-		run_test()
-		frame_count = G.settings.tester_speed / delta / 60.0
+	if running_tests:
+		frame_count -= 1
+		if frame_count < 0 and test_state == G.TEST_STATUS.PLAYING and not busy:
+			run_test()
+			frame_count = G.settings.tester_speed / delta / 60.0
+	apply_level_indications()
 
 
 func add_compared_string(out, comp, text_area: RichTextLabel):

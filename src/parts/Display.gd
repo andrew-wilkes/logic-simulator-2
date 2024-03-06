@@ -2,6 +2,9 @@ class_name Display
 
 extends Part
 
+var ports = [ false, false, false, false, false, false, false, false ]
+var previous_ports
+
 func _init():
 	order = 80
 	category = UTILITY
@@ -14,12 +17,26 @@ func _init():
 
 func _ready():
 	super()
+	if show_display:
+		display_update_timer = Timer.new()
+		get_child(-1).add_child(display_update_timer)
+		display_update_timer.timeout.connect(update_segments)
+		display_update_timer.start()
+	previous_ports = ports.duplicate()
 	set_color(data.color_index)
 	%Hue.set_value_no_signal(data.color_index)
 
 
 func evaluate_output_level(port, level):
-	%Segments.material.set_shader_parameter(["a","b","c","d","e","f","g","dp"][port], level)
+	ports[port] = level
+
+
+func update_segments():
+	var idx = 0
+	for level in ports:
+		if previous_ports[idx] != level:
+			%Segments.material.set_shader_parameter(["a","b","c","d","e","f","g","dp"][idx], level)
+	previous_ports = ports.duplicate()
 
 
 func _on_hue_value_changed(value):
