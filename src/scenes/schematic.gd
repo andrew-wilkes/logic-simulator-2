@@ -30,6 +30,9 @@ var level_indications_to_update = {}
 var mutex: Mutex
 var thread: Thread
 var part_references = {}
+var input_stimulus: CircuitInput
+var clocks = []
+var running_thread = false
 
 func _ready():
 	circuit = Circuit.new()
@@ -42,6 +45,67 @@ func _ready():
 	G.test_runner = $C/TestRunner
 	mutex = Mutex.new()
 	thread = Thread.new()
+	start_thread()
+
+
+func start_thread():
+	running_thread = true
+	thread.start(process_inputs, Thread.PRIORITY_NORMAL)
+
+
+func stop_thread():
+	running_thread = false
+	thread.wait_to_finish()
+
+
+func process_inputs():
+	while running_thread:
+		reset_race_counters()
+		# Consume any one-off input such as a toggle button output
+		mutex.lock()
+		var _input = input_stimulus
+		input_stimulus = null
+		mutex.unlock()
+		if _input:
+			apply_input(_input)
+		# Now apply clocks and toggle the clock level
+		mutex.lock()
+		var _clocks = clocks.duplicate()
+		mutex.unlock()
+		for clock in _clocks:
+			apply_input(clock)
+			if clock.level:
+				clock.level = false
+			else:
+				clock.level = true
+				clock.cycles += 1
+		mutex.unlock()
+
+
+func apply_input(cin: CircuitInput):
+	# Have to guard against parts not existing in the scene tree any more due to changes made in the main thread
+	var part = part_references.get(cin.name)
+	if part:
+		output_level_changed_handler(part, cin.port, cin.level)
+
+
+func inject_circuit_input(cin: CircuitInput):
+	mutex.lock()
+	input_stimulus = cin
+	mutex.unlock()
+
+
+func add_clock(cin: CircuitInput):
+	mutex.lock()
+	cin.level = true
+	clocks.append(cin)
+	mutex.unlock()
+
+
+func remove_clock(cin: CircuitInput):
+	mutex.lock()
+	clocks.erase(cin)
+	mutex.unlock()
 
 
 func _unhandled_key_input(event):
@@ -163,7 +227,6 @@ func duplicate_selected_parts():
 				offset.y / part.position.y * part_offset.y)
 		#var new_part = part.duplicate() # This does not work for WireColor or BusColor
 		# after setting the color for some unknown reason
-		#if new_part == null:
 		var new_part = Parts.scenes[part.part_type].instantiate()
 		new_part.position_offset = part.position_offset
 		new_part.selected = false
@@ -213,7 +276,7 @@ func get_part_by_name(part_name):
 func add_part(part):
 	part.controller = self
 	add_child(part)
-	part.setup()
+	part.call_deferred("setup")
 	part.part_type = part.name
 	part.position_offset = PART_INITIAL_OFFSET + scroll_offset / zoom \
 		+ part_initial_offset_delta
@@ -455,11 +518,14 @@ func unstable_handler(part, port):
 	G.warn_user("Unstable input to %s on %s pin: %d" % [part.name, "left", port])
 
 
+# part_references was added so that the parts can be accessed in the secondary thread where we can't see the scene tree nodes
 func update_part_references():
+	stop_thread()
 	part_references.clear()
 	for node in get_children():
 		if node is Part:
 			part_references[node.name] = node
+	start_thread()
 
 
 func reset_race_counters():
@@ -504,12 +570,14 @@ func set_io_connection_colors(io_part):
 			io_part.set_slot_color_left(slot, color)
 
 
+# Called from our inner thread
 func add_level_to_update(part, side, pin, level):
 	mutex.lock()
 	level_indications_to_update[[part, side, pin]] = level
 	mutex.unlock()
 
 
+# Processed by the main (visual) thread
 func apply_level_indications():
 	mutex.lock()
 	var levels = level_indications_to_update.duplicate()
@@ -848,3 +916,7 @@ func add_compared_string(out, comp, text_area: RichTextLabel):
 		text_area.pop()
 	text_area.add_text("\n")
 #endregion
+
+
+func _on_tree_exiting():
+	stop_thread()

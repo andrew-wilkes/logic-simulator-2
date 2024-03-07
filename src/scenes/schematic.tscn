@@ -45,8 +45,8 @@ borderless = false
 [node name="CircuitTree" parent="BlockTreePanel" instance=ExtResource("5_gxq4f")]
 offset_left = 4.0
 offset_top = 4.0
-offset_right = 396.0
-offset_bottom = 296.0
+offset_right = -4.0
+offset_bottom = -4.0
 
 [node name="C" type="CanvasLayer" parent="."]
 
@@ -56,6 +56,7 @@ offset_top = 0.0
 offset_bottom = 369.0
 
 [connection signal="scroll_offset_changed" from="." to="." method="_on_scroll_offset_changed"]
+[connection signal="tree_exiting" from="." to="." method="_on_tree_exiting"]
 [connection signal="play" from="C/TestRunner" to="." method="_on_test_runner_play"]
 [connection signal="reset" from="C/TestRunner" to="." method="_on_test_runner_reset"]
 [connection signal="step" from="C/TestRunner" to="." method="_on_test_runner_step"]

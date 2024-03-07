@@ -5,9 +5,11 @@ extends Part
 var fps = 0
 var tick = false
 var race_counter_reset_counter: = 0
-var cycles := 0
 var cycle_limit := 0
 var turbo_off = true
+var clock: CircuitInput
+var inv_clock: CircuitInput
+var reset_out: CircuitInput
 
 func _init():
 	category = UTILITY
@@ -21,6 +23,19 @@ func _ready():
 		get_child(-1).add_child(display_update_timer)
 		display_update_timer.timeout.connect(update_cycle_count)
 		display_update_timer.start(0.1)
+
+
+func setup():
+	# Now name is set after adding to scene tree
+	clock = CircuitInput.new()
+	clock.name = name
+	clock.port = OUT
+	clock.level = true
+	inv_clock = CircuitInput.new()
+	inv_clock.name = name
+	inv_clock.port = 2
+	reset_out = CircuitInput.new()
+	reset_out.name = name
 
 
 func _on_rate_value_changed(value):
@@ -63,7 +78,7 @@ func _on_reset_button_button_up():
 
 
 func output_clock(level):
-	if cycle_limit > 0 and cycles >= cycle_limit:
+	if cycle_limit > 0 and clock.cycles >= cycle_limit:
 		$Rate.value = 0
 		return
 	if race_counter_reset_counter == 0:
@@ -73,11 +88,11 @@ func output_clock(level):
 		race_counter_reset_counter = 0
 	update_clock_output(level)
 	if not level:
-		cycles += 1
+		clock.cycles += 1
 
 
 func update_cycle_count():
-	%CycleCount.text = str(cycles)
+	%CycleCount.text = str(clock.cycles)
 
 
 func update_clock_output(level):
@@ -105,7 +120,7 @@ func _on_reset_cycle_count_pressed():
 
 
 func reset_cycle_count():
-	cycles = 0
+	clock.cycles = 0
 
 
 func _on_cycle_limit_value_changed(value):
@@ -116,18 +131,15 @@ func _on_cycle_limit_value_changed(value):
 func _on_turbo_button_toggled(toggled_on):
 	if toggled_on:
 		turbo_off = false
-		controller.thread.start(fast_clock, Thread.PRIORITY_NORMAL)
+		controller.add_clock(clock)
+		#controller.add_clock(inv_clock)
 	else:
+		controller.remove_clock(clock)
+		#controller.remove_clock(inv_clock)
 		turbo_off = true
-		controller.thread.wait_to_finish()
 
 
-func fast_clock():
-	var level = true
-	while not turbo_off:
-		controller.reset_race_counters()
-		controller.output_level_changed_handler(self, OUT, level)
-		level = !level
-		controller.reset_race_counters()
-		controller.output_level_changed_handler(self, 2, level)
-		cycles += 1
+func _on_tree_exited():
+	clock.free()
+	inv_clock.free()
+	reset_out.free()

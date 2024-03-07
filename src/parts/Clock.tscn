@@ -154,6 +154,7 @@ expand_to_text_length = true
 [node name="Timer" type="Timer" parent="."]
 one_shot = true
 
+[connection signal="tree_exited" from="." to="." method="_on_tree_exited"]
 [connection signal="button_down" from="HB/PulseButton" to="." method="_on_pulse_button_button_down"]
 [connection signal="button_up" from="HB/PulseButton" to="." method="_on_pulse_button_button_up"]
 [connection signal="button_down" from="HB2/ResetButton" to="." method="_on_reset_button_button_down"]
