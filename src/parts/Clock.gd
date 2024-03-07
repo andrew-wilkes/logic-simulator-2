@@ -23,7 +23,6 @@ func _ready():
 		display_update_timer = Timer.new()
 		get_child(-1).add_child(display_update_timer)
 		display_update_timer.timeout.connect(update_cycle_count)
-		display_update_timer.start(0.1)
 
 
 func setup():
@@ -44,6 +43,7 @@ func setup():
 	reset_out = CircuitInput.new()
 	reset_out.name = name
 	reset_out.port = 1
+	display_update_timer.start(0.1)
 
 
 func _on_rate_value_changed(value):
@@ -152,7 +152,7 @@ func _on_turbo_button_toggled(toggled_on):
 		controller.remove_clock(inv_clock)
 
 
-func _on_tree_exited():
+func _on_tree_exiting():
 	clock.free()
 	inv_clock.free()
 	reset_out.free()

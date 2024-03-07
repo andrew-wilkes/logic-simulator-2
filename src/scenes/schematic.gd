@@ -87,7 +87,10 @@ func apply_input(cin: CircuitInput):
 	# Have to guard against parts not existing in the scene tree any more due to changes made in the main thread
 	var part = part_references.get(cin.name)
 	if part:
-		output_level_changed_handler(part, cin.port, cin.level)
+		if cin.is_bus:
+			bus_value_changed_handler(part, cin.port, cin.value)
+		else:
+			output_level_changed_handler(part, cin.port, cin.level)
 
 
 func inject_circuit_input(cin: CircuitInput):
@@ -362,8 +365,8 @@ func add_parts():
 		part.data = node.data
 		part.controller = self
 		add_child(part)
-		part.setup()
 		part.name = node.node_name
+		part.setup()
 		loaded_parts[part.name] = part
 		part.position_offset = Vector2(node.offset[0], node.offset[1])
 		part.tooltip_text = part.name

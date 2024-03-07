@@ -58,5 +58,6 @@ visible = false
 layout_mode = 2
 expand_to_text_length = true
 
+[connection signal="tree_exiting" from="." to="." method="_on_tree_exiting"]
 [connection signal="text_changed" from="HB/Chars" to="." method="_on_chars_text_changed"]
 [connection signal="timeout" from="HB/BlinkTimer" to="." method="_on_blink_timer_timeout"]

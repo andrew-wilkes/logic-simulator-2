@@ -2,24 +2,28 @@ class_name ToggleSwitch
 
 extends Part
 
-var race_counter_reset_counter = 0
+var switch_output: CircuitInput
 
 func _init():
 	category = UTILITY
 	order = 86
 
 
-func output_clock(level):
-	race_counter_reset_counter += 1
-	if race_counter_reset_counter > 3:
-		race_counter_reset_counter = 0
-		controller.reset_race_counters()
-	update_output_level_with_color(OUT, level)
+func setup():
+	switch_output = CircuitInput.new()
+	switch_output.name = name
+	switch_output.port = OUT
 
 
 func _on_button_toggled(button_pressed):
-	output_clock(button_pressed)
+	switch_output.level = button_pressed
+	controller.inject_circuit_input(switch_output)
 
 
 func apply_power():
-	update_output_level_with_color(OUT, false)
+	switch_output.level = false
+	controller.inject_circuit_input(switch_output)
+
+
+func _on_tree_exiting():
+	switch_output.free()

@@ -103,7 +103,6 @@ layout_mode = 2
 [node name="TurboButton" type="Button" parent="HB3"]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/font_pressed_color = Color(1, 0, 0, 1)
 toggle_mode = true
 text = "Turbo"
 
@@ -156,7 +155,7 @@ expand_to_text_length = true
 [node name="Timer" type="Timer" parent="."]
 one_shot = true
 
-[connection signal="tree_exited" from="." to="." method="_on_tree_exited"]
+[connection signal="tree_exiting" from="." to="." method="_on_tree_exiting"]
 [connection signal="button_down" from="HB/PulseButton" to="." method="_on_pulse_button_button_down"]
 [connection signal="button_up" from="HB/PulseButton" to="." method="_on_pulse_button_button_up"]
 [connection signal="button_down" from="HB2/ResetButton" to="." method="_on_reset_button_button_down"]

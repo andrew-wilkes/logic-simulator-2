@@ -13,6 +13,7 @@ class_name IO
 extends Part
 
 var current_value = 0 # This is accessed by the IO Manager panel
+var level_outputs = []
 
 func _init():
 	data = {
@@ -41,6 +42,19 @@ func setup():
 	set_pins()
 
 
+func set_level_outputs():
+	for idx in level_outputs.size():
+		level_outputs[idx].free()
+	level_outputs.resize(data.num_wires + 1)
+	for idx in level_outputs.size():
+		var cin = CircuitInput.new()
+		cin.name = name
+		cin.port = idx
+		if idx < 1:
+			cin.is_bus = true
+		level_outputs[idx] = cin
+
+
 func set_pins():
 	# num_wires == number of bits, the bus is seperate
 	var num_wires = get_input_port_count() - 1
@@ -61,6 +75,7 @@ func set_pins():
 	await get_tree().process_frame
 	set_pin_colors()
 	set_labels()
+	set_level_outputs()
 	# Shrinking leaves a gap at the bottom
 	size = Vector2.ZERO # Fit to the new size automatically
 
@@ -94,19 +109,23 @@ func set_pin_colors():
 
 func value_changed(value):
 	current_value = value
-	# The change may propagate before the race reset has occurred,
-	# so the threshold value may need to be increased
-	controller.reset_race_counters()
-	update_output_levels_from_value(value)
-	update_output_value(0, value)
+	update_output_levels_from_value(value, false)
+	var cin = level_outputs[0]
+	cin.value = value
+	controller.inject_circuit_input(cin)
 
 
-func update_output_levels_from_value(value: int):
+func update_output_levels_from_value(value: int, internal: bool):
 	# This will ignore (clip) value bits above the range that the wires cover
 	for n in data.num_wires:
 		var level = bool(value % 2)
 		value /= 2
-		update_output_level(n + 1, level)
+		if internal:
+			update_output_level(n + 1, level)
+		else:
+			var cin = level_outputs[n + 1]
+			cin.level = level
+			controller.inject_circuit_input(cin)
 
 
 func evaluate_output_level(port, level):
@@ -122,7 +141,7 @@ func evaluate_bus_output_value(port, value, update_levels = true):
 	super(port, value)
 	# A speed optimization could be to not call this unless there are wire connections.
 	if update_levels:
-		update_output_levels_from_value(value)
+		update_output_levels_from_value(value, true)
 	current_value = value
 
 
@@ -151,3 +170,9 @@ func apply_power():
 
 func update_display():
 	$Value.display_value(current_value, true, true)
+
+
+func _on_tree_exiting():
+	for cin in level_outputs:
+		cin.free()
+

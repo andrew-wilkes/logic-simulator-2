@@ -3,6 +3,7 @@ class_name DipSwitch4
 extends Part
 
 var switches = []
+var level_outputs = []
 
 func _init():
 	category = UTILITY
@@ -20,6 +21,14 @@ func _ready():
 		idx += 1
 
 
+func setup():
+	for idx in switches.size():
+		var cin = CircuitInput.new()
+		cin.name = name
+		cin.port = idx
+		level_outputs.append(cin)
+
+
 func evaluate_output_level(port, level):
 	if switches[port].button_pressed:
 		update_output_level(port, level)
@@ -27,9 +36,14 @@ func evaluate_output_level(port, level):
 
 func switch_changed(idx):
 	if switches[idx].button_pressed:
-		controller.reset_race_counters() # Cause V+ or Gnd to emit their levels
-		# Propagate the input level to the output
-		update_output_level_with_color(idx, pins.get([LEFT, idx], false))
+		var cin = level_outputs[idx]
+		cin.level = pins.get([LEFT, idx], false)
+		controller.inject_circuit_input(cin)
 	else:
 		# Set output to white color
 		set_slot_color_right(idx, Color.WHITE)
+
+
+func _on_tree_exiting():
+	for cin in level_outputs:
+		cin.free()
