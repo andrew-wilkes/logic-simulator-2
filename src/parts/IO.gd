@@ -12,8 +12,9 @@ class_name IO
 
 extends Part
 
-var current_value = 0 # This is accessed by the IO Manager panel
+var current_value := 0 # This is accessed by the IO Manager panel
 var level_outputs = []
+var data_received := 0
 
 func _init():
 	data = {
@@ -134,6 +135,7 @@ func evaluate_output_level(port, level):
 	for n in data.num_wires:
 		value *= 2
 		value += int(pins.get([LEFT, int(data.num_wires - n)], false))
+	data_received = true
 	evaluate_bus_output_value(0, value, false)
 
 
@@ -142,6 +144,7 @@ func evaluate_bus_output_value(port, value, update_levels = true):
 	# A speed optimization could be to not call this unless there are wire connections.
 	if update_levels:
 		update_output_levels_from_value(value, true)
+		data_received = true
 	current_value = value
 
 
@@ -169,7 +172,9 @@ func apply_power():
 
 
 func update_display():
-	$Value.display_value(current_value, true, true)
+	if data_received:
+		$Value.display_value(current_value, true, true)
+		data_received = false
 
 
 func _on_tree_exiting():
