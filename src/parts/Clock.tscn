@@ -101,7 +101,9 @@ text = "reset"
 layout_mode = 2
 
 [node name="TurboButton" type="Button" parent="HB3"]
+unique_name_in_owner = true
 layout_mode = 2
+theme_override_colors/font_pressed_color = Color(1, 0, 0, 1)
 toggle_mode = true
 text = "Turbo"
 

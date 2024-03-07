@@ -6,3 +6,4 @@ var name: String
 var port: int
 var level: bool
 var cycles: int # Used by clocks
+var cycle_limit: int

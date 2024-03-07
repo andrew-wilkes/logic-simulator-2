@@ -30,7 +30,7 @@ var level_indications_to_update = {}
 var mutex: Mutex
 var thread: Thread
 var part_references = {}
-var input_stimulus: CircuitInput
+var input_stimuli = []
 var clocks = []
 var running_thread = false
 
@@ -61,24 +61,25 @@ func stop_thread():
 func process_inputs():
 	while running_thread:
 		reset_race_counters()
-		# Consume any one-off input such as a toggle button output
+		# Consume any one-off inputs such as a toggle button output
 		mutex.lock()
-		var _input = input_stimulus
-		input_stimulus = null
+		var _inputs = input_stimuli.duplicate()
+		input_stimuli.clear()
 		mutex.unlock()
-		if _input:
+		for _input in _inputs:
 			apply_input(_input)
 		# Now apply clocks and toggle the clock level
 		mutex.lock()
 		var _clocks = clocks.duplicate()
 		mutex.unlock()
 		for clock in _clocks:
-			apply_input(clock)
-			if clock.level:
-				clock.level = false
-			else:
-				clock.level = true
-				clock.cycles += 1
+			if clock.cycle_limit == 0 or clock.cycles < clock.cycle_limit:
+				apply_input(clock)
+				if clock.level:
+					clock.level = false
+				else:
+					clock.level = true
+					clock.cycles += 1
 		mutex.unlock()
 
 
@@ -91,7 +92,7 @@ func apply_input(cin: CircuitInput):
 
 func inject_circuit_input(cin: CircuitInput):
 	mutex.lock()
-	input_stimulus = cin
+	input_stimuli.append(cin)
 	mutex.unlock()
 
 

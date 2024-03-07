@@ -4,12 +4,13 @@ extends Part
 
 var fps = 0
 var tick = false
-var race_counter_reset_counter: = 0
 var cycle_limit := 0
-var turbo_off = true
+var turbo_on = false
 var clock: CircuitInput
 var inv_clock: CircuitInput
 var reset_out: CircuitInput
+var clock_pulse: CircuitInput
+var clock_pulse_inv: CircuitInput
 
 func _init():
 	category = UTILITY
@@ -27,6 +28,12 @@ func _ready():
 
 func setup():
 	# Now name is set after adding to scene tree
+	clock_pulse = CircuitInput.new()
+	clock_pulse.name = name
+	clock_pulse.port = OUT
+	clock_pulse_inv = CircuitInput.new()
+	clock_pulse_inv.name = name
+	clock_pulse_inv.port = 2
 	clock = CircuitInput.new()
 	clock.name = name
 	clock.port = OUT
@@ -36,6 +43,7 @@ func setup():
 	inv_clock.port = 2
 	reset_out = CircuitInput.new()
 	reset_out.name = name
+	reset_out.port = 1
 
 
 func _on_rate_value_changed(value):
@@ -50,8 +58,6 @@ func _on_rate_value_changed(value):
 func _on_timer_timeout():
 	tick = not tick
 	output_clock(tick)
-	if tick:
-		update_cycle_count()
 	if fps > 0.5:
 		$Timer.start(1 / fps)
 
@@ -81,23 +87,25 @@ func output_clock(level):
 	if cycle_limit > 0 and clock.cycles >= cycle_limit:
 		$Rate.value = 0
 		return
-	if race_counter_reset_counter == 0:
-		controller.reset_race_counters()
-	race_counter_reset_counter += 1
-	if race_counter_reset_counter > 3:
-		race_counter_reset_counter = 0
 	update_clock_output(level)
 	if not level:
+		controller.mutex.lock()
 		clock.cycles += 1
+		controller.mutex.unlock()
 
 
 func update_cycle_count():
 	%CycleCount.text = str(clock.cycles)
+	if turbo_on and cycle_limit > 0 and clock.cycles >= cycle_limit:
+		$Rate.value = 0
+		%TurboButton.button_pressed = false
 
 
 func update_clock_output(level):
-	update_output_level_with_color(OUT, level)
-	update_output_level_with_color(2, not level)
+	clock_pulse.level = level
+	clock_pulse_inv.level = not level
+	controller.inject_circuit_input(clock_pulse)
+	controller.inject_circuit_input(clock_pulse_inv)
 
 
 func _on_reset_button_toggled(button_pressed):
@@ -107,7 +115,8 @@ func _on_reset_button_toggled(button_pressed):
 
 
 func update_reset_output(level):
-	update_output_level_with_color(1, level)
+	reset_out.level = level
+	controller.inject_circuit_input(reset_out)
 
 
 func apply_power():
@@ -120,7 +129,10 @@ func _on_reset_cycle_count_pressed():
 
 
 func reset_cycle_count():
+	controller.mutex.lock()
 	clock.cycles = 0
+	inv_clock.cycles = 0
+	controller.mutex.unlock()
 
 
 func _on_cycle_limit_value_changed(value):
@@ -129,17 +141,20 @@ func _on_cycle_limit_value_changed(value):
 
 
 func _on_turbo_button_toggled(toggled_on):
+	turbo_on = toggled_on
 	if toggled_on:
-		turbo_off = false
+		clock.cycle_limit = cycle_limit
+		inv_clock.cycle_limit = cycle_limit
 		controller.add_clock(clock)
-		#controller.add_clock(inv_clock)
+		controller.add_clock(inv_clock)
 	else:
 		controller.remove_clock(clock)
-		#controller.remove_clock(inv_clock)
-		turbo_off = true
+		controller.remove_clock(inv_clock)
 
 
 func _on_tree_exited():
 	clock.free()
 	inv_clock.free()
 	reset_out.free()
+	clock_pulse.free()
+	clock_pulse_inv.free()
