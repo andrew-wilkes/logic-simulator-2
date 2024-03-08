@@ -89,9 +89,7 @@ func output_clock(level):
 		return
 	update_clock_output(level)
 	if not level:
-		controller.mutex.lock()
 		clock.cycles += 1
-		controller.mutex.unlock()
 
 
 func update_cycle_count():
@@ -129,10 +127,10 @@ func _on_reset_cycle_count_pressed():
 
 
 func reset_cycle_count():
-	controller.mutex.lock()
+	# It's possible that this will not reset the value if cycles is incremented
+	# at the same time in the process_inputs thread.
 	clock.cycles = 0
 	inv_clock.cycles = 0
-	controller.mutex.unlock()
 
 
 func _on_cycle_limit_value_changed(value):

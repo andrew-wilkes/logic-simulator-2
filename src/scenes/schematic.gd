@@ -70,6 +70,7 @@ func process_inputs():
 			apply_input(_input)
 		# Now apply clocks and toggle the clock level
 		mutex.lock()
+		# Be able to add/remove clocks
 		var _clocks = clocks.duplicate()
 		mutex.unlock()
 		for clock in _clocks:
@@ -79,8 +80,10 @@ func process_inputs():
 					clock.level = false
 				else:
 					clock.level = true
+					# This value is read and may be reset by the main thread.
+					# Don't want to Mutex lock for the duration of processing the logic.
+					# Would cause stuttering in the main thread visual updates.
 					clock.cycles += 1
-		mutex.unlock()
 
 
 func apply_input(cin: CircuitInput):
