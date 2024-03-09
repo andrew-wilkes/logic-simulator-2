@@ -55,7 +55,8 @@ func start_thread():
 
 func stop_thread():
 	running_thread = false
-	thread.wait_to_finish()
+	if thread.is_alive():
+		thread.wait_to_finish()
 
 
 func process_inputs():
@@ -165,6 +166,7 @@ func remove_connections_to_part(part):
 
 
 func clear():
+	stop_thread()
 	grab_focus()
 	circuit = Circuit.new()
 	scroll_offset = Vector2.ZERO
@@ -591,7 +593,8 @@ func apply_level_indications():
 	level_indications_to_update.clear()
 	mutex.unlock()
 	for level in levels:
-		level[0].indicate_level(level[1], level[2], levels[level])
+		if is_instance_valid(level[0]):
+			level[0].indicate_level(level[1], level[2], levels[level])
 
 
 func number_parts():
