@@ -173,7 +173,7 @@ func apply_power():
 
 func update_display():
 	if data_received:
-		$Value.display_value(current_value, true, true)
+		%Value.display_value(current_value, true, true)
 		data_received = false
 
 
@@ -181,3 +181,6 @@ func _on_tree_exiting():
 	for cin in level_outputs:
 		cin.free()
 
+
+func _on_edit_button_pressed():
+	controller.right_click_on_part(self)

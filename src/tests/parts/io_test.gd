@@ -13,14 +13,14 @@ func test_update_output_levels_from_value() -> void:
 	part.controller = self
 	part.data.num_wires = 16
 	# Output to left side
-	part.update_output_levels_from_value(0xaaaa)
+	part.update_output_levels_from_value(0xaaaa, true)
 	assert_int(part.pins.size()).is_equal(16)
 	var sum = 0
 	for n in 16:
 		sum += int(part.pins[[0, n + 1]])
 	assert_int(sum).is_equal(8)
 	# Output to both sides
-	part.update_output_levels_from_value(0xffff)
+	part.update_output_levels_from_value(0xffff, true)
 	assert_int(part.pins.size()).is_equal(32)
 	sum = 0
 	for n in 16:

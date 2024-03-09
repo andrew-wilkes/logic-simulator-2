@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://bswu3v1qdhsxb"]
+[gd_scene load_steps=4 format=3 uid="uid://bswu3v1qdhsxb"]
 
 [ext_resource type="PackedScene" uid="uid://dpighqrkisujs" path="res://scenes/highlighted_text_entry.tscn" id="2_qcphq"]
 [ext_resource type="Script" path="res://parts/IO.gd" id="3_h3ig0"]
+[ext_resource type="Texture2D" uid="uid://81y1cd23ujub" path="res://assets/parts/Edit.svg" id="3_l5b5d"]
 
 [node name="IO" type="GraphNode"]
 offset_left = 32.0
@@ -47,11 +48,21 @@ slot/3/right_icon = null
 slot/3/draw_stylebox = true
 script = ExtResource("3_h3ig0")
 
-[node name="Value" parent="." instance=ExtResource("2_qcphq")]
+[node name="HB" type="HBoxContainer" parent="."]
 layout_mode = 2
+
+[node name="Value" parent="HB" instance=ExtResource("2_qcphq")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0, 1, 0, 1)
 text = "0x00"
 default_color = Color(0, 1, 0, 1)
+
+[node name="EditButton" type="Button" parent="HB"]
+layout_mode = 2
+tooltip_text = "Edit"
+icon = ExtResource("3_l5b5d")
 
 [node name="Bus" type="Label" parent="."]
 layout_mode = 2
@@ -70,4 +81,5 @@ layout_mode = 2
 expand_to_text_length = true
 
 [connection signal="tree_exiting" from="." to="." method="_on_tree_exiting"]
-[connection signal="value_changed" from="Value" to="." method="value_changed"]
+[connection signal="value_changed" from="HB/Value" to="." method="value_changed"]
+[connection signal="pressed" from="HB/EditButton" to="." method="_on_edit_button_pressed"]
