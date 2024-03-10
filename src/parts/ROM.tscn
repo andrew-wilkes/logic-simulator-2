@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://do2067p4805xw"]
+[gd_scene load_steps=4 format=3 uid="uid://do2067p4805xw"]
 
 [ext_resource type="PackedScene" uid="uid://b1q1tvqg3cnqm" path="res://scenes/simple_highlighted_text_entry.tscn" id="2_m5gr6"]
+[ext_resource type="PackedScene" uid="uid://c0ir78j4nitov" path="res://scenes/DataLoader.tscn" id="3_7fm2r"]
 [ext_resource type="Script" path="res://parts/ROM.gd" id="3_nj2eq"]
 
 [node name="ROM" type="GraphNode"]
@@ -113,14 +114,8 @@ text = "8K"
 layout_mode = 2
 expand_to_text_length = true
 
-[node name="FileDialog" type="FileDialog" parent="."]
-title = "Open a File"
-size = Vector2i(900, 500)
-ok_button_text = "Open"
-file_mode = 0
-access = 2
-filters = PackedStringArray("*.hack,*.bin ; Code files")
+[node name="DataLoader" parent="." instance=ExtResource("3_7fm2r")]
 
 [connection signal="text_submitted" from="HB2/Bits" to="." method="_on_bits_text_submitted"]
 [connection signal="text_submitted" from="Size" to="." method="_on_size_text_submitted"]
-[connection signal="file_selected" from="FileDialog" to="." method="_on_file_dialog_file_selected"]
+[connection signal="loaded_data" from="DataLoader" to="." method="loaded_data"]
