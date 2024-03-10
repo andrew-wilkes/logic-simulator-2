@@ -13,21 +13,8 @@ func _init():
 	data["file"] = ""
 
 
-func _ready():
-	super()
-	%Bits.text = str(data.bits)
-	$Size.text = data.size
-	if show_display:
-		display_update_timer = Timer.new()
-		get_child(-1).add_child(display_update_timer)
-		display_update_timer.timeout.connect(update_display)
-		display_update_timer.start(0.1)
-
-
 func setup_instance():
-	set_max_value()
-	mem_size = get_mem_size(data.size)
-	resize_memory(mem_size)
+	super()
 	if file_exists():
 		$DataLoader.values = values
 		$DataLoader.load_data(data.file)
@@ -53,11 +40,6 @@ func loaded_data():
 func open_file():
 	data_loaded_by_user = true
 	$DataLoader.open_file(values, data)
-
-
-func update_display():
-	%Address.text = get_display_hex_value(current_address)
-	%Data.text = get_display_hex_value(values[current_address])
 
 
 func _on_file_button_pressed():

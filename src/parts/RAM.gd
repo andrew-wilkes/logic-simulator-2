@@ -16,7 +16,6 @@ func _ready():
 		get_child(-1).add_child(display_update_timer)
 		display_update_timer.timeout.connect(update_display)
 		display_update_timer.start(0.1)
-	set_max_value()
 	update()
 
 
@@ -25,6 +24,7 @@ func setup_instance():
 
 
 func update():
+	set_max_value()
 	mem_size = get_mem_size(data.size)
 	resize_memory(mem_size)
 	if show_display:
