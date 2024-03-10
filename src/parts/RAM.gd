@@ -33,7 +33,7 @@ func update():
 
 func show_bits():
 		%Bits.text = str(data.bits)
-		$Size.text = data.size
+		%Size.text = data.size
 
 
 func evaluate_output_level(port, level):
@@ -83,3 +83,7 @@ func set_value(address, value):
 func update_display():
 	%Address.text = get_display_hex_value(current_address)
 	%Data.text = get_display_hex_value(values[current_address])
+
+
+func _on_inspect_button_pressed():
+	controller.open_memory_manager(self)

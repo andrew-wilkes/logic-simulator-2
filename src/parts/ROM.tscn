@@ -9,7 +9,7 @@
 [node name="ROM" type="GraphNode"]
 offset_left = 32.0
 offset_top = 22.0
-offset_right = 170.0
+offset_right = 239.0
 offset_bottom = 224.0
 mouse_filter = 1
 title = "ROM"
@@ -90,6 +90,7 @@ text = "0x0000"
 [node name="Data" type="Label" parent="HB3"]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
 tooltip_text = "Data"
 mouse_filter = 1
 theme_override_colors/font_color = Color(0, 1, 0, 1)
@@ -100,12 +101,7 @@ horizontal_alignment = 2
 layout_mode = 2
 tooltip_text = "Address"
 
-[node name="L1" type="Label" parent="HB2"]
-layout_mode = 2
-text = "bits"
-
-[node name="Bits" parent="HB2" instance=ExtResource("2_m5gr6")]
-unique_name_in_owner = true
+[node name="Sp" type="Control" parent="HB2"]
 layout_mode = 2
 size_flags_horizontal = 3
 
@@ -118,9 +114,24 @@ layout_mode = 2
 tooltip_text = "Inspect memory"
 icon = ExtResource("4_8wfa5")
 
-[node name="Size" parent="." instance=ExtResource("2_m5gr6")]
+[node name="HB" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Size" parent="HB" instance=ExtResource("2_m5gr6")]
+unique_name_in_owner = true
 layout_mode = 2
 text = "8K"
+alignment = 2
+
+[node name="Bits" parent="HB" instance=ExtResource("2_m5gr6")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 2
+
+[node name="L1" type="Label" parent="HB"]
+layout_mode = 2
+text = "bits"
 
 [node name="Tag" type="LineEdit" parent="."]
 layout_mode = 2
@@ -128,8 +139,8 @@ expand_to_text_length = true
 
 [node name="DataLoader" parent="." instance=ExtResource("3_7fm2r")]
 
-[connection signal="text_submitted" from="HB2/Bits" to="." method="_on_bits_text_submitted"]
 [connection signal="pressed" from="HB2/FileButton" to="." method="_on_file_button_pressed"]
 [connection signal="pressed" from="HB2/InspectButton" to="." method="_on_inspect_button_pressed"]
-[connection signal="text_submitted" from="Size" to="." method="_on_size_text_submitted"]
+[connection signal="text_submitted" from="HB/Size" to="." method="_on_size_text_submitted"]
+[connection signal="text_submitted" from="HB/Bits" to="." method="_on_bits_text_submitted"]
 [connection signal="loaded_data" from="DataLoader" to="." method="loaded_data"]
