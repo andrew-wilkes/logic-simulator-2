@@ -1,16 +1,16 @@
 extends Container
 
-var ram: RAM
+var mem: BaseMemory
 var list
 var not_opened_yet = true
 var base_addresses = {}
 var base_addr:
 	get:
-		if not base_addresses.has(ram):
-			base_addresses[ram] = 0
-		return base_addresses[ram]
+		if not base_addresses.has(mem):
+			base_addresses[mem] = 0
+		return base_addresses[mem]
 	set(value):
-		base_addresses[ram] = value
+		base_addresses[mem] = value
 
 
 func _ready():
@@ -23,19 +23,19 @@ func _ready():
 
 
 func list_item_selected(idx):
-	ram.data.size = list.get_item_text(idx)
-	ram.update()
-	%SizeLabel.text = ram.data.size
+	mem.data.size = list.get_item_text(idx)
+	mem.update()
+	%SizeLabel.text = mem.data.size
 
 
-func open(_ram: RAM):
+func open(_mem: BaseMemory):
 	if not_opened_yet:
 		not_opened_yet = false
 		init_grid()
-	ram = _ram
-	set_word_visibility(ram.data.bits == 8)
-	%SizeLabel.text = ram.data.size
-	set_width_text(ram.data.bits)
+	mem = _mem
+	set_word_visibility(mem.data.bits == 8)
+	%SizeLabel.text = mem.data.size
+	set_width_text(mem.data.bits)
 	update_grid()
 
 
@@ -65,7 +65,7 @@ func init_grid():
 func update_grid():
 	var num_words =  16
 	var wide = false
-	if ram.data.bits == 16:
+	if mem.data.bits == 16:
 		wide = true
 		num_words = 8
 	var idx = 0
@@ -73,11 +73,11 @@ func update_grid():
 		var chrs = []
 		%Grid.get_child(idx).text = "%04x:" % [base_addr + row * num_words]
 		for n in num_words:
-			var word = ram.values[base_addr + row * num_words + n]
+			var word = mem.values[base_addr + row * num_words + n]
 			var cell = %Grid.get_child(idx + n + 1)
-			cell.clamp_value = 0x100 if ram.data.bits == 8 else 0x10000
+			cell.clamp_value = 0x100 if mem.data.bits == 8 else 0x10000
 			cell.display_value(word, false, not wide)
-			cell.tooltip_text = G.int2bin(word, ram.data.bits)
+			cell.tooltip_text = G.int2bin(word, mem.data.bits)
 			chrs.append(get_chr(word % 256))
 			if wide:
 				chrs.append(get_chr(word / 256))
@@ -97,16 +97,16 @@ func set_word_visibility(show_all):
 
 
 func _on_up_button_pressed():
-	var step = 0x80 if ram.data.bits == 16 else 0x100
+	var step = 0x80 if mem.data.bits == 16 else 0x100
 	base_addr = base_addr - step
 	if base_addr < 0:
-		base_addr = ram.mem_size - step
+		base_addr = mem.mem_size - step
 	update_grid()
 
 
 func _on_down_button_pressed():
-	var step = 0x80 if ram.data.bits == 16 else 0x100
-	if base_addr + step < ram.mem_size:
+	var step = 0x80 if mem.data.bits == 16 else 0x100
+	if base_addr + step < mem.mem_size:
 		base_addr = base_addr + step
 	else:
 		base_addr = 0
@@ -114,13 +114,13 @@ func _on_down_button_pressed():
 
 
 func _on_width_button_pressed():
-	if ram.data.bits == 8:
-		ram.data.bits = 16
+	if mem.data.bits == 8:
+		mem.data.bits = 16
 	else:
-		ram.data.bits = 8
-	set_width_text(ram.data.bits)
-	set_word_visibility(ram.data.bits == 8)
-	ram.update()
+		mem.data.bits = 8
+	set_width_text(mem.data.bits)
+	set_word_visibility(mem.data.bits == 8)
+	mem.update()
 	update_grid()
 	get_parent().size.x = 0
 
@@ -134,20 +134,20 @@ func _on_save_button_pressed():
 
 
 func _on_erase_button_pressed():
-	ram.erase()
+	mem.erase()
 	update_grid()
 
 
 func _on_file_dialog_file_selected(path):
 	var file = FileAccess.open(path, FileAccess.WRITE)
-	file.store_buffer(ram.values)
+	file.store_buffer(mem.values)
 	G.notify_user("File saved")
 
 
 func _on_word_value_changed(value, node, row, col):
-	if ram.data.bits == 8:
-		ram.set_value(base_addr + row * 16 + col, value % 0x100)
+	if mem.data.bits == 8:
+		mem.set_value(base_addr + row * 16 + col, value % 0x100)
 	else:
-		ram.set_value(base_addr + row * 8 + col, value % 0x10000)
-	node.tooltip_text = G.int2bin(value, ram.data.bits)
-	ram.update_probes()
+		mem.set_value(base_addr + row * 8 + col, value % 0x10000)
+	node.tooltip_text = G.int2bin(value, mem.data.bits)
+	mem.update_probes()

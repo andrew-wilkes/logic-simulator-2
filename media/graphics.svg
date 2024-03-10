@@ -5,7 +5,7 @@
    viewBox="0 0 793.7007874 1122.519685"
    version="1.1"
    id="svg863"
-   inkscape:version="1.3 (0e150ed, 2023-07-21)"
+   inkscape:version="1.2.1 (9c6d41e, 2022-07-14)"
    sodipodi:docname="graphics.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -44,8 +44,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.64"
-     inkscape:cx="-138.28125"
-     inkscape:cy="-625.78125"
+     inkscape:cx="342.1875"
+     inkscape:cy="-707.8125"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      inkscape:document-rotation="0"
@@ -152,5 +152,19 @@
        inkscape:export-filename="../src/assets/parts/reset.png"
        inkscape:export-xdpi="3.1340263"
        inkscape:export-ydpi="3.1340263" />
+    <circle
+       style="fill:none;stroke:#ffffff;stroke-width:60;stroke-linecap:square"
+       id="path303"
+       cx="750"
+       cy="-770"
+       r="170"
+       inkscape:export-filename="../src/assets/parts/inspect.png"
+       inkscape:export-xdpi="2.8981133"
+       inkscape:export-ydpi="2.8981133" />
+    <path
+       style="fill:none;stroke:#ffffff;stroke-width:80;stroke-linecap:round;stroke-dasharray:none"
+       d="m 900,-620 140,140"
+       id="path359"
+       sodipodi:nodetypes="cc" />
   </g>
 </svg>

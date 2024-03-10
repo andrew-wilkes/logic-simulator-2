@@ -495,12 +495,16 @@ func right_click_on_part(part):
 		"ROM":
 			part.open_file()
 		"RAM", "Memory", "Screen":
-			$MemoryManagerPanel/MemoryManager.open(part)
-			$MemoryManagerPanel.popup_centered()
-			$MemoryManagerPanel.position.y += 15
+			open_memory_manager(part)
 		"Block":
 			$BlockTreePanel/CircuitTree.generate_tree(part.file_tree)
 			$BlockTreePanel.popup_centered()
+
+
+func open_memory_manager(part):
+	$MemoryManagerPanel/MemoryManager.open(part)
+	$MemoryManagerPanel.popup_centered()
+	$MemoryManagerPanel.position.y += 15
 
 
 func output_level_changed_handler(part, port, level):

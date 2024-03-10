@@ -1,6 +1,6 @@
 class_name ROM
 
-extends BaseMemory
+extends RAM
 
 var old_address := 0
 var data_loaded_by_user = false
@@ -58,3 +58,11 @@ func open_file():
 func update_display():
 	%Address.text = get_display_hex_value(current_address)
 	%Data.text = get_display_hex_value(values[current_address])
+
+
+func _on_file_button_pressed():
+	open_file()
+
+
+func _on_inspect_button_pressed():
+	controller.open_memory_manager(self)
