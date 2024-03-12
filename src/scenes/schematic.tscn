@@ -5,10 +5,8 @@
 [ext_resource type="PackedScene" uid="uid://1ugdcg3f5q1w" path="res://scenes/IOManager.tscn" id="2_7dp20"]
 [ext_resource type="PackedScene" uid="uid://soo142csxxxi" path="res://scenes/MemoryManager.tscn" id="3_3rybu"]
 [ext_resource type="PackedScene" uid="uid://c7pcrpp8inqwr" path="res://scenes/TestRunner.tscn" id="3_lacat"]
+[ext_resource type="StyleBox" uid="uid://dobxkdcrg3vg6" path="res://assets/parts/dark-panel.stylebox" id="3_pm7h4"]
 [ext_resource type="PackedScene" uid="uid://kp63t0sdyggh" path="res://scenes/circuit_tree.tscn" id="5_gxq4f"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ydr2j"]
-bg_color = Color(0.14902, 0.14902, 0.14902, 1)
 
 [node name="Schematic" type="GraphEdit"]
 size_flags_vertical = 3
@@ -19,7 +17,7 @@ script = ExtResource("1_q7w2l")
 [node name="IOManagerPanel" type="PopupPanel" parent="."]
 title = "IO Manager"
 borderless = false
-theme_override_styles/panel = SubResource("StyleBoxFlat_ydr2j")
+theme_override_styles/panel = ExtResource("3_pm7h4")
 
 [node name="IOManager" parent="IOManagerPanel" instance=ExtResource("2_7dp20")]
 offset_right = 700.0
@@ -28,7 +26,7 @@ offset_bottom = 520.0
 [node name="MemoryManagerPanel" type="PopupPanel" parent="."]
 title = "Memory Manager"
 borderless = false
-theme_override_styles/panel = SubResource("StyleBoxFlat_ydr2j")
+theme_override_styles/panel = ExtResource("3_pm7h4")
 
 [node name="MemoryManager" parent="MemoryManagerPanel" instance=ExtResource("3_3rybu")]
 offset_left = 0.0

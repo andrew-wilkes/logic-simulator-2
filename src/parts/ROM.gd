@@ -2,7 +2,6 @@ class_name ROM
 
 extends RAM
 
-var old_address := 0
 var data_loaded_by_user = false
 
 func _init():
