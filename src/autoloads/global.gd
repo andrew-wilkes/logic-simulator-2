@@ -109,3 +109,7 @@ func int2bin(x: int, num_bits) -> String:
 		b = str(x % 2) + b
 		x /= 2
 	return b
+
+
+func get_file_list(dir, ext):
+	return Array(dir.get_files()).filter(func(fn): return fn.ends_with(ext))

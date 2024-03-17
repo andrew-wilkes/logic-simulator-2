@@ -6,44 +6,37 @@ var scenes = {}
 var names = []
 var scripts = {}
 
-func _init():
-	add_parts("res://parts/")
-	if OS.is_debug_build():
-		var path = "res://mods/"
-		if DirAccess.dir_exists_absolute(path):
-			add_parts(path)
-		else:
-			print(path + " doesn't exist.")
-	add_mods()
+func _ready():
+	var parts_path = "res://parts/"
+	var dir = DirAccess.open(parts_path)
+	var files = G.get_file_list(dir, "scn")
+	add_parts(parts_path, files)
+	parts_path = "res://mods/"
+	if OS.is_debug_build() and DirAccess.dir_exists_absolute(parts_path):
+		files = []
+		dir = DirAccess.open(parts_path)
+		files = G.get_file_list(dir, "scn")
+		add_parts(parts_path, files)
 
 
-func add_parts(path):
-	var dir = DirAccess.open(path)
-	var files = get_files(dir)
+func load_mods():
+	var parts_path = "res://parts/"
+	var files = ModImporter.get_mod_files(parts_path)
+	add_parts(parts_path, files)
+	parts_path = "res://mods/"
+	files = ModImporter.get_mod_files(parts_path)
+	add_parts(parts_path, files)
+
+
+func add_parts(path, files):
 	for file_name in files:
 		var part_name = file_name.get_file().get_slice('.', 0)
 		# Don't add the Block part as a Part option in the menu.
 		if part_name not in ["Block"]:
-			names.append(part_name)
-		scenes[part_name] = ResourceLoader.load(path + file_name.replace(".gd", ".tscn"))
-		scripts[part_name] = ResourceLoader.load(path + file_name)
-
-
-func get_files(dir):
-	return Array(dir.get_files()).filter(func(fn): return fn.ends_with("gd"))
-
-
-func add_mods():
-	var mod_files = ModImporter.get_file_list()
-	for file in mod_files:
-		var scene = ModImporter.get_part_scene(file)
-		if scene:
-			var ob = scene.instantiate()
-			if ob is Part:
-				scenes[ob.name] = scene
-				scripts[ob.name] = ob.script
-			ob.free()
-
+			if not names.has(part_name):
+				names.append(part_name)
+		scenes[part_name] = ResourceLoader.load(path + file_name)
+		scripts[part_name] = ResourceLoader.load(path + part_name + ".gd")
 
 # This is used with circuit blocks where there are no visual elements internally.
 # So the scene file is not used, but its script is instantiated to an object of part_type.

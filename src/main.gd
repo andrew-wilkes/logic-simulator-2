@@ -5,6 +5,7 @@ enum { NO_ACTION, NEW, OPEN, OPEN_AS_BLOCK, SAVE, SAVE_AS, QUIT, ABOUT }
 var saved = false
 var menu_action = NO_ACTION
 var schematic
+var tools = []
 
 func _ready():
 	schematic = $VB/Schematic
@@ -27,6 +28,17 @@ func _ready():
 	%Title.text_submitted.connect(unfocus)
 	G.warning = $WarningPanel
 	G.warnings = $WarningsPanel/Warnings
+	var tool_path = "res://tools/"
+	var files = []
+	if OS.is_debug_build() and DirAccess.dir_exists_absolute(tool_path):
+		var dir = DirAccess.open(tool_path)
+		files = G.get_file_list(dir, "scn")
+	add_tools(tool_path, files)
+	ModImporter.load_scenes()
+	Parts.load_mods()
+	$PartListPanel/PartList.build()
+	files = ModImporter.get_mod_files(tool_path)
+	add_tools(tool_path, files)
 
 
 func tool_action(idx):
@@ -53,6 +65,26 @@ func tool_action(idx):
 			$LoadHack.popup_centered()
 		4:
 			$WarningsPanel.popup_centered()
+		_:
+			tools[idx - 5].popup_centered()
+
+
+func add_tools(tool_path, files):
+	for file_name in files:
+		var tool = ResourceLoader.load(tool_path + file_name).instantiate()
+		%ToolsButton.get_popup().add_item(tool.title)
+		var tool_panel = PopupPanel.new()
+		tool_panel.borderless = false
+		tool_panel.unresizable = false
+		var title = tool.get("title")
+		if title:
+			tool_panel.title = title
+		else:
+			tool_panel.title = "Untitled Tool"
+		add_child(tool_panel)
+		tool_panel.add_child(tool)
+		tools.append(tool_panel)
+
 
 #region File Code
 func _on_save_button_pressed():

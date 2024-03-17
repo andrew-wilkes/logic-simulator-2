@@ -22,8 +22,14 @@ src/*.tres
 out/
 .VSCodeCounter/
 
+# Storage folders for builds and zipped deployments
 build/
 deploy/
-src/mods
+
+# Folders and scripts related to Mods where the code is not public (independant of the main App) 
 *mods
+src/mods
 src/tests/mods
+src/tools
+src/tests/tools
+src/*.pck
