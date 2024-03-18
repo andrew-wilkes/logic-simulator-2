@@ -36,6 +36,6 @@ func load_scenes():
 func get_mod_files(path):
 	var files = []
 	for scene in mod_scenes:
-		if scene.resource_path.begins_with(path):
-			files.append(scene.resource_path.get_file())
+		if scene.begins_with(path):
+			files.append(scene.get_file())
 	return files

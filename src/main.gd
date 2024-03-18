@@ -29,10 +29,7 @@ func _ready():
 	G.warning = $WarningPanel
 	G.warnings = $WarningsPanel/Warnings
 	var tool_path = "res://tools/"
-	var files = []
-	if OS.is_debug_build() and DirAccess.dir_exists_absolute(tool_path):
-		var dir = DirAccess.open(tool_path)
-		files = G.get_file_list(dir, "scn")
+	var files = G.get_scene_file_list(tool_path, false)
 	add_tools(tool_path, files)
 	ModImporter.load_scenes()
 	Parts.load_mods()

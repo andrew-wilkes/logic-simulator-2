@@ -2,30 +2,22 @@ extends Node
 
 # Autoload for providing access to the available parts.
 
+const parts_paths = ["res://parts/", "res://mods/"]
+
 var scenes = {}
 var names = []
 var scripts = {}
 
 func _ready():
-	var parts_path = "res://parts/"
-	var dir = DirAccess.open(parts_path)
-	var files = G.get_file_list(dir, "scn")
-	add_parts(parts_path, files)
-	parts_path = "res://mods/"
-	if OS.is_debug_build() and DirAccess.dir_exists_absolute(parts_path):
-		files = []
-		dir = DirAccess.open(parts_path)
-		files = G.get_file_list(dir, "scn")
+	for parts_path in parts_paths:
+		var files = G.get_scene_file_list(parts_path, true)
 		add_parts(parts_path, files)
 
 
 func load_mods():
-	var parts_path = "res://parts/"
-	var files = ModImporter.get_mod_files(parts_path)
-	add_parts(parts_path, files)
-	parts_path = "res://mods/"
-	files = ModImporter.get_mod_files(parts_path)
-	add_parts(parts_path, files)
+	for parts_path in parts_paths:
+		var files = ModImporter.get_mod_files(parts_path)
+		add_parts(parts_path, files)
 
 
 func add_parts(path, files):
@@ -33,6 +25,7 @@ func add_parts(path, files):
 		var part_name = file_name.get_file().get_slice('.', 0)
 		# Don't add the Block part as a Part option in the menu.
 		if part_name not in ["Block"]:
+			# A mod may override an existing part
 			if not names.has(part_name):
 				names.append(part_name)
 		scenes[part_name] = ResourceLoader.load(path + file_name)
