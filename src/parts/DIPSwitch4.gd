@@ -24,7 +24,7 @@ func _ready():
 func setup():
 	for idx in switches.size():
 		var cin = CircuitInput.new()
-		cin.name = name
+		cin.part = self
 		cin.port = idx
 		level_outputs.append(cin)
 

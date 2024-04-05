@@ -17,7 +17,7 @@ func _ready():
 
 func setup():
 	value_output = CircuitInput.new()
-	value_output.name = name
+	value_output.part = self
 	value_output.port = OUT
 	value_output.is_bus = true
 

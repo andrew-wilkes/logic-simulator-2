@@ -45,12 +45,12 @@ func _ready():
 	G.test_runner = $C/TestRunner
 	mutex = Mutex.new()
 	thread = Thread.new()
-	start_thread()
 
 
 func start_thread():
 	running_thread = true
-	thread.start(process_inputs, Thread.PRIORITY_NORMAL)
+	if not thread.is_started():
+		thread.start(process_inputs, Thread.PRIORITY_NORMAL)
 
 
 func stop_thread():
@@ -74,7 +74,9 @@ func process_inputs():
 		# Be able to add/remove clocks
 		var _clocks = clocks.duplicate()
 		mutex.unlock()
+		running_thread = false
 		for clock in _clocks:
+			running_thread = true
 			if clock.cycle_limit == 0 or clock.cycles < clock.cycle_limit:
 				apply_input(clock)
 				if clock.level:
@@ -85,22 +87,21 @@ func process_inputs():
 					# Don't want to Mutex lock for the duration of processing the logic.
 					# Would cause stuttering in the main thread visual updates.
 					clock.cycles += 1
+	thread.call_deferred("wait_to_finish")
 
 
 func apply_input(cin: CircuitInput):
-	# Have to guard against parts not existing in the scene tree any more due to changes made in the main thread
-	var part = part_references.get(cin.name)
-	if part:
-		if cin.is_bus:
-			bus_value_changed_handler(part, cin.port, cin.value)
-		else:
-			output_level_changed_handler(part, cin.port, cin.level)
+	if cin.is_bus:
+		bus_value_changed_handler(cin.part, cin.port, cin.value)
+	else:
+		output_level_changed_handler(cin.part, cin.port, cin.level)
 
 
 func inject_circuit_input(cin: CircuitInput):
 	mutex.lock()
 	input_stimuli.append(cin)
 	mutex.unlock()
+	start_thread()
 
 
 func add_clock(cin: CircuitInput):
@@ -108,6 +109,7 @@ func add_clock(cin: CircuitInput):
 	cin.level = true
 	clocks.append(cin)
 	mutex.unlock()
+	start_thread()
 
 
 func remove_clock(cin: CircuitInput):
@@ -116,12 +118,24 @@ func remove_clock(cin: CircuitInput):
 	mutex.unlock()
 
 
+# Call this before making any changes to the circuit connectivity
+func remove_clocks():
+	mutex.lock()
+	for clock in clocks:
+		if clock.part is Clock:
+			clock.part.reset_turbo_button()
+	clocks.clear()
+	mutex.unlock()
+	running_thread = false
+
+
 func _unhandled_key_input(event):
 	if event.keycode == KEY_R and event.ctrl_pressed:
 		remove_connections_between_selected_parts()
 
 
 func connect_wire(from_part, from_pin, to_part, to_pin):
+	remove_clocks()
 	# Add guards against invalid connections
 	# The Part class is designed to be bi-directional
 	# Only allow 1 connection to an input
@@ -153,12 +167,14 @@ func connect_wire(from_part, from_pin, to_part, to_pin):
 
 
 func disconnect_wire(from_part, from_pin, to_part, to_pin):
+	remove_clocks()
 	disconnect_node(from_part, from_pin, to_part, to_pin)
 	ConnectionSorter.set_part_outputs(get_part_by_name(from_part), get_connection_list())
 	circuit_changed()
 
 
 func remove_connections_to_part(part):
+	remove_clocks()
 	for con in get_connection_list():
 		if con.to_node == part.name or con.from_node == part.name:
 			disconnect_node(con.from_node, con.from_port, con.to_node, con.to_port)
@@ -166,7 +182,7 @@ func remove_connections_to_part(part):
 
 
 func clear():
-	stop_thread()
+	remove_clocks()
 	grab_focus()
 	circuit = Circuit.new()
 	scroll_offset = Vector2.ZERO
@@ -191,6 +207,7 @@ func deselect_part(part):
 
 
 func delete_selected_parts(_arr):
+	remove_clocks()
 	var flag_changed = false
 	# _arr only lists parts that have a close button but none of our parts use the close button
 	for part in selected_parts:
@@ -213,6 +230,7 @@ func delete_selected_part(part):
 
 
 func duplicate_selected_parts():
+	remove_clocks()
 	var flag_changed = false
 	# Base the location off the first selected part relative to the mouse cursor
 	var offset = abs(get_local_mouse_position())
@@ -258,6 +276,7 @@ func duplicate_selected_parts():
 
 
 func remove_connections_between_selected_parts():
+	remove_clocks()
 	var flag_changed = false
 	var part_names = []
 	for part in selected_parts:
@@ -283,6 +302,7 @@ func get_part_by_name(part_name):
 
 
 func add_part(part):
+	remove_clocks()
 	part.controller = self
 	add_child(part)
 	part.call_deferred("setup")
@@ -533,12 +553,10 @@ func unstable_handler(part, port):
 
 # part_references was added so that the parts can be accessed in the secondary thread where we can't see the scene tree nodes
 func update_part_references():
-	stop_thread()
 	part_references.clear()
 	for node in get_children():
 		if node is Part:
 			part_references[node.name] = node
-	start_thread()
 
 
 func reset_race_counters():

@@ -28,20 +28,20 @@ func _ready():
 func setup():
 	# Now name is set after adding to scene tree
 	clock_pulse = CircuitInput.new()
-	clock_pulse.name = name
+	clock_pulse.part = self
 	clock_pulse.port = OUT
 	clock_pulse_inv = CircuitInput.new()
-	clock_pulse_inv.name = name
+	clock_pulse_inv.part = self
 	clock_pulse_inv.port = 2
 	clock = CircuitInput.new()
-	clock.name = name
+	clock.part = self
 	clock.port = OUT
 	clock.level = true
 	inv_clock = CircuitInput.new()
-	inv_clock.name = name
+	inv_clock.part = self
 	inv_clock.port = 2
 	reset_out = CircuitInput.new()
-	reset_out.name = name
+	reset_out.part = self
 	reset_out.port = 1
 	display_update_timer.start(0.1)
 
@@ -148,6 +148,10 @@ func _on_turbo_button_toggled(toggled_on):
 	else:
 		controller.remove_clock(clock)
 		controller.remove_clock(inv_clock)
+
+
+func reset_turbo_button():
+	%TurboButton.set_pressed_no_signal(false)
 
 
 func _on_tree_exiting():

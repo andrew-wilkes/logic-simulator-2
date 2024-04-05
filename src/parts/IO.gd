@@ -49,7 +49,7 @@ func set_level_outputs():
 	level_outputs.resize(data.num_wires + 1)
 	for idx in level_outputs.size():
 		var cin = CircuitInput.new()
-		cin.name = name
+		cin.part = self
 		cin.port = idx
 		if idx < 1:
 			cin.is_bus = true

@@ -11,7 +11,7 @@ func _init():
 
 func setup():
 	switch_output = CircuitInput.new()
-	switch_output.name = name
+	switch_output.part = self
 	switch_output.port = OUT
 
 
