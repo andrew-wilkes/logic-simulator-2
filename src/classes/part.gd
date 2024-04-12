@@ -32,6 +32,7 @@ var race_counter = {} # [port]: count
 var connections = [] # Used to store a sorted list of output connections
 var pins = {} # [port]: level / value
 var change_notification_timer: Timer
+var display_update_timer: Timer
 
 func get_dict():
 	return {

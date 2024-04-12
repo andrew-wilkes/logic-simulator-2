@@ -6,6 +6,7 @@ var values = []
 var probes = []
 var max_value = 0
 var mem_size = 0
+var current_address := 0
 
 func update_probes():
 	for probe in probes:

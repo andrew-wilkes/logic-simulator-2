@@ -1,0 +1,149 @@
+[gd_scene load_steps=5 format=3 uid="uid://8mmfjwnx861a"]
+
+[ext_resource type="Script" path="res://tools/6502_assembler.gd" id="1_1ksro"]
+[ext_resource type="Theme" uid="uid://byf2ullferoy8" path="res://assets/ui/popup_panel.theme" id="1_eusq3"]
+[ext_resource type="StyleBox" path="res://assets/ui/PopupPanelStyle.tres" id="2_pmb4l"]
+
+[sub_resource type="Theme" id="Theme_btxkw"]
+
+[node name="6502Assembler" type="MarginContainer"]
+custom_minimum_size = Vector2(600, 550)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -552.0
+offset_bottom = -98.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_eusq3")
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_bottom = 0
+script = ExtResource("1_1ksro")
+
+[node name="VB" type="VBoxContainer" parent="."]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Code" type="CodeEdit" parent="VB"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+gutters_draw_line_numbers = true
+
+[node name="Report" type="Label" parent="VB"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+
+[node name="HB" type="HBoxContainer" parent="VB"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="HelpButton" type="Button" parent="VB/HB"]
+layout_mode = 2
+theme = SubResource("Theme_btxkw")
+text = "Help"
+
+[node name="NewButton" type="Button" parent="VB/HB"]
+layout_mode = 2
+text = "New"
+
+[node name="OpenButton" type="Button" parent="VB/HB"]
+layout_mode = 2
+text = "Open"
+
+[node name="SaveButton" type="Button" parent="VB/HB"]
+layout_mode = 2
+text = "Save"
+
+[node name="Sp" type="Control" parent="VB/HB"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CompileButton" type="Button" parent="VB/HB"]
+layout_mode = 2
+text = "Compile"
+
+[node name="SaveCodeButton" type="Button" parent="VB/HB"]
+layout_mode = 2
+text = "Save Code"
+
+[node name="FileDialog" type="FileDialog" parent="."]
+size = Vector2i(900, 500)
+access = 2
+
+[node name="HelpPanel" type="PopupPanel" parent="."]
+title = "6502 Assembler Guide"
+position = Vector2i(0, 36)
+size = Vector2i(600, 500)
+borderless = false
+theme_override_styles/panel = ExtResource("2_pmb4l")
+
+[node name="RT" type="RichTextLabel" parent="HelpPanel"]
+offset_left = 5.0
+offset_top = 5.0
+offset_right = 595.0
+offset_bottom = 495.0
+bbcode_enabled = true
+text = "[b]Comments[/b]
+
+Comments start with a comma.
+
+; comment line
+LDA #8 ; Load A reg.
+
+[b]Directives[/b]
+
+.org sets the value of the address
+.db stores bytes
+.dw stores words (2 bytes)
+.dl stores longs (4 bytes)
+.ds is followed by an integer to specify the number of bytes of storage
+
+[b]Labels[/b]
+
+These are used to reference the address where they are located.
+Upper or lower-case text followed by a colon.
+
+label:
+LABEL:
+
+Example use (the colon is omitted):
+ADC label, X
+
+[b] Value types[/b]
+
+\"string of ASCII bytes\"
+'A' character literal (1 byte)
+8 ; Integer
+-6 ; Negative 2's complement number
+$A6 ; hex number
+%00001111 ; 8-bit binary number
+
+Values may be listed with comma separation for .db, .dw, and .dl directives.
+
+Example code
+
+; Set reset vector
+.org $FFFC
+.dw start
+
+; Program code
+.org $7000
+start:
+ldx #0
+
+init:
+jsr loop
+sta 0,x
+inx
+"
+
+[connection signal="pressed" from="VB/HB/HelpButton" to="." method="_on_help_button_pressed"]
+[connection signal="pressed" from="VB/HB/NewButton" to="." method="_on_new_button_pressed"]
+[connection signal="pressed" from="VB/HB/OpenButton" to="." method="_on_open_button_pressed"]
+[connection signal="pressed" from="VB/HB/SaveButton" to="." method="_on_save_button_pressed"]
+[connection signal="pressed" from="VB/HB/CompileButton" to="." method="_on_compile_button_pressed"]
+[connection signal="pressed" from="VB/HB/SaveCodeButton" to="." method="_on_save_code_button_pressed"]
+[connection signal="file_selected" from="FileDialog" to="." method="_on_file_dialog_file_selected"]

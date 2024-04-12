@@ -56,7 +56,7 @@ Previously saved circuits may be loaded as blocks. This causes them to appear as
 
 IO parts are required in order to obtain IO pins for block parts. One side of each of these parts should be fully un-connected for it to be deemed an input or output of the circuit when loaded as a block. Inside of a block, the IO Manager panel is no longer available. The internal IO parts of the block have their pins assigned to block pins in relation to their positions in the schematic diagram.
 
-Circuits containing blocks that have been saved may also be loaded as blocks to nest or encapsulate their functionality into ever more complex circuits. This will impact speed since there will be exponential growth in the number of parts to be processed, but blocks do not involve coloring wires and visual elementss.
+Circuits containing blocks that have been saved may also be loaded as blocks to nest or encapsulate their functionality into ever more complex circuits. This will impact speed since there will be exponential growth in the number of parts to be processed, but blocks do not involve coloring wires and visual elements.
 
 Chips encapsulate complex functionality in the most efficient manner since they directly implement their functionality rather than being comprised of basic parts.
 

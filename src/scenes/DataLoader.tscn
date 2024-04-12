@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://c0ir78j4nitov"]
+
+[ext_resource type="Script" path="res://scenes/DataLoader.gd" id="1_u7hai"]
+
+[node name="DataLoader" type="FileDialog"]
+title = "Open a File"
+size = Vector2i(900, 500)
+ok_button_text = "Open"
+file_mode = 0
+access = 2
+filters = PackedStringArray("*.hack,*.bin ; Code files")
+script = ExtResource("1_u7hai")
+
+[connection signal="file_selected" from="." to="." method="_on_file_selected"]

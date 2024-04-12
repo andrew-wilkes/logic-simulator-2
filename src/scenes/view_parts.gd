@@ -74,6 +74,7 @@ func add_parts_to_graph():
 		part.controller = self
 		part.size.y = 0
 		add_child(part)
+		part.call_deferred("setup")
 		x += part.size.x + GAP
 		row_height = max(row_height, part.size.y)
 		if x > size.x:

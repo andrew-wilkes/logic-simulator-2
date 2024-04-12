@@ -3,7 +3,7 @@ extends Control
 signal part_selected(part_name)
 signal block_selected(file_name)
 
-func _ready():
+func build():
 	var lists = []
 	lists.resize($HB.get_child_count() - 1)
 	for idx in lists.size():

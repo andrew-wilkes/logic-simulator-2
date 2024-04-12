@@ -41,4 +41,3 @@ static func get_connection_tree(part_name, parts, depth, all_connections):
 		if con.from_node == part_name:
 			parts[con.to_node] = depth
 			get_connection_tree(con.to_node, parts, depth + 1, all_connections)
-	return
