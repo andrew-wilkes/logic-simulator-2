@@ -119,5 +119,19 @@ func get_scene_file_list(dir_path, no_path_check = false):
 	var files = []
 	if no_path_check or (OS.is_debug_build() and DirAccess.dir_exists_absolute(dir_path)):
 		var dir = DirAccess.open(dir_path)
-		files = get_file_list(dir, "scn")
+		# We can't detect .tscn files in a build since they are embedded resources but it works for scripts
+		var gd_files = get_file_list(dir, "gd")
+		for filename in gd_files:
+			var scene_file = get_file_name(dir_path, filename)
+			if scene_file != "":
+				files.append(scene_file)
 	return files
+
+
+func get_file_name(dir_path, filename):
+	var scene_file = filename.replace(".gd", ".tscn")
+	if not ResourceLoader.exists(dir_path + scene_file):
+		scene_file = filename.replace(".gd", ".scn")
+		if not ResourceLoader.exists(dir_path + scene_file):
+			scene_file = "" # This should not happen normally
+	return scene_file
