@@ -258,7 +258,7 @@ This part is used by the tester to monitor the value stored at a memory address 
 [b]Wire[/b] - used for tester input and output pins.
 [b]Bus[/b] -  also used for tester input and output pins.
 
-[b]RAM Memory Inspector[/b]
+[b]RAM Memory Manager[/b]
 Using this pop-up panel of a RAM chip, you are able to step through pages of the memory to view the contents of the words/bytes of data and see any ASCII characters that may be present.
 
 The data cells are editable. You may enter a decimal, hex (0xff) or binary (b1000) style of input value and press Enter to change the value.

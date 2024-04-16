@@ -29,7 +29,7 @@ func _ready():
 	G.warning = $WarningPanel
 	G.warnings = $WarningsPanel/Warnings
 	var tool_path = "res://tools/"
-	var files = G.get_scene_file_list(tool_path, false)
+	var files = G.get_scene_file_list(tool_path)
 	add_tools(tool_path, files)
 	ModImporter.load_scenes()
 	Parts.load_mods()
