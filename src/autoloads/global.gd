@@ -115,9 +115,9 @@ func get_file_list(dir, ext):
 	return Array(dir.get_files()).filter(func(fn): return fn.ends_with(ext))
 
 
-func get_scene_file_list(dir_path, no_path_check = false):
+func get_scene_file_list(dir_path):
 	var files = []
-	if no_path_check or (OS.is_debug_build() and DirAccess.dir_exists_absolute(dir_path)):
+	if DirAccess.dir_exists_absolute(dir_path):
 		var dir = DirAccess.open(dir_path)
 		# We can't detect .tscn files in a build since they are embedded resources but it works for scripts
 		var gd_files = get_file_list(dir, "gd")
