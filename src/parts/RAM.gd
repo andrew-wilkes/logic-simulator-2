@@ -16,7 +16,6 @@ func _ready():
 		get_child(-1).add_child(display_update_timer)
 		display_update_timer.timeout.connect(update_display)
 		display_update_timer.start(0.1)
-	update()
 
 
 func setup_instance():

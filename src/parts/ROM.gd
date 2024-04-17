@@ -19,6 +19,10 @@ func setup_instance():
 		$DataLoader.load_data(data.file)
 
 
+func reset():
+	pins = {}
+
+
 func evaluate_bus_output_value(port, _value):
 	if port == 0: # Change of address
 		set_output_data()
