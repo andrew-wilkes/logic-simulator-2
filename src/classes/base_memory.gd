@@ -2,6 +2,8 @@ extends Part
 
 class_name BaseMemory
 
+signal data_loaded()
+
 var values = []
 var probes = []
 var max_value = 0
@@ -46,3 +48,29 @@ func get_mem_size(dsize: String) -> int:
 func resize_memory(num_bytes):
 	values.resize(num_bytes)
 	values.fill(0)
+
+
+func load_data(file_path):
+	values.fill(0)
+	var num_words = 0
+	if file_path.get_extension() == "hack":
+		# .hack files contain binary strings
+		var ints = G.hack_to_array_of_int(FileAccess.get_file_as_string(file_path))
+		for addr in ints.size():
+			values[addr] = ints[addr]
+			num_words += 1
+	else:
+		var bytes = FileAccess.get_file_as_bytes(file_path)
+		if values.size() < bytes.size():
+			# Load 16 bit words
+			for idx in range(0, bytes.size(), 2):
+				@warning_ignore("integer_division")
+				values[idx / 2] = bytes[idx] + 256 * bytes[idx + 1]
+				num_words += 1
+		else:
+			# Copy bytes
+			num_words = bytes.size()
+			for idx in num_words:
+				values[idx] = bytes[idx]
+	G.notify_user(str(num_words) + " words of data was loaded.")
+	emit_signal("data_loaded")
