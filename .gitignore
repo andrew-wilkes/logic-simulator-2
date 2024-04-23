@@ -27,3 +27,4 @@ deploy/
 src/mods
 *mods
 src/tests/mods
+src/tools
