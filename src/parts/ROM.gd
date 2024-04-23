@@ -12,11 +12,15 @@ func _init():
 	data["file"] = ""
 
 
+func _ready():
+	super()
+	data_loaded.connect(loaded_data)
+
+
 func setup_instance():
 	super()
 	if file_exists():
-		$DataLoader.values = values
-		$DataLoader.load_data(data.file)
+		load_data(data.file)
 
 
 func reset():

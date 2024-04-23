@@ -144,4 +144,3 @@ expand_to_text_length = true
 [connection signal="pressed" from="HB2/InspectButton" to="." method="_on_inspect_button_pressed"]
 [connection signal="text_submitted" from="HB/Size" to="." method="_on_size_text_submitted"]
 [connection signal="text_submitted" from="HB/Bits" to="." method="_on_bits_text_submitted"]
-[connection signal="loaded_data" from="DataLoader" to="." method="loaded_data"]
