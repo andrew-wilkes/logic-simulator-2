@@ -118,8 +118,11 @@ func update_reset_output(level):
 
 
 func apply_power():
-	update_clock_output(false)
-	update_reset_output(false)
+	if clock:
+		update_clock_output(false)
+		update_reset_output(false)
+	else:
+		G.warning.open("Clock Part cannot be used inside a Block")
 
 
 func _on_reset_cycle_count_pressed():
