@@ -19,7 +19,8 @@ func _ready():
 
 
 func evaluate_output_level(port, level):
-	%Segments.material.set_shader_parameter(["a","b","c","d","e","f","g","dp"][port], level)
+	if show_display:
+		%Segments.material.set_shader_parameter(["a","b","c","d","e","f","g","dp"][port], level)
 
 
 func _on_hue_value_changed(value):

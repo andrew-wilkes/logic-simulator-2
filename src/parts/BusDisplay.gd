@@ -69,12 +69,13 @@ func set_dp():
 
 
 func evaluate_bus_output_value(port, _value):
-	value = int(_value)
-	if port == 0:
-		set_digits(value)
-	if port == 1:
-		data.dp_position = value
-		set_dp()
+	if show_display:
+		value = int(_value)
+		if port == 0:
+			set_digits(value)
+		if port == 1:
+			data.dp_position = value
+			set_dp()
 
 
 func set_digits(n):
