@@ -34,13 +34,6 @@ func _on_chars_text_changed(new_text):
 	last_text_length = length
 
 
-# Emit 0 when key is released
-func _unhandled_key_input(event):
-	if not event.pressed:
-		value_output.value = 0
-		controller.inject_circuit_input(value_output)
-
-
 func _on_blink_timer_timeout():
 	show_placeholder = !show_placeholder
 	if show_placeholder and not $HB/Chars.has_focus():
@@ -51,3 +44,65 @@ func _on_blink_timer_timeout():
 
 func _on_tree_exiting():
 	value_output.free()
+
+
+func _on_chars_gui_input(event):
+	if event is InputEventKey:
+		var keycode = event.keycode
+		if event.pressed:
+			match keycode:
+				KEY_ENTER:
+					keycode = 128
+				KEY_BACKSPACE:
+					keycode = 129
+				KEY_LEFT:
+					keycode = 130
+				KEY_UP:
+					keycode = 131
+				KEY_RIGHT:
+					keycode = 132
+				KEY_DOWN:
+					keycode = 133
+				KEY_HOME:
+					keycode = 134
+				KEY_END:
+					keycode = 135
+				KEY_PAGEUP:
+					keycode = 136
+				KEY_PAGEDOWN:
+					keycode = 137
+				KEY_INSERT:
+					keycode = 138
+				KEY_DELETE:
+					keycode = 139
+				KEY_ESCAPE:
+					keycode = 140
+				KEY_F1:
+					keycode = 141
+				KEY_F2:
+					keycode = 142
+				KEY_F3:
+					keycode = 143
+				KEY_F4:
+					keycode = 144
+				KEY_F5:
+					keycode = 145
+				KEY_F6:
+					keycode = 146
+				KEY_F7:
+					keycode = 147
+				KEY_F8: # Closes the program on Linux
+					keycode = 148
+				KEY_F9:
+					keycode = 149
+				KEY_F10:
+					keycode = 150
+				KEY_F11:
+					keycode = 151
+				KEY_F12:
+					keycode = 152
+		else:
+			keycode = 0
+			%Chars.text = ""
+		value_output.value = keycode
+		controller.inject_circuit_input(value_output)
