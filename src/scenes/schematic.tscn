@@ -53,9 +53,14 @@ visible = false
 offset_top = 0.0
 offset_bottom = 369.0
 
+[node name="WarningCheckTimer" type="Timer" parent="."]
+wait_time = 0.5
+autostart = true
+
 [connection signal="scroll_offset_changed" from="." to="." method="_on_scroll_offset_changed"]
 [connection signal="tree_exiting" from="." to="." method="_on_tree_exiting"]
 [connection signal="play" from="C/TestRunner" to="." method="_on_test_runner_play"]
 [connection signal="reset" from="C/TestRunner" to="." method="_on_test_runner_reset"]
 [connection signal="step" from="C/TestRunner" to="." method="_on_test_runner_step"]
 [connection signal="stop" from="C/TestRunner" to="." method="_on_test_runner_stop"]
+[connection signal="timeout" from="WarningCheckTimer" to="." method="_on_warning_check_timer_timeout"]

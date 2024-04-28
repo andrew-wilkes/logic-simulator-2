@@ -288,8 +288,8 @@ func reset():
 		input.pins = {}
 
 
-func unstable_handler(_name, port):
-	controller.unstable_handler(name + ":" + _name, port)
+func unstable_handler(part, port):
+	controller.unstable_handler({ "name": name + ":" + part.name }, port)
 
 
 func compare_offsets(a, b):

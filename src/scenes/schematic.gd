@@ -33,6 +33,7 @@ var part_references = {}
 var input_stimuli = []
 var clocks = []
 var running_thread = false
+var warning = ""
 
 func _ready():
 	circuit = Circuit.new()
@@ -548,7 +549,9 @@ func bus_value_changed_handler(part, port, value):
 
 
 func unstable_handler(part, port):
-	G.warn_user("Unstable input to %s on %s pin: %d" % [part.name, "left", port])
+	mutex.lock()
+	warning = "Unstable input to %s on pin: %d" % [part.name, port]
+	mutex.unlock()
 
 
 # part_references was added so that the parts can be accessed in the secondary thread where we can't see the scene tree nodes
@@ -952,3 +955,11 @@ func add_compared_string(out, comp, text_area: RichTextLabel):
 
 func _on_tree_exiting():
 	stop_thread()
+
+
+func _on_warning_check_timer_timeout():
+	if warning != "":
+		mutex.lock()
+		G.warn_user(warning)
+		warning = ""
+		mutex.unlock()
