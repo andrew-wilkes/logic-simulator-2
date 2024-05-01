@@ -56,11 +56,7 @@ func output_clock(level):
 	if cycle_limit > 0 and cycles >= cycle_limit:
 		$Rate.value = 0
 		return
-	if race_counter_reset_counter == 0:
-		controller.reset_race_counters()
-	race_counter_reset_counter += 1
-	if race_counter_reset_counter > 3:
-		race_counter_reset_counter = 0
+	controller.reset_race_counters()
 	update_clock_output(level)
 	if not level:
 		cycles += 1

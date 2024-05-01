@@ -209,7 +209,6 @@ func add_parts(files, tree_key):
 			part.block_setup(files, tree_key, file_tree)
 		parts[part.name] = part
 
-
 # Map external input to internal IO part
 func evaluate_output_level(port: int, level):
 	var map = input_map[port]

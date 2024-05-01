@@ -12,8 +12,7 @@ enum { BIT0 = 1, BIT1 = 2, BIT2 = 4, BIT3 = 8, BIT4 = 0x10, BIT5 = 0x20, BIT6 = 
 
 # If this value is too low we get false flags.
 # If too high get stack overflows with unstable circuits.
-# A value of 10 seems to be a good choice when testing.
-const RACE_COUNT_THRESHOLD = 10
+const RACE_COUNT_THRESHOLD = 32
 const DEBUG = false
 const IN = 0
 const OUT = 0
@@ -79,21 +78,13 @@ func setup_instance():
 func update_input_level(port, level):
 	if DEBUG:
 		prints("part update_input_level", self.name, port, level)
-	var key = set_pin_value(LEFT, port, level)
-	if key != null:
-		if race_counter.has(key):
-			race_counter[key] += 1
-			if race_counter[key] == RACE_COUNT_THRESHOLD:
-				controller.unstable_handler(self, port)
-				return
-		else:
-			race_counter[key] = 1
+	if set_pin_value(LEFT, port, level) != null:
 		evaluate_output_level(port, level)
 
 
 func set_pin_value(side, port, value):
 	# value will be an int or a bool to handle a wire or a bus
-	# The function returns null if there was no change or the pin key
+	# The function returns null if there was no change of the pin key
 	# This makes it easy to ignore no change to the level/value
 	var key = [side, int(port)]
 	if not pins.has(key):
@@ -121,7 +112,15 @@ func evaluate_output_level(port, level):
 func update_output_level(port, level):
 	if DEBUG:
 		prints("part update_output_level", self.name, port, level)
-	if set_pin_value(RIGHT, port, level) != null:
+	var key = set_pin_value(RIGHT, port, level)
+	if key != null:
+		if race_counter.has(key):
+			race_counter[key] += 1
+			if race_counter[key] == RACE_COUNT_THRESHOLD:
+				controller.unstable_handler(self, port)
+				return
+		else:
+			race_counter[key] = 1
 		controller.output_level_changed_handler(self, port, level)
 
 
