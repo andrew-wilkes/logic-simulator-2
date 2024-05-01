@@ -550,7 +550,7 @@ func bus_value_changed_handler(part, port, value):
 
 func unstable_handler(part, port):
 	mutex.lock()
-	warning = "Unstable input to %s on pin: %d" % [part.name, port]
+	warning = "Unstable condition at output of %s on pin: %d" % [part.name, port]
 	mutex.unlock()
 
 
