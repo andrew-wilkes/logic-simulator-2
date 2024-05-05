@@ -140,7 +140,16 @@ func _on_erase_button_pressed():
 
 func _on_file_dialog_file_selected(path):
 	var file = FileAccess.open(path, FileAccess.WRITE)
-	file.store_buffer(mem.values)
+	var bytes = PackedByteArray()
+	bytes.resize(mem.values.size() * 2)
+	# Store as 2 bytes per value
+	var idx = 0
+	for value in mem.values:
+		bytes[idx] = value % 256
+		idx += 1
+		bytes[idx] = value / 256
+		idx += 1
+	file.store_buffer(bytes)
 	G.notify_user("File saved")
 
 
