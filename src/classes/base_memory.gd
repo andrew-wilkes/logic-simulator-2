@@ -56,6 +56,8 @@ func load_data(file_path):
 	if file_path.get_extension() == "hack":
 		# .hack files contain binary strings
 		var ints = G.hack_to_array_of_int(FileAccess.get_file_as_string(file_path))
+		if ints.size() > values.size():
+			resize_memory(ints.size())
 		for addr in ints.size():
 			values[addr] = ints[addr]
 			num_words += 1
@@ -65,6 +67,8 @@ func load_data(file_path):
 			# Load 16 bit words
 			for idx in range(0, bytes.size(), 2):
 				@warning_ignore("integer_division")
+				if idx == values.size():
+					values.append(0) # Prevent possible overflow
 				values[idx / 2] = bytes[idx] + 256 * bytes[idx + 1]
 				num_words += 1
 		else:
@@ -74,3 +78,4 @@ func load_data(file_path):
 				values[idx] = bytes[idx]
 	G.notify_user(str(num_words) + " words of data was loaded.")
 	emit_signal("data_loaded")
+
