@@ -12,7 +12,6 @@ func _ready():
 	%ToolsButton.get_popup().add_item("Number parts")
 	%ToolsButton.get_popup().add_item("Test circuit")
 	%ToolsButton.get_popup().add_item("Load HDL circuit")
-	%ToolsButton.get_popup().add_item("Disassembler")
 	%ToolsButton.get_popup().add_item("List Warnings")
 	%ToolsButton.get_popup().index_pressed.connect(tool_action)
 	schematic.changed.connect(set_current_file_color)
@@ -55,15 +54,9 @@ func tool_action(idx):
 				$LoadHDL.current_dir = G.settings.test_dir
 			$LoadHDL.popup_centered()
 		3:
-			if G.settings.test_dir.is_empty():
-				$LoadHack.current_dir = G.settings.last_dir
-			else:
-				$LoadHack.current_dir = G.settings.test_dir
-			$LoadHack.popup_centered()
-		4:
 			$WarningsPanel.popup_centered()
 		_:
-			tools[idx - 5].popup_centered()
+			tools[idx - 4].popup_centered()
 
 
 func add_tools(tool_path, files):
@@ -160,10 +153,6 @@ func set_current_file_color(changed = true):
 
 
 func _on_save_dialog_canceled():
-	unfocus()
-
-
-func _on_load_dialog_canceled():
 	unfocus()
 #endregion
 
@@ -288,18 +277,6 @@ func open_meta_target(target):
 func _on_load_hdl_file_selected(path):
 	set_current_file("")
 	schematic.create_circuit_from_hdl(path)
-
-
-func _on_load_hack_file_selected(path):
-	var file = FileAccess.open(path, FileAccess.READ)
-	if not file:
-		G.warn_user("Error opening file: " + path)
-	else:
-		# The file popup needs to close before opening the new popup
-		await get_tree().process_frame
-		var code = file.get_as_text()
-		$Disassembler.load_data(code, path.get_file())
-		$Disassembler.open()
 
 
 func _on_clear_levels_button_pressed():
