@@ -12,7 +12,6 @@ func _ready():
 	%ToolsButton.get_popup().add_item("Number parts")
 	%ToolsButton.get_popup().add_item("Test circuit")
 	%ToolsButton.get_popup().add_item("Load HDL circuit")
-	%ToolsButton.get_popup().add_item("Disassembler")
 	%ToolsButton.get_popup().add_item("List Warnings")
 	%ToolsButton.get_popup().index_pressed.connect(tool_action)
 	schematic.changed.connect(set_current_file_color)
@@ -55,15 +54,9 @@ func tool_action(idx):
 				$LoadHDL.current_dir = G.settings.test_dir
 			$LoadHDL.popup_centered()
 		3:
-			if G.settings.test_dir.is_empty():
-				$LoadHack.current_dir = G.settings.last_dir
-			else:
-				$LoadHack.current_dir = G.settings.test_dir
-			$LoadHack.popup_centered()
-		4:
 			$WarningsPanel.popup_centered()
 		_:
-			tools[idx - 5].popup_centered()
+			tools[idx - 4].popup_centered()
 
 
 func add_tools(tool_path, files):
