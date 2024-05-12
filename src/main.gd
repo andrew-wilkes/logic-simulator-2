@@ -154,6 +154,10 @@ func set_current_file_color(changed = true):
 
 func _on_save_dialog_canceled():
 	unfocus()
+
+
+func _on_load_dialog_canceled():
+	unfocus()
 #endregion
 
 
