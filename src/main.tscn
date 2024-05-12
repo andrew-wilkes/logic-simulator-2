@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://eohxndqnij0x"]
+[gd_scene load_steps=13 format=3 uid="uid://eohxndqnij0x"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_7i1tr"]
 [ext_resource type="Texture2D" uid="uid://cy7i2jvb0vhoe" path="res://assets/ui/colors.png" id="2_p126i"]
@@ -6,7 +6,6 @@
 [ext_resource type="StyleBox" uid="uid://d2pelybf770tb" path="res://assets/ui/warning-panel.stylebox" id="3_3bxnd"]
 [ext_resource type="Script" path="res://scenes/WarningPanel.gd" id="4_u4i6y"]
 [ext_resource type="PackedScene" uid="uid://cbivksj5j1nmb" path="res://scenes/part_list.tscn" id="5_3p0gq"]
-[ext_resource type="PackedScene" uid="uid://diox3mx04ljm" path="res://tools/hack_disassembler.tscn" id="5_ihm75"]
 [ext_resource type="StyleBox" uid="uid://b4ts0xs184cax" path="res://assets/ui/popup-panel.stylebox" id="5_lbacc"]
 [ext_resource type="PackedScene" uid="uid://0xeyeylg8w8k" path="res://scenes/settings_panel.tscn" id="6_t623a"]
 [ext_resource type="PackedScene" uid="uid://b1a77l6rte3i" path="res://scenes/help_tabs.tscn" id="7_qqehi"]
@@ -153,14 +152,6 @@ file_mode = 0
 access = 2
 filters = PackedStringArray("*.hdl ; HDL files")
 
-[node name="LoadHack" type="FileDialog" parent="."]
-title = "Open a File"
-size = Vector2i(900, 500)
-ok_button_text = "Open"
-file_mode = 0
-access = 2
-filters = PackedStringArray("*.hack ; Hack files")
-
 [node name="SaveDialog" type="FileDialog" parent="."]
 title = "Save Circuit"
 size = Vector2i(900, 500)
@@ -243,13 +234,6 @@ offset_top = 4.0
 offset_right = 496.0
 offset_bottom = 296.0
 
-[node name="Disassembler" parent="." instance=ExtResource("5_ihm75")]
-visible = false
-layout_mode = 0
-offset_top = 0.0
-offset_right = 390.0
-offset_bottom = 550.0
-
 [connection signal="pressed" from="VB/HB/NewButton" to="." method="_on_new_button_pressed"]
 [connection signal="pressed" from="VB/HB/SaveButton" to="." method="_on_save_button_pressed"]
 [connection signal="pressed" from="VB/HB/SaveAsButton" to="." method="_on_save_as_button_pressed"]
@@ -266,7 +250,5 @@ offset_bottom = 550.0
 [connection signal="file_selected" from="LoadDialog" to="." method="_on_file_dialog_file_selected"]
 [connection signal="canceled" from="LoadHDL" to="." method="_on_load_dialog_canceled"]
 [connection signal="file_selected" from="LoadHDL" to="." method="_on_load_hdl_file_selected"]
-[connection signal="canceled" from="LoadHack" to="." method="_on_load_dialog_canceled"]
-[connection signal="file_selected" from="LoadHack" to="." method="_on_load_hack_file_selected"]
 [connection signal="canceled" from="SaveDialog" to="." method="_on_save_dialog_canceled"]
 [connection signal="file_selected" from="SaveDialog" to="." method="_on_file_dialog_file_selected"]
