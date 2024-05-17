@@ -15,8 +15,6 @@ src/addons
 data_*/
 mono_crash.*.json
 
-# Related to test files
-src/*.tres
 
 # Related to line counting
 out/

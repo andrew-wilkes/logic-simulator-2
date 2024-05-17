@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# The version string should be supplied as a command line argument
+# This replaces the token: VERSION in the export preset.
+
+cp ../presets/main/export_presets.cfg export_presets.cfg
+
+sed -i "s/VERSION/$1/g" export_presets.cfg
+
+godot="/home/andrew/apps/Godot_v4.2.1-stable_linux.x86_64"
+
+$godot --headless --export-release "Linux/X11"
+
+$godot --headless --export-release "macOS"
+
+$godot --headless --export-release "Windows Desktop"
+
+zip -j ../deploy/LogicSimX-$1.x86_64.zip ../build/linux/LogicSimX-$1.x86_64
+
+# Create and embed an icon for Windows based on a 256x256 png image.
+$godot --headless -s ../utility/CreateIcon.gd ../build/windows/customized.ico assets/ui/icon-256.png
+$godot --headless -s ../utility/ReplaceIcon.gd ../build/windows/customized.ico ../build/windows/LogicSimX-$1.exe
+
+zip -j ../deploy/LogicSimX-$1-windows.zip ../build/windows/LogicSimX-$1.exe ../build/windows/LogicSimX-$1.pck
