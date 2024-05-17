@@ -25,7 +25,6 @@ build/
 deploy/
 
 # Folders and scripts related to Mods where the code is not public (independant of the main App) 
-*mods
 src/mods
 src/tests/mods
 src/tools

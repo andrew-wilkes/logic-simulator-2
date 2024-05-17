@@ -1,0 +1,1 @@
+rsync -ruv --delete /media/andrew/'USB STICK'/mods/ src/mods
