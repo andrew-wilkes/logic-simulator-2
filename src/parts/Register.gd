@@ -24,8 +24,6 @@ func evaluate_output_level(port, level):
 			var ld = pins.get([LEFT, 1], false)
 			if ld:
 				value = pins.get([LEFT, 0], 0)
-				if show_display:
-					$Value.text = get_display_hex_value(value)
 				update_output_value(1, value)
 		else:
 			update_output_value(OUT, value)

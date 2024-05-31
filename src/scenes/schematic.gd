@@ -69,7 +69,8 @@ func process_inputs():
 		input_stimuli.clear()
 		mutex.unlock()
 		for _input in _inputs:
-			apply_input(_input)
+			if is_instance_valid(_input):
+				apply_input(_input)
 		# Now apply clocks and toggle the clock level
 		mutex.lock()
 		# Be able to add/remove clocks

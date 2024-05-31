@@ -67,7 +67,7 @@ func load_data(file_path):
 			# Load 16 bit words
 			for idx in range(0, bytes.size(), 2):
 				@warning_ignore("integer_division")
-				if idx == values.size():
+				if idx / 2 == values.size():
 					values.append(0) # Prevent possible overflow
 				values[idx / 2] = bytes[idx] + 256 * bytes[idx + 1]
 				num_words += 1
