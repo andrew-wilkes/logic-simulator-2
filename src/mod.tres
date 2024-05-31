@@ -1,0 +1,7 @@
+[gd_resource type="Resource" load_steps=2 format=3 uid="uid://cyq7cdvk85wm2"]
+
+[ext_resource type="Script" path="res://mod.gd" id="1_epynp"]
+
+[resource]
+script = ExtResource("1_epynp")
+scenes = Array[String](["res://mods/HackComputer.tscn", "res://tools/hack_assembler.tscn", "res://tools/hack_disassembler.tscn"])
