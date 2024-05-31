@@ -6,7 +6,7 @@ cp ../presets/main/export_presets.cfg export_presets.cfg
 
 sed -i "s/VERSION/$1/g" export_presets.cfg
 
-godot="/home/andrew/apps/Godot_v4.2.1-stable_linux.x86_64"
+godot="/home/andrew/apps/Godot_v4.2.2-stable_linux.x86_64"
 
 $godot --headless --export-release "Linux/X11"
 
