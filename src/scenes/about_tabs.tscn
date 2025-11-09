@@ -6,6 +6,7 @@
 offset_right = 431.0
 offset_bottom = 612.0
 theme = ExtResource("1_ofg2v")
+current_tab = 0
 
 [node name="About" type="MarginContainer" parent="."]
 layout_mode = 2
@@ -13,6 +14,7 @@ theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
+metadata/_tab_index = 0
 
 [node name="Text" type="RichTextLabel" parent="About"]
 layout_mode = 2
@@ -22,10 +24,7 @@ text = "This software was created by Andrew Wilkes in 2023.
 
 [url=coffee]Buy me a Coffee[/url]
 
-The supporting website is here:
-[url=website]https://logicsimx.com[/url] Check for news and upgrades.
-
-This is the Standard Version (2.0.12).
+This is the Standard Version (2.0.13).
 
 
 "
@@ -37,6 +36,7 @@ theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
+metadata/_tab_index = 1
 
 [node name="Text" type="RichTextLabel" parent="License"]
 layout_mode = 2
@@ -44,7 +44,7 @@ theme_override_colors/default_color = Color(0, 0, 0, 1)
 bbcode_enabled = true
 text = "MIT License
 
-Copyright (c) 2023 Andrew Wilkes
+Copyright (c) 2025 Andrew Wilkes
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the \"Software\"), to deal

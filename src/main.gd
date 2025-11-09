@@ -272,8 +272,7 @@ func _on_nand_text_meta_clicked(meta):
 func open_meta_target(target):
 	var endpoints = {
 		"nand": "https://www.nand2tetris.org/software",
-		"coffee": "https://buymeacoffee.com/gdscriptdude",
-		"website": "https://logicsimx.com"
+		"coffee": "https://buymeacoffee.com/gdscriptdude"
 	}
 	var _e = OS.shell_open(endpoints[target])
 

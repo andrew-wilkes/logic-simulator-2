@@ -78,4 +78,3 @@ func load_data(file_path):
 				values[idx] = bytes[idx]
 	G.notify_user(str(num_words) + " words of data was loaded.")
 	emit_signal("data_loaded")
-
