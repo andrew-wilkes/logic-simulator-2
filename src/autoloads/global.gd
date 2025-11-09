@@ -112,15 +112,13 @@ func int2bin(x: int, num_bits) -> String:
 
 
 func get_file_list(dir, ext):
-	return Array(dir.get_files()).filter(func(fn): return fn.ends_with(ext))
+	return Array(Array(ResourceLoader.list_directory(dir)).filter(func(fn): return fn.ends_with(ext)))
 
 
 func get_scene_file_list(dir_path):
 	var files = []
 	if DirAccess.dir_exists_absolute(dir_path):
-		var dir = DirAccess.open(dir_path)
-		# We can't detect .tscn files in a build since they are embedded resources but it works for scripts
-		var gd_files = get_file_list(dir, "gd")
+		var gd_files = get_file_list(dir_path, "gd")
 		for filename in gd_files:
 			var scene_file = get_file_name(dir_path, filename)
 			if scene_file != "":
