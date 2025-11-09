@@ -25,8 +25,9 @@ var max_hack = "0000000000000000
 1110101010000111"
 
 func test_run() -> void:
-	var d = Disassembler.new()
-	var lines = d.disassemble(max_hack)
+	var d = HACKDisassembler.new()
+	var lines = []
+	d.disassemble(max_hack, lines)
 	assert_int(lines.size()).is_equal(19)
 	print("\n".join(lines))
 	d.free()

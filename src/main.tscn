@@ -1,10 +1,10 @@
 [gd_scene load_steps=13 format=3 uid="uid://eohxndqnij0x"]
 
-[ext_resource type="Script" path="res://main.gd" id="1_7i1tr"]
+[ext_resource type="Script" uid="uid://dbm2yarr3cx85" path="res://main.gd" id="1_7i1tr"]
 [ext_resource type="Texture2D" uid="uid://cy7i2jvb0vhoe" path="res://assets/ui/colors.png" id="2_p126i"]
 [ext_resource type="PackedScene" uid="uid://cq3v3io0y1kms" path="res://scenes/schematic.tscn" id="2_qticl"]
 [ext_resource type="StyleBox" uid="uid://d2pelybf770tb" path="res://assets/ui/warning-panel.stylebox" id="3_3bxnd"]
-[ext_resource type="Script" path="res://scenes/WarningPanel.gd" id="4_u4i6y"]
+[ext_resource type="Script" uid="uid://b53tafl7c5ms2" path="res://scenes/WarningPanel.gd" id="4_u4i6y"]
 [ext_resource type="PackedScene" uid="uid://cbivksj5j1nmb" path="res://scenes/part_list.tscn" id="5_3p0gq"]
 [ext_resource type="StyleBox" uid="uid://b4ts0xs184cax" path="res://assets/ui/popup-panel.stylebox" id="5_lbacc"]
 [ext_resource type="PackedScene" uid="uid://0xeyeylg8w8k" path="res://scenes/settings_panel.tscn" id="6_t623a"]
@@ -195,6 +195,7 @@ offset_left = 4.0
 offset_top = 4.0
 offset_right = 796.0
 offset_bottom = 496.0
+current_tab = 0
 
 [node name="LearnPanel" type="PopupPanel" parent="."]
 title = "Learn"
@@ -207,6 +208,7 @@ offset_left = 4.0
 offset_top = 4.0
 offset_right = 796.0
 offset_bottom = 496.0
+current_tab = 0
 
 [node name="AboutPanel" type="PopupPanel" parent="."]
 title = "About"
@@ -233,6 +235,7 @@ offset_left = 4.0
 offset_top = 4.0
 offset_right = 496.0
 offset_bottom = 296.0
+current_tab = 0
 
 [connection signal="pressed" from="VB/HB/NewButton" to="." method="_on_new_button_pressed"]
 [connection signal="pressed" from="VB/HB/SaveButton" to="." method="_on_save_button_pressed"]

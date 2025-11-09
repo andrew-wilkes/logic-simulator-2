@@ -1,6 +1,8 @@
 extends MarginContainer
 
+@warning_ignore("unused_signal")
 signal bus_color_changed(part, color)
+@warning_ignore("unused_signal")
 signal wire_color_changed(part, color)
 
 const DEFAULT_SLIDER_LIMIT = 0xff
