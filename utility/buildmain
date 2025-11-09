@@ -21,7 +21,7 @@ $godot --headless --export-release "Windows Desktop"
 zip -j ../deploy/LogicSimX-$1.x86_64.zip ../build/linux/LogicSimX-$1.x86_64
 
 # Create and embed an icon for Windows based on a 256x256 png image.
-$godot --headless -s ../utility/CreateIcon.gd ../build/windows/customized.ico assets/ui/icon-256.png
-$godot --headless -s ../utility/ReplaceIcon.gd ../build/windows/customized.ico ../build/windows/LogicSimX-$1.exe
+#$godot --headless -s ../utility/CreateIcon.gd ../build/windows/customized.ico assets/ui/icon-256.png
+#$godot --headless -s ../utility/ReplaceIcon.gd ../build/windows/customized.ico ../build/windows/LogicSimX-$1.exe
 
 zip -j ../deploy/LogicSimX-$1-windows.zip ../build/windows/LogicSimX-$1.exe ../build/windows/LogicSimX-$1.pck
