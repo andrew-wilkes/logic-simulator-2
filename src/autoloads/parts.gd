@@ -18,7 +18,6 @@ func load_mods():
 	for parts_path in parts_paths:
 		var files = ModImporter.get_mod_files(parts_path)
 		add_parts(parts_path, files)
-		pass
 
 
 func add_parts(path, files):
